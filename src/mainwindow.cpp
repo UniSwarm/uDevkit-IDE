@@ -1,8 +1,12 @@
 #include "mainwindow.h"
 
 #include <QBoxLayout>
+#include <QSplitter>
+#include <QHeaderView>
 #include <QFile>
 #include <QDebug>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include "edbee/edbee.h"
 #include "edbee/io/textdocumentserializer.h"
@@ -16,27 +20,45 @@ MainWindow::MainWindow(QWidget *parent) :
     edbee::Edbee* tm = edbee::Edbee::instance();
 
     // configure your paths
-    tm->setKeyMapPath( "../edbee-data/keymaps/");
-    tm->setGrammarPath(  "../edbee-data/syntaxfiles/" );
-    tm->setThemePath( "../edbee-data/themes/" );
+    tm->setKeyMapPath( QApplication::applicationDirPath()+"/../edbee-data/keymaps/");
+    tm->setGrammarPath(  QApplication::applicationDirPath()+"/../edbee-data/syntaxfiles/" );
+    tm->setThemePath( QApplication::applicationDirPath()+"/../edbee-data/themes/" );
 
     // initialize the library
     tm->init();
     tm->autoShutDownOnAppExit();
 
-    _editorWidget =  new edbee::TextEditorWidget();
+    _fileItemModel = new QFileSystemModel();
+    _fileItemModel->setRootPath(QApplication::applicationDirPath()+"/../../rtprog/");
 
-    setCentralWidget(_editorWidget);
-    setFixedSize(QSize(800,600));
+    QSplitter *spitter = new QSplitter(this);
+    _fileView = new QTreeView(this);
+    _fileView->setModel(_fileItemModel);
+    _fileView->setRootIndex(_fileItemModel->index(QApplication::applicationDirPath()+"/../../rtprog/"));
+    for (int i = 1; i < _fileItemModel->columnCount(); ++i)
+        _fileView->hideColumn(i);
+    _fileView->header()->close();
+    _editorWidget =  new edbee::TextEditorWidget();
+    spitter->addWidget(_fileView);
+    spitter->addWidget(_editorWidget);
+    spitter->setSizes(QList<int>()<<100<<500);
+    connect(_fileView, &QTreeView::doubleClicked, this, &MainWindow::openIndex);
+
+    setCentralWidget(spitter);
+    resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 }
 
 MainWindow::~MainWindow()
 {
 }
 
-void MainWindow::openFile(const QString &fileName)
+int MainWindow::openFile(const QString &fileName)
 {
     QFile file (fileName);
+    QFileInfo info(file);
+    if (!info.isReadable() || !info.isFile())
+        return -1;
+    _editorWidget->textDocument()->setText("");
 
     edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
     if( !serializer.load( &file ) )
@@ -46,4 +68,9 @@ void MainWindow::openFile(const QString &fileName)
     edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename( fileName );
     _editorWidget->textDocument()->setLanguageGrammar( grammar );
 
+}
+
+void MainWindow::openIndex(const QModelIndex &index)
+{
+    openFile(_fileItemModel->filePath(index));
 }
