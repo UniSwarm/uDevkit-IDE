@@ -14,9 +14,13 @@ DESTDIR = $$PWD/../bin
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    project/fileproject.cpp \
+    editor/codeeditor.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    project/fileproject.h \
+    editor/codeeditor.h
 
 include (../edbee-lib/edbee-lib/edbee-lib.pri)

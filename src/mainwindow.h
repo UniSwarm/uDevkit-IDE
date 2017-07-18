@@ -1,11 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QFileSystemModel>
-#include <QTreeView>
-
 #include <QMainWindow>
-#include "edbee/texteditorwidget.h"
+
+#include "project/fileproject.h"
+#include "editor/codeeditor.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,14 +14,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-public slots:
-    int openFile(const QString &fileName);
-    void openIndex(const QModelIndex &index);
-
 protected:
-    edbee::TextEditorWidget* _editorWidget;
-    QTreeView *_fileView;
-    QFileSystemModel *_fileItemModel;
+    FileProject *_fileView;
+    CodeEditor *_editorWidget;
 };
 
 #endif // MAINWINDOW_H
