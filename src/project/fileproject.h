@@ -3,6 +3,9 @@
 
 #include <QFileSystemModel>
 #include <QTreeView>
+#include <QDebug>
+
+#include "fileprojectproxymodel.h"
 
 class FileProject : public QWidget
 {
@@ -18,6 +21,7 @@ protected slots:
 
 protected:
     QTreeView *_fileView;
+    FileProjectProxyModel *_proxy;
     QFileSystemModel *_fileItemModel;
 };
 

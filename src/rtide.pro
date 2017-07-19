@@ -21,6 +21,7 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     project/fileproject.h \
-    editor/codeeditor.h
+    editor/codeeditor.h \
+    project/fileprojectproxymodel.h
 
 include (../edbee-lib/edbee-lib/edbee-lib.pri)

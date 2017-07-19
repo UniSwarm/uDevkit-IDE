@@ -10,6 +10,7 @@
 #include "edbee/io/textdocumentserializer.h"
 #include "edbee/models/textdocument.h"
 #include "edbee/models/textgrammar.h"
+#include "edbee/models/texteditorconfig.h"
 
 CodeEditor::CodeEditor(QWidget *parent) : QWidget(parent)
 {
@@ -28,6 +29,9 @@ CodeEditor::CodeEditor(QWidget *parent) : QWidget(parent)
     tm->autoShutDownOnAppExit();
 
     _editorWidget =  new edbee::TextEditorWidget();
+    QFont font = _editorWidget->config()->font();
+    font.setPixelSize(13);
+    _editorWidget->config()->setFont(font);
 
     layout->addWidget(_editorWidget);
     setLayout(layout);
