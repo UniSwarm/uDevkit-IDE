@@ -2,46 +2,10 @@ sudo: required
 dist: trusty
 group: edge
 
-env:
-  global:
-    - XC16_URL="http://ww1.microchip.com/downloads/en/DeviceDoc/xc16-v1.31-full-install-linux-installer.run"
-    - XC16_PATH="/opt/microchip/xc16/v1.31/bin"
-    - XC16_DL="$HOME/xc16.run"
-    - XC32_URL="http://ww1.microchip.com/downloads/en/DeviceDoc/xc32-v1.43-full-install-linux-installer.run"
-    - XC32_PATH="/opt/microchip/xc32/v1.43/bin"
-    - XC32_DL="$HOME/xc32.run"
-  matrix:
-    - TEST=tools
-    - TEST=tests16
-    - TEST=tests32
-
 before_install:
-  - if [[ "$TEST" == "tests16" ]]; then
-        sudo dpkg --add-architecture i386 && sudo apt-get update
-            && sudo apt-get install libc6:i386 && wget -O "$XC16_DL" "$XC16_URL"
-            && chmod +x "$XC16_DL"
-            && sudo "$XC16_DL" --mode unattended --netservername localhost
-            && export PATH="$PATH:$XC16_PATH"
-            && echo "xc16 installed";
-    fi
-  - if [[ "$TEST" == "tests32" ]]; then
-        sudo dpkg --add-architecture i386 && sudo apt-get update
-            && sudo apt-get install libc6:i386 && wget -O "$XC32_DL" "$XC32_URL"
-            && chmod +x "$XC32_DL"
-            && sudo "$XC32_DL" --mode unattended --netservername localhost
-            && export PATH="$PATH:$XC32_PATH"
-            && echo "xc32 installed";
-    fi
-  - if [[ "$TEST" == "tools" ]]; then
-        sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu trusty universe"
-            && sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu trusty main"
-            && sudo apt-get install debian-keyring debian-archive-keyring
-            && sudo apt-key update
-            && sudo apt-get update -qq
-            && sudo apt-get install -qq qt5-qmake qtbase5-dev qt5-default qttools5-dev-tools libqt5serialport5-dev
-            && sudo apt-get install -qq zlib1g-dev libudev-dev
-            && echo "Qt5 installed";
-    fi
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq qt5-qmake qtbase5-dev qt5-default qttools5-dev-tools libqt5serialport5-dev
+  - sudo apt-get install -qq zlib1g-dev libudev-dev
 
 language: cpp
 
@@ -53,4 +17,4 @@ install: true
 
 # Build steps
 script:
-  - make $TEST
+  - make all
