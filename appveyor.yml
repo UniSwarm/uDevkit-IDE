@@ -1,0 +1,13 @@
+version: 0.{build}
+
+clone_folder: c:\dev\rtprog
+clone_depth: 5
+
+init:
+  - set PATH=C:\msys64;C:\Qt\5.7\mingw53_32\bin;C:\MinGW\bin;%PATH%
+
+build_script:
+  - cd C:\dev\rtprog
+  - mingw32-make tools MAKE=mingw32-make
+
+test: off
