@@ -2,9 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTextEdit>
+#include <QDockWidget>
+#include <QProcess>
 
-#include "project/fileproject.h"
+#include "project/fileprojectwidget.h"
 #include "editor/codeeditor.h"
+#include "project/project.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,8 +19,19 @@ public:
     ~MainWindow();
 
 protected:
-    FileProject *_fileView;
+    Project *_projet;
+
+    FileProjectWidget *_fileView;
     CodeEditor *_editorWidget;
+
+    QDockWidget *_dockLog;
+    QTextEdit *_logWidget;
+
+    QProcess *_process;
+
+protected slots:
+    void git();
+    void readProcess();
 };
 
 #endif // MAINWINDOW_H
