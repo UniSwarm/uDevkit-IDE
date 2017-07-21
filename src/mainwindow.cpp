@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(spitter);
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
-    QAction *action = new QAction(QString("git"));
+    QAction *action = new QAction(QString("git"), this);
     action->setShortcut(QKeySequence("F2"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::git);
