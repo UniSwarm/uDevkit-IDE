@@ -10,6 +10,7 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     _project = project;
 
     QHBoxLayout *layout = new QHBoxLayout();
+    layout->setMargin(0);
 
     _fileView = new QTreeView(this);
     _fileItemModel = new QFileSystemModel();

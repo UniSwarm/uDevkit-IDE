@@ -4,3 +4,6 @@
 [submodule "edbee-data"]
 	path = edbee-data
 	url = https://github.com/edbee/edbee-data.git
+[submodule "QDarkStyleSheet"]
+	path = QDarkStyleSheet
+	url = https://github.com/ColinDuquesnoy/QDarkStyleSheet.git

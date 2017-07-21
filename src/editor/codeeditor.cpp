@@ -15,6 +15,7 @@
 CodeEditor::CodeEditor(QWidget *parent) : QWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout();
+    layout->setMargin(0);
 
     // get the edbee instance
     edbee::Edbee* tm = edbee::Edbee::instance();
@@ -30,11 +31,11 @@ CodeEditor::CodeEditor(QWidget *parent) : QWidget(parent)
 
     _editorWidget =  new edbee::TextEditorWidget();
     QFont font = _editorWidget->config()->font();
-    font.setFamily("Monospace");
+    font.setFamily("monospace");
+    font.setStyleHint(QFont::Monospace);
     font.setPixelSize(13);
     _editorWidget->config()->setFont(font);
     _editorWidget->config()->setThemeName("RtIDE");
-    //_editorWidget->config()->setThemeName("Mac Classic");
 
     layout->addWidget(_editorWidget);
     setLayout(layout);
