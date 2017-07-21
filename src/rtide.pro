@@ -32,3 +32,5 @@ HEADERS += \
     version/abstractversioncontrol.h \
     version/gitversioncontrol.h \
     project/fileprojectwidget.h
+
+include (../edbee-lib/edbee-lib/edbee-lib.pri)
