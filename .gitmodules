@@ -1,6 +1,6 @@
 [submodule "edbee-lib"]
 	path = edbee-lib
-	url = git@github.com:Robotips/edbee-lib.git
+	url = https://github.com/Robotips/edbee-lib.git
 [submodule "edbee-data"]
 	path = edbee-data
 	url = https://github.com/edbee/edbee-data.git

@@ -15,7 +15,7 @@ all: bin/$(TARGET_NAME)
 
 build/Makefile:
 	@test -d build/ || mkdir -p build/
-	cd build/ && qmake src/rtide.pro
+	cd build/ && qmake ../src/rtide.pro
 
 bin/$(TARGET_NAME): build/Makefile FORCE
 	cd build/ && $(MAKE) $(TARGET_EXE) -j$(NPROC)
