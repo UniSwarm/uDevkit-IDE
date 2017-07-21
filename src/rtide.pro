@@ -33,6 +33,6 @@ HEADERS += \
     version/gitversioncontrol.h \
     project/fileprojectwidget.h
 
-RESOURCES += $$PWD/../qdarkstyle/qdarkstyle/style.qrc
+RESOURCES += $$PWD/../QDarkStyleSheet/qdarkstyle/style.qrc
 
 include (../edbee-lib/edbee-lib/edbee-lib.pri)
