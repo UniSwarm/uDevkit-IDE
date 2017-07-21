@@ -12,6 +12,8 @@ TARGET = rtide
 TEMPLATE = app
 DESTDIR = $$PWD/../bin
 
+CONFIG += c++11
+
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
@@ -30,5 +32,3 @@ HEADERS += \
     version/abstractversioncontrol.h \
     version/gitversioncontrol.h \
     project/fileprojectwidget.h
-
-include (../edbee-lib/edbee-lib/edbee-lib.pri)
