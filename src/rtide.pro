@@ -22,7 +22,8 @@ SOURCES += \
     version/abstractversioncontrol.cpp \
     version/gitversioncontrol.cpp \
     project/fileprojectproxymodel.cpp \
-    project/fileprojectwidget.cpp
+    project/fileprojectwidget.cpp \
+    project/fileprojectitemmodel.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -31,7 +32,8 @@ HEADERS += \
     project/project.h \
     version/abstractversioncontrol.h \
     version/gitversioncontrol.h \
-    project/fileprojectwidget.h
+    project/fileprojectwidget.h \
+    project/fileprojectitemmodel.h
 
 RESOURCES += $$PWD/../QDarkStyleSheet/qdarkstyle/style.qrc
 

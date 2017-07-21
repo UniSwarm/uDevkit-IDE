@@ -4,6 +4,13 @@
 
 Project::Project(const QString &path) : QObject()
 {
+    _fileItemModel = new FileProjectItemModel(this);
+    _versionControl = new GitVersionControl();
+    connect(_versionControl, &GitVersionControl::newModifiedFiles,
+            _fileItemModel, &FileProjectItemModel::filesUpdated);
+    connect(_versionControl, &GitVersionControl::newValidatedFiles,
+            _fileItemModel, &FileProjectItemModel::filesUpdated);
+
     if (!path.isEmpty())
         setRootPath(path);
 }
@@ -21,11 +28,16 @@ QString Project::rootPath() const
 void Project::setRootPath(const QString &path)
 {
     _rootDir.setPath(QDir::cleanPath(path));
-    _versionControl = new GitVersionControl();
     _versionControl->setPath(path);
+    _fileItemModel->setRootPath(rootPath());
 }
 
 AbstractVersionControl *Project::versionControl() const
 {
     return _versionControl;
+}
+
+FileProjectItemModel *Project::fileItemModel() const
+{
+    return _fileItemModel;
 }

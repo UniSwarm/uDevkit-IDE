@@ -1,7 +1,6 @@
 #ifndef FILEPROJECT_H
 #define FILEPROJECT_H
 
-#include <QFileSystemModel>
 #include <QTreeView>
 #include <QDebug>
 
@@ -25,7 +24,6 @@ protected:
     Project *_project;
     QTreeView *_fileView;
     FileProjectProxyModel *_proxy;
-    QFileSystemModel *_fileItemModel;
 };
 
 #endif // FILEPROJECT_H

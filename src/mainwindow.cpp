@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _editorWidget = new CodeEditor();
     _editorWidget->openFile(QApplication::applicationDirPath()+"/../../rtprog/README.md");
     spitter->addWidget(_editorWidget);
+    _editorWidget->setFocus();
 
     connect(_fileView, &FileProjectWidget::doubleClickFile, _editorWidget, &CodeEditor::openFile);
 

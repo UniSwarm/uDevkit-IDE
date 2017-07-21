@@ -13,19 +13,17 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     layout->setMargin(0);
 
     _fileView = new QTreeView(this);
-    _fileItemModel = new QFileSystemModel();
-    _fileItemModel->setRootPath(QApplication::applicationDirPath()+"/../../rtprog/");
 
-    _proxy = new FileProjectProxyModel(_project);
+    _proxy = new FileProjectProxyModel();
     _proxy->setDynamicSortFilter(true);
-    _proxy->setSourceModel(_fileItemModel);
+    _proxy->setSourceModel(_project->fileItemModel());
     _proxy->setFilterRegExp(QRegExp("(nbproject|bin|build)", Qt::CaseInsensitive, QRegExp::RegExp));
     _proxy->setFilterKeyColumn(0);
     _proxy->setFilterRole(QFileSystemModel::FilePathRole);
 
     _fileView->setModel(_proxy);
-    _fileView->setRootIndex(_proxy->mapFromSource(_fileItemModel->index(QApplication::applicationDirPath()+"/../../rtprog/")));
-    for (int i = 1; i < _fileItemModel->columnCount(); ++i)
+    _fileView->setRootIndex(_proxy->mapFromSource(_project->fileItemModel()->index(project->rootPath())));
+    for (int i = 1; i < _project->fileItemModel()->columnCount(); ++i)
         _fileView->hideColumn(i);
     connect(_fileView, &QTreeView::doubleClicked, this, &FileProjectWidget::openIndex);
 
@@ -36,5 +34,5 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
 
 void FileProjectWidget::openIndex(const QModelIndex &index)
 {
-    emit doubleClickFile(_fileItemModel->filePath(_proxy->mapToSource(index)));
+    emit doubleClickFile(_project->fileItemModel()->filePath(_proxy->mapToSource(index)));
 }

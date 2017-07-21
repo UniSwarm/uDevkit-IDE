@@ -53,11 +53,14 @@ void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &out
         while (!stream.atEnd())
             modifiedFiles.insert(_path+"/"+stream.readLine(1000));
     }
-    outgoingFiles = oldSed;
-    outgoingFiles.subtract(modifiedFiles);
+    if (!oldSed.isEmpty())
+    {
+        outgoingFiles = oldSed;
+        outgoingFiles.subtract(modifiedFiles);
 
-    incomingFiles = modifiedFiles;
-    incomingFiles.subtract(oldSed);
+        incomingFiles = modifiedFiles;
+        incomingFiles.subtract(oldSed);
+    }
 
     oldSed = modifiedFiles;
 }

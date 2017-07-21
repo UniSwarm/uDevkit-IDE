@@ -5,6 +5,7 @@
 #include <QObject>
 
 #include "version/abstractversioncontrol.h"
+#include "fileprojectitemmodel.h"
 
 class Project : public QObject
 {
@@ -18,6 +19,8 @@ public:
 
     AbstractVersionControl *versionControl() const;
 
+    FileProjectItemModel *fileItemModel() const;
+
 signals:
 
 public slots:
@@ -25,6 +28,7 @@ public slots:
 protected:
     QDir _rootDir;
     AbstractVersionControl *_versionControl;
+    FileProjectItemModel *_fileItemModel;
 };
 
 #endif // PROJECT_H
