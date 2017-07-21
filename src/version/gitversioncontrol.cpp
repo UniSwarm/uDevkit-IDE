@@ -8,51 +8,58 @@
 GitVersionControl::GitVersionControl()
     : AbstractVersionControl ()
 {
-    _process = nullptr;
     _indexWatcher = nullptr;
+
+    _processGit = new QProcess(this);
+    //connect(_process, &QProcess::finished, this, &GitVersionControl::parseModifiedFiles); // does not work...
+    connect(_processGit, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            [=](int, QProcess::ExitStatus){processEnd();}); // but this crap is recomended
 }
 
-void GitVersionControl::reqFiles()
+GitVersionControl::~GitVersionControl()
 {
-    _process = new QProcess(this);
+    _processGit->deleteLater();
+}
 
-    //connect(_process, &QProcess::finished, this, &GitVersionControl::parseModifiedFiles); // does not work...
-    connect(_process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-          [=](int, QProcess::ExitStatus){parseModifiedFiles();}); // but this crap is recomended
-
-    _process->setWorkingDirectory(_path);
-    _process->start("git", QStringList()<<"ls-files"<<"-m"<<".");
+void GitVersionControl::reqModifFiles()
+{
+    _processGit->start("git", QStringList()<<"ls-files"<<"-m"<<".");
 }
 
 void GitVersionControl::indexCheck()
 {
     _indexWatcher->addPath(_gitPath+"index");
-    reqFiles();
+    reqModifFiles();
 }
 
-void GitVersionControl::parseModifiedFiles()
+void GitVersionControl::processEnd()
+{
+    QSet<QString> newmodifiedFiles, validedFile;
+
+    parseFilesList(_modifiedFiles, validedFile, newmodifiedFiles);
+
+    if (!newmodifiedFiles.isEmpty())
+        emit newModifiedFiles(newmodifiedFiles);
+    if (!validedFile.isEmpty())
+        emit newValidatedFiles(validedFile);
+}
+
+void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &outgoingFiles, QSet<QString> &incomingFiles)
 {
     QSet<QString> modifiedFiles;
-    if (_process->exitStatus() == QProcess::NormalExit)
+    if (_processGit->exitStatus() == QProcess::NormalExit)
     {
-        QTextStream stream(_process);
+        QTextStream stream(_processGit);
         while (!stream.atEnd())
             modifiedFiles.insert(_path+"/"+stream.readLine(1000));
     }
-    _process->deleteLater();
-    _process = nullptr;
+    outgoingFiles = oldSed;
+    outgoingFiles.subtract(modifiedFiles);
 
-    QSet<QString> newmodifiedFiles = _modifiedFiles;
-    newmodifiedFiles.subtract(modifiedFiles);
+    incomingFiles = modifiedFiles;
+    incomingFiles.subtract(oldSed);
 
-    QSet<QString> validedFile = modifiedFiles;
-    validedFile.subtract(_modifiedFiles);
-
-    /*qDebug()<<newmodifiedFiles;
-    qDebug()<<validedFile;
-    qDebug()<<"";
-    emit bla();*/
-    _modifiedFiles = modifiedFiles;
+    oldSed = modifiedFiles;
 }
 
 QString GitVersionControl::findGitDir()
@@ -75,6 +82,7 @@ void GitVersionControl::analysePath()
     delete _indexWatcher;
     _indexWatcher = new QFileSystemWatcher();
     _indexWatcher->addPath(_gitPath+"index");
+    _processGit->setWorkingDirectory(_path);
     connect(_indexWatcher, &QFileSystemWatcher::fileChanged, this, &GitVersionControl::indexCheck);
-    reqFiles();
+    reqModifFiles();
 }

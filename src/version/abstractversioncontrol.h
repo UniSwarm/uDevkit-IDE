@@ -21,7 +21,8 @@ protected:
     virtual void analysePath();
 
 signals:
-    void fileModified();
+    void newModifiedFiles(QSet<QString> modifiedFiles);
+    void newValidatedFiles(QSet<QString> modifiedFiles);
 
 protected:
     QString _path;

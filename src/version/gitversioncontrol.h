@@ -12,17 +12,29 @@ class GitVersionControl : public AbstractVersionControl
     Q_OBJECT
 public:
     GitVersionControl();
+    virtual ~GitVersionControl();
 
 protected slots:
-    void reqFiles();
+    void reqModifFiles();
     void indexCheck();
-    void parseModifiedFiles();
+    void processEnd();
+
+protected:
+    void parseFilesList(QSet<QString> &oldSed, QSet<QString> &outgoingFiles, QSet<QString> &incomingFiles);
 
 protected:
     QString findGitDir();
     virtual void analysePath();
 
-    QProcess *_process;
+    enum State {
+        None,
+        ModifiedFiles,
+        TrackedFiles,
+        DiffFile
+    };
+    State _state;
+
+    QProcess *_processGit;
     QFileSystemWatcher *_indexWatcher;
     QString _gitPath;
 };
