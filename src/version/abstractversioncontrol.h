@@ -14,6 +14,7 @@ public:
 
     bool isFileModified(const QString &filePath) const;
     bool isDirModified(const QString &filePath) const;
+    bool isFileTracked(const QString &filePath) const;
 
     const QSet<QString> &trackedFiles();
     const QSet<QString> &modifiedFiles();

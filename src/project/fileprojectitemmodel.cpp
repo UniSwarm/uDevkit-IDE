@@ -24,17 +24,26 @@ QVariant FileProjectItemModel::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::FontRole)
     {
-        bool modified = false;
+        bool modified = false, tracked = true;
         if (!_project || !index.isValid())
             return QFileSystemModel::data(index, role);
         if (isDir(index))
             modified = _project->versionControl()->isDirModified(filePath(index));
         else
+        {
             modified = _project->versionControl()->isFileModified(filePath(index));
+            tracked = _project->versionControl()->isFileTracked(filePath(index));
+        }
         if (modified)
         {
             QFont font;
             font.setBold(true);
+            return font;
+        }
+        if (!tracked)
+        {
+            QFont font;
+            font.setItalic(true);
             return font;
         }
         return QVariant();

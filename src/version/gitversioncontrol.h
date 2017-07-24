@@ -16,6 +16,7 @@ public:
 
 protected slots:
     void reqModifFiles();
+    void reqTrackedFiles();
     void indexCheck();
     void processEnd();
 

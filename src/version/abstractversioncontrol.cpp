@@ -27,6 +27,11 @@ bool AbstractVersionControl::isDirModified(const QString &filePath) const
     return false;
 }
 
+bool AbstractVersionControl::isFileTracked(const QString &filePath) const
+{
+    return _trackedFiles.contains(filePath);
+}
+
 const QSet<QString> &AbstractVersionControl::trackedFiles()
 {
     return _trackedFiles;

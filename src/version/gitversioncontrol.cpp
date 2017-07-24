@@ -9,6 +9,7 @@ GitVersionControl::GitVersionControl()
     : AbstractVersionControl ()
 {
     _indexWatcher = nullptr;
+    _state = None;
 
     _processGit = new QProcess(this);
     //connect(_process, &QProcess::finished, this, &GitVersionControl::parseModifiedFiles); // does not work...
@@ -23,7 +24,14 @@ GitVersionControl::~GitVersionControl()
 
 void GitVersionControl::reqModifFiles()
 {
+    _state = ModifiedFiles;
     _processGit->start("git", QStringList()<<"ls-files"<<"-m"<<".");
+}
+
+void GitVersionControl::reqTrackedFiles()
+{
+    _state = TrackedFiles;
+    _processGit->start("git", QStringList()<<"ls-files"<<".");
 }
 
 void GitVersionControl::indexCheck()
@@ -36,7 +44,20 @@ void GitVersionControl::processEnd()
 {
     QSet<QString> newmodifiedFiles, validedFile;
 
-    parseFilesList(_modifiedFiles, validedFile, newmodifiedFiles);
+    switch (_state) {
+    case GitVersionControl::None:
+        break;
+    case GitVersionControl::ModifiedFiles:
+        parseFilesList(_modifiedFiles, validedFile, newmodifiedFiles);
+        reqTrackedFiles();
+        break;
+    case GitVersionControl::TrackedFiles:
+        parseFilesList(_trackedFiles, validedFile, newmodifiedFiles);
+        break;
+    case GitVersionControl::DiffFile:
+        break;
+
+    }
 
     if (!newmodifiedFiles.isEmpty())
         emit newModifiedFiles(newmodifiedFiles);
