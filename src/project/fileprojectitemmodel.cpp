@@ -24,9 +24,14 @@ QVariant FileProjectItemModel::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::FontRole)
     {
+        bool modified = false;
         if (!_project || !index.isValid())
             return QFileSystemModel::data(index, role);
-        if (_project->versionControl()->isFileModified(filePath(index)))
+        if (isDir(index))
+            modified = _project->versionControl()->isDirModified(filePath(index));
+        else
+            modified = _project->versionControl()->isFileModified(filePath(index));
+        if (modified)
         {
             QFont font;
             font.setBold(true);

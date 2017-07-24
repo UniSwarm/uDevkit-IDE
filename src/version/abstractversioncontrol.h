@@ -13,6 +13,7 @@ public:
     void setPath(const QString &path);
 
     bool isFileModified(const QString &filePath) const;
+    bool isDirModified(const QString &filePath) const;
 
     const QSet<QString> &trackedFiles();
     const QSet<QString> &modifiedFiles();
