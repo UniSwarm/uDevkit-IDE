@@ -35,6 +35,6 @@ HEADERS += \
     project/fileprojectwidget.h \
     project/fileprojectitemmodel.h
 
-RESOURCES += $$PWD/../QDarkStyleSheet/qdarkstyle/style.qrc
+RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
-include (../edbee-lib/edbee-lib/edbee-lib.pri)
+include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)

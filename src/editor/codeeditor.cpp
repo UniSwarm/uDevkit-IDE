@@ -21,9 +21,9 @@ CodeEditor::CodeEditor(QWidget *parent) : QWidget(parent)
     edbee::Edbee* tm = edbee::Edbee::instance();
 
     // configure your paths
-    tm->setKeyMapPath( QApplication::applicationDirPath()+"/../edbee-data/keymaps/");
-    tm->setGrammarPath(  QApplication::applicationDirPath()+"/../edbee-data/syntaxfiles/" );
-    tm->setThemePath( QApplication::applicationDirPath()+"/../edbee-data/themes/" );
+    tm->setKeyMapPath( QApplication::applicationDirPath()+"/../contrib/edbee-data/keymaps/");
+    tm->setGrammarPath(  QApplication::applicationDirPath()+"/../contrib/edbee-data/syntaxfiles/" );
+    tm->setThemePath( QApplication::applicationDirPath()+"/../contrib/edbee-data/themes/" );
 
     // initialize the library
     tm->init();

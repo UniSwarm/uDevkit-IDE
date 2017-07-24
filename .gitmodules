@@ -1,9 +1,9 @@
-[submodule "edbee-lib"]
-	path = edbee-lib
-	url = https://github.com/Robotips/edbee-lib.git
-[submodule "edbee-data"]
-	path = edbee-data
+[submodule "contrib/edbee-lib"]
+	path = contrib/edbee-lib
+	url = https://github.com/edbee/edbee-lib.git
+[submodule "contrib/edbee-data"]
+	path = contrib/edbee-data
 	url = https://github.com/edbee/edbee-data.git
-[submodule "QDarkStyleSheet"]
-	path = QDarkStyleSheet
+[submodule "contrib/QDarkStyleSheet"]
+	path = contrib/QDarkStyleSheet
 	url = https://github.com/ColinDuquesnoy/QDarkStyleSheet.git
