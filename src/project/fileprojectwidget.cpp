@@ -17,7 +17,7 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     _proxy = new FileProjectProxyModel();
     _proxy->setDynamicSortFilter(true);
     _proxy->setSourceModel(_project->fileItemModel());
-    _proxy->setFilterRegExp(QRegExp("(nbproject|bin|build)", Qt::CaseInsensitive, QRegExp::RegExp));
+    _proxy->setFilterRegExp(QRegExp("(nbproject|bin|build|.*\\.git$)", Qt::CaseInsensitive, QRegExp::RegExp));
     _proxy->setFilterKeyColumn(0);
     _proxy->setFilterRole(QFileSystemModel::FilePathRole);
 
@@ -26,7 +26,7 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     for (int i = 1; i < _project->fileItemModel()->columnCount(); ++i)
         _fileView->hideColumn(i);
     connect(_fileView, &QTreeView::doubleClicked, this, &FileProjectWidget::openIndex);
-
+    _fileView->setStyleSheet("QTreeView { selection-background-color: transparent; }");
     layout->addWidget(_fileView);
     setLayout(layout);
     _fileView->header()->close();

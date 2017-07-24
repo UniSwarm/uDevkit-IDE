@@ -5,6 +5,7 @@
 Project::Project(const QString &path) : QObject()
 {
     _fileItemModel = new FileProjectItemModel(this);
+    _fileItemModel->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
     _versionControl = new GitVersionControl();
     connect(_versionControl, &GitVersionControl::newModifiedFiles,
             _fileItemModel, &FileProjectItemModel::filesUpdated);
