@@ -34,5 +34,8 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
 
 void FileProjectWidget::openIndex(const QModelIndex &index)
 {
-    emit doubleClickFile(_project->fileItemModel()->filePath(_proxy->mapToSource(index)));
+    const QModelIndex &indexFile = _proxy->mapToSource(index);
+    if (_project->fileItemModel()->isDir(indexFile))
+        return;
+    emit doubleClickFile(_project->fileItemModel()->filePath(indexFile));
 }

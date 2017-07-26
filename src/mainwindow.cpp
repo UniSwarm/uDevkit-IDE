@@ -28,11 +28,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(spitter);
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
-    QAction *action = new QAction(QString("git"), this);
-    action->setShortcut(QKeySequence("F2"));
-    addAction(action);
-    connect(action, &QAction::triggered, this, &MainWindow::git);
-
     setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
     setTabPosition(Qt::LeftDockWidgetArea, QTabWidget::North);
@@ -47,10 +42,21 @@ MainWindow::MainWindow(QWidget *parent) :
     addDockWidget(Qt::BottomDockWidgetArea, _dockLog);
 
     _process = nullptr;
+
+    registerAction();
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::registerAction()
+{
+    QAction *action;
+    action = new QAction(QString("git"), this);
+    action->setShortcut(QKeySequence("F2"));
+    addAction(action);
+    connect(action, &QAction::triggered, this, &MainWindow::git);
 }
 
 void MainWindow::git()

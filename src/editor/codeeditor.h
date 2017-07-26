@@ -10,15 +10,14 @@ class CodeEditor : public Editor
 public:
     explicit CodeEditor(QWidget *parent = 0);
 
-    bool modified() const;
+    bool isModified() const;
 
-signals:
-
-public slots:
-    int openFile(const QString &filePath);
-
+    Type type() const {return Code;}
 protected:
     edbee::TextEditorWidget* _editorWidget;
+
+    int openFileData(const QString &filePath);
+    int saveFileData(const QString &filePath=QString());
 
 private:
     static bool initialized;

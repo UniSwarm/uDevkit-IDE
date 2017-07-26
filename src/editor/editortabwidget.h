@@ -12,9 +12,17 @@ public:
     EditorTabWidget();
 
     void addEditor(Editor *editor);
+    Editor *currentEditor() const;
 
 public slots:
     void addFileEditor(const QString &filePath);
+
+    void closeEditor(int id=-1);
+    void saveEditor();
+
+protected:
+    bool eventFilter(QObject *o, QEvent *e);
+    void registerAction();
 };
 
 #endif // EDITORTABWIDGET_H

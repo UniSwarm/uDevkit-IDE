@@ -30,6 +30,8 @@ protected:
 
     QProcess *_process;
 
+    void registerAction();
+
 protected slots:
     void git();
     void readProcess();

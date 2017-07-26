@@ -1,10 +1,11 @@
 #include "codeeditor.h"
 
-#include <QBoxLayout>
-#include <QFile>
-#include <QDebug>
 #include <QApplication>
+#include <QBoxLayout>
+#include <QDebug>
+#include <QFile>
 #include <QFileInfo>
+#include <QSaveFile>
 
 #include "edbee/edbee.h"
 #include "edbee/io/textdocumentserializer.h"
@@ -44,17 +45,18 @@ CodeEditor::CodeEditor(QWidget *parent) : Editor(parent)
     font.setPixelSize(13);
     _editorWidget->config()->setFont(font);
     _editorWidget->config()->setThemeName("RtIDE");
+    //_editorWidget->config()->setThemeName("IDLE");
 
     layout->addWidget(_editorWidget);
     setLayout(layout);
 }
 
-bool CodeEditor::modified() const
+bool CodeEditor::isModified() const
 {
     return !_editorWidget->textDocument()->isPersisted();
 }
 
-int CodeEditor::openFile(const QString &filePath)
+int CodeEditor::openFileData(const QString &filePath)
 {
     QFile file (filePath);
     QFileInfo info(file);
@@ -64,13 +66,32 @@ int CodeEditor::openFile(const QString &filePath)
 
     edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
     if( !serializer.load( &file ) )
-        qDebug() << QString("Error opening file!\n%1").arg(serializer.errorString());
+        return -1;
 
     edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
     edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename( filePath );
     _editorWidget->textDocument()->setLanguageGrammar( grammar );
 
+    _editorWidget->textDocument()->setPersisted(true);
+
     setFilePath(filePath);
+
+    return 0;
+}
+
+int CodeEditor::saveFileData(const QString &filePath)
+{
+    QString path = filePath.isEmpty() ? _filePath : filePath;
+    QSaveFile file(path);
+
+    edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
+    if(!serializer.save(&file))
+        return -1;
+
+    if (!file.commit())
+        return -1;
+
+    _editorWidget->textDocument()->setPersisted(true);
 
     return 0;
 }
