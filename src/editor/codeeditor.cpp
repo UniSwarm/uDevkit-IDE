@@ -62,10 +62,12 @@ int CodeEditor::openFileData(const QString &filePath)
     QFileInfo info(file);
     if (!info.isReadable() || !info.isFile())
         return -1;
+    if (!file.open(QIODevice::ReadOnly))
+        return -1;
     _editorWidget->textDocument()->setText("");
 
     edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
-    if( !serializer.load( &file ) )
+    if( !serializer.loadWithoutOpening( &file ) )
         return -1;
 
     edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
@@ -83,9 +85,11 @@ int CodeEditor::saveFileData(const QString &filePath)
 {
     QString path = filePath.isEmpty() ? _filePath : filePath;
     QSaveFile file(path);
+    if (!file.open(QIODevice::WriteOnly))
+        return -1;
 
     edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
-    if(!serializer.save(&file))
+    if(!serializer.saveWithoutOpening(&file))
         return -1;
 
     if (!file.commit())
