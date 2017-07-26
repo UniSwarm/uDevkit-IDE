@@ -9,28 +9,41 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    QSplitter *spitter = new QSplitter(this);
+    _process = nullptr;
 
     _projet = new Project(QApplication::applicationDirPath()+"/../../rtprog/");
 
-    _fileView = new FileProjectWidget(_projet);
-    spitter->addWidget(_fileView);
-
     _editorTabWidget = new EditorTabWidget();
     _editorTabWidget->addFileEditor(QApplication::applicationDirPath()+"/../../rtprog/README.md");
-    spitter->addWidget(_editorTabWidget);
-    _editorTabWidget->setFocus();
+    //_editorTabWidget->setFocus();
 
-    connect(_fileView, &FileProjectWidget::doubleClickFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
-
-    spitter->setSizes(QList<int>()<<100<<500);
-
-    setCentralWidget(spitter);
+    setCentralWidget(_editorTabWidget);
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
+    createDocks();
+    registerAction();
+}
+
+MainWindow::~MainWindow()
+{
+}
+
+void MainWindow::createDocks()
+{
     setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
     setTabPosition(Qt::LeftDockWidgetArea, QTabWidget::North);
+
+    _dockFileProject = new QDockWidget("project", this);
+    QWidget *fileProjectContent = new QWidget(_dockFileProject);
+    QLayout *fileProjectLayout = new QVBoxLayout();
+    _fileProjectWidget = new FileProjectWidget(_projet);
+    fileProjectLayout->addWidget(_fileProjectWidget);
+    connect(_fileProjectWidget, &FileProjectWidget::doubleClickFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
+    fileProjectContent->setLayout(fileProjectLayout);
+    _dockFileProject->setWidget(fileProjectContent);
+    addDockWidget(Qt::LeftDockWidgetArea, _dockFileProject);
+
     _dockLog = new QDockWidget("log", this);
     QWidget *logContent = new QWidget(_dockLog);
     QLayout *logLayout = new QVBoxLayout();
@@ -40,14 +53,6 @@ MainWindow::MainWindow(QWidget *parent) :
     logContent->setLayout(logLayout);
     _dockLog->setWidget(logContent);
     addDockWidget(Qt::BottomDockWidgetArea, _dockLog);
-
-    _process = nullptr;
-
-    registerAction();
-}
-
-MainWindow::~MainWindow()
-{
 }
 
 void MainWindow::registerAction()
@@ -65,7 +70,6 @@ void MainWindow::git()
     connect(_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(readProcess()));
     _process->setWorkingDirectory(QApplication::applicationDirPath());
     _process->start("git", QStringList()<<"status");
-
 }
 
 void MainWindow::readProcess()

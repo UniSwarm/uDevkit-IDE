@@ -21,15 +21,17 @@ public:
 
 protected:
     Project *_projet;
-
-    FileProjectWidget *_fileView;
     EditorTabWidget *_editorTabWidget;
 
     QDockWidget *_dockLog;
     QTextEdit *_logWidget;
 
+    QDockWidget *_dockFileProject;
+    FileProjectWidget *_fileProjectWidget;
+
     QProcess *_process;
 
+    void createDocks();
     void registerAction();
 
 protected slots:
