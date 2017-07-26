@@ -16,12 +16,12 @@ MainWindow::MainWindow(QWidget *parent) :
     _fileView = new FileProjectWidget(_projet);
     spitter->addWidget(_fileView);
 
-    _editorWidget = new CodeEditor();
-    _editorWidget->openFile(QApplication::applicationDirPath()+"/../../rtprog/README.md");
-    spitter->addWidget(_editorWidget);
-    _editorWidget->setFocus();
+    _editorTabWidget = new EditorTabWidget();
+    _editorTabWidget->addFileEditor(QApplication::applicationDirPath()+"/../../rtprog/README.md");
+    spitter->addWidget(_editorTabWidget);
+    _editorTabWidget->setFocus();
 
-    connect(_fileView, &FileProjectWidget::doubleClickFile, _editorWidget, &CodeEditor::openFile);
+    connect(_fileView, &FileProjectWidget::doubleClickFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
 
     spitter->setSizes(QList<int>()<<100<<500);
 

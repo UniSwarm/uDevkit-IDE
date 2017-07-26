@@ -1,13 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QTextEdit>
 #include <QDockWidget>
+#include <QMainWindow>
 #include <QProcess>
+#include <QTextEdit>
+
+#include "editor/editortabwidget.h"
 
 #include "project/fileprojectwidget.h"
-#include "editor/codeeditor.h"
 #include "project/project.h"
 
 class MainWindow : public QMainWindow
@@ -22,7 +23,7 @@ protected:
     Project *_projet;
 
     FileProjectWidget *_fileView;
-    CodeEditor *_editorWidget;
+    EditorTabWidget *_editorTabWidget;
 
     QDockWidget *_dockLog;
     QTextEdit *_logWidget;
