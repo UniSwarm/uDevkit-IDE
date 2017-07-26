@@ -26,6 +26,7 @@ void EditorTabWidget::addEditor(Editor *editor)
 {
     addTab(editor, editor->fileName());
     setCurrentIndex(count()-1);
+    connect(editor, &Editor::filePathChanged, this, &EditorTabWidget::updateFilePath);
 }
 
 Editor *EditorTabWidget::currentEditor() const
@@ -74,13 +75,28 @@ void EditorTabWidget::saveEditor()
         editor->saveFile();
 }
 
+void EditorTabWidget::updateFilePath(const QString &filePath)
+{
+    qDebug()<<filePath;
+    QWidget* editor = qobject_cast<QWidget*>(sender());
+    if (editor != NULL)
+    {
+        int id = indexOf(editor);
+        if (id != -1)
+            setTabText(id, filePath);
+    }
+}
+
 bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
 {
     if (o == tabBar() && e->type() == QEvent::MouseButtonPress)
     {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
-        closeEditor(tabBar()->tabAt(mouseEvent->pos()));
-        return true;
+        if (mouseEvent->button() == Qt::MiddleButton)
+        {
+            closeEditor(tabBar()->tabAt(mouseEvent->pos()));
+            return true;
+        }
     }
     return QTabWidget::eventFilter(o, e);
 }

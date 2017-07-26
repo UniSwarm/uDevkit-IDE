@@ -64,8 +64,6 @@ Editor *Editor::createEditor(const QString &filePath, QWidget *parent)
     Editor *editor;
     editor = createEditor(Editor::Code, parent);
     if (editor)
-    {
         editor->openFileData(filePath);
-    }
     return editor;
 }

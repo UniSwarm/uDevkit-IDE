@@ -20,6 +20,9 @@ public slots:
     void closeEditor(int id=-1);
     void saveEditor();
 
+protected slots:
+    void updateFilePath(const QString &filePath);
+
 protected:
     bool eventFilter(QObject *o, QEvent *e);
     void registerAction();
