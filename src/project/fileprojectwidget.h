@@ -1,8 +1,8 @@
 #ifndef FILEPROJECT_H
 #define FILEPROJECT_H
 
+#include <QLineEdit>
 #include <QTreeView>
-#include <QDebug>
 
 #include "project.h"
 
@@ -24,6 +24,8 @@ protected:
     Project *_project;
     QTreeView *_fileView;
     FileProjectProxyModel *_proxy;
+
+    QLineEdit *_filterEdit;
 };
 
 #endif // FILEPROJECT_H

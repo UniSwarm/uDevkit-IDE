@@ -2,21 +2,38 @@
 
 #include <QFileSystemModel>
 
+#include "project.h"
+
 FileProjectProxyModel::FileProjectProxyModel(Project *project)
     : QSortFilterProxyModel()
 {
     _project = project;
     setDynamicSortFilter(true);
+    setSortRole(QFileSystemModel::FilePathRole);
 }
 
 void FileProjectProxyModel::setHiddenFilter(const QRegExp &regExp)
 {
     _hiddenFilter = regExp;
+    invalidateFilter();
+}
+
+void FileProjectProxyModel::setHiddenFilter(const QString &pattern)
+{
+    _hiddenFilter = QRegExp(pattern, Qt::CaseInsensitive, QRegExp::RegExp);
+    invalidateFilter();
 }
 
 void FileProjectProxyModel::setShowFilter(const QRegExp &regExp)
 {
     _showFilter = regExp;
+    invalidateFilter();
+}
+
+void FileProjectProxyModel::setShowFilter(const QString &pattern)
+{
+    _showFilter = QRegExp(pattern, Qt::CaseInsensitive, QRegExp::RegExp);
+    invalidateFilter();
 }
 
 bool FileProjectProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
@@ -25,13 +42,17 @@ bool FileProjectProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
     const QModelIndex index = fsm->index(source_row, 0, source_parent);
     const QString &path = fsm->data(index, QFileSystemModel::FilePathRole).toString();
 
+    // show all dir parent of project path
+    if (!path.startsWith(_project->rootPath()))
+        return true;
+
     // hidden filter: if path match, do not show
     if (_hiddenFilter.indexIn(path) != -1)
         return false;
 
     // show filter: show only if match
     if (fsm->isDir(index))
-        return true;
+        return true; // TODO add recursive search
     if (_showFilter.indexIn(path) == -1)
         return false;
 

@@ -13,7 +13,9 @@ public:
 
 public slots:
     void setHiddenFilter(const QRegExp &regExp);
+    void setHiddenFilter(const QString &pattern);
     void setShowFilter(const QRegExp &regExp);
+    void setShowFilter(const QString &pattern);
 
     // QSortFilterProxyModel interface
 protected:

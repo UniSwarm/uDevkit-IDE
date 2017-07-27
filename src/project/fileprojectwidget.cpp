@@ -9,8 +9,11 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
 {
     _project = project;
 
-    QHBoxLayout *layout = new QHBoxLayout();
+    QVBoxLayout *layout = new QVBoxLayout();
     layout->setMargin(0);
+
+    _filterEdit = new QLineEdit();
+    layout->addWidget(_filterEdit);
 
     _fileView = new QTreeView(this);
 
@@ -29,6 +32,8 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     layout->addWidget(_fileView);
     setLayout(layout);
     _fileView->header()->close();
+
+    connect(_filterEdit, SIGNAL(textChanged(QString)), _proxy, SLOT(setShowFilter(QString)));
 }
 
 void FileProjectWidget::openIndex(const QModelIndex &index)
