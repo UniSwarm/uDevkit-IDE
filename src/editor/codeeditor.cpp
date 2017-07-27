@@ -46,6 +46,7 @@ CodeEditor::CodeEditor(QWidget *parent) : Editor(parent)
     _editorWidget->config()->setFont(font);
     _editorWidget->config()->setThemeName("RtIDE");
     //_editorWidget->config()->setThemeName("IDLE");
+    _editorWidget->config()->setUseTabChar(false);
 
     layout->addWidget(_editorWidget);
     setLayout(layout);
