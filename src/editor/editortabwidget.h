@@ -26,6 +26,10 @@ public slots:
     void nextTab();
     void previousTab();
 
+signals:
+    void editorChange(Editor *editor);
+    void currentEditorModified(Editor *editor);
+
 protected slots:
     void updateTab();
     void activeTab(int id);

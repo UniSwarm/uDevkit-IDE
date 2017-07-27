@@ -39,7 +39,7 @@ void Editor::setFilePath(const QString &filePath)
 {
     if (filePath != _filePath)
     {
-        _filePath = filePath;
+        _filePath = QFileInfo(filePath).absoluteFilePath();
         emit filePathChanged(_filePath);
     }
 }

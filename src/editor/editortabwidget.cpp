@@ -117,15 +117,19 @@ void EditorTabWidget::updateTab()
         tabText.append(" *");
     setTabText(id, tabText);
 
+    emit currentEditorModified(editor);
 }
 
 void EditorTabWidget::activeTab(int id)
 {
+    // update stack of active tab (ctrl + tab)
     int pos = _activedTab.indexOf(id);
     if (pos != -1)
         _activedTab.removeAt(pos);
     _activedTab.prepend(id);
     //qDebug()<<_activedTab;
+
+    emit editorChange(editor(id));
 }
 
 bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)

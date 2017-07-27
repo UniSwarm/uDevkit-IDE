@@ -13,6 +13,7 @@
 #include "edbee/models/textgrammar.h"
 #include "edbee/models/texteditorconfig.h"
 #include "edbee/texteditorcontroller.h"
+#include "edbee/util/lineending.h"
 
 bool CodeEditor::initialized = false;
 
@@ -47,6 +48,7 @@ CodeEditor::CodeEditor(QWidget *parent) : Editor(parent)
     _editorWidget->config()->setThemeName("RtIDE");
     //_editorWidget->config()->setThemeName("IDLE");
     _editorWidget->config()->setUseTabChar(false);
+    _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
 
     connect(_editorWidget->textDocument(), &edbee::TextDocument::persistedChanged, this, &CodeEditor::modificationAppend);
 

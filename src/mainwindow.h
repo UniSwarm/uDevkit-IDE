@@ -37,6 +37,7 @@ protected:
 protected slots:
     void git();
     void readProcess();
+    void updateTitle(Editor *editor);
 };
 
 #endif // MAINWINDOW_H

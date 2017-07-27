@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //_editorTabWidget->setFocus();
 
     setCentralWidget(_editorTabWidget);
+    connect(_editorTabWidget, &EditorTabWidget::editorChange, this, &MainWindow::updateTitle);
+    connect(_editorTabWidget, &EditorTabWidget::currentEditorModified, this, &MainWindow::updateTitle);
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
     createDocks();
@@ -97,4 +99,15 @@ void MainWindow::readProcess()
 
     _process->deleteLater();
     _process = nullptr;
+}
+
+void MainWindow::updateTitle(Editor *editor)
+{
+    if(!editor)
+        return;
+    QString title = editor->filePath();
+    if (editor->isModified())
+        title.append("*");
+    title.append(" | rtide");
+    setWindowTitle(title);
 }
