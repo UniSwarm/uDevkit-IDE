@@ -16,11 +16,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(Project *project = 0, QWidget *parent = 0);
     ~MainWindow();
 
 protected:
-    Project *_projet;
+    Project *_project;
     EditorTabWidget *_editorTabWidget;
 
     QDockWidget *_dockLog;

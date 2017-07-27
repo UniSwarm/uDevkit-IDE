@@ -6,15 +6,16 @@
 #include <QSplitter>
 #include <QAction>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+MainWindow::MainWindow(Project *project, QWidget *parent) :
+    QMainWindow(parent), _project(project)
 {
     _process = nullptr;
 
-    _projet = new Project(QApplication::applicationDirPath()+"/../../rtprog/");
+    if(!_project)
+        _project = new Project(QDir::home().canonicalPath());
 
     _editorTabWidget = new EditorTabWidget();
-    _editorTabWidget->addFileEditor(QApplication::applicationDirPath()+"/../../rtprog/README.md");
+    //_editorTabWidget->addFileEditor(QApplication::applicationDirPath()+"/../../rtprog/README.md");
     //_editorTabWidget->setFocus();
 
     setCentralWidget(_editorTabWidget);
@@ -39,7 +40,7 @@ void MainWindow::createDocks()
     _dockFileProject = new QDockWidget("project", this);
     QWidget *fileProjectContent = new QWidget(_dockFileProject);
     QLayout *fileProjectLayout = new QVBoxLayout();
-    _fileProjectWidget = new FileProjectWidget(_projet);
+    _fileProjectWidget = new FileProjectWidget(_project);
     fileProjectLayout->addWidget(_fileProjectWidget);
     connect(_fileProjectWidget, &FileProjectWidget::doubleClickFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
     fileProjectContent->setLayout(fileProjectLayout);
