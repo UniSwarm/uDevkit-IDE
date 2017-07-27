@@ -2,6 +2,7 @@
 #define EDITORTABWIDGET_H
 
 #include <QStack>
+#include <QMap>
 #include <QTabWidget>
 
 #include "editor.h"
@@ -39,6 +40,7 @@ protected:
     void registerAction();
 
     QStack<int> _activedTab;
+    QMap<QString, Editor* > _mapPathEditor;
 };
 
 #endif // EDITORTABWIDGET_H

@@ -3,6 +3,7 @@
 #include <QAction>
 #include <QDebug>
 #include <QEvent>
+#include <QFileInfo>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QTabBar>
@@ -29,6 +30,7 @@ void EditorTabWidget::addEditor(Editor *editor)
     setCurrentIndex(count()-1);
     connect(editor, &Editor::filePathChanged, this, &EditorTabWidget::updateTab);
     connect(editor, &Editor::modified, this, &EditorTabWidget::updateTab);
+    _mapPathEditor.insert(QFileInfo(editor->filePath()).absoluteFilePath(), editor);
 }
 
 Editor *EditorTabWidget::currentEditor() const
@@ -43,6 +45,8 @@ Editor *EditorTabWidget::editor(int i) const
 
 void EditorTabWidget::addFileEditor(const QString &filePath)
 {
+    if(_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
+        return;
     Editor *editor = Editor::createEditor(filePath);
     if (editor)
         addEditor(editor);
@@ -72,6 +76,7 @@ void EditorTabWidget::closeEditor(int id)
         if (response == QMessageBox::Yes)
             editor->saveFile();
     }
+    _mapPathEditor.remove(QFileInfo(editor->filePath()).absoluteFilePath());
     removeTab(id);
 }
 
@@ -116,6 +121,10 @@ void EditorTabWidget::updateTab()
     if(editor->isModified())
         tabText.append(" *");
     setTabText(id, tabText);
+
+    // update map of editors
+    _mapPathEditor.remove(_mapPathEditor.key(editor));
+    _mapPathEditor.insert(QFileInfo(editor->filePath()).absoluteFilePath(), editor);
 
     emit currentEditorModified(editor);
 }
