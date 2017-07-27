@@ -109,7 +109,9 @@ void EditorTabWidget::updateTab()
 
 void EditorTabWidget::activeTab(int id)
 {
-    _activedTab.removeAll(id);
+    int pos = _activedTab.indexOf(id);
+    if (pos != -1)
+        _activedTab.removeAt(pos);
     _activedTab.prepend(id);
     //qDebug()<<_activedTab;
 }
