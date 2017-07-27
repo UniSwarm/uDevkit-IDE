@@ -48,6 +48,8 @@ CodeEditor::CodeEditor(QWidget *parent) : Editor(parent)
     //_editorWidget->config()->setThemeName("IDLE");
     _editorWidget->config()->setUseTabChar(false);
 
+    connect(_editorWidget->textDocument(), &edbee::TextDocument::persistedChanged, this, &CodeEditor::modificationAppend);
+
     layout->addWidget(_editorWidget);
     setLayout(layout);
 }
@@ -78,6 +80,7 @@ int CodeEditor::openFileData(const QString &filePath)
     _editorWidget->textDocument()->setPersisted(true);
 
     setFilePath(filePath);
+    emit modified(false);
 
     return 0;
 }
@@ -97,6 +100,12 @@ int CodeEditor::saveFileData(const QString &filePath)
         return -1;
 
     _editorWidget->textDocument()->setPersisted(true);
+    emit modified(false);
 
     return 0;
+}
+
+void CodeEditor::modificationAppend()
+{
+    emit modified(isModified());
 }

@@ -19,6 +19,9 @@ protected:
     int openFileData(const QString &filePath);
     int saveFileData(const QString &filePath=QString());
 
+protected slots:
+    void modificationAppend();
+
 private:
     static bool initialized;
 };

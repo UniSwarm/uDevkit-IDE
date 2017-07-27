@@ -21,7 +21,7 @@ public slots:
     void saveEditor();
 
 protected slots:
-    void updateFilePath(const QString &filePath);
+    void updateTab();
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);

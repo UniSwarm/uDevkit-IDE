@@ -26,7 +26,8 @@ void EditorTabWidget::addEditor(Editor *editor)
 {
     addTab(editor, editor->fileName());
     setCurrentIndex(count()-1);
-    connect(editor, &Editor::filePathChanged, this, &EditorTabWidget::updateFilePath);
+    connect(editor, &Editor::filePathChanged, this, &EditorTabWidget::updateTab);
+    connect(editor, &Editor::modified, this, &EditorTabWidget::updateTab);
 }
 
 Editor *EditorTabWidget::currentEditor() const
@@ -75,16 +76,21 @@ void EditorTabWidget::saveEditor()
         editor->saveFile();
 }
 
-void EditorTabWidget::updateFilePath(const QString &filePath)
+void EditorTabWidget::updateTab()
 {
-    qDebug()<<filePath;
-    QWidget* editor = qobject_cast<QWidget*>(sender());
-    if (editor != NULL)
-    {
-        int id = indexOf(editor);
-        if (id != -1)
-            setTabText(id, filePath);
-    }
+    Editor* editor = qobject_cast<Editor*>(sender());
+    if (editor == NULL)
+        return;
+
+    int id = indexOf(editor);
+    if (id == -1)
+        return;
+
+    QString tabText = editor->fileName();
+    if(editor->isModified())
+        tabText.append(" *");
+    setTabText(id, tabText);
+
 }
 
 bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
