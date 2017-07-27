@@ -14,12 +14,11 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
 
     _fileView = new QTreeView(this);
 
-    _proxy = new FileProjectProxyModel();
-    _proxy->setDynamicSortFilter(true);
+    _proxy = new FileProjectProxyModel(project);
     _proxy->setSourceModel(_project->fileItemModel());
-    _proxy->setFilterRegExp(QRegExp("(nbproject|bin|build|.*\\.git$)", Qt::CaseInsensitive, QRegExp::RegExp));
-    _proxy->setFilterKeyColumn(0);
-    _proxy->setFilterRole(QFileSystemModel::FilePathRole);
+    _proxy->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
+
+    //_proxy->setShowFilter(QRegExp("readme", Qt::CaseInsensitive, QRegExp::RegExp));
 
     _fileView->setModel(_proxy);
     _fileView->setRootIndex(_proxy->mapFromSource(_project->fileItemModel()->index(project->rootPath())));

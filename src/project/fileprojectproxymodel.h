@@ -2,16 +2,28 @@
 #define FILEPROJECTPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
-#include <QFileSystemModel>
+
+class Project;
 
 class FileProjectProxyModel : public QSortFilterProxyModel
 {
+    Q_OBJECT
 public:
-    explicit FileProjectProxyModel();
+    explicit FileProjectProxyModel(Project *project);
+
+public slots:
+    void setHiddenFilter(const QRegExp &regExp);
+    void setShowFilter(const QRegExp &regExp);
 
     // QSortFilterProxyModel interface
 protected:
     virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    virtual bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const;
+
+protected:
+    Project *_project;
+    QRegExp _hiddenFilter;
+    QRegExp _showFilter;
 };
 
 #endif // FILEPROJECTPROXYMODEL_H
