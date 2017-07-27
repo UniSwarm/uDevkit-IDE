@@ -36,6 +36,11 @@ Editor *EditorTabWidget::currentEditor() const
     return static_cast<Editor *>(currentWidget());
 }
 
+Editor *EditorTabWidget::editor(int i) const
+{
+    return static_cast<Editor *>(widget(i));
+}
+
 void EditorTabWidget::addFileEditor(const QString &filePath)
 {
     Editor *editor = Editor::createEditor(filePath);
@@ -70,11 +75,18 @@ void EditorTabWidget::closeEditor(int id)
     removeTab(id);
 }
 
-void EditorTabWidget::saveEditor()
+void EditorTabWidget::saveCurrentEditor()
 {
     Editor *editor = currentEditor();
     if (editor)
         editor->saveFile();
+}
+
+void EditorTabWidget::saveAllEditor()
+{
+    for (int i=0; i<count(); i++)
+        if (editor(i)->isModified())
+            editor(i)->saveFile();
 }
 
 void EditorTabWidget::nextTab()
@@ -136,7 +148,12 @@ void EditorTabWidget::registerAction()
 
     action = new QAction(QString("save"), this);
     action->setShortcut(QKeySequence::Save);
-    connect(action, &QAction::triggered, this, &EditorTabWidget::saveEditor);
+    connect(action, &QAction::triggered, this, &EditorTabWidget::saveCurrentEditor);
+    addAction(action);
+
+    action = new QAction(QString("save all"), this);
+    action->setShortcut(QKeySequence("Ctrl+Shift+S"));
+    connect(action, &QAction::triggered, this, &EditorTabWidget::saveAllEditor);
     addAction(action);
 
     action = new QAction(QString("close tab"), this);

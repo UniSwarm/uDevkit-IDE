@@ -14,12 +14,14 @@ public:
 
     void addEditor(Editor *editor);
     Editor *currentEditor() const;
+    Editor *editor(int i) const;
 
 public slots:
     void addFileEditor(const QString &filePath);
 
     void closeEditor(int id=-1);
-    void saveEditor();
+    void saveCurrentEditor();
+    void saveAllEditor();
 
     void nextTab();
     void previousTab();
