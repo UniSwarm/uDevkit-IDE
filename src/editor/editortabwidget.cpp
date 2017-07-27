@@ -20,6 +20,7 @@ EditorTabWidget::EditorTabWidget()
     registerAction();
 
     connect(this, &QTabWidget::tabCloseRequested, this, &EditorTabWidget::closeEditor);
+    connect(this, &QTabWidget::currentChanged, this, &EditorTabWidget::activeTab);
 }
 
 void EditorTabWidget::addEditor(Editor *editor)
@@ -76,6 +77,19 @@ void EditorTabWidget::saveEditor()
         editor->saveFile();
 }
 
+void EditorTabWidget::nextTab()
+{
+    if(_activedTab.count() < 2)
+        return;
+    setCurrentIndex(_activedTab[1]);
+    // TODO improve me
+}
+
+void EditorTabWidget::previousTab()
+{
+    // TODO implement me
+}
+
 void EditorTabWidget::updateTab()
 {
     Editor* editor = qobject_cast<Editor*>(sender());
@@ -91,6 +105,13 @@ void EditorTabWidget::updateTab()
         tabText.append(" *");
     setTabText(id, tabText);
 
+}
+
+void EditorTabWidget::activeTab(int id)
+{
+    _activedTab.removeAll(id);
+    _activedTab.prepend(id);
+    //qDebug()<<_activedTab;
 }
 
 bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)

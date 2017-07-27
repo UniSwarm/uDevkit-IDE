@@ -1,6 +1,7 @@
 #ifndef EDITORTABWIDGET_H
 #define EDITORTABWIDGET_H
 
+#include <QStack>
 #include <QTabWidget>
 
 #include "editor.h"
@@ -20,12 +21,18 @@ public slots:
     void closeEditor(int id=-1);
     void saveEditor();
 
+    void nextTab();
+    void previousTab();
+
 protected slots:
     void updateTab();
+    void activeTab(int id);
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);
     void registerAction();
+
+    QStack<int> _activedTab;
 };
 
 #endif // EDITORTABWIDGET_H

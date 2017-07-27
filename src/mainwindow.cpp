@@ -62,6 +62,11 @@ void MainWindow::registerAction()
     action->setShortcut(QKeySequence("F2"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::git);
+
+    action = new QAction(QString("next tab"), this);
+    action->setShortcut(QKeySequence::NextChild);
+    addAction(action);
+    connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::nextTab);
 }
 
 void MainWindow::git()
