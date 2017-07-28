@@ -1,7 +1,6 @@
 #include "fileprojectwidget.h"
 
 #include <QBoxLayout>
-#include <QHeaderView>
 #include <QDebug>
 #include <QApplication>
 
@@ -15,31 +14,25 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     _filterEdit = new QLineEdit();
     layout->addWidget(_filterEdit);
 
-    _fileView = new QTreeView(this);
+    _fileView = new FileTreeView(_project, this);
+    _fileView->proxy()->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
 
-    _proxy = new FileProjectProxyModel(project);
-    _proxy->setSourceModel(_project->fileItemModel());
-    _proxy->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
-
-    //_proxy->setShowFilter(QRegExp("readme", Qt::CaseInsensitive, QRegExp::RegExp));
-
-    _fileView->setModel(_proxy);
-    _fileView->setRootIndex(_proxy->mapFromSource(_project->fileItemModel()->index(project->rootPath())));
-    for (int i = 1; i < _project->fileItemModel()->columnCount(); ++i)
-        _fileView->hideColumn(i);
-    connect(_fileView, &QTreeView::doubleClicked, this, &FileProjectWidget::openIndex);
     _fileView->setStyleSheet("QTreeView { selection-background-color: transparent; }");
     layout->addWidget(_fileView);
     setLayout(layout);
-    _fileView->header()->close();
 
-    connect(_filterEdit, SIGNAL(textChanged(QString)), _proxy, SLOT(setShowFilter(QString)));
+    connect(_fileView, &FileTreeView::doubleClickedDir, this, &FileProjectWidget::doubleClickDir);
+    connect(_fileView, &FileTreeView::doubleClickedFile, this, &FileProjectWidget::doubleClickFile);
+
+    connect(_filterEdit, SIGNAL(textChanged(QString)), _fileView->proxy(), SLOT(setShowFilter(QString)));
 }
 
-void FileProjectWidget::openIndex(const QModelIndex &index)
+void FileProjectWidget::doubleClickDir(QString fileName)
 {
-    const QModelIndex &indexFile = _proxy->mapToSource(index);
-    if (_project->fileItemModel()->isDir(indexFile))
-        return;
-    emit doubleClickFile(_project->fileItemModel()->filePath(indexFile));
+    emit doubleClickedFile(fileName);
+}
+
+void FileProjectWidget::doubleClickFile(QString fileName)
+{
+    emit doubleClickedFile(fileName);
 }

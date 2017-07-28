@@ -42,7 +42,7 @@ void MainWindow::createDocks()
     QLayout *fileProjectLayout = new QVBoxLayout();
     _fileProjectWidget = new FileProjectWidget(_project);
     fileProjectLayout->addWidget(_fileProjectWidget);
-    connect(_fileProjectWidget, &FileProjectWidget::doubleClickFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
+    connect(_fileProjectWidget, &FileProjectWidget::doubleClickedFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
     fileProjectContent->setLayout(fileProjectLayout);
     _fileProjectDock->setWidget(fileProjectContent);
     addDockWidget(Qt::LeftDockWidgetArea, _fileProjectDock);
@@ -71,10 +71,10 @@ void MainWindow::createDocks()
 void MainWindow::registerAction()
 {
     QAction *action;
-    action = new QAction(QString("git"), this);
+    /*action = new QAction(QString("git"), this);
     action->setShortcut(QKeySequence("F2"));
     addAction(action);
-    connect(action, &QAction::triggered, this, &MainWindow::git);
+    connect(action, &QAction::triggered, this, &MainWindow::git);*/
 
     action = new QAction(QString("next tab"), this);
     action->setShortcut(QKeySequence::NextChild);

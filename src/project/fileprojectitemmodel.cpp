@@ -8,6 +8,7 @@
 FileProjectItemModel::FileProjectItemModel(Project *project)
 {
     _project = project;
+    setReadOnly(false);
 }
 
 void FileProjectItemModel::filesUpdated(QSet<QString> filesPath)

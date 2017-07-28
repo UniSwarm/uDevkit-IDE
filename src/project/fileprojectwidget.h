@@ -2,11 +2,10 @@
 #define FILEPROJECT_H
 
 #include <QLineEdit>
-#include <QTreeView>
 
 #include "project.h"
 
-#include "fileprojectproxymodel.h"
+#include "filetreeview.h"
 
 class FileProjectWidget : public QWidget
 {
@@ -15,15 +14,16 @@ public:
     explicit FileProjectWidget(Project *project, QWidget *parent = 0);
 
 signals:
-    void doubleClickFile(QString fileName);
+    void doubleClickedFile(QString fileName);
+    void doubleClickedDir(QString dirName);
 
 protected slots:
-    void openIndex(const QModelIndex &index);
+    void doubleClickDir(QString fileName);
+    void doubleClickFile(QString fileName);
 
 protected:
     Project *_project;
-    QTreeView *_fileView;
-    FileProjectProxyModel *_proxy;
+    FileTreeView *_fileView;
 
     QLineEdit *_filterEdit;
 };
