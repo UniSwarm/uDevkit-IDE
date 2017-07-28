@@ -46,7 +46,15 @@ Editor *EditorTabWidget::editor(int i) const
 void EditorTabWidget::addFileEditor(const QString &filePath)
 {
     if(_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
+    {
+        Editor *editor = _mapPathEditor.value(filePath);
+        int id = indexOf(editor);
+        if (id == -1)
+            return;
+
+        setCurrentIndex(id);
         return;
+    }
     Editor *editor = Editor::createEditor(filePath);
     if (editor)
         addEditor(editor);
