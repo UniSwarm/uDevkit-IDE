@@ -57,6 +57,14 @@ int Editor::search(const QVariant &search, SearchFlags flags)
     return 0;
 }
 
+void Editor::nextSearch()
+{
+}
+
+void Editor::prevSearch()
+{
+}
+
 void Editor::setFilePath(const QString &filePath)
 {
     if (filePath != _filePath)

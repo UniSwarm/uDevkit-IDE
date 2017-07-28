@@ -16,6 +16,8 @@ public:
 
     virtual SearchCaps searchCap() const;
     virtual int search(const QVariant &searchTerm, SearchFlags flags=SearchFlag(NoFlag));
+    virtual void nextSearch();
+    virtual void prevSearch();
 
 protected:
     edbee::TextEditorWidget* _editorWidget;

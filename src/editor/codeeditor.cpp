@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
+#include <QRegExp>
 #include <QSaveFile>
 
 #include "edbee/edbee.h"
@@ -124,14 +125,38 @@ int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
     edbee::TextSearcher* searcher = controller->textSearcher();
 
     if (flags.testFlag(RegExpMode))
+    {
         searcher->setSyntax(edbee::TextSearcher::SyntaxRegExp);
+        searcher->setSearchTerm(searchTerm.toString());
+    }
     else
+    {
         searcher->setSyntax(edbee::TextSearcher::SyntaxPlainString);
-
-    searcher->setSearchTerm(searchTerm.toString());
+        searcher->setSearchTerm(QRegExp::escape(searchTerm.toString()));
+    }
     searcher->markAll(controller->borderedTextRanges());
 
     controller->update();
 
     return controller->borderedTextRanges()->rangeCount(); // return the number of occurences found
+}
+
+void CodeEditor::nextSearch()
+{
+    edbee::TextEditorController* controller = _editorWidget->controller();
+    edbee::TextSearcher* searcher = controller->textSearcher();
+
+    searcher->findNext(_editorWidget);
+
+    controller->update();
+}
+
+void CodeEditor::prevSearch()
+{
+    edbee::TextEditorController* controller = _editorWidget->controller();
+    edbee::TextSearcher* searcher = controller->textSearcher();
+
+    searcher->findPrev(_editorWidget);
+
+    controller->update();
 }

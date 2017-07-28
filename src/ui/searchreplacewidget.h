@@ -4,6 +4,7 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QLineEdit>
+#include <QToolButton>
 #include <QWidget>
 
 #include "editor/editor.h"
@@ -22,12 +23,17 @@ public slots:
 
 protected slots:
     void upadteSearch();
+    void next();
+    void prev();
 
 protected:
     void createWidgets();
     QLineEdit *_searchLineEdit;
     QCheckBox *_regexpCheckbox;
     QLabel *_statusLabel;
+
+    QToolButton *_nextButton;
+    QToolButton *_prevButton;
 
     Editor *_editor;
 };

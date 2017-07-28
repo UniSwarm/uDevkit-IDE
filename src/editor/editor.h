@@ -44,6 +44,8 @@ public:
     };
     Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
     virtual int search(const QVariant &searchTerm, SearchFlags flags=SearchFlag(NoFlag));
+    virtual void nextSearch();
+    virtual void prevSearch();
 
 signals:
     void filePathChanged(QString filePath);
