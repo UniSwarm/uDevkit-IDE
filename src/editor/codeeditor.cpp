@@ -50,6 +50,7 @@ CodeEditor::CodeEditor(QWidget *parent) : Editor(parent)
     _editorWidget->config()->setThemeName("RtIDE");
     //_editorWidget->config()->setThemeName("IDLE");
     _editorWidget->config()->setUseTabChar(false);
+    //_editorWidget->config()->setShowWhitespaceMode(edbee::TextEditorConfig::ShowWhitespaces);
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
 
     connect(_editorWidget->textDocument(), &edbee::TextDocument::persistedChanged, this, &CodeEditor::modificationAppend);

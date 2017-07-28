@@ -29,7 +29,7 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
 
 void FileProjectWidget::doubleClickDir(QString fileName)
 {
-    emit doubleClickedFile(fileName);
+    emit doubleClickedDir(fileName);
 }
 
 void FileProjectWidget::doubleClickFile(QString fileName)

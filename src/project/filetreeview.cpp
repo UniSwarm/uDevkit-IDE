@@ -31,9 +31,11 @@ void FileTreeView::mouseDoubleClickEvent(QMouseEvent *event)
     if (!event->buttons().testFlag(Qt::LeftButton))
         return;
 
-    const QPersistentModelIndex persistent = indexAt(event->pos());
+    const QPersistentModelIndex index = indexAt(event->pos());
+    if (!index.isValid())
+        return;
 
-    const QModelIndex &indexFile = _proxy->mapToSource(persistent);
+    const QModelIndex &indexFile = _proxy->mapToSource(index);
     if (_project->fileItemModel()->isDir(indexFile))
         emit doubleClickedDir(_project->fileItemModel()->filePath(indexFile));
     else
