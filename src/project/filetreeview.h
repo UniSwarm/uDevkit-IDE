@@ -25,6 +25,7 @@ protected:
     // QWidget interface
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
+    virtual void contextMenuEvent(QContextMenuEvent *event);
 };
 
 #endif // FILETREEVIEW_H
