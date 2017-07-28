@@ -37,25 +37,35 @@ void MainWindow::createDocks()
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
     setTabPosition(Qt::LeftDockWidgetArea, QTabWidget::North);
 
-    _dockFileProject = new QDockWidget("project", this);
-    QWidget *fileProjectContent = new QWidget(_dockFileProject);
+    _fileProjectDock = new QDockWidget("project", this);
+    QWidget *fileProjectContent = new QWidget(_fileProjectDock);
     QLayout *fileProjectLayout = new QVBoxLayout();
     _fileProjectWidget = new FileProjectWidget(_project);
     fileProjectLayout->addWidget(_fileProjectWidget);
     connect(_fileProjectWidget, &FileProjectWidget::doubleClickFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
     fileProjectContent->setLayout(fileProjectLayout);
-    _dockFileProject->setWidget(fileProjectContent);
-    addDockWidget(Qt::LeftDockWidgetArea, _dockFileProject);
+    _fileProjectDock->setWidget(fileProjectContent);
+    addDockWidget(Qt::LeftDockWidgetArea, _fileProjectDock);
 
-    _dockLog = new QDockWidget("log", this);
-    QWidget *logContent = new QWidget(_dockLog);
+    _logDock = new QDockWidget("log", this);
+    QWidget *logContent = new QWidget(_logDock);
     QLayout *logLayout = new QVBoxLayout();
     _logWidget = new QTextEdit();
     _logWidget->document()->setDefaultStyleSheet("p{margin: 0;}");
     logLayout->addWidget(_logWidget);
     logContent->setLayout(logLayout);
-    _dockLog->setWidget(logContent);
-    addDockWidget(Qt::BottomDockWidgetArea, _dockLog);
+    _logDock->setWidget(logContent);
+    addDockWidget(Qt::BottomDockWidgetArea, _logDock);
+
+    _searchReplaceDock = new QDockWidget("search / replace", this);
+    QWidget *searchReplaceContent = new QWidget(_searchReplaceDock);
+    QLayout *searchReplaceLayout = new QVBoxLayout();
+    _searchReplaceWidget = new SearchReplaceWidget();
+    searchReplaceLayout->addWidget(_searchReplaceWidget);
+    connect(_editorTabWidget, &EditorTabWidget::editorChange, _searchReplaceWidget, &SearchReplaceWidget::setEditor);
+    searchReplaceContent->setLayout(searchReplaceLayout);
+    _searchReplaceDock->setWidget(searchReplaceContent);
+    addDockWidget(Qt::BottomDockWidgetArea, _searchReplaceDock);
 }
 
 void MainWindow::registerAction()
@@ -70,6 +80,11 @@ void MainWindow::registerAction()
     action->setShortcut(QKeySequence::NextChild);
     addAction(action);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::nextTab);
+
+    action = new QAction(QString("search"), this);
+    action->setShortcut(QKeySequence::QKeySequence::Find);
+    addAction(action);
+    connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activate);
 }
 
 void MainWindow::git()

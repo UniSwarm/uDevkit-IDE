@@ -35,6 +35,17 @@ int Editor::saveFile(const QString &filePath)
     return saveFileData(_filePath);
 }
 
+bool Editor::hasResearch() const
+{
+    return false;
+}
+
+void Editor::search(const QVariant &search)
+{
+    Q_UNUSED(search)
+    return;
+}
+
 void Editor::setFilePath(const QString &filePath)
 {
     if (filePath != _filePath)

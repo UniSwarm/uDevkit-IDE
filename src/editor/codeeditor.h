@@ -13,6 +13,10 @@ public:
     bool isModified() const;
 
     Type type() const {return Code;}
+
+    virtual bool hasResearch() const;
+    virtual void search(const QVariant &searchTerm);
+
 protected:
     edbee::TextEditorWidget* _editorWidget;
 

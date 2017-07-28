@@ -1,6 +1,7 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
+#include <QVariant>
 #include <QWidget>
 
 class Editor : public QWidget
@@ -22,7 +23,11 @@ public:
         Image,
         ELF
     };
-   virtual Type type() const =0;
+    virtual Type type() const =0;
+
+    // research / replace interface
+    virtual bool hasResearch() const;
+    virtual void search(const QVariant &searchTerm);
 
 signals:
     void filePathChanged(QString filePath);

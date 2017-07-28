@@ -14,6 +14,7 @@
 #include "edbee/models/texteditorconfig.h"
 #include "edbee/texteditorcontroller.h"
 #include "edbee/util/lineending.h"
+#include "edbee/models/textsearcher.h"
 
 bool CodeEditor::initialized = false;
 
@@ -110,4 +111,19 @@ int CodeEditor::saveFileData(const QString &filePath)
 void CodeEditor::modificationAppend()
 {
     emit modified(isModified());
+}
+
+
+bool CodeEditor::hasResearch() const
+{
+    return true;
+}
+
+void CodeEditor::search(const QVariant &searchTerm)
+{
+    edbee::TextEditorController* controller = _editorWidget->controller();
+    edbee::TextSearcher* searcher = controller->textSearcher();
+    searcher->setSearchTerm(searchTerm.toString());
+    searcher->markAll(controller->borderedTextRanges());
+    controller->update();
 }

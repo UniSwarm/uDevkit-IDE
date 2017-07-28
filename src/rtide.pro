@@ -25,7 +25,8 @@ SOURCES += \
     project/fileprojectwidget.cpp \
     project/fileprojectitemmodel.cpp \
     editor/editor.cpp \
-    editor/editortabwidget.cpp
+    editor/editortabwidget.cpp \
+    ui/searchreplacewidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,7 +39,8 @@ HEADERS += \
     project/fileprojectitemmodel.h \
     editor/editor.h \
     editor/editors.h \
-    editor/editortabwidget.h
+    editor/editortabwidget.h \
+    ui/searchreplacewidget.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 

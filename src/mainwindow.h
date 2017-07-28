@@ -9,7 +9,8 @@
 #include "editor/editortabwidget.h"
 
 #include "project/fileprojectwidget.h"
-#include "project/project.h"
+
+#include "ui/searchreplacewidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -23,11 +24,14 @@ protected:
     Project *_project;
     EditorTabWidget *_editorTabWidget;
 
-    QDockWidget *_dockLog;
+    QDockWidget *_logDock;
     QTextEdit *_logWidget;
 
-    QDockWidget *_dockFileProject;
+    QDockWidget *_fileProjectDock;
     FileProjectWidget *_fileProjectWidget;
+
+    QDockWidget *_searchReplaceDock;
+    SearchReplaceWidget *_searchReplaceWidget;
 
     QProcess *_process;
 
