@@ -57,11 +57,15 @@ int Editor::search(const QVariant &search, SearchFlags flags)
     return 0;
 }
 
-void Editor::nextSearch()
+void Editor::searchNext()
 {
 }
 
-void Editor::prevSearch()
+void Editor::searchPrev()
+{
+}
+
+void Editor::searchSelectAll()
 {
 }
 

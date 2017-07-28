@@ -40,7 +40,7 @@ void SearchReplaceWidget::upadteSearch()
 
     Editor::SearchFlags flags;
     if (_regexpCheckbox->isEnabled() && _regexpCheckbox->isChecked())
-        flags.setFlag(Editor::RegExpMode);
+        flags |= Editor::RegExpMode;
     int found = _editor->search(_searchLineEdit->text(), flags);
     _statusLabel->setText(QString("%1 occurence%2 found").arg(found).arg(found>1 ? "s" : ""));
 }
@@ -49,14 +49,21 @@ void SearchReplaceWidget::next()
 {
     if (!_editor)
         return;
-    _editor->nextSearch();
+    _editor->searchNext();
 }
 
 void SearchReplaceWidget::prev()
 {
     if (!_editor)
         return;
-    _editor->prevSearch();
+    _editor->searchPrev();
+}
+
+void SearchReplaceWidget::all()
+{
+    if (!_editor)
+        return;
+    _editor->searchSelectAll();
 }
 
 void SearchReplaceWidget::createWidgets()
@@ -81,6 +88,11 @@ void SearchReplaceWidget::createWidgets()
     _nextButton->setText(">");
     searchLineLayout->addWidget(_nextButton);
     connect(_nextButton, &QToolButton::clicked, this, &SearchReplaceWidget::next);
+
+    _allButton = new QToolButton();
+    _allButton->setText("*");
+    searchLineLayout->addWidget(_allButton);
+    connect(_allButton, &QToolButton::clicked, this, &SearchReplaceWidget::all);
 
     layout->addLayout(searchLineLayout);
 

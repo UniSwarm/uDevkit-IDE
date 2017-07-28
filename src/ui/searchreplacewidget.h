@@ -25,6 +25,7 @@ protected slots:
     void upadteSearch();
     void next();
     void prev();
+    void all();
 
 protected:
     void createWidgets();
@@ -34,6 +35,7 @@ protected:
 
     QToolButton *_nextButton;
     QToolButton *_prevButton;
+    QToolButton *_allButton;
 
     Editor *_editor;
 };

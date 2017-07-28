@@ -141,7 +141,7 @@ int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
     return controller->borderedTextRanges()->rangeCount(); // return the number of occurences found
 }
 
-void CodeEditor::nextSearch()
+void CodeEditor::searchNext()
 {
     edbee::TextEditorController* controller = _editorWidget->controller();
     edbee::TextSearcher* searcher = controller->textSearcher();
@@ -151,12 +151,22 @@ void CodeEditor::nextSearch()
     controller->update();
 }
 
-void CodeEditor::prevSearch()
+void CodeEditor::searchPrev()
 {
     edbee::TextEditorController* controller = _editorWidget->controller();
     edbee::TextSearcher* searcher = controller->textSearcher();
 
     searcher->findPrev(_editorWidget);
+
+    controller->update();
+}
+
+void CodeEditor::searchSelectAll()
+{
+    edbee::TextEditorController* controller = _editorWidget->controller();
+    edbee::TextSearcher* searcher = controller->textSearcher();
+
+    searcher->selectAll(_editorWidget);
 
     controller->update();
 }
