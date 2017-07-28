@@ -25,9 +25,25 @@ public:
     };
     virtual Type type() const =0;
 
-    // research / replace interface
-    virtual bool hasResearch() const;
-    virtual void search(const QVariant &searchTerm);
+    // search / replace interface
+    enum SearchCap {
+        NoSearch   = 0x0000,
+        HasSearch  = 0x0001,
+        HasReplace = 0x0002,
+        HasRegexp  = 0x0004
+    };
+    Q_DECLARE_FLAGS(SearchCaps, SearchCap)
+    virtual SearchCaps searchCap() const;
+    bool hasResearch() const;
+    bool hasRegExp() const;
+
+    enum SearchFlag {
+        NoFlag        = 0x0000,
+        RegExpMode    = 0x0001,
+        HighlightAll  = 0x0002
+    };
+    Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
+    virtual int search(const QVariant &searchTerm, SearchFlags flags=SearchFlag(NoFlag));
 
 signals:
     void filePathChanged(QString filePath);

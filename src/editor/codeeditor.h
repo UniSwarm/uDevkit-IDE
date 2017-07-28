@@ -14,8 +14,8 @@ public:
 
     Type type() const {return Code;}
 
-    virtual bool hasResearch() const;
-    virtual void search(const QVariant &searchTerm);
+    virtual SearchCaps searchCap() const;
+    virtual int search(const QVariant &searchTerm, SearchFlags flags=SearchFlag(NoFlag));
 
 protected:
     edbee::TextEditorWidget* _editorWidget;

@@ -1,6 +1,8 @@
 #ifndef SEARCHREPLACEWIDGET_H
 #define SEARCHREPLACEWIDGET_H
 
+#include <QCheckBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QWidget>
 
@@ -24,6 +26,8 @@ protected slots:
 protected:
     void createWidgets();
     QLineEdit *_searchLineEdit;
+    QCheckBox *_regexpCheckbox;
+    QLabel *_statusLabel;
 
     Editor *_editor;
 };

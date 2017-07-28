@@ -35,15 +35,26 @@ int Editor::saveFile(const QString &filePath)
     return saveFileData(_filePath);
 }
 
-bool Editor::hasResearch() const
+Editor::SearchCaps Editor::searchCap() const
 {
-    return false;
+    return NoSearch;
 }
 
-void Editor::search(const QVariant &search)
+bool Editor::hasResearch() const
+{
+    return searchCap().testFlag(HasSearch);
+}
+
+bool Editor::hasRegExp() const
+{
+    return searchCap().testFlag(HasRegexp);
+}
+
+int Editor::search(const QVariant &search, SearchFlags flags)
 {
     Q_UNUSED(search)
-    return;
+    Q_UNUSED(flags)
+    return 0;
 }
 
 void Editor::setFilePath(const QString &filePath)

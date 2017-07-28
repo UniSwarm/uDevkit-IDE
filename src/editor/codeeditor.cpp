@@ -113,17 +113,25 @@ void CodeEditor::modificationAppend()
     emit modified(isModified());
 }
 
-
-bool CodeEditor::hasResearch() const
+Editor::SearchCaps CodeEditor::searchCap() const
 {
-    return true;
+    return Editor::SearchCaps(Editor::HasSearch | Editor::HasRegexp | Editor::HasReplace);
 }
 
-void CodeEditor::search(const QVariant &searchTerm)
+int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
 {
     edbee::TextEditorController* controller = _editorWidget->controller();
     edbee::TextSearcher* searcher = controller->textSearcher();
+
+    if (flags.testFlag(RegExpMode))
+        searcher->setSyntax(edbee::TextSearcher::SyntaxRegExp);
+    else
+        searcher->setSyntax(edbee::TextSearcher::SyntaxPlainString);
+
     searcher->setSearchTerm(searchTerm.toString());
     searcher->markAll(controller->borderedTextRanges());
+
     controller->update();
+
+    return controller->borderedTextRanges()->rangeCount(); // return the number of occurences found
 }
