@@ -1,9 +1,12 @@
 #include "filetreeview.h"
 
+#include <QDebug>
 #include <QHeaderView>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMouseEvent>
+
+#include "mainwindow.h"
 
 FileTreeView::FileTreeView(Project *project, QWidget *parent)
     : QTreeView(parent), _project(project)
@@ -58,11 +61,13 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
     // file
     QAction *fileRenameAction = menu.addAction("Rename");
     fileRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
-    QAction *fileRemoveAction = nullptr, *dirRemoveAction = nullptr;
+    QAction *fileRemoveAction = nullptr, *dirRemoveAction = nullptr, *openDirAction = nullptr;
     if(_project->fileItemModel()->isDir(indexFile))
     {
         dirRemoveAction = menu.addAction("Remove directory");
         dirRemoveAction->setShortcut(QKeySequence::Delete);
+
+        openDirAction = menu.addAction("Open directory as project");
     }
     else
     {
@@ -85,4 +90,10 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
     }
     else if(trigered == fileRenameAction)
         edit(index);
+    else if(trigered == openDirAction)
+    {
+        Project *project = new Project(_project->fileItemModel()->filePath(indexFile));
+        MainWindow *w = new MainWindow(project);
+        w->show();
+    }
 }
