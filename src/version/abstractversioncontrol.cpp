@@ -32,6 +32,11 @@ bool AbstractVersionControl::isFileTracked(const QString &filePath) const
     return _trackedFiles.contains(filePath);
 }
 
+bool AbstractVersionControl::isFileValidated(const QString &filePath) const
+{
+    return _validatedFiles.contains(filePath);
+}
+
 const QSet<QString> &AbstractVersionControl::trackedFiles()
 {
     return _trackedFiles;
@@ -40,6 +45,11 @@ const QSet<QString> &AbstractVersionControl::trackedFiles()
 const QSet<QString> &AbstractVersionControl::modifiedFiles()
 {
     return _modifiedFiles;
+}
+
+const QSet<QString> &AbstractVersionControl::validatedFiles()
+{
+    return _validatedFiles;
 }
 
 void AbstractVersionControl::analysePath()

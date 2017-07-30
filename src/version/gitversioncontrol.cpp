@@ -34,6 +34,12 @@ void GitVersionControl::reqTrackedFiles()
     _processGit->start("git", QStringList()<<"ls-files"<<".");
 }
 
+void GitVersionControl::reqValidatedFiles()
+{
+    _state = ValidatedFiles;
+    _processGit->start("git", QStringList()<<"diff"<<"--cached"<<"--name-only");
+}
+
 void GitVersionControl::indexCheck()
 {
     _indexWatcher->addPath(_gitPath+"index");
@@ -53,6 +59,10 @@ void GitVersionControl::processEnd()
         break;
     case GitVersionControl::TrackedFiles:
         parseFilesList(_trackedFiles, validedFile, newmodifiedFiles);
+        reqValidatedFiles();
+        break;
+    case GitVersionControl::ValidatedFiles:
+        parseFilesList(_validatedFiles, validedFile, newmodifiedFiles);
         break;
     case GitVersionControl::DiffFile:
         break;
@@ -74,7 +84,7 @@ void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &out
         while (!stream.atEnd())
             modifiedFiles.insert(_path+"/"+stream.readLine(1000));
     }
-    if (!oldSed.isEmpty())
+    //if (!oldSed.isEmpty())
     {
         outgoingFiles = oldSed;
         outgoingFiles.subtract(modifiedFiles);

@@ -15,9 +15,11 @@ public:
     bool isFileModified(const QString &filePath) const;
     bool isDirModified(const QString &filePath) const;
     bool isFileTracked(const QString &filePath) const;
+    bool isFileValidated(const QString &filePath) const;
 
     const QSet<QString> &trackedFiles();
     const QSet<QString> &modifiedFiles();
+    const QSet<QString> &validatedFiles();
 
 protected:
     virtual void analysePath();
@@ -28,6 +30,7 @@ signals:
 
 protected:
     QString _path;
+    QSet<QString> _validatedFiles;
     QSet<QString> _trackedFiles;
     QSet<QString> _modifiedFiles;
 };

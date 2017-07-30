@@ -17,6 +17,7 @@ public:
 protected slots:
     void reqModifFiles();
     void reqTrackedFiles();
+    void reqValidatedFiles();
     void indexCheck();
     void processEnd();
 
@@ -31,6 +32,7 @@ protected:
         None,
         ModifiedFiles,
         TrackedFiles,
+        ValidatedFiles,
         DiffFile
     };
     State _state;
