@@ -13,6 +13,17 @@ void AbstractVersionControl::setPath(const QString &path)
     analysePath();
 }
 
+bool AbstractVersionControl::isDirTracked(const QString &filePath) const
+{
+    if (!isValid())
+        return true;
+    QSetIterator<QString> i(_trackedFiles);
+    while (i.hasNext())
+        if (i.next().startsWith(filePath))
+            return true;
+    return false;
+}
+
 bool AbstractVersionControl::isFileModified(const QString &filePath) const
 {
     return _modifiedFiles.contains(filePath);
@@ -29,6 +40,8 @@ bool AbstractVersionControl::isDirModified(const QString &filePath) const
 
 bool AbstractVersionControl::isFileTracked(const QString &filePath) const
 {
+    if (!isValid())
+        return true;
     return _trackedFiles.contains(filePath);
 }
 
@@ -50,6 +63,11 @@ const QSet<QString> &AbstractVersionControl::modifiedFiles()
 const QSet<QString> &AbstractVersionControl::validatedFiles()
 {
     return _validatedFiles;
+}
+
+AbstractVersionControl::isValid() const
+{
+    return true;
 }
 
 void AbstractVersionControl::analysePath()

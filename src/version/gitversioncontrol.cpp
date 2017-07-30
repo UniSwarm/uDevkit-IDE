@@ -22,6 +22,11 @@ GitVersionControl::~GitVersionControl()
     _processGit->deleteLater();
 }
 
+GitVersionControl::isValid() const
+{
+    return !_gitPath.isEmpty();
+}
+
 void GitVersionControl::reqModifFiles()
 {
     _state = ModifiedFiles;

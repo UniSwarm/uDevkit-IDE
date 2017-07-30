@@ -12,14 +12,18 @@ public:
 
     void setPath(const QString &path);
 
+    bool isDirTracked(const QString &filePath) const;
+    bool isFileTracked(const QString &filePath) const;
+    const QSet<QString> &trackedFiles();
+
     bool isFileModified(const QString &filePath) const;
     bool isDirModified(const QString &filePath) const;
-    bool isFileTracked(const QString &filePath) const;
-    bool isFileValidated(const QString &filePath) const;
-
-    const QSet<QString> &trackedFiles();
     const QSet<QString> &modifiedFiles();
+
+    bool isFileValidated(const QString &filePath) const;
     const QSet<QString> &validatedFiles();
+
+    virtual isValid() const;
 
 protected:
     virtual void analysePath();

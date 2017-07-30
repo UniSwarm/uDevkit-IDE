@@ -23,31 +23,50 @@ void FileProjectItemModel::filesUpdated(QSet<QString> filesPath)
 
 QVariant FileProjectItemModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::FontRole)
+    if (role == Qt::FontRole || role == Qt::TextColorRole)
     {
-        bool modified = false, tracked = true;
+        bool modified = false, tracked = true, validated = false;
         if (!_project || !index.isValid())
             return QFileSystemModel::data(index, role);
         if (isDir(index))
+        {
             modified = _project->versionControl()->isDirModified(filePath(index));
+            tracked = _project->versionControl()->isDirTracked(filePath(index));
+        }
         else
         {
             modified = _project->versionControl()->isFileModified(filePath(index));
             tracked = _project->versionControl()->isFileTracked(filePath(index));
+            validated = _project->versionControl()->isFileValidated(filePath(index));
         }
-        if (modified)
+
+        // font role
+        if (role == Qt::FontRole)
         {
-            QFont font;
-            font.setBold(true);
-            return font;
+            if (modified || validated)
+            {
+                QFont font;
+                font.setBold(true);
+                return font;
+            }
+            if (!tracked)
+            {
+                QFont font;
+                font.setItalic(true);
+                return font;
+            }
+            return QVariant();
         }
-        if (!tracked)
+
+        // text color
+        if (role == Qt::TextColorRole)
         {
-            QFont font;
-            font.setItalic(true);
-            return font;
+            if (validated)
+                return QVariant(QColor(0, 255, 0));
+            if (!tracked)
+                return QColor(127, 127, 127);
+            return QVariant();
         }
-        return QVariant();
     }
     return QFileSystemModel::data(index, role);
 }
