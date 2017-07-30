@@ -43,3 +43,27 @@ FileProjectItemModel *Project::fileItemModel() const
 {
     return _fileItemModel;
 }
+
+bool Project::isOpenedFile(const QString &path) const
+{
+    return _openedFiles.contains(path);
+}
+
+const QSet<QString> &Project::openedFiles() const
+{
+    return _openedFiles;
+}
+
+void Project::addOpenedFiles(QSet<QString> openedFiles)
+{
+    foreach (QString file, openedFiles)
+        _openedFiles.insert(file);
+    _fileItemModel->filesUpdated(openedFiles);
+}
+
+void Project::removeOpenedFiles(QSet<QString> openedFiles)
+{
+    foreach (QString file, openedFiles)
+        _openedFiles.remove(file);
+    _fileItemModel->filesUpdated(openedFiles);
+}

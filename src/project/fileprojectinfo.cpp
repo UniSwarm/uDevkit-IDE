@@ -28,6 +28,11 @@ bool FileProjectInfo::isValidated() const
     return _project->versionControl()->isFileValidated(filePath());
 }
 
+bool FileProjectInfo::isOpened() const
+{
+    return _project->isOpenedFile(filePath());
+}
+
 QString FileProjectInfo::humanSize() const
 {
     float num = size();

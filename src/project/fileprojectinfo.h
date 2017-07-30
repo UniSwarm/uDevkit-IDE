@@ -14,6 +14,7 @@ public:
     bool isTracked() const;
     bool isModified() const;
     bool isValidated() const;
+    bool isOpened() const;
 
     QString humanSize() const;
     QString toolTips() const;

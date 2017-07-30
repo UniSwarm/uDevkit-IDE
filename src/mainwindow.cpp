@@ -16,7 +16,7 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
     if(!_project)
         _project = new Project(QDir::home().canonicalPath());
 
-    _editorTabWidget = new EditorTabWidget();
+    _editorTabWidget = new EditorTabWidget(_project);
     //_editorTabWidget->addFileEditor(QApplication::applicationDirPath()+"/../../rtprog/README.md");
     //_editorTabWidget->setFocus();
 

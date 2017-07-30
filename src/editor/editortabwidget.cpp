@@ -8,7 +8,8 @@
 #include <QMouseEvent>
 #include <QTabBar>
 
-EditorTabWidget::EditorTabWidget()
+EditorTabWidget::EditorTabWidget(Project *project)
+    : _project(project)
 {
     setTabsClosable(true);
     setTabShape(QTabWidget::Triangular);
@@ -26,11 +27,13 @@ EditorTabWidget::EditorTabWidget()
 
 void EditorTabWidget::addEditor(Editor *editor)
 {
+    const QString &path = QFileInfo(editor->filePath()).absoluteFilePath();
     addTab(editor, editor->fileName());
     setCurrentIndex(count()-1);
     connect(editor, &Editor::filePathChanged, this, &EditorTabWidget::updateTab);
     connect(editor, &Editor::modified, this, &EditorTabWidget::updateTab);
-    _mapPathEditor.insert(QFileInfo(editor->filePath()).absoluteFilePath(), editor);
+    _mapPathEditor.insert(path, editor);
+    _project->addOpenedFiles(QSet<QString>()<<path);
 }
 
 Editor *EditorTabWidget::currentEditor() const
@@ -73,6 +76,7 @@ void EditorTabWidget::closeEditor(int id)
     if (!editor)
         return;
 
+    const QString &path = QFileInfo(editor->filePath()).absoluteFilePath();
     if (editor->isModified())
     {
         int response = QMessageBox::question(this, tr("File modified"),
@@ -84,7 +88,8 @@ void EditorTabWidget::closeEditor(int id)
         if (response == QMessageBox::Yes)
             editor->saveFile();
     }
-    _mapPathEditor.remove(QFileInfo(editor->filePath()).absoluteFilePath());
+    _mapPathEditor.remove(path);
+    _project->removeOpenedFiles(QSet<QString>()<<path);
     removeTab(id);
 }
 

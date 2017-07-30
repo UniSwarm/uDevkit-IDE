@@ -35,12 +35,22 @@ QVariant FileProjectItemModel::data(const QModelIndex &index, int role) const
             {
                 QFont font;
                 font.setBold(true);
+                if (info.isOpened())
+                    font.setUnderline(true);
                 return font;
             }
             if (!info.isTracked())
             {
                 QFont font;
                 font.setItalic(true);
+                if (info.isOpened())
+                    font.setUnderline(true);
+                return font;
+            }
+            if (info.isOpened())
+            {
+                QFont font;
+                font.setUnderline(true);
                 return font;
             }
             return QVariant();

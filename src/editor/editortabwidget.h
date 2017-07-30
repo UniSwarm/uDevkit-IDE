@@ -6,12 +6,13 @@
 #include <QTabWidget>
 
 #include "editor.h"
+#include "project/project.h"
 
 class EditorTabWidget : public QTabWidget
 {
     Q_OBJECT
 public:
-    EditorTabWidget();
+    EditorTabWidget(Project *project);
 
     void addEditor(Editor *editor);
     Editor *currentEditor() const;
@@ -39,6 +40,7 @@ protected:
     bool eventFilter(QObject *o, QEvent *e);
     void registerAction();
 
+    Project *_project;
     QStack<int> _activedTab;
     QMap<QString, Editor* > _mapPathEditor;
 };

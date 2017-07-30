@@ -21,6 +21,11 @@ public:
 
     FileProjectItemModel *fileItemModel() const;
 
+    bool isOpenedFile(const QString &path) const;
+    const QSet<QString> &openedFiles() const;
+    void addOpenedFiles(QSet<QString> openedFiles);
+    void removeOpenedFiles(QSet<QString> openedFiles);
+
 signals:
     void rootPathChanged();
 
@@ -30,6 +35,7 @@ protected:
     QDir _rootDir;
     AbstractVersionControl *_versionControl;
     FileProjectItemModel *_fileItemModel;
+    QSet<QString> _openedFiles;
 };
 
 #endif // PROJECT_H
