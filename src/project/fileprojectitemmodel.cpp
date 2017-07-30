@@ -1,5 +1,6 @@
 #include "fileprojectitemmodel.h"
 
+#include "fileprojectinfo.h"
 #include "project.h"
 
 #include <QFont>
@@ -23,33 +24,20 @@ void FileProjectItemModel::filesUpdated(QSet<QString> filesPath)
 
 QVariant FileProjectItemModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::FontRole || role == Qt::TextColorRole)
+    if (role == Qt::FontRole || role == Qt::TextColorRole || role == Qt::ToolTipRole)
     {
-        bool modified = false, tracked = true, validated = false;
-        if (!_project || !index.isValid())
-            return QFileSystemModel::data(index, role);
-        if (isDir(index))
-        {
-            modified = _project->versionControl()->isDirModified(filePath(index));
-            tracked = _project->versionControl()->isDirTracked(filePath(index));
-        }
-        else
-        {
-            modified = _project->versionControl()->isFileModified(filePath(index));
-            tracked = _project->versionControl()->isFileTracked(filePath(index));
-            validated = _project->versionControl()->isFileValidated(filePath(index));
-        }
+        FileProjectInfo info(filePath(index), _project);
 
         // font role
         if (role == Qt::FontRole)
         {
-            if (modified || validated)
+            if (info.isModified() || info.isValidated())
             {
                 QFont font;
                 font.setBold(true);
                 return font;
             }
-            if (!tracked)
+            if (!info.isTracked())
             {
                 QFont font;
                 font.setItalic(true);
@@ -61,11 +49,17 @@ QVariant FileProjectItemModel::data(const QModelIndex &index, int role) const
         // text color
         if (role == Qt::TextColorRole)
         {
-            if (validated)
+            if (info.isValidated())
                 return QVariant(QColor(0, 255, 0));
-            if (!tracked)
+            if (!info.isTracked())
                 return QColor(127, 127, 127);
             return QVariant();
+        }
+
+        // tooltip
+        if (role == Qt::ToolTipRole)
+        {
+            return info.toolTips();
         }
     }
     return QFileSystemModel::data(index, role);
