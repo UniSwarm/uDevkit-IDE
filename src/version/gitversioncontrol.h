@@ -14,7 +14,7 @@ public:
     GitVersionControl();
     virtual ~GitVersionControl();
 
-    virtual isValid() const;
+    virtual bool isValid() const;
 
 protected slots:
     void reqModifFiles();

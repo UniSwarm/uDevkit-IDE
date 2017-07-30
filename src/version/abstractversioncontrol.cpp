@@ -65,7 +65,7 @@ const QSet<QString> &AbstractVersionControl::validatedFiles()
     return _validatedFiles;
 }
 
-AbstractVersionControl::isValid() const
+bool AbstractVersionControl::isValid() const
 {
     return true;
 }

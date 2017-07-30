@@ -22,7 +22,7 @@ GitVersionControl::~GitVersionControl()
     _processGit->deleteLater();
 }
 
-GitVersionControl::isValid() const
+bool GitVersionControl::isValid() const
 {
     return !_gitPath.isEmpty();
 }

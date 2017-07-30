@@ -23,7 +23,7 @@ public:
     bool isFileValidated(const QString &filePath) const;
     const QSet<QString> &validatedFiles();
 
-    virtual isValid() const;
+    virtual bool isValid() const;
 
 protected:
     virtual void analysePath();
