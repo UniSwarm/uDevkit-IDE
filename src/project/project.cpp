@@ -31,6 +31,7 @@ void Project::setRootPath(const QString &path)
     _rootDir.setPath(QDir::cleanPath(path));
     _versionControl->setPath(path);
     _fileItemModel->setRootPath(rootPath());
+    emit rootPathChanged();
 }
 
 AbstractVersionControl *Project::versionControl() const

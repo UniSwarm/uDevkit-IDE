@@ -36,7 +36,11 @@ protected:
     QProcess *_process;
 
     void createDocks();
-    void registerAction();
+    void createMenus();
+
+public slots:
+    bool openDir(const QString &paths=QString());
+    bool openFiles(const QStringList &paths=QStringList());
 
 protected slots:
     void git();

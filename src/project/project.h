@@ -22,6 +22,7 @@ public:
     FileProjectItemModel *fileItemModel() const;
 
 signals:
+    void rootPathChanged();
 
 public slots:
 

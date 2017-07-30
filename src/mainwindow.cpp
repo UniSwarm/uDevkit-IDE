@@ -1,10 +1,12 @@
 #include "mainwindow.h"
 
-#include <QBoxLayout>
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QSplitter>
 #include <QAction>
+#include <QApplication>
+#include <QBoxLayout>
+#include <QDesktopWidget>
+#include <QFileDialog>
+#include <QSplitter>
+#include <QMenuBar>
 
 MainWindow::MainWindow(Project *project, QWidget *parent) :
     QMainWindow(parent), _project(project)
@@ -24,7 +26,7 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
     createDocks();
-    registerAction();
+    createMenus();
 }
 
 MainWindow::~MainWindow()
@@ -68,13 +70,38 @@ void MainWindow::createDocks()
     addDockWidget(Qt::BottomDockWidgetArea, _searchReplaceDock);
 }
 
-void MainWindow::registerAction()
+void MainWindow::createMenus()
 {
+    setMenuBar(new QMenuBar(this));
+    //addToolBar(new QToolBar(this));
+
+    QMenu *projectMenu = menuBar()->addMenu("&Project");
+
+    QAction *openDirAction = new QAction(tr("Open &project"),this);
+    openDirAction->setStatusTip(tr("Opens a project as directory"));
+    projectMenu->addAction(openDirAction);
+    connect(openDirAction, SIGNAL(triggered()), this, SLOT(openDir()));
+
+    QAction *openFilesAction = new QAction(tr("&Open files"),this);
+    openFilesAction->setStatusTip(tr("Opens files"));
+    openFilesAction->setShortcut(QKeySequence::Open);
+    projectMenu->addAction(openFilesAction);
+    connect(openFilesAction, SIGNAL(triggered()), this, SLOT(openFiles()));
+
+    projectMenu->addSeparator();
+
+    projectMenu->addSeparator();
+    QAction *exit = new QAction(tr("E&xit"),this);
+    exit->setStatusTip(tr("Exits RtIDE"));
+    exit->setShortcut(QKeySequence::Quit);
+    projectMenu->addAction(exit);
+    connect(exit, SIGNAL(triggered()), this, SLOT(close()));
+
     QAction *action;
-    /*action = new QAction(QString("git"), this);
-    action->setShortcut(QKeySequence("F2"));
+    action = new QAction(QString("git"), this);
+    action->setShortcut(QKeySequence("F4"));
     addAction(action);
-    connect(action, &QAction::triggered, this, &MainWindow::git);*/
+    connect(action, &QAction::triggered, this, &MainWindow::git);
 
     action = new QAction(QString("next tab"), this);
     action->setShortcut(QKeySequence::NextChild);
@@ -85,6 +112,43 @@ void MainWindow::registerAction()
     action->setShortcut(QKeySequence::QKeySequence::Find);
     addAction(action);
     connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activate);
+}
+
+bool MainWindow::openDir(const QString &path)
+{
+    QString mpath = path;
+    if (mpath.isEmpty())
+    {
+        QFileDialog dialog(this);
+        dialog.setOption(QFileDialog::DontUseNativeDialog);
+        dialog.setFileMode(QFileDialog::Directory);
+        if (!dialog.exec())
+            return false;
+        mpath = dialog.selectedFiles().first();
+    }
+    //_project->setRootPath(mpath);
+
+    Project *project = new Project(mpath);
+    MainWindow *w = new MainWindow(project);
+    w->show();
+    return true;
+}
+
+bool MainWindow::openFiles(const QStringList &paths)
+{
+    QStringList mpaths = paths;
+    if (mpaths.isEmpty())
+    {
+        QFileDialog dialog(this);
+        dialog.setOption(QFileDialog::DontUseNativeDialog);
+        dialog.setFileMode(QFileDialog::ExistingFiles);
+        if (!dialog.exec())
+            return false;
+        mpaths = dialog.selectedFiles();
+    }
+    foreach (QString apath, mpaths)
+        _editorTabWidget->addFileEditor(apath);
+    return true;
 }
 
 void MainWindow::git()
