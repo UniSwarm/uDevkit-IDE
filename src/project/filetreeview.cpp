@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 
+#include "fileprojectinfo.h"
 #include "mainwindow.h"
 
 FileTreeView::FileTreeView(Project *project, QWidget *parent)
@@ -58,7 +59,7 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
 
     QMenu menu;
 
-    // file
+    // file commands
     QAction *fileRenameAction = menu.addAction("Rename");
     fileRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
     QAction *fileRemoveAction = nullptr, *dirRemoveAction = nullptr, *openDirAction = nullptr;
@@ -75,25 +76,49 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
         fileRemoveAction->setShortcut(QKeySequence::Delete);
     }
 
+    // git commands
+    QAction *versionValidAction = nullptr, *versionInvalidAction = nullptr, *versionCheckoutAction = nullptr;
+    FileProjectInfo info(_project->fileItemModel()->filePath(indexFile), _project);
+    if (_project->versionControl()->isValid())
+    {
+        menu.addSeparator();
+        if (!info.isTracked() || info.isModified())
+            versionValidAction = menu.addAction(_project->versionControl()->versionControlName()+" add");
+        if (info.isValidated())
+            versionInvalidAction = menu.addAction(_project->versionControl()->versionControlName()+" reset HEAD");
+        if (info.isModified())
+            versionCheckoutAction = menu.addAction(_project->versionControl()->versionControlName()+" checkout");
+    }
+
+    // exec menu
     QAction *trigered = menu.exec(event->globalPos());
     if(trigered == nullptr)
         return;
-    if(trigered == dirRemoveAction)
+
+    // analyse clicked menu
+    if (trigered == dirRemoveAction)
     {
-        if(QMessageBox::question(this, "Remove file?", QString("Do you realy want to remove '%1'?").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+        if(QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove '%1'?").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
             _project->fileItemModel()->rmdir(indexFile);
     }
-    else if(trigered == fileRemoveAction)
+    else if (trigered == fileRemoveAction)
     {
-        if(QMessageBox::question(this, "Remove file?", QString("Do you realy want to remove '%1'?").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+        if (QMessageBox::question(this, "Remove file?", QString("Do you realy want to remove '%1'?").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
             _project->fileItemModel()->remove(indexFile);
     }
-    else if(trigered == fileRenameAction)
+    else if (trigered == fileRenameAction)
         edit(index);
-    else if(trigered == openDirAction)
+    else if (trigered == openDirAction)
     {
         Project *project = new Project(_project->fileItemModel()->filePath(indexFile));
         MainWindow *w = new MainWindow(project);
         w->show();
     }
+    else if (trigered == versionValidAction)
+        _project->versionControl()->validFile(QSet<QString>()<<info.filePath());
+    else if (trigered == versionInvalidAction)
+        _project->versionControl()->inValidFile(QSet<QString>()<<info.filePath());
+    else if (trigered == versionCheckoutAction)
+        if (QMessageBox::question(this, "Checkout file?", QString("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+            _project->versionControl()->checkoutFile(QSet<QString>()<<info.filePath());
 }
