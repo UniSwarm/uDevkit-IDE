@@ -91,6 +91,7 @@ void EditorTabWidget::closeEditor(int id)
     _mapPathEditor.remove(path);
     _project->removeOpenedFiles(QSet<QString>()<<path);
     removeTab(id);
+    delete editor;
 }
 
 void EditorTabWidget::saveCurrentEditor()
@@ -154,7 +155,10 @@ void EditorTabWidget::activeTab(int id)
     Editor *editor = this->editor(id);
     emit editorChange(editor);
     if (editor)
+    {
         currentFileChanged(editor->filePath());
+        editor->active();
+    }
 }
 
 bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)

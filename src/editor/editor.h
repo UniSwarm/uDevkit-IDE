@@ -1,6 +1,7 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
+#include <QFileSystemWatcher>
 #include <QVariant>
 #include <QWidget>
 
@@ -9,6 +10,7 @@ class Editor : public QWidget
     Q_OBJECT
 public:
     explicit Editor(QWidget *parent = nullptr);
+    virtual ~Editor();
 
     QString fileName() const;
     QString filePath() const;
@@ -16,6 +18,8 @@ public:
     int saveFile(const QString &filePath=QString());
 
     virtual bool isModified() const =0;
+
+    bool isActiveEditor() const;
 
     enum Type {
         Code,
@@ -48,6 +52,10 @@ public:
     virtual void searchPrev();
     virtual void searchSelectAll();
 
+public slots:
+    void reload();
+    void active();
+
 signals:
     void filePathChanged(QString filePath);
     void modified(bool modified);
@@ -59,6 +67,8 @@ public:
 protected:
     void setFilePath(const QString &filePath);
     QString _filePath;
+    QFileSystemWatcher *_reloadWatcher;
+    bool _extModifDetected;
 
     virtual int openFileData(const QString &filePath) =0;
     virtual int saveFileData(const QString &filePath=QString()) =0;
