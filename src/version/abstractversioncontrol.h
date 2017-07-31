@@ -28,6 +28,7 @@ public:
     virtual void checkoutFile(const QSet<QString> &filesPath);
 
     virtual bool isValid() const;
+    void modifFile(const QSet<QString> &filesPath);
 
 protected:
     virtual void analysePath();

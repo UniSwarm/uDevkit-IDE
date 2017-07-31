@@ -8,7 +8,7 @@ class CodeEditor : public Editor
 {
     Q_OBJECT
 public:
-    explicit CodeEditor(QWidget *parent = 0);
+    explicit CodeEditor(Project *project, QWidget *parent = 0);
 
     bool isModified() const;
 

@@ -5,11 +5,13 @@
 #include <QVariant>
 #include <QWidget>
 
+#include "project/project.h"
+
 class Editor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Editor(QWidget *parent = nullptr);
+    explicit Editor(Project *project, QWidget *parent = nullptr);
     virtual ~Editor();
 
     QString fileName() const;
@@ -53,7 +55,7 @@ public:
     virtual void searchSelectAll();
 
 public slots:
-    void reload();
+    void reload(const QString &path=QString());
     void active();
 
 signals:
@@ -61,11 +63,13 @@ signals:
     void modified(bool modified);
 
 public:
-    static Editor *createEditor(Type type, QWidget *parent = nullptr);
-    static Editor *createEditor(const QString &filePath, QWidget *parent = nullptr);
+    static Editor *createEditor(Type type, Project *project, QWidget *parent = nullptr);
+    static Editor *createEditor(const QString &filePath, Project *project, QWidget *parent = nullptr);
 
 protected:
     void setFilePath(const QString &filePath);
+
+    Project *_project;
     QString _filePath;
     QFileSystemWatcher *_reloadWatcher;
     bool _extModifDetected;

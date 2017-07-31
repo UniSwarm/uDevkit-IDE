@@ -17,9 +17,12 @@
 #include "edbee/util/lineending.h"
 #include "edbee/models/textsearcher.h"
 
+#include "edbee/models/chardocument/chartextdocument.h"
+
 bool CodeEditor::initialized = false;
 
-CodeEditor::CodeEditor(QWidget *parent) : Editor(parent)
+CodeEditor::CodeEditor(Project *project, QWidget *parent)
+    : Editor(project, parent)
 {
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setMargin(0);
@@ -72,11 +75,28 @@ int CodeEditor::openFileData(const QString &filePath)
         return -1;
     if (!file.open(QIODevice::ReadOnly))
         return -1;
+    /*//_editorWidget->textDocument()->blockSignals(true);
+    _editorWidget->textDocument()->beginChanges(_editorWidget->controller());
     _editorWidget->textDocument()->setText("");
+    _editorWidget->textDocument()->endChanges(123456789);
+    //_editorWidget->textDocument()->blockSignals(false);*/
+    //_editorWidget->controller()->replace(0, _editorWidget->textDocument()->length(), , 0);
 
-    edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
-    if( !serializer.loadWithoutOpening( &file ) )
-        return -1;
+    if (_editorWidget->textDocument()->length()>1)
+    {
+        edbee::CharTextDocument document;
+        edbee::TextDocumentSerializer serializer( &document );
+        if( !serializer.loadWithoutOpening( &file ) )
+            return -1;
+
+        _editorWidget->textDocument()->replace( 0, _editorWidget->textDocument()->length(), document.text(), 0 );
+    }
+    else
+    {
+        edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
+        if( !serializer.loadWithoutOpening( &file ) )
+            return -1;
+    }
 
     edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
     edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename( filePath );

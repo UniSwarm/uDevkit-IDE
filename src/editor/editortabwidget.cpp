@@ -58,7 +58,7 @@ void EditorTabWidget::addFileEditor(const QString &filePath)
         setCurrentIndex(id);
         return;
     }
-    Editor *editor = Editor::createEditor(filePath);
+    Editor *editor = Editor::createEditor(filePath, _project);
     if (editor)
         addEditor(editor);
 }

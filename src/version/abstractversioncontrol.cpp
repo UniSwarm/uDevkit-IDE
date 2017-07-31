@@ -94,6 +94,21 @@ bool AbstractVersionControl::isValid() const
     return true;
 }
 
+void AbstractVersionControl::modifFile(const QSet<QString> &filesPath)
+{
+    QSet<QString> mnewModifiedFiles;
+    foreach (QString filePath, filesPath)
+    {
+        if (!_modifiedFiles.contains(filePath))
+        {
+            mnewModifiedFiles.insert(filePath);
+            _modifiedFiles.insert(filePath);
+        }
+    }
+    if (!mnewModifiedFiles.isEmpty())
+        emit newModifiedFiles(mnewModifiedFiles);
+}
+
 void AbstractVersionControl::analysePath()
 {
 }

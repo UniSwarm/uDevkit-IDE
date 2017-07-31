@@ -8,7 +8,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-Editor::Editor(QWidget *parent) : QWidget(parent)
+Editor::Editor(Project *project, QWidget *parent)
+    : QWidget(parent), _project(project)
 {
     _reloadWatcher = new QFileSystemWatcher();
     connect(_reloadWatcher, &QFileSystemWatcher::fileChanged, this, &Editor::reload);
@@ -45,6 +46,7 @@ int Editor::saveFile(const QString &filePath)
     setFilePath(path);
     _reloadWatcher->removePath(_filePath);
     int ret = saveFileData(_filePath);
+    _project->versionControl()->modifFile(QSet<QString>()<<_filePath);
     _reloadWatcher->addPath(_filePath);
     return ret;
 }
@@ -96,8 +98,20 @@ void Editor::searchSelectAll()
 {
 }
 
-void Editor::reload()
+void Editor::reload(const QString &path)
 {
+    //qDebug()<<"reload path: "<<path;
+    if (path != _filePath)
+    {
+        if (!QFileInfo(_filePath).exists())
+            _reloadWatcher->addPath(QFileInfo(_filePath).filePath());
+        return;
+    }
+    _project->versionControl()->modifFile(QSet<QString>()<<_filePath);
+
+    if (!QFileInfo(_filePath).exists())
+        _reloadWatcher->addPath(QFileInfo(_filePath).filePath());
+
     bool needReload = true;
     _extModifDetected = true;
 
@@ -140,12 +154,12 @@ void Editor::setFilePath(const QString &filePath)
     }
 }
 
-Editor *Editor::createEditor(Editor::Type type, QWidget *parent)
+Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *parent)
 {
     switch (type)
     {
     case Editor::Code:
-        return new CodeEditor(parent);
+        return new CodeEditor(project, parent);
     case Editor::Hexa:
         break;
     case Editor::Image:
@@ -156,10 +170,10 @@ Editor *Editor::createEditor(Editor::Type type, QWidget *parent)
     return nullptr;
 }
 
-Editor *Editor::createEditor(const QString &filePath, QWidget *parent)
+Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget *parent)
 {
     Editor *editor;
-    editor = createEditor(Editor::Code, parent);
+    editor = createEditor(Editor::Code, project, parent);
     if (editor)
         editor->openFileData(filePath);
     return editor;
