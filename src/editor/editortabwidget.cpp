@@ -94,6 +94,15 @@ void EditorTabWidget::closeEditor(int id)
     delete editor;
 }
 
+void EditorTabWidget::closeAllEditors()
+{
+    while (count() > 0)
+    {
+        setCurrentIndex(0);
+        closeEditor(0);
+    }
+}
+
 void EditorTabWidget::saveCurrentEditor()
 {
     Editor *editor = currentEditor();
@@ -101,7 +110,7 @@ void EditorTabWidget::saveCurrentEditor()
         editor->saveFile();
 }
 
-void EditorTabWidget::saveAllEditor()
+void EditorTabWidget::saveAllEditors()
 {
     for (int i=0; i<count(); i++)
         if (editor(i)->isModified())
@@ -186,7 +195,7 @@ void EditorTabWidget::registerAction()
 
     action = new QAction(QString("save all"), this);
     action->setShortcut(QKeySequence("Ctrl+Shift+S"));
-    connect(action, &QAction::triggered, this, &EditorTabWidget::saveAllEditor);
+    connect(action, &QAction::triggered, this, &EditorTabWidget::saveAllEditors);
     addAction(action);
 
     action = new QAction(QString("close tab"), this);

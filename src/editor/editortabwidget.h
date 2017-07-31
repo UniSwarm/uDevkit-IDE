@@ -22,8 +22,9 @@ public slots:
     void addFileEditor(const QString &filePath);
 
     void closeEditor(int id=-1);
+    void closeAllEditors();
     void saveCurrentEditor();
-    void saveAllEditor();
+    void saveAllEditors();
 
     void nextTab();
     void previousTab();

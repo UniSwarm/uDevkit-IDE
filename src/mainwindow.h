@@ -46,6 +46,10 @@ protected slots:
     void git();
     void readProcess();
     void updateTitle(Editor *editor);
+
+    // QObject interface
+public:
+    virtual bool event(QEvent *event);
 };
 
 #endif // MAINWINDOW_H

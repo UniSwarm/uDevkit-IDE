@@ -192,3 +192,12 @@ void MainWindow::updateTitle(Editor *editor)
     title.append(" | rtide");
     setWindowTitle(title);
 }
+
+bool MainWindow::event(QEvent *event)
+{
+    if(event->type()==QEvent::Close)
+    {
+        _editorTabWidget->closeAllEditors();
+    }
+    return QMainWindow::event(event);
+}
