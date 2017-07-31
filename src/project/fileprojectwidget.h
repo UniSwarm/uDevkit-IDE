@@ -17,9 +17,12 @@ signals:
     void doubleClickedFile(QString fileName);
     void doubleClickedDir(QString dirName);
 
+public slots:
+    void selectFile(const QString &fileName);
+
 protected slots:
-    void doubleClickDir(QString fileName);
-    void doubleClickFile(QString fileName);
+    void doubleClickDir(const QString &fileName);
+    void doubleClickFile(const QString &fileName);
 
 protected:
     Project *_project;

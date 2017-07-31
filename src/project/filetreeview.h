@@ -14,6 +14,9 @@ public:
 
     FileProjectProxyModel *proxy() const;
 
+public slots:
+    void selectFile(const QString &fileName);
+
 signals:
     void doubleClickedFile(QString fileName);
     void doubleClickedDir(QString dirName);

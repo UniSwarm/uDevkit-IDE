@@ -151,7 +151,9 @@ void EditorTabWidget::activeTab(int id)
     _activedTab.prepend(id);
     //qDebug()<<_activedTab;
 
-    emit editorChange(editor(id));
+    Editor *meditor = this->editor(id);
+    emit editorChange(meditor);
+    currentFileChanged(meditor->filePath());
 }
 
 bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)

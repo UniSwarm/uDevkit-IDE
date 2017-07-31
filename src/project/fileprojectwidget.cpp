@@ -27,12 +27,17 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     connect(_filterEdit, SIGNAL(textChanged(QString)), _fileView->proxy(), SLOT(setShowFilter(QString)));
 }
 
-void FileProjectWidget::doubleClickDir(QString fileName)
+void FileProjectWidget::selectFile(const QString &fileName)
+{
+    _fileView->selectFile(fileName);
+}
+
+void FileProjectWidget::doubleClickDir(const QString &fileName)
 {
     emit doubleClickedDir(fileName);
 }
 
-void FileProjectWidget::doubleClickFile(QString fileName)
+void FileProjectWidget::doubleClickFile(const QString &fileName)
 {
     emit doubleClickedFile(fileName);
 }

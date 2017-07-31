@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QHeaderView>
+#include <QItemSelectionModel>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMouseEvent>
@@ -28,6 +29,19 @@ FileTreeView::FileTreeView(Project *project, QWidget *parent)
 FileProjectProxyModel *FileTreeView::proxy() const
 {
     return _proxy;
+}
+
+void FileTreeView::selectFile(const QString &fileName)
+{
+    QModelIndex fileIndex = _project->fileItemModel()->index(fileName);
+    if (!fileIndex.isValid())
+        return;
+
+    QModelIndex proxyIndex = _proxy->mapFromSource(fileIndex);
+    if (!proxyIndex.isValid())
+        return;
+
+    selectionModel()->setCurrentIndex(proxyIndex, QItemSelectionModel::ClearAndSelect);
 }
 
 void FileTreeView::mouseDoubleClickEvent(QMouseEvent *event)

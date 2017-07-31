@@ -45,6 +45,7 @@ void MainWindow::createDocks()
     _fileProjectWidget = new FileProjectWidget(_project);
     fileProjectLayout->addWidget(_fileProjectWidget);
     connect(_fileProjectWidget, &FileProjectWidget::doubleClickedFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
+    connect(_editorTabWidget, &EditorTabWidget::currentFileChanged, _fileProjectWidget, &FileProjectWidget::selectFile);
     fileProjectContent->setLayout(fileProjectLayout);
     _fileProjectDock->setWidget(fileProjectContent);
     addDockWidget(Qt::LeftDockWidgetArea, _fileProjectDock);

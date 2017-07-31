@@ -31,6 +31,7 @@ public slots:
 signals:
     void editorChange(Editor *editor);
     void currentEditorModified(Editor *editor);
+    void currentFileChanged(QString filePath);
 
 protected slots:
     void updateTab();
