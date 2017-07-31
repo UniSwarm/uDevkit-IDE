@@ -14,6 +14,12 @@ public:
     GitVersionControl();
     virtual ~GitVersionControl();
 
+    virtual QString versionControlName() const;
+
+    virtual void validFile(const QSet<QString> &filesPath);
+    virtual void inValidFile(const QSet<QString> &filesPath);
+    virtual void checkoutFile(const QSet<QString> &filesPath);
+
     virtual bool isValid() const;
 
 protected slots:
@@ -39,9 +45,10 @@ protected:
     };
     State _state;
 
-    QProcess *_processGit;
+    QProcess *_processGitState;
     QFileSystemWatcher *_indexWatcher;
     QString _gitPath;
+    QString _basePath;
 };
 
 #endif // GITVERSIONCONTROL_H

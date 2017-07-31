@@ -7,8 +7,17 @@ AbstractVersionControl::AbstractVersionControl(QObject *parent) : QObject(parent
 {
 }
 
+QString AbstractVersionControl::versionControlName() const
+{
+    return "none";
+}
+
 void AbstractVersionControl::setPath(const QString &path)
 {
+
+    _validatedFiles.clear();
+    _trackedFiles.clear();
+    _modifiedFiles.clear();
     _path = QDir::cleanPath(path);
     analysePath();
 }
@@ -50,19 +59,34 @@ bool AbstractVersionControl::isFileValidated(const QString &filePath) const
     return _validatedFiles.contains(filePath);
 }
 
-const QSet<QString> &AbstractVersionControl::trackedFiles()
+const QSet<QString> &AbstractVersionControl::trackedFiles() const
 {
     return _trackedFiles;
 }
 
-const QSet<QString> &AbstractVersionControl::modifiedFiles()
+const QSet<QString> &AbstractVersionControl::modifiedFiles() const
 {
     return _modifiedFiles;
 }
 
-const QSet<QString> &AbstractVersionControl::validatedFiles()
+const QSet<QString> &AbstractVersionControl::validatedFiles() const
 {
     return _validatedFiles;
+}
+
+void AbstractVersionControl::validFile(const QSet<QString> &filesPath)
+{
+    Q_UNUSED(filesPath)
+}
+
+void AbstractVersionControl::inValidFile(const QSet<QString> &filesPath)
+{
+    Q_UNUSED(filesPath)
+}
+
+void AbstractVersionControl::checkoutFile(const QSet<QString> &filesPath)
+{
+    Q_UNUSED(filesPath)
 }
 
 bool AbstractVersionControl::isValid() const
