@@ -26,6 +26,10 @@ protected:
     Project *_project;
     QRegExp _hiddenFilter;
     QRegExp _showFilter;
+
+    // QSortFilterProxyModel interface
+protected:
+    virtual bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const;
 };
 
 #endif // FILEPROJECTPROXYMODEL_H

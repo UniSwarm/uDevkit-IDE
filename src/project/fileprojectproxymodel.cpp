@@ -1,5 +1,6 @@
 #include "fileprojectproxymodel.h"
 
+#include <QDebug>
 #include <QFileSystemModel>
 
 #include "project.h"
@@ -9,7 +10,8 @@ FileProjectProxyModel::FileProjectProxyModel(Project *project)
 {
     _project = project;
     setDynamicSortFilter(true);
-    setSortRole(QFileSystemModel::FilePathRole);
+    setSortRole(Qt::DisplayRole);
+    sort(1, Qt::AscendingOrder);
 }
 
 void FileProjectProxyModel::setHiddenFilter(const QRegExp &regExp)
@@ -64,4 +66,19 @@ bool FileProjectProxyModel::filterAcceptsColumn(int source_column, const QModelI
     Q_UNUSED(source_column)
     Q_UNUSED(source_parent)
     return true;
+}
+
+bool FileProjectProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+{
+    QFileSystemModel *fsm = static_cast<QFileSystemModel*>(sourceModel());
+    QString leftPath = sourceModel()->data(source_left, QFileSystemModel::FilePathRole).toString();
+    QString rightPath = sourceModel()->data(source_right, QFileSystemModel::FilePathRole).toString();
+    bool isLeftDir = fsm->isDir(source_left);
+    bool isRightDir = fsm->isDir(source_right);
+
+    if (isLeftDir == isRightDir)
+        return (leftPath.compare(rightPath, Qt::CaseInsensitive) < 0);
+    if (isLeftDir)
+        return true;
+    return false;
 }
