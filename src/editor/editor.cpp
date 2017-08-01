@@ -142,7 +142,7 @@ void Editor::active()
 
 void Editor::prepareReload()
 {
-    QTimer::singleShot(100, this, &Editor::reload);
+    QTimer::singleShot(100, this, SLOT(reload()));
 }
 
 void Editor::setFilePath(const QString &filePath)
