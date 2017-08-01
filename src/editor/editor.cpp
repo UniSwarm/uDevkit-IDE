@@ -7,12 +7,14 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTimer>
 
 Editor::Editor(Project *project, QWidget *parent)
     : QWidget(parent), _project(project)
 {
     _reloadWatcher = new QFileSystemWatcher();
-    connect(_reloadWatcher, &QFileSystemWatcher::fileChanged, this, &Editor::reload);
+    connect(_reloadWatcher, &QFileSystemWatcher::fileChanged, this, &Editor::prepareReload);
+    connect(_reloadWatcher, &QFileSystemWatcher::directoryChanged, this, &Editor::prepareReload);
     _extModifDetected = false;
 }
 
@@ -98,19 +100,14 @@ void Editor::searchSelectAll()
 {
 }
 
-void Editor::reload(const QString &path)
+void Editor::reload()
 {
-    //qDebug()<<"reload path: "<<path;
-    if (path != _filePath)
+    QFileInfo info(_filePath);
+    if (!info.exists() || info.size()==0)
     {
-        if (!QFileInfo(_filePath).exists())
-            _reloadWatcher->addPath(QFileInfo(_filePath).filePath());
+        _reloadWatcher->addPath(info.path());
         return;
     }
-    _project->versionControl()->modifFile(QSet<QString>()<<_filePath);
-
-    if (!QFileInfo(_filePath).exists())
-        _reloadWatcher->addPath(QFileInfo(_filePath).filePath());
 
     bool needReload = true;
     _extModifDetected = true;
@@ -133,6 +130,7 @@ void Editor::reload(const QString &path)
         openFileData(_filePath);
         _extModifDetected = false;
     }
+    _reloadWatcher->removePath(info.path());
     _reloadWatcher->addPath(_filePath);
 }
 
@@ -140,6 +138,11 @@ void Editor::active()
 {
     if (_extModifDetected)
         reload();
+}
+
+void Editor::prepareReload()
+{
+    QTimer::singleShot(100, this, &Editor::reload);
 }
 
 void Editor::setFilePath(const QString &filePath)

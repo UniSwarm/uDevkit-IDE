@@ -75,12 +75,6 @@ int CodeEditor::openFileData(const QString &filePath)
         return -1;
     if (!file.open(QIODevice::ReadOnly))
         return -1;
-    /*//_editorWidget->textDocument()->blockSignals(true);
-    _editorWidget->textDocument()->beginChanges(_editorWidget->controller());
-    _editorWidget->textDocument()->setText("");
-    _editorWidget->textDocument()->endChanges(123456789);
-    //_editorWidget->textDocument()->blockSignals(false);*/
-    //_editorWidget->controller()->replace(0, _editorWidget->textDocument()->length(), , 0);
 
     if (_editorWidget->textDocument()->length()>1)
     {
@@ -89,18 +83,18 @@ int CodeEditor::openFileData(const QString &filePath)
         if( !serializer.loadWithoutOpening( &file ) )
             return -1;
 
-        _editorWidget->textDocument()->replace( 0, _editorWidget->textDocument()->length(), document.text(), 0 );
+        _editorWidget->controller()->replace( 0, _editorWidget->textDocument()->length(), document.text(), 0 );
     }
     else
     {
         edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
         if( !serializer.loadWithoutOpening( &file ) )
             return -1;
-    }
 
-    edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
-    edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename( filePath );
-    _editorWidget->textDocument()->setLanguageGrammar( grammar );
+        edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
+        edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename( filePath );
+        _editorWidget->textDocument()->setLanguageGrammar( grammar );
+    }
 
     _editorWidget->textDocument()->setPersisted(true);
 

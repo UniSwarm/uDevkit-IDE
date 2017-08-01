@@ -55,8 +55,11 @@ public:
     virtual void searchSelectAll();
 
 public slots:
-    void reload(const QString &path=QString());
+    void reload();
     void active();
+
+protected slots:
+    void prepareReload();
 
 signals:
     void filePathChanged(QString filePath);
