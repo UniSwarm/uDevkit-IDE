@@ -18,8 +18,7 @@ public slots:
     void selectFile(const QString &fileName);
 
 signals:
-    void doubleClickedFile(QString fileName);
-    void doubleClickedDir(QString dirName);
+    void openedFile(QString fileName);
 
 protected:
     Project *_project;
@@ -29,6 +28,7 @@ protected:
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // FILETREEVIEW_H

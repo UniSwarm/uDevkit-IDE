@@ -56,10 +56,8 @@ void FileTreeView::mouseDoubleClickEvent(QMouseEvent *event)
         return;
 
     const QModelIndex &indexFile = _proxy->mapToSource(index);
-    if (_project->fileItemModel()->isDir(indexFile))
-        emit doubleClickedDir(_project->fileItemModel()->filePath(indexFile));
-    else
-        emit doubleClickedFile(_project->fileItemModel()->filePath(indexFile));
+    if (!_project->fileItemModel()->isDir(indexFile))
+        emit openedFile(_project->fileItemModel()->filePath(indexFile));
 }
 
 void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
@@ -135,4 +133,20 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
     else if (trigered == versionCheckoutAction)
         if (QMessageBox::question(this, "Checkout file?", QString("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
             _project->versionControl()->checkoutFile(QSet<QString>()<<info.filePath());
+}
+
+void FileTreeView::keyPressEvent(QKeyEvent *event)
+{
+    QTreeView::keyPressEvent(event);
+
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+    {
+        const QPersistentModelIndex index = selectionModel()->currentIndex();
+        if (!index.isValid())
+            return;
+
+        const QModelIndex &indexFile = _proxy->mapToSource(index);
+        if (!_project->fileItemModel()->isDir(indexFile))
+            emit openedFile(_project->fileItemModel()->filePath(indexFile));
+    }
 }

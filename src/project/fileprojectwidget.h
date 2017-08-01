@@ -14,15 +14,13 @@ public:
     explicit FileProjectWidget(Project *project, QWidget *parent = 0);
 
 signals:
-    void doubleClickedFile(QString fileName);
-    void doubleClickedDir(QString dirName);
+    void openedFile(QString fileName);
 
 public slots:
     void selectFile(const QString &fileName);
 
 protected slots:
-    void doubleClickDir(const QString &fileName);
-    void doubleClickFile(const QString &fileName);
+    void openFile(const QString &fileName);
 
 protected:
     Project *_project;

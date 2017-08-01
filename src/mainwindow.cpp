@@ -44,7 +44,7 @@ void MainWindow::createDocks()
     QLayout *fileProjectLayout = new QVBoxLayout();
     _fileProjectWidget = new FileProjectWidget(_project);
     fileProjectLayout->addWidget(_fileProjectWidget);
-    connect(_fileProjectWidget, &FileProjectWidget::doubleClickedFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
+    connect(_fileProjectWidget, &FileProjectWidget::openedFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
     connect(_editorTabWidget, &EditorTabWidget::currentFileChanged, _fileProjectWidget, &FileProjectWidget::selectFile);
     fileProjectContent->setLayout(fileProjectLayout);
     _fileProjectDock->setWidget(fileProjectContent);
@@ -54,6 +54,8 @@ void MainWindow::createDocks()
     QWidget *logContent = new QWidget(_logDock);
     QLayout *logLayout = new QVBoxLayout();
     _logWidget = new QTextEdit();
+    _logWidget->setTabChangesFocus(true);
+    _logWidget->setReadOnly(true);
     _logWidget->document()->setDefaultStyleSheet("p{margin: 0;}");
     logLayout->addWidget(_logWidget);
     logContent->setLayout(logLayout);

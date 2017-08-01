@@ -21,8 +21,7 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     layout->addWidget(_fileView);
     setLayout(layout);
 
-    connect(_fileView, &FileTreeView::doubleClickedDir, this, &FileProjectWidget::doubleClickDir);
-    connect(_fileView, &FileTreeView::doubleClickedFile, this, &FileProjectWidget::doubleClickFile);
+    connect(_fileView, &FileTreeView::openedFile, this, &FileProjectWidget::openFile);
 
     connect(_filterEdit, SIGNAL(textChanged(QString)), _fileView->proxy(), SLOT(setShowFilter(QString)));
 }
@@ -32,12 +31,7 @@ void FileProjectWidget::selectFile(const QString &fileName)
     _fileView->selectFile(fileName);
 }
 
-void FileProjectWidget::doubleClickDir(const QString &fileName)
+void FileProjectWidget::openFile(const QString &fileName)
 {
-    emit doubleClickedDir(fileName);
-}
-
-void FileProjectWidget::doubleClickFile(const QString &fileName)
-{
-    emit doubleClickedFile(fileName);
+    emit openedFile(fileName);
 }
