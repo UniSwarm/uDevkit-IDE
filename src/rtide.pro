@@ -18,6 +18,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     editor/codeeditor.cpp \
+    editor/hexeditor.cpp \
     project/project.cpp \
     version/abstractversioncontrol.cpp \
     version/gitversioncontrol.cpp \
@@ -33,6 +34,7 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     editor/codeeditor.h \
+    editor/hexeditor.h \
     project/fileprojectproxymodel.h \
     project/project.h \
     version/abstractversioncontrol.h \
@@ -49,3 +51,4 @@ HEADERS += \
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
 include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)
+include (../contrib/hexedit2.pri)

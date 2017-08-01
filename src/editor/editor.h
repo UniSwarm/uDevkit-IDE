@@ -68,6 +68,7 @@ signals:
 public:
     static Editor *createEditor(Type type, Project *project, QWidget *parent = nullptr);
     static Editor *createEditor(const QString &filePath, Project *project, QWidget *parent = nullptr);
+    static Type typeFromExt(const QString &ext);
 
 protected:
     void setFilePath(const QString &filePath);

@@ -7,6 +7,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QMimeDatabase>
 #include <QTimer>
 
 Editor::Editor(Project *project, QWidget *parent)
@@ -164,7 +165,7 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
     case Editor::Code:
         return new CodeEditor(project, parent);
     case Editor::Hexa:
-        break;
+        return new HexEditor(project, parent);
     case Editor::Image:
         break;
     case Editor::ELF:
@@ -175,9 +176,25 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
 
 Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget *parent)
 {
+    QFileInfo info(filePath);
+
+    /*QMimeDatabase db;
+    QFile file(filePath);
+    file.open(QIODevice::ReadOnly);
+
+    qDebug()<<db.mimeTypeForFileNameAndData(filePath, file.read(100));*/
+
     Editor *editor;
-    editor = createEditor(Editor::Code, project, parent);
+    Type type = typeFromExt(info.suffix());
+    editor = createEditor(type, project, parent);
     if (editor)
         editor->openFileData(filePath);
     return editor;
+}
+
+Editor::Type Editor::typeFromExt(const QString &ext)
+{
+    if (ext == "o")
+        return Editor::Hexa;
+    return Editor::Code;
 }
