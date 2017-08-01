@@ -133,7 +133,7 @@ void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &out
     {
         QTextStream stream(_processGitState);
         while (!stream.atEnd())
-            modifiedFiles.insert(_path+"/"+stream.readLine(1000));
+            modifiedFiles.insert(_basePath+"/"+stream.readLine(1000));
     }
     //if (!oldSed.isEmpty())
     {
