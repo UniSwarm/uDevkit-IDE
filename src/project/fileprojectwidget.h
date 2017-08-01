@@ -15,12 +15,14 @@ public:
 
 signals:
     void openedFile(QString fileName);
+    void closedFile(QString fileName);
 
 public slots:
     void selectFile(const QString &fileName);
 
 protected slots:
     void openFile(const QString &fileName);
+    void closeFile(const QString &fileName);
 
 protected:
     Project *_project;

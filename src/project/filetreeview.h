@@ -19,6 +19,7 @@ public slots:
 
 signals:
     void openedFile(QString fileName);
+    void closedFile(QString fileName);
 
 protected:
     Project *_project;
@@ -26,6 +27,7 @@ protected:
 
     // QWidget interface
 protected:
+    virtual void mouseReleaseEvent(QMouseEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void keyPressEvent(QKeyEvent *event);

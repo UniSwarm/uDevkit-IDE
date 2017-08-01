@@ -22,6 +22,7 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     setLayout(layout);
 
     connect(_fileView, &FileTreeView::openedFile, this, &FileProjectWidget::openFile);
+    connect(_fileView, &FileTreeView::closedFile, this, &FileProjectWidget::closeFile);
 
     connect(_filterEdit, SIGNAL(textChanged(QString)), _fileView->proxy(), SLOT(setShowFilter(QString)));
 }
@@ -34,4 +35,9 @@ void FileProjectWidget::selectFile(const QString &fileName)
 void FileProjectWidget::openFile(const QString &fileName)
 {
     emit openedFile(fileName);
+}
+
+void FileProjectWidget::closeFile(const QString &fileName)
+{
+    emit closedFile(fileName);
 }

@@ -46,7 +46,7 @@ Editor *EditorTabWidget::editor(int i) const
     return static_cast<Editor *>(widget(i));
 }
 
-void EditorTabWidget::addFileEditor(const QString &filePath)
+void EditorTabWidget::openFileEditor(const QString &filePath)
 {
     if(_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
     {
@@ -61,6 +61,16 @@ void EditorTabWidget::addFileEditor(const QString &filePath)
     Editor *editor = Editor::createEditor(filePath, _project);
     if (editor)
         addEditor(editor);
+}
+
+void EditorTabWidget::closeFileEditor(const QString &filePath)
+{
+    if(_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
+    {
+        Editor *editor = _mapPathEditor.value(filePath);
+        int id = indexOf(editor);
+        closeEditor(id);
+    }
 }
 
 void EditorTabWidget::closeEditor(int id)

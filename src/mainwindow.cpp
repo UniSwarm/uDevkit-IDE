@@ -44,7 +44,8 @@ void MainWindow::createDocks()
     QLayout *fileProjectLayout = new QVBoxLayout();
     _fileProjectWidget = new FileProjectWidget(_project);
     fileProjectLayout->addWidget(_fileProjectWidget);
-    connect(_fileProjectWidget, &FileProjectWidget::openedFile, _editorTabWidget, &EditorTabWidget::addFileEditor);
+    connect(_fileProjectWidget, &FileProjectWidget::openedFile, _editorTabWidget, &EditorTabWidget::openFileEditor);
+    connect(_fileProjectWidget, &FileProjectWidget::closedFile, _editorTabWidget, &EditorTabWidget::closeFileEditor);
     connect(_editorTabWidget, &EditorTabWidget::currentFileChanged, _fileProjectWidget, &FileProjectWidget::selectFile);
     fileProjectContent->setLayout(fileProjectLayout);
     _fileProjectDock->setWidget(fileProjectContent);
@@ -150,7 +151,7 @@ bool MainWindow::openFiles(const QStringList &paths)
         mpaths = dialog.selectedFiles();
     }
     foreach (QString apath, mpaths)
-        _editorTabWidget->addFileEditor(apath);
+        _editorTabWidget->openFileEditor(apath);
     return true;
 }
 

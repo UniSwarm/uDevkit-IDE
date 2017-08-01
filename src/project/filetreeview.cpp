@@ -44,22 +44,6 @@ void FileTreeView::selectFile(const QString &fileName)
     selectionModel()->setCurrentIndex(proxyIndex, QItemSelectionModel::ClearAndSelect);
 }
 
-void FileTreeView::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    QTreeView::mouseDoubleClickEvent(event);
-
-    if (!event->buttons().testFlag(Qt::LeftButton))
-        return;
-
-    const QPersistentModelIndex index = indexAt(event->pos());
-    if (!index.isValid())
-        return;
-
-    const QModelIndex &indexFile = _proxy->mapToSource(index);
-    if (!_project->fileItemModel()->isDir(indexFile))
-        emit openedFile(_project->fileItemModel()->filePath(indexFile));
-}
-
 void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
     const QModelIndex &index = indexAt(event->pos());
@@ -133,6 +117,38 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
     else if (trigered == versionCheckoutAction)
         if (QMessageBox::question(this, "Checkout file?", QString("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
             _project->versionControl()->checkoutFile(QSet<QString>()<<info.filePath());
+}
+
+void FileTreeView::mouseReleaseEvent(QMouseEvent *event)
+{
+    QTreeView::mouseReleaseEvent(event);
+
+    if (event->button() == Qt::MidButton)
+    {
+        const QPersistentModelIndex index = indexAt(event->pos());
+        if (!index.isValid())
+            return;
+
+        const QModelIndex &indexFile = _proxy->mapToSource(index);
+        if (!_project->fileItemModel()->isDir(indexFile))
+            emit closedFile(_project->fileItemModel()->filePath(indexFile));
+    }
+}
+
+void FileTreeView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    QTreeView::mouseDoubleClickEvent(event);
+
+    if (!event->buttons().testFlag(Qt::LeftButton))
+        return;
+
+    const QPersistentModelIndex index = indexAt(event->pos());
+    if (!index.isValid())
+        return;
+
+    const QModelIndex &indexFile = _proxy->mapToSource(index);
+    if (!_project->fileItemModel()->isDir(indexFile))
+        emit openedFile(_project->fileItemModel()->filePath(indexFile));
 }
 
 void FileTreeView::keyPressEvent(QKeyEvent *event)

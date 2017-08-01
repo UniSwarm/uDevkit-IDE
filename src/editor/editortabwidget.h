@@ -19,7 +19,8 @@ public:
     Editor *editor(int i) const;
 
 public slots:
-    void addFileEditor(const QString &filePath);
+    void openFileEditor(const QString &filePath);
+    void closeFileEditor(const QString &filePath);
 
     void closeEditor(int id=-1);
     void closeAllEditors();
