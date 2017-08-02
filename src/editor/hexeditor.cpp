@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QDebug>
+#include <QSaveFile>
 
 #include "qhexedit.h"
 
@@ -13,6 +14,8 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
     layout->setMargin(0);
 
     _hexEditor = new QHexEdit();
+    _modified = false;
+    connect(_hexEditor, &QHexEdit::dataChanged, this, &HexEditor::modificationAppend);
 
     // style
     QString style = "\
@@ -36,12 +39,18 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
 
 bool HexEditor::isModified() const
 {
-    return false;
+    return _modified;
 }
 
 HexEditor::SearchCaps HexEditor::searchCap() const
 {
     return NoSearch;
+}
+
+void HexEditor::modificationAppend()
+{
+    _modified = true;
+    emit modified(isModified());
 }
 
 int HexEditor::openFileData(const QString &filePath)
@@ -54,5 +63,24 @@ int HexEditor::openFileData(const QString &filePath)
 
 int HexEditor::saveFileData(const QString &filePath)
 {
-    return 0;
+    QString path = filePath.isEmpty() ? _filePath : filePath;
+    QString tmpFileName = path + ".~tmp";
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QFile file(tmpFileName);
+    bool ok = _hexEditor->write(file);
+    if (QFile::exists(path))
+        ok = QFile::remove(path);
+    if (ok)
+    {
+        file.setFileName(tmpFileName);
+        ok = file.copy(path);
+        if (ok)
+            ok = QFile::remove(tmpFileName);
+    }
+    QApplication::restoreOverrideCursor();
+    _modified = false;
+    emit modified(false);
+
+    return ok ? 0 : -1;
 }

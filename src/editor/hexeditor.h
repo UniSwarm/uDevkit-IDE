@@ -17,9 +17,13 @@ public:
 
     virtual SearchCaps searchCap() const;
 
+protected slots:
+    void modificationAppend();
+
 protected:
     QHexEdit *_hexEditor;
     QFile _file;
+    bool _modified;
 
     int openFileData(const QString &filePath);
     int saveFileData(const QString &filePath=QString());
