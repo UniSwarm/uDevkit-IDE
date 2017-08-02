@@ -2,7 +2,10 @@
 #define CODEEDITOR_H
 
 #include "editor.h"
-#include "edbee/texteditorwidget.h"
+
+namespace edbee {
+    class TextEditorWidget;
+}
 
 class CodeEditor : public Editor
 {

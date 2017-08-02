@@ -9,6 +9,7 @@
 #include <QSaveFile>
 
 #include "edbee/edbee.h"
+#include "edbee/texteditorwidget.h"
 #include "edbee/io/textdocumentserializer.h"
 #include "edbee/models/textdocument.h"
 #include "edbee/models/textgrammar.h"
@@ -52,7 +53,6 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     _editorWidget->config()->setFont(font);
     _editorWidget->config()->setThemeName("RtIDE");
     //_editorWidget->config()->setThemeName("IDLE");
-    _editorWidget->config()->setUseTabChar(false);
     //_editorWidget->config()->setShowWhitespaceMode(edbee::TextEditorConfig::ShowWhitespaces);
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
 
@@ -76,12 +76,16 @@ int CodeEditor::openFileData(const QString &filePath)
     if (!file.open(QIODevice::ReadOnly))
         return -1;
 
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     if (_editorWidget->textDocument()->length()>1)
     {
         edbee::CharTextDocument document;
         edbee::TextDocumentSerializer serializer( &document );
         if( !serializer.loadWithoutOpening( &file ) )
+        {
+            QApplication::restoreOverrideCursor();
             return -1;
+        }
 
         _editorWidget->controller()->replace( 0, _editorWidget->textDocument()->length(), document.text(), 0 );
     }
@@ -89,17 +93,27 @@ int CodeEditor::openFileData(const QString &filePath)
     {
         edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
         if( !serializer.loadWithoutOpening( &file ) )
+        {
+            QApplication::restoreOverrideCursor();
             return -1;
+        }
 
         edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
         edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename( filePath );
         _editorWidget->textDocument()->setLanguageGrammar( grammar );
     }
+    QApplication::restoreOverrideCursor();
 
     _editorWidget->textDocument()->setPersisted(true);
 
     setFilePath(filePath);
     emit modified(false);
+
+    // TODO replace this section with .editorconfig
+    if (info.suffix()=="mk" || info.fileName()=="Makefile")
+        _editorWidget->config()->setUseTabChar(true);
+    else
+        _editorWidget->config()->setUseTabChar(false);
 
     return 0;
 }
