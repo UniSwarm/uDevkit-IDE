@@ -176,16 +176,20 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
 
 Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget *parent)
 {
-    QFileInfo info(filePath);
-
-    /*QMimeDatabase db;
+    QMimeDatabase db;
     QFile file(filePath);
     file.open(QIODevice::ReadOnly);
+    QMimeType mime = db.mimeTypeForData(file.read(100));
+    file.close();
+    //qDebug()<<mime;
 
-    qDebug()<<db.mimeTypeForFileNameAndData(filePath, file.read(100));*/
+    Type type;
+    if(mime.name().startsWith("text"))
+        type = Editor::Code;
+    else
+        type = Editor::Hexa;
 
     Editor *editor;
-    Type type = typeFromExt(info.suffix());
     editor = createEditor(type, project, parent);
     if (editor)
         editor->openFileData(filePath);
