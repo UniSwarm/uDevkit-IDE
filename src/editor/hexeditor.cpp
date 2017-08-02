@@ -57,6 +57,8 @@ int HexEditor::openFileData(const QString &filePath)
 {
     _file.setFileName(filePath);
     _hexEditor->setData(_file);
+    _modified = false;
+    emit modified(isModified());
     setFilePath(filePath);
     return 0;
 }
