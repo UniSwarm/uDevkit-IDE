@@ -8,10 +8,13 @@ A simple IDE for [RtProg](https://github.com/Robotips/rtprog). This IDE want to 
 
 Still in development.
 
+![Screenshot](screenshot_rtide.png)
+
 ## Features
 
 * files project viewer with git integration
 * code highlighting (based on [edbee](https://github.com/edbee/edbee-lib))
+* hexadecimal editor (based on [qhexedit2](https://github.com/Simsys/qhexedit2))
 * dark theme to preserve developer eyes :wink: (based on [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet))
 
 ## Build
@@ -23,4 +26,4 @@ qmake ../src
 make -j
 ```
 
-Binaries will be placed in bin/ directory.
+Binaries will be placed in `bin/` directory.
