@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QHeaderView>
 #include <QItemSelectionModel>
+#include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMouseEvent>
@@ -15,7 +16,7 @@ FileTreeView::FileTreeView(Project *project, QWidget *parent)
 {
     _proxy = new FileProjectProxyModel(project);
     _proxy->setSourceModel(_project->fileItemModel());
-    _proxy->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
+    _proxy->setHiddenFilter(QRegExp("^$"));
 
     setModel(_proxy);
     setEditTriggers(QAbstractItemView::EditKeyPressed);
@@ -44,6 +45,29 @@ void FileTreeView::selectFile(const QString &fileName)
     selectionModel()->setCurrentIndex(proxyIndex, QItemSelectionModel::ClearAndSelect);
 }
 
+void FileTreeView::setHiddenFilter(const QRegExp &regExp)
+{
+    if (!regExp.isValid() || regExp.isEmpty())
+        _proxy->setHiddenFilter(QRegExp("^$"));
+    else
+        _proxy->setHiddenFilter(regExp);
+}
+
+void FileTreeView::setHiddenFilter(const QString &pattern)
+{
+    setHiddenFilter(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
+}
+
+void FileTreeView::setShowFilter(const QRegExp &regExp)
+{
+    _proxy->setShowFilter(regExp);
+}
+
+void FileTreeView::setShowFilter(const QString &pattern)
+{
+    setShowFilter(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
+}
+
 void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
     const QModelIndex &index = indexAt(event->pos());
@@ -56,6 +80,11 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
     QMenu menu;
 
     // file commands
+    QAction *fileCreateAction = nullptr;
+    if(_project->fileItemModel()->isDir(indexFile))
+    {
+        fileCreateAction = menu.addAction("Add new file here");
+    }
     QAction *fileRenameAction = menu.addAction("Rename");
     fileRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
     QAction *fileRemoveAction = nullptr, *dirRemoveAction = nullptr, *openDirAction = nullptr;
@@ -92,7 +121,20 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
         return;
 
     // analyse clicked menu
-    if (trigered == dirRemoveAction)
+    if (trigered == fileCreateAction)
+    {
+        QString fileName = QInputDialog::getText(this, "New file name", "Enter a name for this new file");
+        QString filePath = _project->fileItemModel()->filePath(indexFile) + "/" + fileName;
+        QFile file(filePath);
+        if (!file.exists())
+        {
+            if(!file.open(QIODevice::WriteOnly))
+                return;
+            file.close();
+            emit openedFile(filePath);
+        }
+    }
+    else if (trigered == dirRemoveAction)
     {
         if(QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove '%1'?").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
             _project->fileItemModel()->rmdir(indexFile);

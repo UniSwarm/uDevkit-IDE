@@ -17,6 +17,11 @@ public:
 public slots:
     void selectFile(const QString &fileName);
 
+    void setHiddenFilter(const QRegExp &regExp);
+    void setHiddenFilter(const QString &pattern);
+    void setShowFilter(const QRegExp &regExp);
+    void setShowFilter(const QString &pattern);
+
 signals:
     void openedFile(QString fileName);
     void closedFile(QString fileName);
