@@ -200,7 +200,11 @@ bool MainWindow::event(QEvent *event)
 {
     if(event->type()==QEvent::Close)
     {
-        _editorTabWidget->closeAllEditors();
+        if(_editorTabWidget->closeAllEditors() < 0)
+        {
+            event->ignore();
+            return false;
+        }
     }
     return QMainWindow::event(event);
 }

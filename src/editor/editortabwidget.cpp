@@ -73,7 +73,7 @@ void EditorTabWidget::closeFileEditor(const QString &filePath)
     }
 }
 
-void EditorTabWidget::closeEditor(int id)
+int EditorTabWidget::closeEditor(int id)
 {
     Editor *editor;
     if (id == -1)
@@ -84,7 +84,7 @@ void EditorTabWidget::closeEditor(int id)
     else
         editor = static_cast<Editor *>(widget(id));
     if (!editor)
-        return;
+        return -1;
 
     const QString &path = QFileInfo(editor->filePath()).absoluteFilePath();
     if (editor->isModified())
@@ -94,7 +94,7 @@ void EditorTabWidget::closeEditor(int id)
                                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort,
                                              QMessageBox::Yes);
         if (response == QMessageBox::Abort)
-            return;
+            return -2;
         if (response == QMessageBox::Yes)
             editor->saveFile();
     }
@@ -102,15 +102,18 @@ void EditorTabWidget::closeEditor(int id)
     _project->removeOpenedFiles(QSet<QString>()<<path);
     removeTab(id);
     delete editor;
+    return 0;
 }
 
-void EditorTabWidget::closeAllEditors()
+int EditorTabWidget::closeAllEditors()
 {
     while (count() > 0)
     {
         setCurrentIndex(0);
-        closeEditor(0);
+        if (closeEditor(0) < 0)
+            return -1;
     }
+    return 0;
 }
 
 void EditorTabWidget::saveCurrentEditor()
@@ -124,7 +127,8 @@ void EditorTabWidget::saveAllEditors()
 {
     for (int i=0; i<count(); i++)
         if (editor(i)->isModified())
-            editor(i)->saveFile();
+            if(editor(i)->saveFile()==-1)
+                return;
 }
 
 void EditorTabWidget::nextTab()
