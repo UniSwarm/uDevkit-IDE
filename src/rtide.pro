@@ -17,24 +17,23 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
+    editor/editor.cpp \
+    editor/editortabwidget.cpp \
     editor/codeeditor.cpp \
     editor/hexeditor.cpp \
+    editor/imageeditor.cpp \
     project/project.cpp \
     version/abstractversioncontrol.cpp \
     version/gitversioncontrol.cpp \
     project/fileprojectproxymodel.cpp \
     project/fileprojectwidget.cpp \
     project/fileprojectitemmodel.cpp \
-    editor/editor.cpp \
-    editor/editortabwidget.cpp \
     ui/searchreplacewidget.cpp \
     project/filetreeview.cpp \
     project/fileprojectinfo.cpp
 
 HEADERS += \
         mainwindow.h \
-    editor/codeeditor.h \
-    editor/hexeditor.h \
     project/fileprojectproxymodel.h \
     project/project.h \
     version/abstractversioncontrol.h \
@@ -44,6 +43,9 @@ HEADERS += \
     editor/editor.h \
     editor/editors.h \
     editor/editortabwidget.h \
+    editor/codeeditor.h \
+    editor/hexeditor.h \
+    editor/imageeditor.h \
     ui/searchreplacewidget.h \
     project/filetreeview.h \
     project/fileprojectinfo.h

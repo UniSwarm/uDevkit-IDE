@@ -167,7 +167,7 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
     case Editor::Hexa:
         return new HexEditor(project, parent);
     case Editor::Image:
-        break;
+        return new ImageEditor(project, parent);
     case Editor::ELF:
         break;
     }
@@ -186,6 +186,8 @@ Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget 
     Type type;
     if(mime.name().startsWith("text"))
         type = Editor::Code;
+    else if(mime.name().startsWith("image"))
+        type = Editor::Image;
     else
         type = Editor::Hexa;
 
