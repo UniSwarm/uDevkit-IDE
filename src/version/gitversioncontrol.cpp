@@ -153,7 +153,7 @@ QString GitVersionControl::findGitDir()
     do
     {
         if (dir.exists(".git/index"))
-            return dir.path() + "/.git/";
+            return dir.canonicalPath() + "/.git/";
     } while(dir.cdUp());
     return QString();
 }
