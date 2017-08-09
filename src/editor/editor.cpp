@@ -179,12 +179,12 @@ Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget 
     QMimeDatabase db;
     QFile file(filePath);
     file.open(QIODevice::ReadOnly);
-    QMimeType mime = db.mimeTypeForData(file.read(100));
+    QMimeType mime = db.mimeTypeForFileNameAndData(filePath, file.read(100));
     file.close();
     //qDebug()<<mime;
 
     Type type;
-    if(mime.name().startsWith("text"))
+    if(mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml")
         type = Editor::Code;
     else if(mime.name().startsWith("image"))
         type = Editor::Image;
