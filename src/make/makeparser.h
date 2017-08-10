@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMultiMap>
+#include <QStringList>
 
 class QProcess;
 
