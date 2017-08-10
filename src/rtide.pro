@@ -30,7 +30,8 @@ SOURCES += \
     project/fileprojectitemmodel.cpp \
     ui/searchreplacewidget.cpp \
     project/filetreeview.cpp \
-    project/fileprojectinfo.cpp
+    project/fileprojectinfo.cpp \
+    make/makeparser.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,7 +49,8 @@ HEADERS += \
     editor/imageeditor.h \
     ui/searchreplacewidget.h \
     project/filetreeview.h \
-    project/fileprojectinfo.h
+    project/fileprojectinfo.h \
+    make/makeparser.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
