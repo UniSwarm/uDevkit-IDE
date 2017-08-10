@@ -14,13 +14,14 @@ public:
     explicit MakeParser(const QString &basePath=QString());
     ~MakeParser();
 
-    void setBasePath(const QString &basePath);
+    void setPath(const QString &basePath);
     QString resolveFilePath(const QString &filePath);
 
     const QMultiMap<QString, QString> &variables() const;
     const QStringList &sourceFiles() const;
 
 signals:
+    void sourceChanged();
 
 public slots:
 

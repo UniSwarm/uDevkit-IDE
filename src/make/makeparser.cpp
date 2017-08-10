@@ -6,6 +6,7 @@
 #include <QProcess>
 #include <QSet>
 #include <QTextStream>
+#include <QStandardPaths>
 
 MakeParser::MakeParser(const QString &basePath)
     : QObject(nullptr)
@@ -14,7 +15,7 @@ MakeParser::MakeParser(const QString &basePath)
     connect(_processMake, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=](int, QProcess::ExitStatus){processEnd();});
     //connect(_processMake, &QProcess::readyReadStandardOutput, this, &MakeParser::processEnd);
-    setBasePath(basePath);
+    setPath(basePath);
 }
 
 MakeParser::~MakeParser()
@@ -22,13 +23,18 @@ MakeParser::~MakeParser()
     delete _processMake;
 }
 
-void MakeParser::setBasePath(const QString &basePath)
+void MakeParser::setPath(const QString &basePath)
 {
+    if (basePath.isEmpty())
+        return;
+
+    _sourceFiles.clear();
+    _vpath.clear();
     _basePath = QDir(basePath).canonicalPath();
     _processMake->setWorkingDirectory(_basePath);
 
     if (QFile(_basePath+"/Makefile").exists()) // TODO add a Makefile detection an -f name option in case of different file name
-        _processMake->start("make", QStringList()<<"-pRnq");
+        _processMake->start("make", QStringList()<<"-pnR");
 }
 
 QString MakeParser::resolveFilePath(const QString &filePath)
@@ -47,16 +53,17 @@ QString MakeParser::resolveFilePath(const QString &filePath)
 
 void MakeParser::processEnd()
 {
+    //qDebug()<<QStandardPaths::findExecutable("make");
     if (_processMake->exitStatus() != QProcess::NormalExit)
         return;
 
-    QRegExp regVar(" *([A-Za-z0-9\\\\\\/.\\_\\-]+) *:= *");
+    QRegExp regVar(" *([A-Za-z0-9\\\\\\/.\\_\\-]+) *:*= *");
 
     QDir makeDir(_basePath);
     QTextStream stream(_processMake);
     while (!stream.atEnd())
     {
-        QString line = stream.readLine(1000);
+        QString line = stream.readLine(10000);
         if (line.startsWith('#') || line.size() == 0) // comments
             continue;
 
@@ -96,6 +103,10 @@ void MakeParser::processEnd()
     _sourceFiles.clear();
     foreach (QString file, _variables.values("SRC")) // TODO complete with generic name of src variable name or
         _sourceFiles<<resolveFilePath(file);         //   improve with an auto detection of source
+    foreach (QString file, _variables.values("HEADER"))
+        _sourceFiles<<resolveFilePath(file);
+
+    emit sourceChanged();
 }
 
 const QStringList &MakeParser::sourceFiles() const
