@@ -1,5 +1,7 @@
 #include "fileprojectinfo.h"
 
+#include "project.h"
+
 #include <QDateTime>
 
 FileProjectInfo::FileProjectInfo(const QString &filePath, Project *project)
@@ -33,6 +35,11 @@ bool FileProjectInfo::isOpened() const
     return _project->isOpenedFile(filePath());
 }
 
+bool FileProjectInfo::isInProject() const
+{
+    return filePath().startsWith(_project->rootPath());
+}
+
 QString FileProjectInfo::humanSize() const
 {
     float num = size();
@@ -61,4 +68,9 @@ QString FileProjectInfo::toolTips() const
     toolTip.append(lastModified().toString("yyyy-MM-dd hh:mm:ss"));
     toolTip.append("<br/>");
     return toolTip;
+}
+
+Project *FileProjectInfo::project() const
+{
+    return _project;
 }

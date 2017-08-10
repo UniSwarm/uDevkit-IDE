@@ -14,6 +14,9 @@ public:
     ~ProjectItemModel();
 
     void addFileItem(const QString &path);
+    void addRealDirItem(const QString &path);
+    void addLogicDirItem(const QString &name);
+    void addItem(ProjectItem *item);
 
     // QAbstractItemModel interface
 public:

@@ -16,10 +16,31 @@ ProjectItemModel::~ProjectItemModel()
     delete _root;
 }
 
+void ProjectItemModel::addRealDirItem(const QString &path)
+{
+    emit layoutAboutToBeChanged();
+    _root->addRealDirItem(path);
+    emit layoutChanged();
+}
+
+void ProjectItemModel::addLogicDirItem(const QString &name)
+{
+    emit layoutAboutToBeChanged();
+    _root->addLogicDirItem(name);
+    emit layoutChanged();
+}
+
+void ProjectItemModel::addItem(ProjectItem *item)
+{
+    emit layoutAboutToBeChanged();
+    _root->addChild(item);
+    emit layoutChanged();
+}
+
 void ProjectItemModel::addFileItem(const QString &path)
 {
     emit layoutAboutToBeChanged();
-    _root->addChild(new ProjectItem(_project, path));
+    _root->addFileItem(path);
     emit layoutChanged();
 }
 
@@ -85,6 +106,8 @@ QVariant ProjectItemModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DecorationRole)
     {
+        if (item->type() == ProjectItem::LogicDir)
+            return _iconProvider->icon(QFileIconProvider::Folder);
         return _iconProvider->icon(item->info());
     }
 

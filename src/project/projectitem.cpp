@@ -2,12 +2,35 @@
 
 #include "project.h"
 
+#include <QDebug>
 #include <QFont>
 
-ProjectItem::ProjectItem(Project *project, const QString path)
-    : QObject(nullptr), _info(path, project)
+ProjectItem::ProjectItem(Project *project, const QString path, Type type)
+    : QObject(nullptr), _type(type), _info(path, project)
 {
     _parentItem = nullptr;
+
+    _watcher = new QFileSystemWatcher();
+    if (type == RealDir)
+    {
+        QFileInfoList list = QDir(path).entryInfoList(QStringList(), QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+        foreach (QFileInfo info, list)
+        {
+            if (info.isDir())
+                addChild(new ProjectItem(project, info.filePath(), RealDir));
+            else
+                addChild(new ProjectItem(project, info.filePath(), File));
+        }
+
+        _watcher->addPath(QDir::cleanPath(path)+"/");
+        connect(_watcher, &QFileSystemWatcher::directoryChanged, this, &ProjectItem::updateModif);
+    }
+
+    if (type == File)
+    {
+        _watcher->addPath(QDir::cleanPath(path));
+        connect(_watcher, &QFileSystemWatcher::fileChanged, this, &ProjectItem::updateModif);
+    }
 }
 
 ProjectItem::~ProjectItem()
@@ -39,12 +62,30 @@ void ProjectItem::addChild(ProjectItem *child)
     _childrens.append(child);
 }
 
+void ProjectItem::addFileItem(const QString &path)
+{
+    addChild(new ProjectItem(_info.project(), path));
+}
+
+void ProjectItem::addRealDirItem(const QString &path)
+{
+    addChild(new ProjectItem(_info.project(), path, ProjectItem::RealDir));
+}
+
+void ProjectItem::addLogicDirItem(const QString &name)
+{
+    addChild(new ProjectItem(_info.project(), name, ProjectItem::LogicDir));
+}
+
 QVariant ProjectItem::data(int column, int role) const
 {
     if (role == Qt::DisplayRole)
         return _info.fileName();
     if (role == Qt::FontRole || role == Qt::TextColorRole || role == Qt::ToolTipRole)
     {
+        if (_type == LogicDir)
+            return QVariant();
+
         // font role
         if (role == Qt::FontRole)
         {
@@ -100,4 +141,14 @@ ProjectItem *ProjectItem::parentItem() const
 const FileProjectInfo &ProjectItem::info() const
 {
     return _info;
+}
+
+void ProjectItem::updateModif(const QString &path)
+{
+    qDebug()<<path;
+}
+
+ProjectItem::Type ProjectItem::type() const
+{
+    return _type;
 }

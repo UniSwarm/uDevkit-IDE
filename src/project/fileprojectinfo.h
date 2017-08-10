@@ -1,10 +1,10 @@
 #ifndef FILEPROJECTINFO_H
 #define FILEPROJECTINFO_H
 
-#include "project.h"
-
 #include <QFileInfo>
 #include <QString>
+
+class Project;
 
 class FileProjectInfo : public QFileInfo
 {
@@ -15,9 +15,12 @@ public:
     bool isModified() const;
     bool isValidated() const;
     bool isOpened() const;
+    bool isInProject() const;
 
     QString humanSize() const;
     QString toolTips() const;
+
+    Project *project() const;
 
 protected:
     Project *_project;
