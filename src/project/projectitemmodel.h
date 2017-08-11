@@ -21,7 +21,7 @@ public:
     enum Role {
         FileIconRole = Qt::DecorationRole,
         FilePathRole = Qt::UserRole + 1,
-        FileRoleRole = Qt::UserRole + 2
+        FileNameRole = Qt::UserRole + 2
     };
     const ProjectItem *item(const QModelIndex &index) const;
     //QModelIndex index(const ProjectItem *item) const;

@@ -89,6 +89,10 @@ QVariant ProjectItem::data(int column, int role) const
     Q_UNUSED(column)
     if (role == Qt::DisplayRole)
         return _info.fileName();
+    if (role == ProjectItemModel::FilePathRole)
+        return _info.filePath();
+    if (role == ProjectItemModel::FileNameRole)
+        return _info.fileName();
     if (role == Qt::FontRole || role == Qt::TextColorRole || role == Qt::ToolTipRole)
     {
         if (_type == LogicDir)

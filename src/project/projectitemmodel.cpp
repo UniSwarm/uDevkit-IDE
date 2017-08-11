@@ -138,7 +138,7 @@ const ProjectItem *ProjectItemModel::item(const QModelIndex &index) const
 
 QModelIndex ProjectItemModel::index(const QString path) const
 {
-    QModelIndexList list = match(parent(QModelIndex()), ProjectItemModel::FilePathRole, path);
+    QModelIndexList list = match(index(0,0), ProjectItemModel::FilePathRole, path, -1, Qt::MatchRecursive);
     if (list.isEmpty())
         return QModelIndex();
     return list.first();
