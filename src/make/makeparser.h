@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QMultiMap>
 #include <QStringList>
+#include <QSet>
+#include <QFileSystemWatcher>
 
 class QProcess;
 
@@ -18,21 +20,27 @@ public:
     QString resolveFilePath(const QString &filePath);
 
     const QMultiMap<QString, QString> &variables() const;
-    const QStringList &sourceFiles() const;
+    QStringList sourceFiles() const;
 
 signals:
     void sourceChanged();
+    void sourceFilesAdded(QSet<QString> newSourcesFiles);
+    void sourceFilesRemoved(QSet<QString> oldSourcesFiles);
 
 public slots:
 
 protected slots:
     void processEnd();
+    void analyseMakefile(const QString path);
 
 protected:
+    QFileSystemWatcher *_makeWatcher;
     QProcess *_processMake;
     QString _basePath;
+    QString _makefileFilePath;
 
-    QStringList _sourceFiles;
+    void addSource(QSet<QString> &sourcesList, const QStringList &varList);
+    QSet<QString> _sourceFiles;
     QMultiMap<QString, QString> _variables;
     QMultiMap<QString, QString> _vpath;
 };
