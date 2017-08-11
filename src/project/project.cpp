@@ -1,19 +1,34 @@
 #include "project.h"
 
 #include "version/gitversioncontrol.h"
+#include "make/makeparser.h"
+
+#include <QDebug>
 
 Project::Project(const QString &path) : QObject()
 {
-    _fileItemModel = new FileProjectItemModel(this);
-    _fileItemModel->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
+    _projectItemModel = new ProjectItemModel(this);
+    //_projectItemModel->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
     _versionControl = new GitVersionControl();
     connect(_versionControl, &GitVersionControl::newModifiedFiles,
-            _fileItemModel, &FileProjectItemModel::filesUpdated);
+            _projectItemModel, &ProjectItemModel::filesUpdated);
     connect(_versionControl, &GitVersionControl::newValidatedFiles,
-            _fileItemModel, &FileProjectItemModel::filesUpdated);
+            _projectItemModel, &ProjectItemModel::filesUpdated);
+
+    _make = new MakeParser();
+    connect(_make, &MakeParser::sourceChanged, this, &Project::updateSources);
+    connect(_make, &MakeParser::sourceFilesAdded, this, &Project::newSource);
+    connect(_make, &MakeParser::sourceFilesRemoved, this, &Project::oldSource);
 
     if (!path.isEmpty())
         setRootPath(path);
+}
+
+Project::~Project()
+{
+    delete _make;
+    delete _projectItemModel;
+    delete _versionControl;
 }
 
 const QDir &Project::rootDir() const
@@ -23,14 +38,16 @@ const QDir &Project::rootDir() const
 
 QString Project::rootPath() const
 {
-    return _rootDir.path();
+    return _rootDir.canonicalPath();
 }
 
 void Project::setRootPath(const QString &path)
 {
     _rootDir.setPath(QDir::cleanPath(path));
-    _versionControl->setPath(path);
-    _fileItemModel->setRootPath(rootPath());
+
+    _make->setPath(rootPath());
+    _versionControl->setPath(rootPath());
+    _projectItemModel->addRealDirItem(rootPath());
     emit rootPathChanged();
 }
 
@@ -39,9 +56,9 @@ AbstractVersionControl *Project::versionControl() const
     return _versionControl;
 }
 
-FileProjectItemModel *Project::fileItemModel() const
+ProjectItemModel *Project::projectItemModel() const
 {
-    return _fileItemModel;
+    return _projectItemModel;
 }
 
 bool Project::isOpenedFile(const QString &path) const
@@ -58,12 +75,38 @@ void Project::addOpenedFiles(QSet<QString> openedFiles)
 {
     foreach (QString file, openedFiles)
         _openedFiles.insert(file);
-    _fileItemModel->filesUpdated(openedFiles);
+    _projectItemModel->filesUpdated(openedFiles);
 }
 
 void Project::removeOpenedFiles(QSet<QString> openedFiles)
 {
     foreach (QString file, openedFiles)
         _openedFiles.remove(file);
-    _fileItemModel->filesUpdated(openedFiles);
+    _projectItemModel->filesUpdated(openedFiles);
+}
+
+MakeParser *Project::make() const
+{
+    return _make;
+}
+
+void Project::updateSources()
+{
+    /*ProjectItem *extDir = new ProjectItem(this, "ext src", ProjectItem::LogicDir);
+    foreach (QString filePath, _make->sourceFiles())
+    {
+        if (!filePath.startsWith(rootPath()))
+            extDir->addFileItem(filePath);
+    }
+    _model->addItem(extDir);*/
+}
+
+void Project::newSource(QSet<QString> sources)
+{
+    _projectItemModel->addExternalSource(sources);
+}
+
+void Project::oldSource(QSet<QString> sources)
+{
+    _projectItemModel->removeExternalSource(sources);
 }

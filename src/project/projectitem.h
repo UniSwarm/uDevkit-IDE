@@ -26,6 +26,7 @@ public:
     ProjectItem *child(int row) const;
     int row() const;
     void addChild(ProjectItem *child);
+    void removeChild(ProjectItem *child);
     Type type() const;
 
     void addFileItem(const QString &path);

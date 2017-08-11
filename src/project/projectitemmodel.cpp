@@ -4,9 +4,12 @@
 
 #include "fileprojectitemmodel.h"
 
+#include "project.h"
+
 ProjectItemModel::ProjectItemModel(Project *project) :
     _project(project)
 {
+    _externalFiles = nullptr;
     _root = new ProjectItem(_project, "");
     _iconProvider = new QFileIconProvider;
 }
@@ -14,6 +17,7 @@ ProjectItemModel::ProjectItemModel(Project *project) :
 ProjectItemModel::~ProjectItemModel()
 {
     delete _root;
+    delete _iconProvider;
 }
 
 void ProjectItemModel::addRealDirItem(const QString &path)
@@ -21,6 +25,94 @@ void ProjectItemModel::addRealDirItem(const QString &path)
     emit layoutAboutToBeChanged();
     _root->addRealDirItem(path);
     emit layoutChanged();
+}
+
+bool ProjectItemModel::isDir(const QModelIndex &index) const
+{
+    const ProjectItem *itemPtr = item(index);
+    if (itemPtr)
+        return itemPtr->info().isDir() || (itemPtr->type() == ProjectItem::LogicDir);
+    return false;
+}
+
+QString ProjectItemModel::filePath(const QModelIndex &index) const
+{
+    const ProjectItem *itemPtr = item(index);
+    if (itemPtr)
+        return itemPtr->info().filePath();
+    return QString();
+}
+
+QString ProjectItemModel::fileName(const QModelIndex &index) const
+{
+    const ProjectItem *itemPtr = item(index);
+    if (itemPtr)
+        return itemPtr->info().fileName();
+    return QString();
+}
+
+bool ProjectItemModel::rmdir(const QModelIndex &index)
+{
+    QString mfileName = filePath(index);
+    if (mfileName.isEmpty())
+        return false;
+    return QDir(mfileName).removeRecursively();
+}
+
+bool ProjectItemModel::remove(const QModelIndex &index)
+{
+    QString mfileName = filePath(index);
+    if (mfileName.isEmpty())
+        return false;
+    return QFile(mfileName).remove();
+}
+
+void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
+{
+    emit layoutAboutToBeChanged();
+    if (!_externalFiles)
+    {
+        _externalFiles = new ProjectItem(_project, "ext src", ProjectItem::LogicDir);
+        _root->addChild(_externalFiles);
+    }
+    foreach (QString filePath, sourceFiles)
+    {
+        if (filePath.startsWith(_project->rootPath()))
+            continue;
+
+        ProjectItem *item = new ProjectItem(_project, filePath);
+        _externalFiles->addChild(item);
+        _pathCache.insert(filePath, item);
+    }
+    emit layoutChanged();
+}
+
+void ProjectItemModel::removeExternalSource(QSet<QString> sourceFiles)
+{
+    if (!_externalFiles)
+        return;
+    emit layoutAboutToBeChanged();
+    foreach (QString filePath, sourceFiles)
+    {
+        if (filePath.startsWith(_project->rootPath()))
+            continue; // not external source
+        ProjectItem *item = _pathCache[filePath];
+        if (!item)
+            continue;
+        _externalFiles->removeChild(item);
+        _pathCache.remove(filePath);
+    }
+    emit layoutChanged();
+}
+
+void ProjectItemModel::filesUpdated(QSet<QString> filesPath)
+{
+    foreach (QString path, filesPath)
+    {
+        QModelIndex id = index(path);
+        if (id.isValid())
+            emit dataChanged(id, id);
+    }
 }
 
 void ProjectItemModel::addLogicDirItem(const QString &name)
@@ -36,6 +128,26 @@ void ProjectItemModel::addItem(ProjectItem *item)
     _root->addChild(item);
     emit layoutChanged();
 }
+
+const ProjectItem *ProjectItemModel::item(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return nullptr;
+    return static_cast<ProjectItem*>(index.internalPointer());
+}
+
+QModelIndex ProjectItemModel::index(const QString path) const
+{
+    QModelIndexList list = match(parent(QModelIndex()), ProjectItemModel::FilePathRole, path);
+    if (list.isEmpty())
+        return QModelIndex();
+    return list.first();
+}
+
+/*QModelIndex ProjectItemModel::index(const ProjectItem *item) const
+{
+
+}*/
 
 void ProjectItemModel::addFileItem(const QString &path)
 {
@@ -101,7 +213,6 @@ QVariant ProjectItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
-
     ProjectItem *item = static_cast<ProjectItem*>(index.internalPointer());
 
     if (role == Qt::DecorationRole)

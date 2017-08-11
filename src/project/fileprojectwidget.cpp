@@ -15,7 +15,7 @@ FileProjectWidget::FileProjectWidget(Project *project, QWidget *parent) : QWidge
     layout->addWidget(_filterEdit);
 
     _fileView = new FileTreeView(_project, this);
-    _fileView->proxy()->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
+    //_fileView->proxy()->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
 
     _fileView->setStyleSheet("QTreeView { selection-background-color: transparent; }");
     layout->addWidget(_fileView);

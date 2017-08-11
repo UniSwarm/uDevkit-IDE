@@ -24,6 +24,7 @@ ProjectItem::ProjectItem(Project *project, const QString path, Type type)
 
         _watcher->addPath(QDir::cleanPath(path)+"/");
         connect(_watcher, &QFileSystemWatcher::directoryChanged, this, &ProjectItem::updateModif);
+        connect(_watcher, &QFileSystemWatcher::fileChanged, this, &ProjectItem::updateModif);
     }
 
     if (type == File)
@@ -62,6 +63,12 @@ void ProjectItem::addChild(ProjectItem *child)
     _childrens.append(child);
 }
 
+void ProjectItem::removeChild(ProjectItem *child)
+{
+    _childrens.removeOne(child);
+    delete child;
+}
+
 void ProjectItem::addFileItem(const QString &path)
 {
     addChild(new ProjectItem(_info.project(), path));
@@ -79,6 +86,7 @@ void ProjectItem::addLogicDirItem(const QString &name)
 
 QVariant ProjectItem::data(int column, int role) const
 {
+    Q_UNUSED(column)
     if (role == Qt::DisplayRole)
         return _info.fileName();
     if (role == Qt::FontRole || role == Qt::TextColorRole || role == Qt::ToolTipRole)
@@ -145,7 +153,7 @@ const FileProjectInfo &ProjectItem::info() const
 
 void ProjectItem::updateModif(const QString &path)
 {
-    qDebug()<<path;
+    qDebug()<<_info.fileName()<<path;
 }
 
 ProjectItem::Type ProjectItem::type() const

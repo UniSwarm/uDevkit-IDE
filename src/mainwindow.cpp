@@ -31,6 +31,7 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete _project;
 }
 
 void MainWindow::createDocks()

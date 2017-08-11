@@ -18,6 +18,27 @@ public:
     void addLogicDirItem(const QString &name);
     void addItem(ProjectItem *item);
 
+    enum Role {
+        FileIconRole = Qt::DecorationRole,
+        FilePathRole = Qt::UserRole + 1,
+        FileRoleRole = Qt::UserRole + 2
+    };
+    const ProjectItem *item(const QModelIndex &index) const;
+    //QModelIndex index(const ProjectItem *item) const;
+    QModelIndex index(const QString path) const;
+    bool isDir(const QModelIndex &index) const;
+    QString filePath(const QModelIndex &index) const;
+    QString fileName(const QModelIndex &index) const;
+    bool rmdir(const QModelIndex &index);
+    bool remove(const QModelIndex &index);
+
+    // high level interface
+    void addExternalSource(QSet<QString> sourceFiles);
+    void removeExternalSource(QSet<QString> sourceFiles);
+
+public slots:
+    void filesUpdated(QSet<QString> filesPath);
+
     // QAbstractItemModel interface
 public:
     virtual QModelIndex index(int row, int column, const QModelIndex &parent=QModelIndex()) const;
@@ -31,6 +52,10 @@ protected:
     ProjectItem *_root;
     Project *_project;
     QFileIconProvider *_iconProvider;
+    QMap<QString, ProjectItem*> _pathCache;
+
+    // high level interface
+    ProjectItem *_externalFiles;
 };
 
 #endif // PROJECTMODEL_H

@@ -15,12 +15,12 @@ FileTreeView::FileTreeView(Project *project, QWidget *parent)
     : QTreeView(parent), _project(project)
 {
     _proxy = new FileProjectProxyModel(project);
-    _proxy->setSourceModel(_project->fileItemModel());
+    _proxy->setSourceModel(_project->projectItemModel());
     _proxy->setHiddenFilter(QRegExp("^$"));
 
     setModel(_proxy);
     setEditTriggers(QAbstractItemView::EditKeyPressed);
-    setRootIndex(_proxy->mapFromSource(_project->fileItemModel()->index(project->rootPath())));
+    //setRootIndex(_proxy->mapFromSource(_project->projectItemModel()->index(project->rootPath())));
     for (int i = 1; i < _proxy->columnCount(); ++i)
         hideColumn(i);
     setStyleSheet("QTreeView { selection-background-color: transparent; }");
@@ -34,7 +34,7 @@ FileProjectProxyModel *FileTreeView::proxy() const
 
 void FileTreeView::selectFile(const QString &fileName)
 {
-    QModelIndex fileIndex = _project->fileItemModel()->index(fileName);
+    QModelIndex fileIndex = _project->projectItemModel()->index(fileName);
     if (!fileIndex.isValid())
         return;
 
@@ -81,14 +81,14 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
 
     // file commands
     QAction *fileCreateAction = nullptr;
-    if(_project->fileItemModel()->isDir(indexFile))
+    if(_project->projectItemModel()->isDir(indexFile))
     {
         fileCreateAction = menu.addAction("Add new file here");
     }
     QAction *fileRenameAction = menu.addAction("Rename");
     fileRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
     QAction *fileRemoveAction = nullptr, *dirRemoveAction = nullptr, *openDirAction = nullptr;
-    if(_project->fileItemModel()->isDir(indexFile))
+    if(_project->projectItemModel()->isDir(indexFile))
     {
         dirRemoveAction = menu.addAction("Remove directory");
         dirRemoveAction->setShortcut(QKeySequence::Delete);
@@ -103,7 +103,7 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
 
     // git commands
     QAction *versionValidAction = nullptr, *versionInvalidAction = nullptr, *versionCheckoutAction = nullptr;
-    FileProjectInfo info(_project->fileItemModel()->filePath(indexFile), _project);
+    FileProjectInfo info(_project->projectItemModel()->filePath(indexFile), _project);
     if (_project->versionControl()->isValid())
     {
         menu.addSeparator();
@@ -124,7 +124,7 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
     if (trigered == fileCreateAction)
     {
         QString fileName = QInputDialog::getText(this, "New file name", "Enter a name for this new file");
-        QString filePath = _project->fileItemModel()->filePath(indexFile) + "/" + fileName;
+        QString filePath = _project->projectItemModel()->filePath(indexFile) + "/" + fileName;
         QFile file(filePath);
         if (!file.exists())
         {
@@ -136,19 +136,21 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
     }
     else if (trigered == dirRemoveAction)
     {
-        if(QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove '%1'?").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
-            _project->fileItemModel()->rmdir(indexFile);
+        if(QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove '%1'?")
+                                 .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+            _project->projectItemModel()->rmdir(indexFile);
     }
     else if (trigered == fileRemoveAction)
     {
-        if (QMessageBox::question(this, "Remove file?", QString("Do you realy want to remove '%1'?").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
-            _project->fileItemModel()->remove(indexFile);
+        if (QMessageBox::question(this, "Remove file?", QString("Do you realy want to remove '%1'?")
+                                  .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+            _project->projectItemModel()->remove(indexFile);
     }
     else if (trigered == fileRenameAction)
         edit(index);
     else if (trigered == openDirAction)
     {
-        Project *project = new Project(_project->fileItemModel()->filePath(indexFile));
+        Project *project = new Project(_project->projectItemModel()->filePath(indexFile));
         MainWindow *w = new MainWindow(project);
         w->show();
     }
@@ -157,7 +159,8 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
     else if (trigered == versionInvalidAction)
         _project->versionControl()->inValidFile(QSet<QString>()<<info.filePath());
     else if (trigered == versionCheckoutAction)
-        if (QMessageBox::question(this, "Checkout file?", QString("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.").arg(_project->fileItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+        if (QMessageBox::question(this, "Checkout file?", QString("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.")
+                                  .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
             _project->versionControl()->checkoutFile(QSet<QString>()<<info.filePath());
 }
 
@@ -172,8 +175,8 @@ void FileTreeView::mouseReleaseEvent(QMouseEvent *event)
             return;
 
         const QModelIndex &indexFile = _proxy->mapToSource(index);
-        if (!_project->fileItemModel()->isDir(indexFile))
-            emit closedFile(_project->fileItemModel()->filePath(indexFile));
+        if (!_project->projectItemModel()->isDir(indexFile))
+            emit closedFile(_project->projectItemModel()->filePath(indexFile));
     }
 }
 
@@ -189,8 +192,8 @@ void FileTreeView::mouseDoubleClickEvent(QMouseEvent *event)
         return;
 
     const QModelIndex &indexFile = _proxy->mapToSource(index);
-    if (!_project->fileItemModel()->isDir(indexFile))
-        emit openedFile(_project->fileItemModel()->filePath(indexFile));
+    if (!_project->projectItemModel()->isDir(indexFile))
+        emit openedFile(_project->projectItemModel()->filePath(indexFile));
 }
 
 void FileTreeView::keyPressEvent(QKeyEvent *event)
@@ -204,7 +207,7 @@ void FileTreeView::keyPressEvent(QKeyEvent *event)
             return;
 
         const QModelIndex &indexFile = _proxy->mapToSource(index);
-        if (!_project->fileItemModel()->isDir(indexFile))
-            emit openedFile(_project->fileItemModel()->filePath(indexFile));
+        if (!_project->projectItemModel()->isDir(indexFile))
+            emit openedFile(_project->projectItemModel()->filePath(indexFile));
     }
 }
