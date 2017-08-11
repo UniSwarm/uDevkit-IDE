@@ -1,7 +1,7 @@
 #include "fileprojectproxymodel.h"
 
 #include <QDebug>
-#include <QFileSystemModel>
+#include "projectitemmodel.h"
 
 #include "project.h"
 
@@ -10,7 +10,7 @@ FileProjectProxyModel::FileProjectProxyModel(Project *project)
 {
     _project = project;
     setDynamicSortFilter(true);
-    setSortRole(Qt::DisplayRole);
+    setSortRole(ProjectItemModel::FilePathRole);
     sort(1, Qt::AscendingOrder);
 }
 
@@ -40,9 +40,9 @@ void FileProjectProxyModel::setShowFilter(const QString &pattern)
 
 bool FileProjectProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    QFileSystemModel *fsm = static_cast<QFileSystemModel*>(sourceModel());
+    ProjectItemModel *fsm = static_cast<ProjectItemModel*>(sourceModel());
     const QModelIndex index = fsm->index(source_row, 0, source_parent);
-    const QString &path = fsm->data(index, QFileSystemModel::FilePathRole).toString();
+    const QString &path = fsm->data(index, ProjectItemModel::FilePathRole).toString();
 
     // show all dir parent of project path
     if (!path.startsWith(_project->rootPath()))
@@ -70,9 +70,9 @@ bool FileProjectProxyModel::filterAcceptsColumn(int source_column, const QModelI
 
 bool FileProjectProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
-    QFileSystemModel *fsm = static_cast<QFileSystemModel*>(sourceModel());
-    QString leftPath = sourceModel()->data(source_left, QFileSystemModel::FilePathRole).toString();
-    QString rightPath = sourceModel()->data(source_right, QFileSystemModel::FilePathRole).toString();
+    ProjectItemModel *fsm = static_cast<ProjectItemModel*>(sourceModel());
+    QString leftPath = sourceModel()->data(source_left, ProjectItemModel::FilePathRole).toString();
+    QString rightPath = sourceModel()->data(source_right, ProjectItemModel::FilePathRole).toString();
     bool isLeftDir = fsm->isDir(source_left);
     bool isRightDir = fsm->isDir(source_right);
 

@@ -17,10 +17,10 @@ FileTreeView::FileTreeView(Project *project, QWidget *parent)
     _proxy = new FileProjectProxyModel(project);
     _proxy->setSourceModel(_project->projectItemModel());
     _proxy->setHiddenFilter(QRegExp("^$"));
+    _proxy->sort(0, Qt::AscendingOrder);
 
     setModel(_proxy);
     setEditTriggers(QAbstractItemView::EditKeyPressed);
-    //setRootIndex(_proxy->mapFromSource(_project->projectItemModel()->index(project->rootPath())));
     for (int i = 1; i < _proxy->columnCount(); ++i)
         hideColumn(i);
     setStyleSheet("QTreeView { selection-background-color: transparent; }");
@@ -200,8 +200,11 @@ void FileTreeView::keyPressEvent(QKeyEvent *event)
 {
     QTreeView::keyPressEvent(event);
 
-    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return )
     {
+        if (!hasFocus())
+            return;
+
         const QPersistentModelIndex index = selectionModel()->currentIndex();
         if (!index.isValid())
             return;
