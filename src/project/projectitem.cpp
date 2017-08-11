@@ -87,7 +87,7 @@ void ProjectItem::addLogicDirItem(const QString &name)
 QVariant ProjectItem::data(int column, int role) const
 {
     Q_UNUSED(column)
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole || role == Qt::EditRole)
         return _info.fileName();
     if (role == ProjectItemModel::FilePathRole)
         return _info.filePath();

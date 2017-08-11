@@ -35,6 +35,14 @@ bool ProjectItemModel::isDir(const QModelIndex &index) const
     return false;
 }
 
+bool ProjectItemModel::isFile(const QModelIndex &index) const
+{
+    const ProjectItem *itemPtr = item(index);
+    if (itemPtr)
+        return itemPtr->info().isFile() || (itemPtr->type() == ProjectItem::LogicDir);
+    return false;
+}
+
 QString ProjectItemModel::filePath(const QModelIndex &index) const
 {
     const ProjectItem *itemPtr = item(index);
@@ -229,6 +237,18 @@ Qt::ItemFlags ProjectItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
+    Qt::ItemFlags baseFlags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
-    return QAbstractItemModel::flags(index);
+    ProjectItem *item = static_cast<ProjectItem*>(index.internalPointer());
+    if (item->type() == ProjectItem::RealDir || item->type() == ProjectItem::File)
+        return baseFlags | Qt::ItemIsEditable;
+
+    return baseFlags;
+}
+
+bool ProjectItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    Q_UNUSED(role)
+    ProjectItem *item = static_cast<ProjectItem*>(index.internalPointer());
+    return item->info().dir().rename(item->info().fileName(), value.toString());
 }
