@@ -37,6 +37,9 @@ public:
     void addExternalSource(QSet<QString> sourceFiles);
     void removeExternalSource(QSet<QString> sourceFiles);
 
+    void prepareModif();
+    void endModif();
+
 public slots:
     void filesUpdated(QSet<QString> filesPath);
 

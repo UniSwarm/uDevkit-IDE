@@ -10,7 +10,7 @@ ProjectItemModel::ProjectItemModel(Project *project) :
     _project(project)
 {
     _externalFiles = nullptr;
-    _root = new ProjectItem(_project, "");
+    _root = new ProjectItem(_project, "", ProjectItem::LogicDir, this);
     _iconProvider = new QFileIconProvider;
 }
 
@@ -80,7 +80,7 @@ void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
     emit layoutAboutToBeChanged();
     if (!_externalFiles)
     {
-        _externalFiles = new ProjectItem(_project, "ext src", ProjectItem::LogicDir);
+        _externalFiles = new ProjectItem(_project, "ext src", ProjectItem::LogicDir, this);
         _root->addChild(_externalFiles);
     }
     foreach (QString filePath, sourceFiles)
@@ -88,7 +88,7 @@ void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
         if (filePath.startsWith(_project->rootPath()))
             continue;
 
-        ProjectItem *item = new ProjectItem(_project, filePath);
+        ProjectItem *item = new ProjectItem(_project, filePath, ProjectItem::IndividualFile, this);
         _externalFiles->addChild(item);
         _pathCache.insert(filePath, item);
     }
@@ -110,6 +110,16 @@ void ProjectItemModel::removeExternalSource(QSet<QString> sourceFiles)
         _externalFiles->removeChild(item);
         _pathCache.remove(filePath);
     }
+    emit layoutChanged();
+}
+
+void ProjectItemModel::prepareModif()
+{
+    emit layoutAboutToBeChanged();
+}
+
+void ProjectItemModel::endModif()
+{
     emit layoutChanged();
 }
 
@@ -240,7 +250,7 @@ Qt::ItemFlags ProjectItemModel::flags(const QModelIndex &index) const
     Qt::ItemFlags baseFlags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
     ProjectItem *item = static_cast<ProjectItem*>(index.internalPointer());
-    if (item->type() == ProjectItem::RealDir || item->type() == ProjectItem::File)
+    if (item->type() != ProjectItem::LogicDir)
         return baseFlags | Qt::ItemIsEditable;
 
     return baseFlags;

@@ -6,6 +6,7 @@
 #include <QFileSystemWatcher>
 
 class Project;
+class ProjectItemModel;
 
 #include "fileprojectinfo.h"
 
@@ -15,16 +16,18 @@ class ProjectItem : public QObject
 public:
     enum Type {
         RealDir,
+        DirFile,
         LogicDir,
-        File
+        IndividualFile
     };
 
-    explicit ProjectItem(Project *project, const QString path, Type type=File);
+    explicit ProjectItem(Project *project, const QString path, Type type, ProjectItemModel *model);
     ~ProjectItem();
 
     int count() const;
     ProjectItem *child(int row) const;
     int row() const;
+    ProjectItem *parentItem() const;
     void addChild(ProjectItem *child);
     void removeChild(ProjectItem *child);
     Type type() const;
@@ -34,8 +37,10 @@ public:
     void addLogicDirItem(const QString &name);
 
     QVariant data(int column, int role) const;
-    ProjectItem *parentItem() const;
+
     const FileProjectInfo &info() const;
+    inline QString filePath() const {return _info.filePath();}
+    inline QString fileName() const {return _info.fileName();}
 
 signals:
 
@@ -48,9 +53,11 @@ protected:
     Type _type;
     FileProjectInfo _info;
     QList<ProjectItem*> _childrens;
+    QHash<QString, ProjectItem*> _childrensMap;
     ProjectItem *_parentItem;
 
     QFileSystemWatcher *_watcher;
+    ProjectItemModel *_model;
 };
 
 #endif // PROJECTITEM_H

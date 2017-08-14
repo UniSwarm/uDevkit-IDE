@@ -16,7 +16,7 @@ FileTreeView::FileTreeView(Project *project, QWidget *parent)
 {
     _proxy = new FileProjectProxyModel(project);
     _proxy->setSourceModel(_project->projectItemModel());
-    _proxy->setHiddenFilter(QRegExp("^$"));
+    setHiddenFilter(QRegExp(""));
     _proxy->sort(0, Qt::AscendingOrder);
 
     setModel(_proxy);
@@ -25,6 +25,8 @@ FileTreeView::FileTreeView(Project *project, QWidget *parent)
         hideColumn(i);
     setStyleSheet("QTreeView { selection-background-color: transparent; }");
     header()->close();
+
+    expandToDepth(0);
 }
 
 FileProjectProxyModel *FileTreeView::proxy() const
