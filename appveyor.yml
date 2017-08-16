@@ -31,6 +31,7 @@ before_build:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\build
-  - '%make%'
+  - if %QTDIR:msvc=%==%QTDIR% %make% -j2
+  - if not %QTDIR:msvc=%==%QTDIR% %make%
 
 test: off
