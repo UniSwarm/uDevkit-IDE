@@ -160,8 +160,9 @@ void MainWindow::git()
 {
     _process = new QProcess(this);
     connect(_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(readProcess()));
-    _process->setWorkingDirectory(QApplication::applicationDirPath());
-    _process->start("git", QStringList()<<"status");
+    _process->setWorkingDirectory(_project->rootPath());
+
+    _process->start("git", QStringList()<<"diff"<<_editorTabWidget->currentFilePath());
 }
 
 void MainWindow::readProcess()

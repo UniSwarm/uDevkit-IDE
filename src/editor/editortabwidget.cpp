@@ -41,6 +41,13 @@ Editor *EditorTabWidget::currentEditor() const
     return static_cast<Editor *>(currentWidget());
 }
 
+QString EditorTabWidget::currentFilePath() const
+{
+    if (currentEditor())
+        return currentEditor()->filePath();
+    return QString();
+}
+
 Editor *EditorTabWidget::editor(int i) const
 {
     return static_cast<Editor *>(widget(i));

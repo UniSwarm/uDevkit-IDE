@@ -16,6 +16,7 @@ public:
 
     void addEditor(Editor *editor);
     Editor *currentEditor() const;
+    QString currentFilePath() const;
     Editor *editor(int i) const;
 
 public slots:
