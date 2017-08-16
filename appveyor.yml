@@ -3,15 +3,21 @@ version: 0.{build}
 clone_folder: c:\dev\rtide
 clone_depth: 5
 
+image:
+  - Visual Studio 2015
+
 init:
-  - set PATH=C:\msys64;C:\Qt\5.7\mingw53_32\bin;C:\MinGW\bin;%PATH%
+  - set PATH=C:\msys64;C:\Qt\5.9.1\msvc2015_64\bin
 
 install:
   - git submodule update --init --recursive
 
+before_build:
+  - mkdir %APPVEYOR_BUILD_FOLDER%-build
+  - qmake ..\src\rtide.pro -o %APPVEYOR_BUILD_FOLDER%-build -r -Wall CONFIG+=release %APPVEYOR_BUILD_FOLDER%
+
 build_script:
-  - cd C:\dev\rtide
-  - mingw32-make all MAKE=mingw32-make
+  - cd %APPVEYOR_BUILD_FOLDER%-build
+  - nmake.exe
 
 test: off
-

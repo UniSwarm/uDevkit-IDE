@@ -8,13 +8,19 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-QT += webenginewidgets
-
 TARGET = rtide
 TEMPLATE = app
 DESTDIR = $$PWD/../bin
 
 CONFIG += c++11
+
+qtHaveModule(webenginewidgets) {
+    QT += webenginewidgets
+    message("web engine included")
+} else {
+    DEFINES += NO_WEBENGINE
+    message("NO web engine !")
+}
 
 SOURCES += \
         main.cpp \
