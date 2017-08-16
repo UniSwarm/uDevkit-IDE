@@ -21,6 +21,8 @@ public slots:
     void setEditor(Editor *editor);
     void activate();
 
+    Editor::SearchFlags flags();
+
 protected slots:
     void upadteSearch();
     void searchNext();
@@ -37,13 +39,14 @@ protected:
     QToolButton *_nextButton;
     QToolButton *_prevButton;
     QToolButton *_allButton;
-    QCheckBox *_regexpCheckbox;
 
     QLineEdit *_replaceLineEdit;
     QToolButton *_replaceNextButton;
     QToolButton *_replacePrevButton;
     QToolButton *_replaceAllButton;
 
+    QCheckBox *_regexpCheckbox;
+    QCheckBox *_caseSensitivityCheckbox;
     QLabel *_statusLabel;
 
     Editor *_editor;

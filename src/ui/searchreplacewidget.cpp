@@ -33,15 +33,22 @@ void SearchReplaceWidget::activate()
     _searchLineEdit->selectAll();
 }
 
+Editor::SearchFlags SearchReplaceWidget::flags()
+{
+    Editor::SearchFlags mflags;
+    if (_regexpCheckbox->isEnabled() && _regexpCheckbox->isChecked())
+        mflags |= Editor::RegExpMode;
+    if (_caseSensitivityCheckbox->isEnabled() && _caseSensitivityCheckbox->isChecked())
+        mflags |= Editor::CaseSensitive;
+    return mflags;
+}
+
 void SearchReplaceWidget::upadteSearch()
 {
     if (!_editor)
         return;
 
-    Editor::SearchFlags flags;
-    if (_regexpCheckbox->isEnabled() && _regexpCheckbox->isChecked())
-        flags |= Editor::RegExpMode;
-    int found = _editor->search(_searchLineEdit->text(), flags);
+    int found = _editor->search(_searchLineEdit->text(), flags());
     _statusLabel->setText(QString("%1 occurence%2 found").arg(found).arg(found>1 ? "s" : ""));
 }
 
@@ -85,10 +92,7 @@ void SearchReplaceWidget::replaceAll()
     if (!_editor)
         return;
 
-    Editor::SearchFlags flags;
-    if (_regexpCheckbox->isEnabled() && _regexpCheckbox->isChecked())
-        flags |= Editor::RegExpMode;
-    _editor->replaceAll(_replaceLineEdit->text(), flags);
+    _editor->replaceAll(_replaceLineEdit->text(), flags());
 }
 
 void SearchReplaceWidget::createWidgets()
@@ -146,10 +150,20 @@ void SearchReplaceWidget::createWidgets()
     layout->addLayout(replaceLineLayout);
 
     // options
+    QHBoxLayout *optionsLineLayout = new QHBoxLayout();
+    optionsLineLayout->setMargin(0);
+
     _regexpCheckbox = new QCheckBox("regexp");
     _regexpCheckbox->setChecked(true);
     layout->addWidget(_regexpCheckbox);
     connect(_regexpCheckbox, &QCheckBox::stateChanged, this, &SearchReplaceWidget::upadteSearch);
+
+    _caseSensitivityCheckbox = new QCheckBox("case sensitive");
+    _caseSensitivityCheckbox->setChecked(true);
+    layout->addWidget(_caseSensitivityCheckbox);
+    connect(_caseSensitivityCheckbox, &QCheckBox::stateChanged, this, &SearchReplaceWidget::upadteSearch);
+
+    layout->addLayout(optionsLineLayout);
 
     // status
     _statusLabel = new QLabel();

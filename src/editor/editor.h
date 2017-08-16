@@ -48,7 +48,8 @@ public:
     enum SearchFlag {
         NoFlag        = 0x0000,
         RegExpMode    = 0x0001,
-        HighlightAll  = 0x0002
+        CaseSensitive = 0x0002,
+        HighlightAll  = 0x0004
     };
     Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
     virtual int search(const QVariant &searchTerm, SearchFlags flags=SearchFlag(NoFlag));

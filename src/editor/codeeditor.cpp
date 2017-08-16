@@ -157,6 +157,7 @@ int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
 
     _searchTerm = searchTerm;
 
+    // regexp mode
     if (flags.testFlag(RegExpMode))
     {
         searcher->setSyntax(edbee::TextSearcher::SyntaxRegExp);
@@ -167,6 +168,10 @@ int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
         searcher->setSyntax(edbee::TextSearcher::SyntaxPlainString);
         searcher->setSearchTerm(QRegExp::escape(searchTerm.toString()));
     }
+
+    // case sensitivity
+    searcher->setCaseSensitive(flags.testFlag(CaseSensitive));
+
     searcher->markAll(controller->borderedTextRanges());
 
     controller->update();
@@ -210,12 +215,14 @@ void CodeEditor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
     edbee::TextSearcher* searcher = controller->textSearcher();
 
     edbee::TextRangeSet *rangeSet = controller->borderedTextRanges();
-    searcher->setCaseSensitive(true); // TODO
+    searcher->setCaseSensitive(flags.testFlag(CaseSensitive));
     searcher->markAll(rangeSet);
 
     _editorWidget->textDocument()->beginChanges(controller);
     edbee::TextRangeSet range(_editorWidget->textDocument());
-    QRegExp regExp(_searchTerm.toString());
+
+    QRegExp regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? Qt::CaseSensitive : Qt::CaseInsensitive);
+
     for (int i=0; i<rangeSet->rangeCount(); i++)
     {
         range.clear();
