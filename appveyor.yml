@@ -14,6 +14,7 @@ install:
 
 before_build:
   - mkdir %APPVEYOR_BUILD_FOLDER%-build
+  - cd %APPVEYOR_BUILD_FOLDER%-build
   - qmake ..\src\rtide.pro -o %APPVEYOR_BUILD_FOLDER%-build -r -Wall CONFIG+=release %APPVEYOR_BUILD_FOLDER%
 
 build_script:
