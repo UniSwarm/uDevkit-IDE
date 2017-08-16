@@ -17,6 +17,8 @@
 #include "edbee/texteditorcontroller.h"
 #include "edbee/util/lineending.h"
 #include "edbee/models/textsearcher.h"
+#include "edbee/models/textrange.h"
+#include "edbee/views/textselection.h"
 
 #include "edbee/models/chardocument/chartextdocument.h"
 
@@ -52,7 +54,7 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     font.setPixelSize(13);
     _editorWidget->config()->setFont(font);
     _editorWidget->config()->setThemeName("RtIDE");
-    //_editorWidget->config()->setThemeName("IDLE");
+    //_editorWidget->config()->setThemeName("Monokai");
     //_editorWidget->config()->setShowWhitespaceMode(edbee::TextEditorConfig::ShowWhitespaces);
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
 
@@ -153,6 +155,8 @@ int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
     edbee::TextEditorController* controller = _editorWidget->controller();
     edbee::TextSearcher* searcher = controller->textSearcher();
 
+    _searchTerm = searchTerm;
+
     if (flags.testFlag(RegExpMode))
     {
         searcher->setSyntax(edbee::TextSearcher::SyntaxRegExp);
@@ -197,5 +201,37 @@ void CodeEditor::searchSelectAll()
 
     searcher->selectAll(_editorWidget);
 
+    controller->update();
+}
+
+void CodeEditor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
+{
+    edbee::TextEditorController* controller = _editorWidget->controller();
+    edbee::TextSearcher* searcher = controller->textSearcher();
+
+    edbee::TextRangeSet *rangeSet = controller->borderedTextRanges();
+    searcher->setCaseSensitive(true); // TODO
+    searcher->markAll(rangeSet);
+
+    _editorWidget->textDocument()->beginChanges(controller);
+    edbee::TextRangeSet range(_editorWidget->textDocument());
+    QRegExp regExp(_searchTerm.toString());
+    for (int i=0; i<rangeSet->rangeCount(); i++)
+    {
+        range.clear();
+        range.addRange(rangeSet->range(i));
+
+        if (!flags.testFlag(RegExpMode))
+            _editorWidget->textDocument()->replaceRangeSet(range, replacePattern.toString());
+        else
+        {
+            QString replaceText = range.getSelectedText();
+            replaceText.replace(regExp, replacePattern.toString());
+            _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
+        }
+    }
+    _editorWidget->textDocument()->endChanges(0xFF01);
+
+    controller->textSelection()->resetAnchors();
     controller->update();
 }

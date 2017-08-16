@@ -23,19 +23,28 @@ public slots:
 
 protected slots:
     void upadteSearch();
-    void next();
-    void prev();
-    void all();
+    void searchNext();
+    void searchPrev();
+    void searchAll();
+
+    void replaceNext();
+    void replacePrev();
+    void replaceAll();
 
 protected:
     void createWidgets();
     QLineEdit *_searchLineEdit;
-    QCheckBox *_regexpCheckbox;
-    QLabel *_statusLabel;
-
     QToolButton *_nextButton;
     QToolButton *_prevButton;
     QToolButton *_allButton;
+    QCheckBox *_regexpCheckbox;
+
+    QLineEdit *_replaceLineEdit;
+    QToolButton *_replaceNextButton;
+    QToolButton *_replacePrevButton;
+    QToolButton *_replaceAllButton;
+
+    QLabel *_statusLabel;
 
     Editor *_editor;
 };

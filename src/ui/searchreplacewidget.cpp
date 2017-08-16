@@ -45,25 +45,50 @@ void SearchReplaceWidget::upadteSearch()
     _statusLabel->setText(QString("%1 occurence%2 found").arg(found).arg(found>1 ? "s" : ""));
 }
 
-void SearchReplaceWidget::next()
+void SearchReplaceWidget::searchNext()
 {
     if (!_editor)
         return;
     _editor->searchNext();
 }
 
-void SearchReplaceWidget::prev()
+void SearchReplaceWidget::searchPrev()
 {
     if (!_editor)
         return;
     _editor->searchPrev();
 }
 
-void SearchReplaceWidget::all()
+void SearchReplaceWidget::searchAll()
 {
     if (!_editor)
         return;
     _editor->searchSelectAll();
+}
+
+void SearchReplaceWidget::replaceNext()
+{
+    if (!_editor)
+        return;
+    _editor->replaceAll(_replaceLineEdit->text());
+}
+
+void SearchReplaceWidget::replacePrev()
+{
+    if (!_editor)
+        return;
+    _editor->replaceAll(_replaceLineEdit->text());
+}
+
+void SearchReplaceWidget::replaceAll()
+{
+    if (!_editor)
+        return;
+
+    Editor::SearchFlags flags;
+    if (_regexpCheckbox->isEnabled() && _regexpCheckbox->isChecked())
+        flags |= Editor::RegExpMode;
+    _editor->replaceAll(_replaceLineEdit->text(), flags);
 }
 
 void SearchReplaceWidget::createWidgets()
@@ -82,19 +107,43 @@ void SearchReplaceWidget::createWidgets()
     _prevButton = new QToolButton();
     _prevButton->setText("<");
     searchLineLayout->addWidget(_prevButton);
-    connect(_prevButton, &QToolButton::clicked, this, &SearchReplaceWidget::prev);
+    connect(_prevButton, &QToolButton::clicked, this, &SearchReplaceWidget::searchPrev);
 
     _nextButton = new QToolButton();
     _nextButton->setText(">");
     searchLineLayout->addWidget(_nextButton);
-    connect(_nextButton, &QToolButton::clicked, this, &SearchReplaceWidget::next);
+    connect(_nextButton, &QToolButton::clicked, this, &SearchReplaceWidget::searchNext);
 
     _allButton = new QToolButton();
     _allButton->setText("*");
     searchLineLayout->addWidget(_allButton);
-    connect(_allButton, &QToolButton::clicked, this, &SearchReplaceWidget::all);
+    connect(_allButton, &QToolButton::clicked, this, &SearchReplaceWidget::searchAll);
 
     layout->addLayout(searchLineLayout);
+
+    // search and next prev buttons
+    QHBoxLayout *replaceLineLayout = new QHBoxLayout();
+    replaceLineLayout->setMargin(0);
+    _replaceLineEdit = new QLineEdit();
+    _replaceLineEdit->setPlaceholderText("replace");
+    replaceLineLayout->addWidget(_replaceLineEdit);
+
+    _replacePrevButton = new QToolButton();
+    _replacePrevButton->setText("<");
+    replaceLineLayout->addWidget(_replacePrevButton);
+    connect(_replacePrevButton, &QToolButton::clicked, this, &SearchReplaceWidget::replacePrev);
+
+    _replaceNextButton = new QToolButton();
+    _replaceNextButton->setText(">");
+    replaceLineLayout->addWidget(_replaceNextButton);
+    connect(_replaceNextButton, &QToolButton::clicked, this, &SearchReplaceWidget::replaceNext);
+
+    _replaceAllButton = new QToolButton();
+    _replaceAllButton->setText("*");
+    replaceLineLayout->addWidget(_replaceAllButton);
+    connect(_replaceAllButton, &QToolButton::clicked, this, &SearchReplaceWidget::replaceAll);
+
+    layout->addLayout(replaceLineLayout);
 
     // options
     _regexpCheckbox = new QCheckBox("regexp");

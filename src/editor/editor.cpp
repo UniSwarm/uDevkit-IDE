@@ -82,6 +82,11 @@ bool Editor::hasRegExp() const
     return searchCap().testFlag(HasRegexp);
 }
 
+bool Editor::hasReplace() const
+{
+    return searchCap().testFlag(HasReplace);
+}
+
 int Editor::search(const QVariant &search, SearchFlags flags)
 {
     Q_UNUSED(search)
@@ -99,6 +104,12 @@ void Editor::searchPrev()
 
 void Editor::searchSelectAll()
 {
+}
+
+void Editor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
+{
+    Q_UNUSED(replacePattern)
+    Q_UNUSED(flags)
 }
 
 void Editor::reload()

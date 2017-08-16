@@ -31,7 +31,7 @@ public:
     };
     virtual Type type() const =0;
 
-    // search / replace interface
+    // search replace capabilities
     enum SearchCap {
         NoSearch   = 0x0000,
         HasSearch  = 0x0001,
@@ -42,7 +42,9 @@ public:
     virtual SearchCaps searchCap() const;
     bool hasResearch() const;
     bool hasRegExp() const;
+    bool hasReplace() const;
 
+    // search / replace interface
     enum SearchFlag {
         NoFlag        = 0x0000,
         RegExpMode    = 0x0001,
@@ -53,6 +55,8 @@ public:
     virtual void searchNext();
     virtual void searchPrev();
     virtual void searchSelectAll();
+
+    virtual void replaceAll(const QVariant &replacePattern, SearchFlags flags=SearchFlag(NoFlag));
 
 public slots:
     void reload();

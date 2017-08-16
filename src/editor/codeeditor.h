@@ -23,6 +23,8 @@ public:
     virtual void searchPrev();
     virtual void searchSelectAll();
 
+    virtual void replaceAll(const QVariant &replacePattern, SearchFlags flags=SearchFlag(NoFlag));
+
 protected:
     edbee::TextEditorWidget* _editorWidget;
 
@@ -34,6 +36,7 @@ protected slots:
 
 private:
     static bool initialized;
+    QVariant _searchTerm;
 };
 
 #endif // CODEEDITOR_H
