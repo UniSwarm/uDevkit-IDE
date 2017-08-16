@@ -2,6 +2,7 @@
 #define PROJECTITEM_H
 
 #include <QObject>
+#include <QHash>
 #include <QList>
 #include <QFileSystemWatcher>
 
@@ -47,7 +48,7 @@ signals:
 public slots:
 
 protected slots:
-    void updateModif(const QString &path);
+    void updateModif(const QString &path=QString());
 
 protected:
     Type _type;
