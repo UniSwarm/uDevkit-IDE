@@ -2,10 +2,14 @@
 
 #include <QDebug>
 
-#ifndef NO_WEBENGINE
-#include <QWebEngineView>
-#else
-#include <QTextBrowser>
+#ifdef WEBENGINE
+    #include <QWebEngineView>
+#endif
+#ifdef WEBKIT
+    #include <QWebView>
+#endif
+#ifdef NOWEBKIT
+    #include <QTextBrowser>
 #endif
 
 #include <QBoxLayout>
@@ -17,9 +21,13 @@
 HtmlEditor::HtmlEditor(Project *project, QWidget *parent)
     : CodeEditor (project, parent)
 {
-#ifndef NO_WEBENGINE
+#ifdef WEBENGINE
     _htmlPreview = new QWebEngineView();
-#else
+#endif
+#ifdef WEBKIT
+    _htmlPreview = new QWebView();
+#endif
+#ifdef NOWEBKIT
     _htmlPreview = new QTextBrowser();
     _htmlPreview->setReadOnly(true);
 #endif
@@ -38,7 +46,7 @@ bool HtmlEditor::hasPreview() const
 
 void HtmlEditor::updatePreview()
 {
-#ifndef NO_WEBENGINE
+#ifndef NOWEBKIT
     QByteArray data;
     data.append(_editorWidget->textDocument()->text());
     _htmlPreview->setContent(data, "text/html", QUrl::fromLocalFile(_filePath));
@@ -50,6 +58,7 @@ void HtmlEditor::updatePreview()
 
 int HtmlEditor::openFileData(const QString &filePath)
 {
-    CodeEditor::openFileData(filePath);
+    int res = CodeEditor::openFileData(filePath);
     updatePreview();
+    return res;
 }

@@ -3,9 +3,19 @@
 
 #include "codeeditor.h"
 
-#ifndef NO_WEBENGINE
+#ifndef NOWEBKIT
+    #if !defined(WEBENGINE) && !defined(WEBKIT)
+        #define NOWEBKIT
+    #endif
+#endif
+
+#ifdef WEBENGINE
 class QWebEngineView;
-#else
+#endif
+#ifdef WEBKIT
+class QWebView;
+#endif
+#ifdef NOWEBKIT
 class QTextBrowser;
 #endif
 
@@ -25,9 +35,13 @@ protected slots:
     int openFileData(const QString &filePath);
 
 protected:
-#ifndef NO_WEBENGINE
+#ifdef WEBENGINE
     QWebEngineView *_htmlPreview;
-#else
+#endif
+#ifdef WEBKIT
+    QWebView *_htmlPreview;
+#endif
+#ifdef NOWEBKIT
     QTextBrowser *_htmlPreview;
 #endif
 };

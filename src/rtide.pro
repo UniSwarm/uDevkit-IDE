@@ -16,10 +16,17 @@ CONFIG += c++11
 
 qtHaveModule(webenginewidgets) {
     QT += webenginewidgets
+    DEFINES += WEBENGINE
     message("web engine included")
 } else {
-    DEFINES += NO_WEBENGINE
-    message("NO web engine !")
+    qtHaveModule(webkitwidgets) {
+        QT += webkitwidgets
+        DEFINES += WEBKIT
+        message("web kit included")
+    } else {
+        DEFINES += NOWEBKIT
+        message("NO web engine !")
+    }
 }
 
 SOURCES += \
