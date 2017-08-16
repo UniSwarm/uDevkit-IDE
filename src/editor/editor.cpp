@@ -112,6 +112,16 @@ void Editor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
     Q_UNUSED(flags)
 }
 
+QWidget *Editor::previewWidget() const
+{
+    return nullptr;
+}
+
+bool Editor::hasPreview() const
+{
+    return false;
+}
+
 void Editor::reload()
 {
     QFileInfo info(_filePath);
@@ -150,6 +160,8 @@ void Editor::active()
 {
     if (_extModifDetected)
         reload();
+
+    initialiseWidget();
 }
 
 void Editor::prepareReload()
@@ -169,6 +181,10 @@ void Editor::setFilePath(const QString &filePath)
     }
 }
 
+void Editor::initialiseWidget()
+{
+}
+
 Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *parent)
 {
     switch (type)
@@ -177,6 +193,8 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
         return new CodeEditor(project, parent);
     case Editor::Hexa:
         return new HexEditor(project, parent);
+    case Editor::HTML:
+        return new HtmlEditor(project, parent);
     case Editor::Image:
         return new ImageEditor(project, parent);
     case Editor::ELF:
@@ -195,7 +213,9 @@ Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget 
     //qDebug()<<mime;
 
     Type type;
-    if(mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml")
+    if(mime.name() == "text/html")
+        type = Editor::HTML;
+    else if(mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml")
         type = Editor::Code;
     else if(mime.name().startsWith("image"))
         type = Editor::Image;

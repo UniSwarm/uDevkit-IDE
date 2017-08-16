@@ -8,6 +8,8 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+QT += webenginewidgets
+
 TARGET = rtide
 TEMPLATE = app
 DESTDIR = $$PWD/../bin
@@ -33,7 +35,8 @@ SOURCES += \
     project/fileprojectinfo.cpp \
     make/makeparser.cpp \
     project/projectitemmodel.cpp \
-    project/projectitem.cpp
+    project/projectitem.cpp \
+    editor/htmleditor.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,7 +57,8 @@ HEADERS += \
     project/fileprojectinfo.h \
     make/makeparser.h \
     project/projectitemmodel.h \
-    project/projectitem.h
+    project/projectitem.h \
+    editor/htmleditor.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 

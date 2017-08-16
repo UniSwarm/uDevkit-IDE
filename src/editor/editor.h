@@ -26,6 +26,7 @@ public:
     enum Type {
         Code,
         Hexa,
+        HTML,
         Image,
         ELF
     };
@@ -59,6 +60,10 @@ public:
 
     virtual void replaceAll(const QVariant &replacePattern, SearchFlags flags=SearchFlag(NoFlag));
 
+    // preview interface
+    virtual QWidget *previewWidget() const;
+    virtual bool hasPreview() const;
+
 public slots:
     void reload();
     void active();
@@ -77,6 +82,7 @@ public:
 
 protected:
     void setFilePath(const QString &filePath);
+    virtual void initialiseWidget();
 
     Project *_project;
     QString _filePath;

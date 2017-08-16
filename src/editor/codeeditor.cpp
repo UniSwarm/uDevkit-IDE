@@ -7,6 +7,7 @@
 #include <QFileInfo>
 #include <QRegExp>
 #include <QSaveFile>
+#include <QSplitter>
 
 #include "edbee/edbee.h"
 #include "edbee/texteditorwidget.h"
@@ -27,9 +28,6 @@ bool CodeEditor::initialized = false;
 CodeEditor::CodeEditor(Project *project, QWidget *parent)
     : Editor(project, parent)
 {
-    QHBoxLayout *layout = new QHBoxLayout();
-    layout->setMargin(0);
-
     if (!initialized)
     {
         // get the edbee instance
@@ -59,9 +57,6 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
 
     connect(_editorWidget->textDocument(), &edbee::TextDocument::persistedChanged, this, &CodeEditor::modificationAppend);
-
-    layout->addWidget(_editorWidget);
-    setLayout(layout);
 }
 
 bool CodeEditor::isModified() const
@@ -143,6 +138,26 @@ int CodeEditor::saveFileData(const QString &filePath)
 void CodeEditor::modificationAppend()
 {
     emit modified(isModified());
+}
+
+void CodeEditor::initialiseWidget()
+{
+    if (!layout())
+    {
+        QHBoxLayout *layout = new QHBoxLayout();
+        layout->setMargin(0);
+        if (hasPreview())
+        {
+            QSplitter *splitter = new QSplitter();
+            splitter->addWidget(_editorWidget);
+            splitter->addWidget(previewWidget());
+            layout->addWidget(splitter);
+        }
+        else
+            layout->addWidget(_editorWidget);
+        setLayout(layout);
+        repaint();
+    }
 }
 
 Editor::SearchCaps CodeEditor::searchCap() const

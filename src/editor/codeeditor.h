@@ -27,6 +27,7 @@ public:
 
 protected:
     edbee::TextEditorWidget* _editorWidget;
+    void initialiseWidget();
 
     int openFileData(const QString &filePath);
     int saveFileData(const QString &filePath=QString());
