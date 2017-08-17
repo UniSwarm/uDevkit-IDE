@@ -26,6 +26,12 @@ void ProjectItemProxyModel::setHiddenFilter(const QString &pattern)
     invalidateFilter();
 }
 
+void ProjectItemProxyModel::enableHiddenFilter(bool enable)
+{
+    _enabledHiddenFilter = enable;
+    invalidateFilter();
+}
+
 void ProjectItemProxyModel::setShowFilter(const QRegExp &regExp)
 {
     _showFilter = regExp;
@@ -49,8 +55,11 @@ bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
         return true;
 
     // hidden filter: if path match, do not show
-    if (_hiddenFilter.indexIn(path) != -1)
-        return false;
+    if (_enabledHiddenFilter)
+    {
+        if (_hiddenFilter.indexIn(path) != -1)
+            return false;
+    }
 
     // show filter: show only if match
     if (fsm->isDir(index))

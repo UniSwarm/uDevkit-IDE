@@ -19,6 +19,8 @@ public slots:
 
     void setHiddenFilter(const QRegExp &regExp);
     void setHiddenFilter(const QString &pattern);
+    void enableHiddenFilter(bool enable=true);
+
     void setShowFilter(const QRegExp &regExp);
     void setShowFilter(const QString &pattern);
 

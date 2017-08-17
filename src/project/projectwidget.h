@@ -2,6 +2,7 @@
 #define PROJECTWIDGET_H
 
 #include <QLineEdit>
+#include <QToolButton>
 
 #include "project.h"
 
@@ -26,8 +27,10 @@ protected slots:
 
 protected:
     Project *_project;
-    ProjectTreeView *_fileView;
+    ProjectTreeView *_projectView;
 
+    void createMenu();
+    QToolButton *_menuBtn;
     QLineEdit *_filterEdit;
 };
 

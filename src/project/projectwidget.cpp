@@ -1,8 +1,10 @@
 #include "projectwidget.h"
 
+#include <QAction>
 #include <QBoxLayout>
 #include <QDebug>
 #include <QApplication>
+#include <QMenu>
 
 ProjectWidget::ProjectWidget(Project *project, QWidget *parent) : QWidget(parent)
 {
@@ -11,25 +13,35 @@ ProjectWidget::ProjectWidget(Project *project, QWidget *parent) : QWidget(parent
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setMargin(0);
 
+    QHBoxLayout *filterLayout = new QHBoxLayout();
+    filterLayout->setMargin(0);
+
     _filterEdit = new QLineEdit();
-    layout->addWidget(_filterEdit);
+    filterLayout->addWidget(_filterEdit);
+    _menuBtn = new QToolButton();
+    _menuBtn->setText("...");
+    _menuBtn->setPopupMode(QToolButton::InstantPopup);
+    filterLayout->addWidget(_menuBtn);
 
-    _fileView = new ProjectTreeView(_project, this);
-    //_fileView->proxy()->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
+    layout->addItem(filterLayout);
 
-    _fileView->setStyleSheet("QTreeView { selection-background-color: transparent; }");
-    layout->addWidget(_fileView);
+    _projectView = new ProjectTreeView(_project, this);
+    _projectView->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
+
+    layout->addWidget(_projectView);
     setLayout(layout);
 
-    connect(_fileView, &ProjectTreeView::openedFile, this, &ProjectWidget::openFile);
-    connect(_fileView, &ProjectTreeView::closedFile, this, &ProjectWidget::closeFile);
+    connect(_projectView, &ProjectTreeView::openedFile, this, &ProjectWidget::openFile);
+    connect(_projectView, &ProjectTreeView::closedFile, this, &ProjectWidget::closeFile);
 
-    connect(_filterEdit, SIGNAL(textChanged(QString)), _fileView->proxy(), SLOT(setShowFilter(QString)));
+    connect(_filterEdit, SIGNAL(textChanged(QString)), _projectView->proxy(), SLOT(setShowFilter(QString)));
+
+    createMenu();
 }
 
 void ProjectWidget::selectFile(const QString &fileName)
 {
-    _fileView->selectFile(fileName);
+    _projectView->selectFile(fileName);
 }
 
 void ProjectWidget::openFile(const QString &fileName)
@@ -40,4 +52,15 @@ void ProjectWidget::openFile(const QString &fileName)
 void ProjectWidget::closeFile(const QString &fileName)
 {
     emit closedFile(fileName);
+}
+
+void ProjectWidget::createMenu()
+{
+    QMenu *menu = new QMenu();
+
+    QAction *enFilter = menu->addAction("enable filter");
+    enFilter->setCheckable(true);
+    connect(enFilter, &QAction::toggled, _projectView->proxy(), &ProjectItemProxyModel::enableHiddenFilter);
+
+    _menuBtn->setMenu(menu);
 }

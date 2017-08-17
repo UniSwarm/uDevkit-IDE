@@ -14,6 +14,8 @@ public:
 public slots:
     void setHiddenFilter(const QRegExp &regExp);
     void setHiddenFilter(const QString &pattern);
+    void enableHiddenFilter(bool enable=true);
+
     void setShowFilter(const QRegExp &regExp);
     void setShowFilter(const QString &pattern);
 
@@ -26,6 +28,7 @@ protected:
     Project *_project;
     QRegExp _hiddenFilter;
     QRegExp _showFilter;
+    bool _enabledHiddenFilter;
 
     // QSortFilterProxyModel interface
 protected:

@@ -60,6 +60,11 @@ void ProjectTreeView::setHiddenFilter(const QString &pattern)
     setHiddenFilter(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
 }
 
+void ProjectTreeView::enableHiddenFilter(bool enable)
+{
+    _proxy->enableHiddenFilter(enable);
+}
+
 void ProjectTreeView::setShowFilter(const QRegExp &regExp)
 {
     _proxy->setShowFilter(regExp);
