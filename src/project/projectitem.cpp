@@ -6,31 +6,28 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QFont>
+#include <QTimer>
 
 ProjectItem::ProjectItem(Project *project, const QString path, Type type, ProjectItemModel *model)
     : QObject(nullptr), _type(type), _info(path, project), _model(model)
 {
     _parentItem = nullptr;
 
-    _watcher = new QFileSystemWatcher();
+    _watcher = nullptr;
     if (type == RealDir)
     {
-        QFileInfoList list = QDir(path).entryInfoList(QStringList(), QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-        foreach (QFileInfo info, list)
-        {
-            if (info.isDir())
-                addChild(new ProjectItem(project, info.filePath(), RealDir, _model));
-            else
-                addChild(new ProjectItem(project, info.filePath(), DirFile, _model));
-        }
-
+        _watcher = new QFileSystemWatcher();
         _watcher->addPath(QDir::cleanPath(path)+"/");
         connect(_watcher, &QFileSystemWatcher::directoryChanged, this, &ProjectItem::updateModif);
         connect(_watcher, &QFileSystemWatcher::fileChanged, this, &ProjectItem::updateModif);
+
+        QTimer::singleShot(0, this, SLOT(updateModif()));
+        //updateModif();
     }
 
     if (type == IndividualFile)
     {
+        _watcher = new QFileSystemWatcher();
         _watcher->addPath(QDir::cleanPath(path));
         connect(_watcher, &QFileSystemWatcher::fileChanged, this, &ProjectItem::updateModif);
     }
@@ -39,6 +36,7 @@ ProjectItem::ProjectItem(Project *project, const QString path, Type type, Projec
 ProjectItem::~ProjectItem()
 {
     qDeleteAll(_childrens);
+    delete _watcher;
 }
 
 int ProjectItem::count() const
@@ -159,6 +157,26 @@ const FileProjectInfo &ProjectItem::info() const
     return _info;
 }
 
+/*bool ProjectItem::haveChildren() const
+{
+    if (_type == RealDir && _loaded == false)
+        return true;
+    return !_childrens.empty();
+}
+
+bool ProjectItem::canFetchMore() const
+{
+    if (_type == RealDir && _loaded == false)
+        return true;
+    return false;
+}
+
+void ProjectItem::fetchMore()
+{
+    updateModif(fileName());
+    _loaded = true;
+}*/
+
 void ProjectItem::updateModif(const QString &path)
 {
     Q_UNUSED(path)
@@ -198,10 +216,13 @@ void ProjectItem::updateModif(const QString &path)
         break;
     }
     case ProjectItem::DirFile:
+        // no watch
         break;
     case ProjectItem::LogicDir:
+        // no watch
         break;
     case ProjectItem::IndividualFile:
+        // TODO
         break;
     }
 }

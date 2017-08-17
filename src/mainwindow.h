@@ -8,7 +8,7 @@
 
 #include "editor/editortabwidget.h"
 
-#include "project/fileprojectwidget.h"
+#include "project/projectwidget.h"
 
 #include "ui/searchreplacewidget.h"
 
@@ -28,7 +28,7 @@ protected:
     QTextEdit *_logWidget;
 
     QDockWidget *_fileProjectDock;
-    FileProjectWidget *_fileProjectWidget;
+    ProjectWidget *_fileProjectWidget;
 
     QDockWidget *_searchReplaceDock;
     SearchReplaceWidget *_searchReplaceWidget;

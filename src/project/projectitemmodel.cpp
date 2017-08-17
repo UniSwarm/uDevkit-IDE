@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-#include "fileprojectitemmodel.h"
+#include "projectitemmodel.h"
 
 #include "project.h"
 
@@ -262,3 +262,21 @@ bool ProjectItemModel::setData(const QModelIndex &index, const QVariant &value, 
     ProjectItem *item = static_cast<ProjectItem*>(index.internalPointer());
     return item->info().dir().rename(item->info().fileName(), value.toString());
 }
+
+
+/*bool ProjectItemModel::hasChildren(const QModelIndex &parent) const
+{
+    return false;//item(parent)->haveChildren();
+}
+
+void ProjectItemModel::fetchMore(const QModelIndex &parent)
+{
+    emit layoutAboutToBeChanged();
+    static_cast<ProjectItem*>(parent.internalPointer())->fetchMore();
+    emit layoutChanged();
+}
+
+bool ProjectItemModel::canFetchMore(const QModelIndex &parent) const
+{
+    return false;//item(parent)->canFetchMore();
+}*/

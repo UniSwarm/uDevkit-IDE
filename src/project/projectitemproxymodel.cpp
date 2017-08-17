@@ -1,44 +1,44 @@
-#include "fileprojectproxymodel.h"
+#include "projectitemproxymodel.h"
 
 #include <QDebug>
 #include "projectitemmodel.h"
 
 #include "project.h"
 
-FileProjectProxyModel::FileProjectProxyModel(Project *project)
+ProjectItemProxyModel::ProjectItemProxyModel(Project *project)
     : QSortFilterProxyModel()
 {
     _project = project;
     setDynamicSortFilter(true);
-    setSortRole(ProjectItemModel::FilePathRole);
+    setSortRole(ProjectItemModel::FileNameRole);
     sort(1, Qt::AscendingOrder);
 }
 
-void FileProjectProxyModel::setHiddenFilter(const QRegExp &regExp)
+void ProjectItemProxyModel::setHiddenFilter(const QRegExp &regExp)
 {
     _hiddenFilter = regExp;
     invalidateFilter();
 }
 
-void FileProjectProxyModel::setHiddenFilter(const QString &pattern)
+void ProjectItemProxyModel::setHiddenFilter(const QString &pattern)
 {
     _hiddenFilter = QRegExp(pattern, Qt::CaseInsensitive, QRegExp::RegExp);
     invalidateFilter();
 }
 
-void FileProjectProxyModel::setShowFilter(const QRegExp &regExp)
+void ProjectItemProxyModel::setShowFilter(const QRegExp &regExp)
 {
     _showFilter = regExp;
     invalidateFilter();
 }
 
-void FileProjectProxyModel::setShowFilter(const QString &pattern)
+void ProjectItemProxyModel::setShowFilter(const QString &pattern)
 {
     _showFilter = QRegExp(pattern, Qt::CaseInsensitive, QRegExp::RegExp);
     invalidateFilter();
 }
 
-bool FileProjectProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     ProjectItemModel *fsm = static_cast<ProjectItemModel*>(sourceModel());
     const QModelIndex index = fsm->index(source_row, 0, source_parent);
@@ -61,18 +61,18 @@ bool FileProjectProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
     return true;
 }
 
-bool FileProjectProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
+bool ProjectItemProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
 {
     Q_UNUSED(source_column)
     Q_UNUSED(source_parent)
     return true;
 }
 
-bool FileProjectProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+bool ProjectItemProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
     ProjectItemModel *fsm = static_cast<ProjectItemModel*>(sourceModel());
-    QString leftPath = sourceModel()->data(source_left, ProjectItemModel::FilePathRole).toString();
-    QString rightPath = sourceModel()->data(source_right, ProjectItemModel::FilePathRole).toString();
+    QString leftPath = sourceModel()->data(source_left, ProjectItemModel::FileNameRole).toString();
+    QString rightPath = sourceModel()->data(source_right, ProjectItemModel::FileNameRole).toString();
     bool isLeftDir = fsm->isDir(source_left);
     bool isRightDir = fsm->isDir(source_right);
 

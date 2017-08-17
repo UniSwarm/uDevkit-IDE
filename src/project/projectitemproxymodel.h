@@ -1,15 +1,15 @@
-#ifndef FILEPROJECTPROXYMODEL_H
-#define FILEPROJECTPROXYMODEL_H
+#ifndef PROJECTITEMPROXYMODEL_H
+#define PROJECTITEMPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 class Project;
 
-class FileProjectProxyModel : public QSortFilterProxyModel
+class ProjectItemProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit FileProjectProxyModel(Project *project);
+    explicit ProjectItemProxyModel(Project *project);
 
 public slots:
     void setHiddenFilter(const QRegExp &regExp);
@@ -32,4 +32,4 @@ protected:
     virtual bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const;
 };
 
-#endif // FILEPROJECTPROXYMODEL_H
+#endif // PROJECTITEMPROXYMODEL_H

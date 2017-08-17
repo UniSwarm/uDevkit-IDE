@@ -1,4 +1,4 @@
-#include "filetreeview.h"
+#include "projecttreeview.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -11,10 +11,10 @@
 #include "fileprojectinfo.h"
 #include "mainwindow.h"
 
-FileTreeView::FileTreeView(Project *project, QWidget *parent)
+ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     : QTreeView(parent), _project(project)
 {
-    _proxy = new FileProjectProxyModel(project);
+    _proxy = new ProjectItemProxyModel(project);
     _proxy->setSourceModel(_project->projectItemModel());
     setHiddenFilter(QRegExp(""));
     _proxy->sort(0, Qt::AscendingOrder);
@@ -29,12 +29,12 @@ FileTreeView::FileTreeView(Project *project, QWidget *parent)
     expandToDepth(0);
 }
 
-FileProjectProxyModel *FileTreeView::proxy() const
+ProjectItemProxyModel *ProjectTreeView::proxy() const
 {
     return _proxy;
 }
 
-void FileTreeView::selectFile(const QString &fileName)
+void ProjectTreeView::selectFile(const QString &fileName)
 {
     QModelIndex fileIndex = _project->projectItemModel()->index(fileName);
     if (!fileIndex.isValid())
@@ -47,7 +47,7 @@ void FileTreeView::selectFile(const QString &fileName)
     selectionModel()->setCurrentIndex(proxyIndex, QItemSelectionModel::ClearAndSelect);
 }
 
-void FileTreeView::setHiddenFilter(const QRegExp &regExp)
+void ProjectTreeView::setHiddenFilter(const QRegExp &regExp)
 {
     if (!regExp.isValid() || regExp.isEmpty())
         _proxy->setHiddenFilter(QRegExp("^$"));
@@ -55,22 +55,22 @@ void FileTreeView::setHiddenFilter(const QRegExp &regExp)
         _proxy->setHiddenFilter(regExp);
 }
 
-void FileTreeView::setHiddenFilter(const QString &pattern)
+void ProjectTreeView::setHiddenFilter(const QString &pattern)
 {
     setHiddenFilter(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
 }
 
-void FileTreeView::setShowFilter(const QRegExp &regExp)
+void ProjectTreeView::setShowFilter(const QRegExp &regExp)
 {
     _proxy->setShowFilter(regExp);
 }
 
-void FileTreeView::setShowFilter(const QString &pattern)
+void ProjectTreeView::setShowFilter(const QString &pattern)
 {
     setShowFilter(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
 }
 
-void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
+void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
     const QModelIndex &index = indexAt(event->pos());
     if (!index.isValid())
@@ -166,7 +166,7 @@ void FileTreeView::contextMenuEvent(QContextMenuEvent *event)
             _project->versionControl()->checkoutFile(QSet<QString>()<<info.filePath());
 }
 
-void FileTreeView::mouseReleaseEvent(QMouseEvent *event)
+void ProjectTreeView::mouseReleaseEvent(QMouseEvent *event)
 {
     QTreeView::mouseReleaseEvent(event);
 
@@ -182,7 +182,7 @@ void FileTreeView::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void FileTreeView::mouseDoubleClickEvent(QMouseEvent *event)
+void ProjectTreeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QTreeView::mouseDoubleClickEvent(event);
 
@@ -198,7 +198,7 @@ void FileTreeView::mouseDoubleClickEvent(QMouseEvent *event)
         emit openedFile(_project->projectItemModel()->filePath(indexFile));
 }
 
-void FileTreeView::keyPressEvent(QKeyEvent *event)
+void ProjectTreeView::keyPressEvent(QKeyEvent *event)
 {
     QTreeView::keyPressEvent(event);
 

@@ -43,11 +43,11 @@ void MainWindow::createDocks()
     _fileProjectDock = new QDockWidget("project", this);
     QWidget *fileProjectContent = new QWidget(_fileProjectDock);
     QLayout *fileProjectLayout = new QVBoxLayout();
-    _fileProjectWidget = new FileProjectWidget(_project);
+    _fileProjectWidget = new ProjectWidget(_project);
     fileProjectLayout->addWidget(_fileProjectWidget);
-    connect(_fileProjectWidget, &FileProjectWidget::openedFile, _editorTabWidget, &EditorTabWidget::openFileEditor);
-    connect(_fileProjectWidget, &FileProjectWidget::closedFile, _editorTabWidget, &EditorTabWidget::closeFileEditor);
-    connect(_editorTabWidget, &EditorTabWidget::currentFileChanged, _fileProjectWidget, &FileProjectWidget::selectFile);
+    connect(_fileProjectWidget, &ProjectWidget::openedFile, _editorTabWidget, &EditorTabWidget::openFileEditor);
+    connect(_fileProjectWidget, &ProjectWidget::closedFile, _editorTabWidget, &EditorTabWidget::closeFileEditor);
+    connect(_editorTabWidget, &EditorTabWidget::currentFileChanged, _fileProjectWidget, &ProjectWidget::selectFile);
     fileProjectContent->setLayout(fileProjectLayout);
     _fileProjectDock->setWidget(fileProjectContent);
     addDockWidget(Qt::LeftDockWidgetArea, _fileProjectDock);

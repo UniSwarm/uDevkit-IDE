@@ -1,18 +1,18 @@
-#ifndef FILETREEVIEW_H
-#define FILETREEVIEW_H
+#ifndef PROJECTTREEVIEW_H
+#define PROJECTTREEVIEW_H
 
 #include <QTreeView>
 
 #include "project.h"
-#include "fileprojectproxymodel.h"
+#include "projectitemproxymodel.h"
 
-class FileTreeView : public QTreeView
+class ProjectTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    FileTreeView(Project *project, QWidget *parent = 0);
+    ProjectTreeView(Project *project, QWidget *parent = 0);
 
-    FileProjectProxyModel *proxy() const;
+    ProjectItemProxyModel *proxy() const;
 
 public slots:
     void selectFile(const QString &fileName);
@@ -28,7 +28,7 @@ signals:
 
 protected:
     Project *_project;
-    FileProjectProxyModel *_proxy;
+    ProjectItemProxyModel *_proxy;
 
     // QWidget interface
 protected:
@@ -38,4 +38,4 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event);
 };
 
-#endif // FILETREEVIEW_H
+#endif // PROJECTTREEVIEW_H

@@ -43,6 +43,10 @@ public:
     inline QString filePath() const {return _info.filePath();}
     inline QString fileName() const {return _info.fileName();}
 
+    /*bool haveChildren() const;
+    bool canFetchMore() const;
+    void fetchMore();*/
+
 signals:
 
 public slots:
@@ -59,6 +63,7 @@ protected:
 
     QFileSystemWatcher *_watcher;
     ProjectItemModel *_model;
+    bool _loaded;
 };
 
 #endif // PROJECTITEM_H

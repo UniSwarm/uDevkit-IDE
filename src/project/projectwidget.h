@@ -1,17 +1,17 @@
-#ifndef FILEPROJECT_H
-#define FILEPROJECT_H
+#ifndef PROJECTWIDGET_H
+#define PROJECTWIDGET_H
 
 #include <QLineEdit>
 
 #include "project.h"
 
-#include "filetreeview.h"
+#include "projecttreeview.h"
 
-class FileProjectWidget : public QWidget
+class ProjectWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit FileProjectWidget(Project *project, QWidget *parent = 0);
+    explicit ProjectWidget(Project *project, QWidget *parent = 0);
 
 signals:
     void openedFile(QString fileName);
@@ -26,9 +26,9 @@ protected slots:
 
 protected:
     Project *_project;
-    FileTreeView *_fileView;
+    ProjectTreeView *_fileView;
 
     QLineEdit *_filterEdit;
 };
 
-#endif // FILEPROJECT_H
+#endif // PROJECTWIDGET_H

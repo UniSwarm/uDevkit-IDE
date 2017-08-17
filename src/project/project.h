@@ -37,7 +37,6 @@ signals:
 public slots:
 
 protected slots:
-    void updateSources();
     void newSource(QSet<QString> sources);
     void oldSource(QSet<QString> sources);
 

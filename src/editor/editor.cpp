@@ -21,7 +21,7 @@ Editor::Editor(Project *project, QWidget *parent)
 
 Editor::~Editor()
 {
-    _reloadWatcher->deleteLater();
+    delete _reloadWatcher;
     disconnect();
 }
 

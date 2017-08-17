@@ -53,6 +53,10 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
+    /*virtual bool hasChildren(const QModelIndex &parent) const;
+    virtual void fetchMore(const QModelIndex &parent);
+    virtual bool canFetchMore(const QModelIndex &parent) const;*/
+
 protected:
     ProjectItem *_root;
     Project *_project;

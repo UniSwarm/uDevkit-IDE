@@ -42,7 +42,7 @@ bool FileProjectInfo::isInProject() const
 
 QString FileProjectInfo::humanSize() const
 {
-    float num = size();
+    double num = size();
     QStringList list;
     list << "kB" << "MB" << "GB" << "TB";
 

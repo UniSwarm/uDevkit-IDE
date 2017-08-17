@@ -16,7 +16,6 @@ Project::Project(const QString &path) : QObject()
             _projectItemModel, &ProjectItemModel::filesUpdated);
 
     _make = new MakeParser();
-    connect(_make, &MakeParser::sourceChanged, this, &Project::updateSources);
     connect(_make, &MakeParser::sourceFilesAdded, this, &Project::newSource);
     connect(_make, &MakeParser::sourceFilesRemoved, this, &Project::oldSource);
 
@@ -88,17 +87,6 @@ void Project::removeOpenedFiles(QSet<QString> openedFiles)
 MakeParser *Project::make() const
 {
     return _make;
-}
-
-void Project::updateSources()
-{
-    /*ProjectItem *extDir = new ProjectItem(this, "ext src", ProjectItem::LogicDir);
-    foreach (QString filePath, _make->sourceFiles())
-    {
-        if (!filePath.startsWith(rootPath()))
-            extDir->addFileItem(filePath);
-    }
-    _model->addItem(extDir);*/
 }
 
 void Project::newSource(QSet<QString> sources)
