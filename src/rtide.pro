@@ -40,25 +40,21 @@ SOURCES += \
     project/project.cpp \
     version/abstractversioncontrol.cpp \
     version/gitversioncontrol.cpp \
-    project/fileprojectproxymodel.cpp \
-    project/fileprojectwidget.cpp \
-    project/fileprojectitemmodel.cpp \
     ui/searchreplacewidget.cpp \
-    project/filetreeview.cpp \
     project/fileprojectinfo.cpp \
     make/makeparser.cpp \
     project/projectitemmodel.cpp \
     project/projectitem.cpp \
-    editor/htmleditor.cpp
+    editor/htmleditor.cpp \
+    project/projectitemproxymodel.cpp \
+    project/projecttreeview.cpp \
+    project/projectwidget.cpp
 
 HEADERS += \
         mainwindow.h \
-    project/fileprojectproxymodel.h \
     project/project.h \
     version/abstractversioncontrol.h \
     version/gitversioncontrol.h \
-    project/fileprojectwidget.h \
-    project/fileprojectitemmodel.h \
     editor/editor.h \
     editor/editors.h \
     editor/editortabwidget.h \
@@ -66,12 +62,14 @@ HEADERS += \
     editor/hexeditor.h \
     editor/imageeditor.h \
     ui/searchreplacewidget.h \
-    project/filetreeview.h \
     project/fileprojectinfo.h \
     make/makeparser.h \
     project/projectitemmodel.h \
     project/projectitem.h \
-    editor/htmleditor.h
+    editor/htmleditor.h \
+    project/projectitemproxymodel.h \
+    project/projecttreeview.h \
+    project/projectwidget.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
