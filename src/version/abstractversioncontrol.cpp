@@ -14,12 +14,16 @@ QString AbstractVersionControl::versionControlName() const
 
 void AbstractVersionControl::setPath(const QString &path)
 {
-
     _validatedFiles.clear();
     _trackedFiles.clear();
     _modifiedFiles.clear();
     _path = QDir::cleanPath(path);
     analysePath();
+}
+
+QString AbstractVersionControl::basePath() const
+{
+    return _path;
 }
 
 bool AbstractVersionControl::isDirTracked(const QString &filePath) const

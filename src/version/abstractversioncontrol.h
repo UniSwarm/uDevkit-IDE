@@ -12,6 +12,7 @@ public:
 
     virtual QString versionControlName() const;
     void setPath(const QString &path);
+    virtual QString basePath() const;
 
     bool isDirTracked(const QString &filePath) const;
     bool isFileTracked(const QString &filePath) const;

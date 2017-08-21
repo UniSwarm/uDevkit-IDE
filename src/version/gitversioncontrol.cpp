@@ -27,6 +27,11 @@ QString GitVersionControl::versionControlName() const
     return "git";
 }
 
+QString GitVersionControl::basePath() const
+{
+    return _basePath;
+}
+
 void GitVersionControl::validFile(const QSet<QString> &filesPath)
 {
     if (!isValid())

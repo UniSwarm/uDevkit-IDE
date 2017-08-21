@@ -15,6 +15,7 @@ public:
     virtual ~GitVersionControl();
 
     virtual QString versionControlName() const;
+    QString basePath() const;
 
     virtual void validFile(const QSet<QString> &filesPath);
     virtual void inValidFile(const QSet<QString> &filesPath);
