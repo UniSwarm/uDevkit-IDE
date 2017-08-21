@@ -74,6 +74,7 @@ protected slots:
 signals:
     void filePathChanged(QString filePath);
     void modified(bool modified);
+    void helpRequest(QString term);
 
 public:
     static Editor *createEditor(Type type, Project *project, QWidget *parent = nullptr);
