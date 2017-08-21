@@ -12,6 +12,7 @@ ProjectItemProxyModel::ProjectItemProxyModel(Project *project)
     setDynamicSortFilter(true);
     setSortRole(ProjectItemModel::FileNameRole);
     sort(1, Qt::AscendingOrder);
+    _enabledHiddenFilter = false;
 }
 
 void ProjectItemProxyModel::setHiddenFilter(const QRegExp &regExp)
@@ -51,8 +52,8 @@ bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
     const QString &path = fsm->data(index, ProjectItemModel::FilePathRole).toString();
 
     // show all dir parent of project path
-    if (!path.startsWith(_project->rootPath()))
-        return true;
+    /*if (!path.startsWith(_project->rootPath()))
+        return true;*/
 
     // hidden filter: if path match, do not show
     if (_enabledHiddenFilter)
