@@ -1,5 +1,6 @@
 #include "codeeditor.h"
 
+#include <QAction>
 #include <QApplication>
 #include <QBoxLayout>
 #include <QDebug>
@@ -57,6 +58,12 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
 
     connect(_editorWidget->textDocument(), &edbee::TextDocument::persistedChanged, this, &CodeEditor::modificationAppend);
+
+    QAction *action;
+    action = new QAction(QString("help"), this);
+    action->setShortcut(QKeySequence("F1"));
+    addAction(action);
+    connect(action, &QAction::triggered, this, &CodeEditor::help);
 }
 
 bool CodeEditor::isModified() const
@@ -138,6 +145,21 @@ int CodeEditor::saveFileData(const QString &filePath)
 void CodeEditor::modificationAppend()
 {
     emit modified(isModified());
+}
+
+void CodeEditor::help()
+{
+    if (_editorWidget->textSelection()->rangeCount() > 0)
+    {
+        edbee::TextSelection *wordUnderCursor = new edbee::TextSelection(*_editorWidget->textSelection());
+        wordUnderCursor->expandToWords(_editorWidget->textDocument()->config()->whitespaces(), _editorWidget->textDocument()->config()->charGroups());
+
+        QString word = _editorWidget->textDocument()->textPart(wordUnderCursor->range(0).anchor(), wordUnderCursor->range(0).length());
+        qDebug()<<wordUnderCursor->rangesAsString()<<word;
+        delete wordUnderCursor;
+
+        emit helpRequest(word);
+    }
 }
 
 void CodeEditor::initialiseWidget()

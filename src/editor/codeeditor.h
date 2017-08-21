@@ -34,6 +34,7 @@ protected:
 
 protected slots:
     void modificationAppend();
+    void help();
 
 private:
     static bool initialized;
