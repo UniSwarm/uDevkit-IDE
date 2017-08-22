@@ -14,8 +14,6 @@ public:
     explicit LogWidget(Project *project, QWidget *parent = nullptr);
     virtual ~LogWidget();
 
-
-
 signals:
     void openFileRequested(QString filePath);
 
@@ -26,6 +24,7 @@ protected:
     Project *_project;
     QProcess *_process;
     QString _color;
+    void parseOutput(QByteArray data, bool error);
 
 protected slots:
     void readProcess();

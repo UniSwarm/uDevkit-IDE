@@ -3,6 +3,7 @@
 #include "project/project.h"
 
 #include <QDebug>
+#include <QTextStream>
 
 LogWidget::LogWidget(Project *project, QWidget *parent)
     : QTextBrowser(parent), _project(project)
@@ -20,6 +21,7 @@ LogWidget::LogWidget(Project *project, QWidget *parent)
 
     connect(_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(readProcess()));
     connect(_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readProcess()));
+    connect(_process, SIGNAL(readyReadStandardError()), this, SLOT(readProcess()));
     _process->setWorkingDirectory(_project->rootPath());
 
     connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(anchorClick(QUrl)));
@@ -34,32 +36,6 @@ LogWidget::~LogWidget()
 void LogWidget::start(const QString &program, const QStringList &arguments)
 {
     clear();
-    _process->start(program, arguments);
-}
-
-void LogWidget::readProcess()
-{
-    QString html;
-    QByteArray dataRead;
-
-    while(_process->canReadLine())
-    {
-        dataRead = _process->readLine();
-        QString stringRead = QString::fromLocal8Bit(dataRead);
-        stringRead = "<br/><span>" + stringRead.toHtmlEscaped() + "</span>";
-        stringRead.replace("\n","");
-        stringRead.replace(QRegExp("\\x001b\\[([0-9]+)m"),"</span><span class=\"color\\1\">");
-        stringRead.replace(QRegExp("\\x001b\\(B\\x001b\\[m"),"</span><span>");
-        stringRead.replace("<span></span>","");
-
-        stringRead.replace(QRegExp("([\\-\\._a-zA-Z/\\\\0-9]+\\.[a-zA-Z]+)"),"<a href=\"\\1\">\\1</a>");
-
-        html.append(stringRead);
-    }
-    dataRead = _process->readAllStandardError();
-    if(!dataRead.isEmpty())
-        html.append("<br/><span class=\"color31\">"+QString::fromLocal8Bit(dataRead).replace("\n","")+"</span>");
-
     document()->setDefaultStyleSheet("\
 * {font-family: monospace;}\n\
 .color30 { color: black; }\n\
@@ -71,14 +47,41 @@ void LogWidget::readProcess()
 .color36 { color: cyan; }\n\
 .color37 { color: white; }\n\
 ");
+    _process->start(program, arguments);
+}
+
+void LogWidget::parseOutput(QByteArray data, bool error)
+{
+    QString html;
+    QByteArray dataRead;
+    QTextStream stream(&data);
+
+    while (!stream.atEnd())
+    {
+        QString stringRead = stream.readLine();
+        QString errorFormat = error ? " class=\"color31\"" : "";
+        stringRead = "<br/><span" + errorFormat + ">" + stringRead.toHtmlEscaped() + "</span>";
+        stringRead.replace(" ","&nbsp;");
+        stringRead.replace(QRegExp("\\x001b\\[([0-9]+)m"),"</span><span class=\"color\\1\">");
+        stringRead.replace(QRegExp("\\x001b\\(B\\x001b\\[m"),"</span><span>"); // reset color
+        stringRead.replace("<span></span>","");
+
+        stringRead.replace(QRegExp("([\\-\\._a-zA-Z/\\\\0-9]+\\.[a-zA-Z]+)(:[0-9]+)*(:[0-9]+)*"),"<a href=\"\\1\\2\\3\">\\1\\2\\3</a>");
+
+        html.append(stringRead);
+    }
     moveCursor(QTextCursor::End);
     insertHtml(html);
     moveCursor(QTextCursor::End);
 }
 
+void LogWidget::readProcess()
+{
+    parseOutput(_process->readAllStandardOutput(), false);
+    parseOutput(_process->readAllStandardError(), true);
+}
+
 void LogWidget::anchorClick(const QUrl &link)
 {
-    QString filePath = _project->make()->resolveFilePath(link.toString(QUrl::None));
-    if (!filePath.isEmpty())
-        emit openFileRequested(filePath);
+    emit openFileRequested(link.toString(QUrl::None));
 }
