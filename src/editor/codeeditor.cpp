@@ -21,6 +21,7 @@
 #include "edbee/models/textsearcher.h"
 #include "edbee/models/textrange.h"
 #include "edbee/views/textselection.h"
+#include "edbee/views/components/texteditorcomponent.h"
 
 #include "edbee/models/chardocument/chartextdocument.h"
 
@@ -69,6 +70,15 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
 bool CodeEditor::isModified() const
 {
     return !_editorWidget->textDocument()->isPersisted();
+}
+
+void CodeEditor::gotoLine(int x, int y)
+{
+    edbee::TextEditorController* controller = _editorWidget->controller();
+    if (y==-1)
+        y = 0;
+    controller->moveCaretTo(x-1, y-1, false);
+    controller->scrollCaretVisible();
 }
 
 int CodeEditor::openFileData(const QString &filePath)
@@ -180,6 +190,11 @@ void CodeEditor::initialiseWidget()
         setLayout(layout);
         repaint();
     }
+}
+
+void CodeEditor::giveFocus()
+{
+    _editorWidget->textEditorComponent()->setFocus();
 }
 
 Editor::SearchCaps CodeEditor::searchCap() const

@@ -20,7 +20,7 @@ public:
     Editor *editor(int i) const;
 
 public slots:
-    void openFileEditor(const QString &filePath);
+    void openFileEditor(const QString &url);
     void closeFileEditor(const QString &filePath);
 
     int closeEditor(int id=-1);

@@ -20,8 +20,9 @@ public:
     int saveFile(const QString &filePath=QString());
 
     virtual bool isModified() const =0;
-
     bool isActiveEditor() const;
+
+    virtual void gotoLine(int x, int y=-1);
 
     enum Type {
         Code,
@@ -84,6 +85,7 @@ public:
 protected:
     void setFilePath(const QString &filePath);
     virtual void initialiseWidget();
+    virtual void giveFocus();
 
     Project *_project;
     QString _filePath;

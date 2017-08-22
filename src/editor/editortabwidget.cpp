@@ -53,21 +53,50 @@ Editor *EditorTabWidget::editor(int i) const
     return static_cast<Editor *>(widget(i));
 }
 
-void EditorTabWidget::openFileEditor(const QString &filePath)
+void EditorTabWidget::openFileEditor(const QString &url)
 {
-    if(_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
+    QString filePath, line, column;
+    QRegExp urlFilePath("([^:]*)(:[0-9]+)*(:[0-9]+)*");
+    if (urlFilePath.indexIn(url) == -1)
+        return;
+    filePath = urlFilePath.cap(1);
+
+    if (urlFilePath.captureCount()>1)
+        line = urlFilePath.cap(2).mid(1);
+    if (urlFilePath.captureCount()>2)
+        column = urlFilePath.cap(3).mid(1);
+
+    if (!QFile(filePath).exists())
+        filePath = _project->make()->resolveFilePath(filePath);
+    if (!QFile(filePath).exists())
+        return;
+
+    Editor *editor = nullptr;
+    if(!_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
     {
-        Editor *editor = _mapPathEditor.value(filePath);
+        editor = Editor::createEditor(filePath, _project);
+        if (!editor)
+            return;
+        addEditor(editor);
+    }
+    else
+    {
+        editor = _mapPathEditor.value(filePath);
         int id = indexOf(editor);
         if (id == -1)
             return;
 
         setCurrentIndex(id);
-        return;
     }
-    Editor *editor = Editor::createEditor(filePath, _project);
-    if (editor)
-        addEditor(editor);
+
+    if (!line.isEmpty())
+    {
+        if (column.isEmpty())
+            editor->gotoLine(line.toInt());
+        else
+            editor->gotoLine(line.toInt(), column.toInt());
+    }
+    editor->active();
 }
 
 void EditorTabWidget::closeFileEditor(const QString &filePath)

@@ -15,6 +15,8 @@ public:
 
     bool isModified() const;
 
+    void gotoLine(int x, int y=-1);
+
     Type type() const {return Code;}
 
     virtual SearchCaps searchCap() const;
@@ -28,6 +30,7 @@ public:
 protected:
     edbee::TextEditorWidget* _editorWidget;
     void initialiseWidget();
+    void giveFocus();
 
     int openFileData(const QString &filePath);
     int saveFileData(const QString &filePath=QString());

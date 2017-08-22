@@ -67,6 +67,12 @@ bool Editor::isActiveEditor() const
     return (tabWidget->currentEditor() == this);
 }
 
+void Editor::gotoLine(int x, int y)
+{
+    Q_UNUSED(x)
+    Q_UNUSED(y)
+}
+
 Editor::SearchCaps Editor::searchCap() const
 {
     return NoSearch;
@@ -162,6 +168,7 @@ void Editor::active()
         reload();
 
     initialiseWidget();
+    giveFocus();
 }
 
 void Editor::prepareReload()
@@ -183,6 +190,11 @@ void Editor::setFilePath(const QString &filePath)
 
 void Editor::initialiseWidget()
 {
+}
+
+void Editor::giveFocus()
+{
+    setFocus();
 }
 
 Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *parent)
