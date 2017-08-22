@@ -3,22 +3,20 @@
 #include <QAction>
 #include <QApplication>
 #include <QBoxLayout>
+#include <QDebug>
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QSplitter>
 #include <QMenuBar>
+#include <QThread>
 
 MainWindow::MainWindow(Project *project, QWidget *parent) :
     QMainWindow(parent), _project(project)
 {
-    _process = nullptr;
-
     if(!_project)
         _project = new Project(QDir::home().canonicalPath());
 
     _editorTabWidget = new EditorTabWidget(_project);
-    //_editorTabWidget->addFileEditor(QApplication::applicationDirPath()+"/../../rtprog/README.md");
-    //_editorTabWidget->setFocus();
 
     setCentralWidget(_editorTabWidget);
     connect(_editorTabWidget, &EditorTabWidget::editorChange, this, &MainWindow::updateTitle);
@@ -55,13 +53,12 @@ void MainWindow::createDocks()
     _logDock = new QDockWidget("log", this);
     QWidget *logContent = new QWidget(_logDock);
     QLayout *logLayout = new QVBoxLayout();
-    _logWidget = new QTextEdit();
-    _logWidget->setTabChangesFocus(true);
-    _logWidget->setReadOnly(true);
+    _logWidget = new LogWidget(_project);
     _logWidget->document()->setDefaultStyleSheet("p{margin: 0;}");
     logLayout->addWidget(_logWidget);
     logContent->setLayout(logLayout);
     _logDock->setWidget(logContent);
+    connect(_logWidget, &LogWidget::openFileRequested, _editorTabWidget, &EditorTabWidget::openFileEditor);
     addDockWidget(Qt::BottomDockWidgetArea, _logDock);
 
     _searchReplaceDock = new QDockWidget("search / replace", this);
@@ -107,6 +104,10 @@ void MainWindow::createMenus()
     action->setShortcut(QKeySequence("F4"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::git);
+    action = new QAction(QString("make"), this);
+    action->setShortcut(QKeySequence("Ctrl+R"));
+    addAction(action);
+    connect(action, &QAction::triggered, this, &MainWindow::makeall);
 
     action = new QAction(QString("next tab"), this);
     action->setShortcut(QKeySequence::NextChild);
@@ -158,33 +159,12 @@ bool MainWindow::openFiles(const QStringList &paths)
 
 void MainWindow::git()
 {
-    _process = new QProcess(this);
-    connect(_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(readProcess()));
-    _process->setWorkingDirectory(_project->rootPath());
-
-    _process->start("git", QStringList()<<"diff"<<_editorTabWidget->currentFilePath());
+    _logWidget->start("git", QStringList()<<"diff"<<_project->rootDir().relativeFilePath(_editorTabWidget->currentFilePath()));
 }
 
-void MainWindow::readProcess()
+void MainWindow::makeall()
 {
-    QString html;
-    QByteArray dataRead;
-
-    while(_process->canReadLine())
-    {
-        dataRead = _process->readLine();
-        QString stringRead = QString::fromLocal8Bit(dataRead);
-        stringRead.replace(QRegExp("\\x001b\\[([0-9]+)m"),"");
-        stringRead = stringRead.toHtmlEscaped();
-        html.append("<p>" + stringRead + "</p>");
-    }
-    dataRead = _process->readAllStandardError();
-    if(!dataRead.isEmpty())
-        html.append("<p><span style=\"color: red\">"+QString::fromLocal8Bit(dataRead)+"</span></p>");
-    _logWidget->append(html);
-
-    _process->deleteLater();
-    _process = nullptr;
+    _logWidget->start("make", QStringList()<<"all"<<"-j"<<QString::number(QThread::idealThreadCount()));
 }
 
 void MainWindow::updateTitle(Editor *editor)

@@ -14,6 +14,7 @@ DESTDIR = $$PWD/../bin
 
 CONFIG += c++11
 
+# Qt web kit / web engine / HTMLDoc selection
 qtHaveModule(webenginewidgets) {
     QT += webenginewidgets
     DEFINES += WEBENGINE
@@ -30,29 +31,29 @@ qtHaveModule(webenginewidgets) {
 }
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
+    main.cpp \
+    mainwindow.cpp \
     editor/editor.cpp \
     editor/editortabwidget.cpp \
     editor/codeeditor.cpp \
     editor/hexeditor.cpp \
     editor/imageeditor.cpp \
-    project/project.cpp \
+    editor/htmleditor.cpp \
     version/abstractversioncontrol.cpp \
     version/gitversioncontrol.cpp \
     ui/searchreplacewidget.cpp \
-    project/fileprojectinfo.cpp \
     make/makeparser.cpp \
+    project/fileprojectinfo.cpp \
+    project/project.cpp \
     project/projectitemmodel.cpp \
     project/projectitem.cpp \
-    editor/htmleditor.cpp \
     project/projectitemproxymodel.cpp \
     project/projecttreeview.cpp \
-    project/projectwidget.cpp
+    project/projectwidget.cpp \
+    ui/logwidget.cpp
 
 HEADERS += \
-        mainwindow.h \
-    project/project.h \
+    mainwindow.h \
     version/abstractversioncontrol.h \
     version/gitversioncontrol.h \
     editor/editor.h \
@@ -61,15 +62,17 @@ HEADERS += \
     editor/codeeditor.h \
     editor/hexeditor.h \
     editor/imageeditor.h \
+    editor/htmleditor.h \
     ui/searchreplacewidget.h \
-    project/fileprojectinfo.h \
     make/makeparser.h \
+    project/fileprojectinfo.h \
+    project/project.h \
     project/projectitemmodel.h \
     project/projectitem.h \
-    editor/htmleditor.h \
     project/projectitemproxymodel.h \
     project/projecttreeview.h \
-    project/projectwidget.h
+    project/projectwidget.h \
+    ui/logwidget.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 

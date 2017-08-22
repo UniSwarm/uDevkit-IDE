@@ -3,7 +3,6 @@
 
 #include <QDockWidget>
 #include <QMainWindow>
-#include <QProcess>
 #include <QTextEdit>
 
 #include "editor/editortabwidget.h"
@@ -11,6 +10,7 @@
 #include "project/projectwidget.h"
 
 #include "ui/searchreplacewidget.h"
+#include "ui/logwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -25,15 +25,13 @@ protected:
     EditorTabWidget *_editorTabWidget;
 
     QDockWidget *_logDock;
-    QTextEdit *_logWidget;
+    LogWidget *_logWidget;
 
     QDockWidget *_fileProjectDock;
     ProjectWidget *_fileProjectWidget;
 
     QDockWidget *_searchReplaceDock;
     SearchReplaceWidget *_searchReplaceWidget;
-
-    QProcess *_process;
 
     void createDocks();
     void createMenus();
@@ -44,7 +42,7 @@ public slots:
 
 protected slots:
     void git();
-    void readProcess();
+    void makeall();
     void updateTitle(Editor *editor);
 
     // QObject interface

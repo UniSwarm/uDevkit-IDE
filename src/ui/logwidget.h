@@ -1,0 +1,35 @@
+#ifndef LOGWIDGET_H
+#define LOGWIDGET_H
+
+#include <QTextBrowser>
+
+#include <QProcess>
+
+class Project;
+
+class LogWidget : public QTextBrowser
+{
+    Q_OBJECT
+public:
+    explicit LogWidget(Project *project, QWidget *parent = nullptr);
+    virtual ~LogWidget();
+
+
+
+signals:
+    void openFileRequested(QString filePath);
+
+public slots:
+    void start(const QString &program, const QStringList &arguments);
+
+protected:
+    Project *_project;
+    QProcess *_process;
+    QString _color;
+
+protected slots:
+    void readProcess();
+    void anchorClick(const QUrl &link);
+};
+
+#endif // LOGWIDGET_H
