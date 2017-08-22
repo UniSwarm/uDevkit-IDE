@@ -108,6 +108,14 @@ void MainWindow::createMenus()
     action->setShortcut(QKeySequence("Ctrl+R"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::makeall);
+    action = new QAction(QString("makeprog"), this);
+    action->setShortcut(QKeySequence("Ctrl+T"));
+    addAction(action);
+    connect(action, &QAction::triggered, this, &MainWindow::makeprog);
+    action = new QAction(QString("makeclean"), this);
+    action->setShortcut(QKeySequence("Ctrl+E"));
+    addAction(action);
+    connect(action, &QAction::triggered, this, &MainWindow::makeclean);
 
     action = new QAction(QString("next tab"), this);
     action->setShortcut(QKeySequence::NextChild);
@@ -165,6 +173,16 @@ void MainWindow::git()
 void MainWindow::makeall()
 {
     _logWidget->start("make", QStringList()<<"all"<<"-j"<<QString::number(QThread::idealThreadCount()));
+}
+
+void MainWindow::makeprog()
+{
+    _logWidget->start("make", QStringList()<<"prog"<<"-j"<<QString::number(QThread::idealThreadCount()));
+}
+
+void MainWindow::makeclean()
+{
+    _logWidget->start("make", QStringList()<<"clean");
 }
 
 void MainWindow::updateTitle(Editor *editor)

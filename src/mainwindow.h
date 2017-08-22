@@ -43,6 +43,8 @@ public slots:
 protected slots:
     void git();
     void makeall();
+    void makeprog();
+    void makeclean();
     void updateTitle(Editor *editor);
 
     // QObject interface
