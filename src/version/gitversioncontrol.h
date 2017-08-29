@@ -24,6 +24,7 @@ public:
     virtual bool isValid() const;
 
 protected slots:
+    void reqFetch();
     void reqModifFiles();
     void reqTrackedFiles();
     void reqValidatedFiles();
@@ -39,6 +40,8 @@ protected:
 
     enum State {
         None,
+        Check,
+        Fetch,
         ModifiedFiles,
         TrackedFiles,
         ValidatedFiles,

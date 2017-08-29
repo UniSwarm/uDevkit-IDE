@@ -79,6 +79,12 @@ bool GitVersionControl::isValid() const
     return !_gitPath.isEmpty();
 }
 
+void GitVersionControl::reqFetch()
+{
+    _state = Fetch;
+    _processGitState->start("git", QStringList()<<"fetch");
+}
+
 void GitVersionControl::reqModifFiles()
 {
     _state = ModifiedFiles;
@@ -109,6 +115,12 @@ void GitVersionControl::processEnd()
 
     switch (_state) {
     case GitVersionControl::None:
+        break;
+    case GitVersionControl::Check:
+        if (_processGitState->exitCode() != 0)
+            reqFetch();
+        else
+            reqModifFiles();
         break;
     case GitVersionControl::ModifiedFiles:
         parseFilesList(_modifiedFiles, validedFile, newmodifiedFiles);
@@ -178,5 +190,7 @@ void GitVersionControl::analysePath()
     _indexWatcher->addPath(_gitPath+"index");
     _processGitState->setWorkingDirectory(_basePath);
     connect(_indexWatcher, &QFileSystemWatcher::fileChanged, this, &GitVersionControl::indexCheck);
-    reqModifFiles();
+
+    _state = Check;
+    _processGitState->start("git", QStringList()<<"status");
 }
