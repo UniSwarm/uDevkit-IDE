@@ -20,6 +20,8 @@ int main(int argc, char *argv[])
     Project *project = nullptr;
     if (argc > 1)
         project = new Project(argv[1]);
+    else
+        project = new Project(QFileInfo(argv[0]).absolutePath());
 
     MainWindow w(project);
     w.show();
