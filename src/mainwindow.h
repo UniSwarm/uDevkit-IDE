@@ -36,6 +36,10 @@ protected:
     void createDocks();
     void createMenus();
 
+    void writeSettings();
+    void readSettings();
+    void updateOldProjects();
+
 public slots:
     bool openDir(const QString &paths=QString());
     bool openFiles(const QStringList &paths=QStringList());
@@ -47,9 +51,16 @@ protected slots:
     void makeclean();
     void updateTitle(Editor *editor);
 
+    void openRecentFile();
+
     // QObject interface
 public:
     virtual bool event(QEvent *event);
+
+private:
+    static const int MaxOldProject;
+    QList<QString> _oldProjects;
+    QList<QAction*> _oldProjectsActions;
 };
 
 #endif // MAINWINDOW_H

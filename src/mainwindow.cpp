@@ -6,25 +6,39 @@
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QFileDialog>
+#include <QSettings>
 #include <QSplitter>
 #include <QMenuBar>
 #include <QThread>
 
+const int MainWindow::MaxOldProject = 4;
+
 MainWindow::MainWindow(Project *project, QWidget *parent) :
     QMainWindow(parent), _project(project)
 {
+    QString path;
     if(!_project)
         _project = new Project(QDir::home().canonicalPath());
+    else
+        path = _project->rootPath();
 
     _editorTabWidget = new EditorTabWidget(_project);
 
     setCentralWidget(_editorTabWidget);
     connect(_editorTabWidget, &EditorTabWidget::editorChange, this, &MainWindow::updateTitle);
     connect(_editorTabWidget, &EditorTabWidget::currentEditorModified, this, &MainWindow::updateTitle);
-    resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
+    //resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
     createDocks();
     createMenus();
+
+    readSettings();
+    if (!path.isEmpty())
+    {
+        _oldProjects.removeOne(path);
+        _oldProjects.prepend(path);
+    }
+    updateOldProjects();
 }
 
 MainWindow::~MainWindow()
@@ -91,6 +105,14 @@ void MainWindow::createMenus()
     connect(openFilesAction, SIGNAL(triggered()), this, SLOT(openFiles()));
 
     projectMenu->addSeparator();
+    for (int i=0; i<MaxOldProject; i++)
+    {
+        QAction *recentAction = new QAction(this);
+        projectMenu->addAction(recentAction);
+        recentAction->setVisible(false);
+        connect(recentAction, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+        _oldProjectsActions.append(recentAction);
+    }
 
     projectMenu->addSeparator();
     QAction *exit = new QAction(tr("E&xit"),this);
@@ -172,11 +194,13 @@ void MainWindow::git()
 
 void MainWindow::makeall()
 {
+    _editorTabWidget->saveAllEditors();
     _logWidget->start("make", QStringList()<<"all"<<"-j"<<QString::number(QThread::idealThreadCount()));
 }
 
 void MainWindow::makeprog()
 {
+    _editorTabWidget->saveAllEditors();
     _logWidget->start("make", QStringList()<<"prog"<<"-j"<<QString::number(QThread::idealThreadCount()));
 }
 
@@ -205,6 +229,74 @@ bool MainWindow::event(QEvent *event)
             event->ignore();
             return false;
         }
+        writeSettings();
     }
     return QMainWindow::event(event);
+}
+
+void MainWindow::updateOldProjects()
+{
+    for (int i=0; i<_oldProjects.size() && i < MaxOldProject; i++)
+    {
+        QString path = _oldProjects[i];
+        _oldProjectsActions[i]->setVisible(true);
+        _oldProjectsActions[i]->setData(path);
+        _oldProjectsActions[i]->setText(QString("&%1. %2").arg(i+1).arg(path));
+        _oldProjectsActions[i]->setStatusTip(tr("Open recent project '")+path+"'");
+    }
+}
+
+void MainWindow::openRecentFile()
+{
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action)
+        openDir(action->data().toString());
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings("Robotips", "RtIDE");
+
+    // MainWindow position/size/maximized
+    settings.beginGroup("MainWindow");
+    settings.setValue("size", normalGeometry().size());
+    settings.setValue("pos", normalGeometry().topLeft());
+    settings.setValue("maximized", isMaximized());
+    settings.endGroup();
+
+    // old projects write
+    settings.beginWriteArray("projects");
+    for (int i = 0; i < _oldProjects.size() && i < MaxOldProject; ++i)
+    {
+        settings.setArrayIndex(i);
+        QString path = _oldProjects[i];
+        settings.setValue("path", path);
+    }
+    settings.endArray();
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings("Robotips", "RtIDE");
+
+    // MainWindow position/size/maximized
+    settings.beginGroup("MainWindow");
+    resize(settings.value("size", QSize(800, 600)).toSize());
+    move(settings.value("pos", QPoint(200, 200)).toPoint());
+    if(settings.value("maximized", true).toBool())
+        showMaximized();
+    settings.endGroup();
+
+    // old projects read
+    int size = settings.beginReadArray("projects");
+    for (int i = 0; i < size && i < MaxOldProject; ++i)
+    {
+        settings.setArrayIndex(i);
+        QString path = settings.value("path", "").toString();
+        if(!_oldProjects.contains(path) && !path.isEmpty())
+            _oldProjects.append(path);
+    }
+    settings.endArray();
+
+    updateOldProjects();
 }
