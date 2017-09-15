@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/Robotips/rtide.svg?branch=master)](https://travis-ci.org/Robotips/rtide)
 [![Build status](https://ci.appveyor.com/api/projects/status/rdd4wup94uuo9ykv?svg=true)](https://ci.appveyor.com/project/sebcaux/rtide)
 
-A simple IDE for [RtProg](https://github.com/Robotips/rtprog). This IDE want to be very lightweight and fast to load without a huge project management system.
+A simple IDE for [RtProg](https://github.com/Robotips/rtprog) written in Qt5. This IDE want to be very lightweight and fast to load without a huge project management system.
 
 Still in development.
 
@@ -16,6 +16,10 @@ Still in development.
 * code highlighting (based on [edbee](https://github.com/edbee/edbee-lib))
 * hexadecimal editor (based on [qhexedit2](https://github.com/Simsys/qhexedit2))
 * dark theme to preserve developer eyes :wink: (based on [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet))
+* Makefile parser to extract external sources and rules
+* compile log with link to file
+* image viewer
+* HTML live preview
 
 ## Build
 
