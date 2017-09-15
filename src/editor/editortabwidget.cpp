@@ -56,7 +56,8 @@ Editor *EditorTabWidget::editor(int i) const
 void EditorTabWidget::openFileEditor(const QString &url)
 {
     QString filePath, line, column;
-    QRegExp urlFilePath("([^:]*)(:[0-9]+)*(:[0-9]+)*");
+    QRegExp urlFilePath("(..[^:]*)(:[0-9]+)*(:[0-9]+)*");
+
     if (urlFilePath.indexIn(url) == -1)
         return;
     filePath = urlFilePath.cap(1);
