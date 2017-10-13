@@ -1,6 +1,8 @@
 #include "searchreplacewidget.h"
 
 #include <QBoxLayout>
+#include <QDebug>
+#include <QEvent>
 
 SearchReplaceWidget::SearchReplaceWidget(QWidget *parent) : QWidget(parent)
 {
@@ -8,6 +10,7 @@ SearchReplaceWidget::SearchReplaceWidget(QWidget *parent) : QWidget(parent)
 
     createWidgets();
     setEditor(nullptr);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void SearchReplaceWidget::setEditor(Editor *editor)
@@ -26,7 +29,7 @@ void SearchReplaceWidget::setEditor(Editor *editor)
 
 void SearchReplaceWidget::activate()
 {
-    if(parentWidget() && parentWidget()->parentWidget())
+    if (parentWidget() && parentWidget()->parentWidget())
         parentWidget()->parentWidget()->show();
     show();
     _searchLineEdit->setFocus();
@@ -105,6 +108,7 @@ void SearchReplaceWidget::createWidgets()
     searchLineLayout->setMargin(0);
     _searchLineEdit = new QLineEdit();
     _searchLineEdit->setPlaceholderText("search");
+    _searchLineEdit->installEventFilter(this);
     searchLineLayout->addWidget(_searchLineEdit);
     connect(_searchLineEdit, &QLineEdit::textChanged, this, &SearchReplaceWidget::upadteSearch);
 
@@ -155,13 +159,14 @@ void SearchReplaceWidget::createWidgets()
 
     _regexpCheckbox = new QCheckBox("regexp");
     _regexpCheckbox->setChecked(true);
-    layout->addWidget(_regexpCheckbox);
+    optionsLineLayout->addWidget(_regexpCheckbox);
     connect(_regexpCheckbox, &QCheckBox::stateChanged, this, &SearchReplaceWidget::upadteSearch);
 
     _caseSensitivityCheckbox = new QCheckBox("case sensitive");
     _caseSensitivityCheckbox->setChecked(true);
-    layout->addWidget(_caseSensitivityCheckbox);
+    optionsLineLayout->addWidget(_caseSensitivityCheckbox);
     connect(_caseSensitivityCheckbox, &QCheckBox::stateChanged, this, &SearchReplaceWidget::upadteSearch);
+    optionsLineLayout->addStretch();
 
     layout->addLayout(optionsLineLayout);
 
@@ -171,4 +176,11 @@ void SearchReplaceWidget::createWidgets()
     layout->addWidget(_statusLabel);
 
     setLayout(layout);
+}
+
+bool SearchReplaceWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == _searchLineEdit && event->type() == QEvent::FocusIn && !_searchLineEdit->text().isEmpty())
+        upadteSearch();
+    return QObject::eventFilter(watched, event);
 }

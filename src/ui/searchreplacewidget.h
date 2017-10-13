@@ -50,6 +50,10 @@ protected:
     QLabel *_statusLabel;
 
     Editor *_editor;
+
+    // QObject interface
+public:
+    virtual bool eventFilter(QObject *watched, QEvent *event);
 };
 
 #endif // SEARCHREPLACEWIDGET_H
