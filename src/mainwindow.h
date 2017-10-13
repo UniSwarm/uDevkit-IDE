@@ -49,7 +49,7 @@ protected slots:
     void makeall();
     void makeprog();
     void makeclean();
-    void updateTitle(Editor *editor);
+    void updateTitle(Editor *editor=Q_NULLPTR);
 
     void openRecentFile();
 

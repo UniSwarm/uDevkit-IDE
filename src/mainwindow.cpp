@@ -18,10 +18,11 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
     QMainWindow(parent), _project(project)
 {
     QString path;
-    if(!_project)
+    if (!_project)
         _project = new Project(QDir::home().canonicalPath());
     else
         path = _project->rootPath();
+    updateTitle();
 
     _editorTabWidget = new EditorTabWidget(_project);
 
@@ -230,20 +231,25 @@ void MainWindow::makeclean()
 
 void MainWindow::updateTitle(Editor *editor)
 {
-    if(!editor)
-        return;
-    QString title = editor->filePath();
-    if (editor->isModified())
-        title.append("*");
-    title.append(" | rtide");
+    QString title;
+    if (editor)
+    {
+        title = _project->rootDir().relativeFilePath(editor->filePath());
+        if (editor->isModified())
+            title.append("*");
+        title.append(" | ");
+    }
+    title.append("(");
+    title.append(_project->rootDir().dirName());
+    title.append(") rtide");
     setWindowTitle(title);
 }
 
 bool MainWindow::event(QEvent *event)
 {
-    if(event->type()==QEvent::Close)
+    if (event->type()==QEvent::Close)
     {
-        if(_editorTabWidget->closeAllEditors() < 0)
+        if (_editorTabWidget->closeAllEditors() < 0)
         {
             event->ignore();
             return false;
@@ -302,7 +308,7 @@ void MainWindow::readSettings()
     settings.beginGroup("MainWindow");
     resize(settings.value("size", QSize(800, 600)).toSize());
     move(settings.value("pos", QPoint(200, 200)).toPoint());
-    if(settings.value("maximized", true).toBool())
+    if (settings.value("maximized", true).toBool())
         showMaximized();
     settings.endGroup();
 
@@ -312,7 +318,7 @@ void MainWindow::readSettings()
     {
         settings.setArrayIndex(i);
         QString path = settings.value("path", "").toString();
-        if(!_oldProjects.contains(path) && !path.isEmpty())
+        if (!_oldProjects.contains(path) && !path.isEmpty())
             _oldProjects.append(path);
     }
     settings.endArray();
