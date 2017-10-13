@@ -19,12 +19,19 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     setHiddenFilter(QRegExp(""));
     _proxy->sort(0, Qt::AscendingOrder);
 
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
+
     setModel(_proxy);
     setEditTriggers(QAbstractItemView::EditKeyPressed);
     for (int i = 1; i < _proxy->columnCount(); ++i)
         hideColumn(i);
     setStyleSheet("QTreeView { selection-background-color: transparent; }");
     header()->close();
+
+    _removeAction = new QAction("remove");
+    _removeAction->setShortcut(QKeySequence::Delete);
+    connect(_removeAction, SIGNAL(triggered(bool)), this, SLOT(remove()));
+    addAction(_removeAction);
 
     expandToDepth(0);
 }
@@ -75,6 +82,55 @@ void ProjectTreeView::setShowFilter(const QString &pattern)
     setShowFilter(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
 }
 
+void ProjectTreeView::remove()
+{
+    QModelIndexList selection = selectionModel()->selectedIndexes();
+    if (selection.isEmpty())
+        return;
+
+    if (selection.size() == 1)
+    {
+        const QModelIndex &indexFile = _proxy->mapToSource(selection.first());
+        if (!indexFile.isValid())
+            return;
+
+        if (_project->projectItemModel()->isDir(indexFile))
+        {
+            if (QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove '%1'?")
+                                     .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+                _project->projectItemModel()->rmdir(indexFile);
+        }
+        else if (_project->projectItemModel()->isFile(indexFile))
+        {
+            if (QMessageBox::question(this, "Remove file?", QString("Do you realy want to remove '%1'?")
+                                      .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+                _project->projectItemModel()->remove(indexFile);
+        }
+    }
+    else
+    {
+        foreach (QModelIndex selected, selection)
+        {
+            const QModelIndex &indexFile = _proxy->mapToSource(selected);
+            if (!indexFile.isValid())
+                continue;
+
+            if (QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove theses %1 files?")
+                                     .arg(selection.size())) != QMessageBox::Yes)
+                return;
+
+            if (_project->projectItemModel()->isDir(indexFile))
+            {
+                _project->projectItemModel()->rmdir(indexFile);
+            }
+            else if (_project->projectItemModel()->isFile(indexFile))
+            {
+                _project->projectItemModel()->remove(indexFile);
+            }
+        }
+    }
+}
+
 void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
     const QModelIndex &index = indexAt(event->pos());
@@ -88,14 +144,15 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 
     // file commands
     QAction *fileCreateAction = nullptr;
-    if(_project->projectItemModel()->isDir(indexFile))
+    if (_project->projectItemModel()->isDir(indexFile))
     {
         fileCreateAction = menu.addAction("Add new file here");
+        fileCreateAction->setShortcut(QKeySequence::Delete);
     }
     QAction *fileRenameAction = menu.addAction("Rename");
     fileRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
     QAction *fileRemoveAction = nullptr, *dirRemoveAction = nullptr, *openDirAction = nullptr;
-    if(_project->projectItemModel()->isDir(indexFile))
+    if (_project->projectItemModel()->isDir(indexFile))
     {
         dirRemoveAction = menu.addAction("Remove directory");
         dirRemoveAction->setShortcut(QKeySequence::Delete);
@@ -124,7 +181,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 
     // exec menu
     QAction *trigered = menu.exec(event->globalPos());
-    if(trigered == nullptr)
+    if (trigered == nullptr)
         return;
 
     // analyse clicked menu
@@ -135,23 +192,11 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
         QFile file(filePath);
         if (!file.exists())
         {
-            if(!file.open(QIODevice::WriteOnly))
+            if (!file.open(QIODevice::WriteOnly))
                 return;
             file.close();
             emit openedFile(filePath);
         }
-    }
-    else if (trigered == dirRemoveAction)
-    {
-        if(QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove '%1'?")
-                                 .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
-            _project->projectItemModel()->rmdir(indexFile);
-    }
-    else if (trigered == fileRemoveAction)
-    {
-        if (QMessageBox::question(this, "Remove file?", QString("Do you realy want to remove '%1'?")
-                                  .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
-            _project->projectItemModel()->remove(indexFile);
     }
     else if (trigered == fileRenameAction)
         edit(index);
@@ -212,12 +257,16 @@ void ProjectTreeView::keyPressEvent(QKeyEvent *event)
         if (!hasFocus())
             return;
 
-        const QPersistentModelIndex index = selectionModel()->currentIndex();
-        if (!index.isValid())
-            return;
+        const QModelIndexList indexList = selectionModel()->selectedIndexes();
 
-        const QModelIndex &indexFile = _proxy->mapToSource(index);
-        if (!_project->projectItemModel()->isDir(indexFile))
-            emit openedFile(_project->projectItemModel()->filePath(indexFile));
+        foreach (const QModelIndex &index, indexList)
+        {
+            if (!index.isValid())
+                return;
+
+            const QModelIndex &indexFile = _proxy->mapToSource(index);
+            if (!_project->projectItemModel()->isDir(indexFile))
+                emit openedFile(_project->projectItemModel()->filePath(indexFile));
+        }
     }
 }

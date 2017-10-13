@@ -1,6 +1,7 @@
 #ifndef PROJECTTREEVIEW_H
 #define PROJECTTREEVIEW_H
 
+#include <QAction>
 #include <QTreeView>
 
 #include "project.h"
@@ -24,6 +25,8 @@ public slots:
     void setShowFilter(const QRegExp &regExp);
     void setShowFilter(const QString &pattern);
 
+    void remove();
+
 signals:
     void openedFile(QString fileName);
     void closedFile(QString fileName);
@@ -31,6 +34,7 @@ signals:
 protected:
     Project *_project;
     ProjectItemProxyModel *_proxy;
+    QAction *_removeAction;
 
     // QWidget interface
 protected:
