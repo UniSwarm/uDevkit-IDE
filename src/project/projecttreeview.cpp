@@ -28,7 +28,8 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     setStyleSheet("QTreeView { selection-background-color: transparent; }");
     header()->close();
 
-    _removeAction = new QAction("remove");
+    _removeAction = new QAction(this);
+    _removeAction->setText("remove");
     _removeAction->setShortcut(QKeySequence::Delete);
     connect(_removeAction, SIGNAL(triggered(bool)), this, SLOT(remove()));
     addAction(_removeAction);
