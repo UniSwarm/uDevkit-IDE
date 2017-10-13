@@ -150,6 +150,13 @@ void MainWindow::createMenus()
     addAction(action);
     connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activate);
 
+    // ============= View =============
+    QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
+
+    viewMenu->addAction(_logDock->toggleViewAction());
+    viewMenu->addAction(_fileProjectDock->toggleViewAction());
+    viewMenu->addAction(_searchReplaceDock->toggleViewAction());
+
     // ============= Help =============
     QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
 
