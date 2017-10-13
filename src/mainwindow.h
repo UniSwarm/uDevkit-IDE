@@ -53,6 +53,8 @@ protected slots:
 
     void openRecentFile();
 
+    void about();
+
     // QObject interface
 public:
     virtual bool event(QEvent *event);

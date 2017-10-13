@@ -10,8 +10,9 @@
 #include <QSplitter>
 #include <QMenuBar>
 #include <QThread>
+#include <QMessageBox>
 
-const int MainWindow::MaxOldProject = 4;
+const int MainWindow::MaxOldProject = 8;
 
 MainWindow::MainWindow(Project *project, QWidget *parent) :
     QMainWindow(parent), _project(project)
@@ -27,7 +28,6 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
     setCentralWidget(_editorTabWidget);
     connect(_editorTabWidget, &EditorTabWidget::editorChange, this, &MainWindow::updateTitle);
     connect(_editorTabWidget, &EditorTabWidget::currentEditorModified, this, &MainWindow::updateTitle);
-    //resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
     createDocks();
     createMenus();
@@ -52,7 +52,7 @@ void MainWindow::createDocks()
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
     setTabPosition(Qt::LeftDockWidgetArea, QTabWidget::North);
 
-    _fileProjectDock = new QDockWidget("project", this);
+    _fileProjectDock = new QDockWidget(tr("project"), this);
     QWidget *fileProjectContent = new QWidget(_fileProjectDock);
     QLayout *fileProjectLayout = new QVBoxLayout();
     _fileProjectWidget = new ProjectWidget(_project);
@@ -64,7 +64,7 @@ void MainWindow::createDocks()
     _fileProjectDock->setWidget(fileProjectContent);
     addDockWidget(Qt::LeftDockWidgetArea, _fileProjectDock);
 
-    _logDock = new QDockWidget("log", this);
+    _logDock = new QDockWidget(tr("log"), this);
     QWidget *logContent = new QWidget(_logDock);
     QLayout *logLayout = new QVBoxLayout();
     _logWidget = new LogWidget(_project);
@@ -75,7 +75,7 @@ void MainWindow::createDocks()
     connect(_logWidget, &LogWidget::openFileRequested, _editorTabWidget, &EditorTabWidget::openFileEditor);
     addDockWidget(Qt::BottomDockWidgetArea, _logDock);
 
-    _searchReplaceDock = new QDockWidget("search / replace", this);
+    _searchReplaceDock = new QDockWidget(tr("search / replace"), this);
     QWidget *searchReplaceContent = new QWidget(_searchReplaceDock);
     QLayout *searchReplaceLayout = new QVBoxLayout();
     _searchReplaceWidget = new SearchReplaceWidget();
@@ -91,7 +91,8 @@ void MainWindow::createMenus()
     setMenuBar(new QMenuBar(this));
     //addToolBar(new QToolBar(this));
 
-    QMenu *projectMenu = menuBar()->addMenu("&Project");
+    // ============= Project =============
+    QMenu *projectMenu = menuBar()->addMenu(tr("&Project"));
 
     QAction *openDirAction = new QAction(tr("Open &project"),this);
     openDirAction->setStatusTip(tr("Opens a project as directory"));
@@ -122,32 +123,43 @@ void MainWindow::createMenus()
     connect(exit, SIGNAL(triggered()), this, SLOT(close()));
 
     QAction *action;
-    action = new QAction(QString("git"), this);
+    action = new QAction(tr("git"), this);
     action->setShortcut(QKeySequence("F4"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::git);
-    action = new QAction(QString("make"), this);
+    action = new QAction(tr("make"), this);
     action->setShortcut(QKeySequence("Ctrl+R"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::makeall);
-    action = new QAction(QString("makeprog"), this);
+    action = new QAction(tr("makeprog"), this);
     action->setShortcut(QKeySequence("Ctrl+T"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::makeprog);
-    action = new QAction(QString("makeclean"), this);
+    action = new QAction(tr("makeclean"), this);
     action->setShortcut(QKeySequence("Ctrl+E"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::makeclean);
 
-    action = new QAction(QString("next tab"), this);
+    action = new QAction(tr("next tab"), this);
     action->setShortcut(QKeySequence::NextChild);
     addAction(action);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::nextTab);
 
-    action = new QAction(QString("search"), this);
+    action = new QAction(tr("search"), this);
     action->setShortcut(QKeySequence::QKeySequence::Find);
     addAction(action);
     connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activate);
+
+    // ============= Help =============
+    QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
+
+    QAction *aboutAction = new QAction(tr("&About"), this);
+    connect(aboutAction, SIGNAL(triggered(bool)), this, SLOT(about()));
+    helpMenu->addAction(aboutAction);
+
+    QAction *aboutQtAction = new QAction(tr("About &Qt"), this);
+    connect(aboutQtAction, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
+    helpMenu->addAction(aboutQtAction);
 }
 
 bool MainWindow::openDir(const QString &path)
@@ -299,4 +311,28 @@ void MainWindow::readSettings()
     settings.endArray();
 
     updateOldProjects();
+}
+
+void MainWindow::about()
+{
+    QMessageBox::about(this, "RtIDE v0", QString("Copyright (C) 2017 Robotips (<a href=\"https://robotips.fr\">robotips.fr</a>)<br>\
+<br>\
+This sofware is part of RtIDE distribution. To check for new version, please visit <a href=\"https://github.com/Robotips/rtide\">github.com/Robotips/rtide</a><br>\
+<br>\
+Written by <a href=\"https://github.com/sebcaux\">Sébastien CAUX (sebcaux)</a><br>\
+<br>\
+RtIDE is a free software: you can redistribute it and/or modify \
+it under the terms of the GNU General Public License as published by \
+the Free Software Foundation, either version 3 of the License, or \
+(at your option) any later version.<br>\
+<br>\
+This program is distributed in the hope that it will be useful, \
+but WITHOUT ANY WARRANTY; without even the implied warranty of \
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the \
+GNU General Public License for more details.<br>\
+<br>\
+You should have received a copy of the GNU General Public License \
+along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\">www.gnu.org/licenses</a><br>\
+<br>\
+Build date: ") + __DATE__ + QString(" time: ")+__TIME__);
 }
