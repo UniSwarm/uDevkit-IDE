@@ -31,6 +31,7 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     _removeAction = new QAction(this);
     _removeAction->setText("remove");
     _removeAction->setShortcut(QKeySequence::Delete);
+    _removeAction->setShortcutContext(Qt::WidgetShortcut);
     connect(_removeAction, SIGNAL(triggered(bool)), this, SLOT(remove()));
     addAction(_removeAction);
 
@@ -85,6 +86,9 @@ void ProjectTreeView::setShowFilter(const QString &pattern)
 
 void ProjectTreeView::remove()
 {
+    if (!hasFocus())
+        return;
+
     QModelIndexList selection = selectionModel()->selectedIndexes();
     if (selection.isEmpty())
         return;
