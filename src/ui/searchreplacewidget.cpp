@@ -80,14 +80,14 @@ void SearchReplaceWidget::replaceNext()
 {
     if (!_editor)
         return;
-    _editor->replaceAll(_replaceLineEdit->text());
+    _editor->replace(_replaceLineEdit->text(), flags());
 }
 
 void SearchReplaceWidget::replacePrev()
 {
     if (!_editor)
         return;
-    _editor->replaceAll(_replaceLineEdit->text());
+    _editor->replace(_replaceLineEdit->text(), flags(), false);
 }
 
 void SearchReplaceWidget::replaceAll()
@@ -111,6 +111,7 @@ void SearchReplaceWidget::createWidgets()
     _searchLineEdit->installEventFilter(this);
     searchLineLayout->addWidget(_searchLineEdit);
     connect(_searchLineEdit, &QLineEdit::textChanged, this, &SearchReplaceWidget::upadteSearch);
+    connect(_searchLineEdit, &QLineEdit::returnPressed, this, &SearchReplaceWidget::searchNext);
 
     _prevButton = new QToolButton();
     _prevButton->setText("<");
@@ -135,6 +136,7 @@ void SearchReplaceWidget::createWidgets()
     _replaceLineEdit = new QLineEdit();
     _replaceLineEdit->setPlaceholderText("replace");
     replaceLineLayout->addWidget(_replaceLineEdit);
+    connect(_replaceLineEdit, &QLineEdit::returnPressed, this, &SearchReplaceWidget::replaceNext);
 
     _replacePrevButton = new QToolButton();
     _replacePrevButton->setText("<");
@@ -176,6 +178,9 @@ void SearchReplaceWidget::createWidgets()
     layout->addWidget(_statusLabel);
 
     setLayout(layout);
+
+    // tab order
+    setTabOrder(_searchLineEdit, _replaceLineEdit);
 }
 
 bool SearchReplaceWidget::eventFilter(QObject *watched, QEvent *event)

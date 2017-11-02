@@ -261,6 +261,35 @@ void CodeEditor::searchSelectAll()
     controller->update();
 }
 
+void CodeEditor::replace(const QVariant &replacePattern, Editor::SearchFlags flags, bool next)
+{
+    edbee::TextEditorController* controller = _editorWidget->controller();
+    edbee::TextSearcher* searcher = controller->textSearcher();
+
+    bool find;
+
+    if (next)
+        find = searcher->findNext(_editorWidget);
+    else
+        find = searcher->findPrev(_editorWidget);
+
+    if (find)
+    {
+        edbee::TextRangeSet range(_editorWidget->textSelection());
+        QRegExp regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        if (!flags.testFlag(RegExpMode))
+            _editorWidget->textDocument()->replaceRangeSet(range, replacePattern.toString());
+        else
+        {
+            QString replaceText = range.getSelectedText();
+            replaceText.replace(regExp, replacePattern.toString());
+            _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
+        }
+    }
+    controller->textSelection()->resetAnchors();
+    controller->update();
+}
+
 void CodeEditor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
 {
     edbee::TextEditorController* controller = _editorWidget->controller();

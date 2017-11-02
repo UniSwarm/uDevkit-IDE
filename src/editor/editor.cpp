@@ -112,6 +112,13 @@ void Editor::searchSelectAll()
 {
 }
 
+void Editor::replace(const QVariant &replacePattern, SearchFlags flags, bool next)
+{
+    Q_UNUSED(replacePattern)
+    Q_UNUSED(flags)
+    Q_UNUSED(next)
+}
+
 void Editor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
 {
     Q_UNUSED(replacePattern)
@@ -227,7 +234,7 @@ Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget 
     Type type;
     if(mime.name() == "text/html")
         type = Editor::HTML;
-    else if(mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml")
+    else if(mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml" || mime.name() == "application/x-shellscript")
         type = Editor::Code;
     else if(mime.name().startsWith("image"))
         type = Editor::Image;

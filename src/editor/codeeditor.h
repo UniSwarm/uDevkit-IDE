@@ -25,6 +25,7 @@ public:
     virtual void searchPrev();
     virtual void searchSelectAll();
 
+    virtual void replace(const QVariant &replacePattern, SearchFlags flags=SearchFlag(NoFlag), bool next=true);
     virtual void replaceAll(const QVariant &replacePattern, SearchFlags flags=SearchFlag(NoFlag));
 
 protected:
