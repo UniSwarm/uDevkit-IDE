@@ -17,6 +17,7 @@ const int MainWindow::MaxOldProject = 8;
 MainWindow::MainWindow(Project *project, QWidget *parent) :
     QMainWindow(parent), _project(project)
 {
+    setWindowIcon(QIcon(":/icons/UNIdevkit.ico"));
     QString path;
     if (!_project)
         _project = new Project(QDir::home().canonicalPath());
@@ -95,12 +96,12 @@ void MainWindow::createMenus()
     // ============= Project =============
     QMenu *projectMenu = menuBar()->addMenu(tr("&Project"));
 
-    QAction *openDirAction = new QAction(tr("Open &project"),this);
+    QAction *openDirAction = new QAction(tr("Open &project"), this);
     openDirAction->setStatusTip(tr("Opens a project as directory"));
     projectMenu->addAction(openDirAction);
     connect(openDirAction, SIGNAL(triggered()), this, SLOT(openDir()));
 
-    QAction *openFilesAction = new QAction(tr("&Open files"),this);
+    QAction *openFilesAction = new QAction(tr("&Open files"), this);
     openFilesAction->setStatusTip(tr("Opens files"));
     openFilesAction->setShortcut(QKeySequence::Open);
     projectMenu->addAction(openFilesAction);
@@ -117,7 +118,7 @@ void MainWindow::createMenus()
     }
 
     projectMenu->addSeparator();
-    QAction *exit = new QAction(tr("E&xit"),this);
+    QAction *exit = new QAction(tr("E&xit"), this);
     exit->setStatusTip(tr("Exits RtIDE"));
     exit->setShortcut(QKeySequence::Quit);
     projectMenu->addAction(exit);

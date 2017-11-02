@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>UNIdevkit.ico</file>
+    </qresource>
+</RCC>

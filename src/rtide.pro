@@ -76,5 +76,8 @@ HEADERS += \
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
+RESOURCES += \
+        $$PWD/img.qrc
+
 include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)
 include (../contrib/hexedit2.pri)
