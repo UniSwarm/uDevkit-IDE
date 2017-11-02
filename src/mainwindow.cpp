@@ -281,7 +281,7 @@ void MainWindow::openRecentFile()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("Robotips", "RtIDE");
+    QSettings settings("UniSwarm", "RtIDE");
 
     // MainWindow position/size/maximized
     settings.beginGroup("MainWindow");
@@ -303,7 +303,7 @@ void MainWindow::writeSettings()
 
 void MainWindow::readSettings()
 {
-    QSettings settings("Robotips", "RtIDE");
+    QSettings settings("UniSwarm", "RtIDE");
 
     // MainWindow position/size/maximized
     settings.beginGroup("MainWindow");
@@ -329,9 +329,9 @@ void MainWindow::readSettings()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, "RtIDE v0", QString("Copyright (C) 2017 Robotips (<a href=\"https://robotips.fr\">robotips.fr</a>)<br>\
+    QMessageBox::about(this, "RtIDE v0", QString("Copyright (C) 2017 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.fr</a>)<br>\
 <br>\
-This sofware is part of RtIDE distribution. To check for new version, please visit <a href=\"https://github.com/Robotips/rtide\">github.com/Robotips/rtide</a><br>\
+This sofware is part of RtIDE distribution. To check for new version, please visit <a href=\"https://github.com/UniSwarm/rtide\">github.com/UniSwarm/rtide</a><br>\
 <br>\
 Written by <a href=\"https://github.com/sebcaux\">Sébastien CAUX (sebcaux)</a><br>\
 <br>\

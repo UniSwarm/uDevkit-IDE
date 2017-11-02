@@ -11,7 +11,7 @@ IDI_ICON1               ICON    DISCARDABLE     "UNIdevkit.ico"
 #define VFT2_UNKNOWN 0x0L
 
 // Local definitions
-#define VER_COMPANYNAME_STR "Robotips\0"
+#define VER_COMPANYNAME_STR "UniSwarm\0"
 #define VER_FILEDESCRIPTION_STR "Kicad Component creator\0"
 #define VER_INTERNALNAME_STR "rtide"
 #define VER_LEGALCOPYRIGHT_STR "UniSwarm 2017"
