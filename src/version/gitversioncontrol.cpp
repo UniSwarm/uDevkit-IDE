@@ -116,6 +116,9 @@ void GitVersionControl::processEnd()
     switch (_state) {
     case GitVersionControl::None:
         break;
+    case GitVersionControl::Fetch:
+        reqModifFiles();
+        break;
     case GitVersionControl::Check:
         if (_processGitState->exitCode() != 0)
             reqFetch();
@@ -164,26 +167,50 @@ void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &out
     oldSed = modifiedFiles;
 }
 
-QString GitVersionControl::findGitDir()
+void GitVersionControl::findGitDir()
 {
     QDir dir(_path);
     do
     {
-        if (dir.exists(".git/index"))
-            return dir.canonicalPath() + "/.git/";
+        if (dir.exists(".git"))
+        {
+            if (dir.exists(".git/index"))
+            {
+                _gitPath = dir.canonicalPath() + "/.git/";
+                _basePath = dir.path();
+                return;
+            }
+            else
+            {
+                QString parentPath;
+                QFile gitFile(dir.canonicalPath() + "/.git");
+                if (!gitFile.open(QIODevice::ReadOnly | QIODevice::Text))
+                    continue;
+                QTextStream stream(&gitFile);
+                QString word;
+                while (!stream.atEnd())
+                {
+                    stream >> word;
+                    if (word != "gitdir:")
+                        continue;
+                    stream >> parentPath;
+                    if (dir.exists(parentPath))
+                    {
+                        _gitPath = dir.absoluteFilePath(parentPath) +"/";
+                        _basePath = dir.path();
+                        return;
+                    }
+                }
+            }
+        }
     } while(dir.cdUp());
-    return QString();
 }
 
 void GitVersionControl::analysePath()
 {
-    _gitPath = findGitDir();
+    findGitDir();
     if (_gitPath.isEmpty())
         return;
-
-    QDir dirGit(_gitPath);
-    dirGit.cdUp();
-    _basePath = dirGit.path();
 
     delete _indexWatcher;
     _indexWatcher = new QFileSystemWatcher();

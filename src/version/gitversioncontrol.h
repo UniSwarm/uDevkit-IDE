@@ -35,7 +35,7 @@ protected:
     void parseFilesList(QSet<QString> &oldSed, QSet<QString> &outgoingFiles, QSet<QString> &incomingFiles);
 
 protected:
-    QString findGitDir();
+    void findGitDir();
     virtual void analysePath();
 
     enum State {
