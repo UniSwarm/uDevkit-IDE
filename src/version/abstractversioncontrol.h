@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QSet>
 
+#include "fileversionchange.h"
+
 class AbstractVersionControl : public QObject
 {
     Q_OBJECT
@@ -31,18 +33,23 @@ public:
     virtual bool isValid() const;
     void modifFile(const QSet<QString> &filesPath);
 
+    virtual void requestFileModifications(const QString &filePath);
+    FileVersionChange fileModifications(const QString &filePath);
+
 protected:
     virtual void analysePath();
 
 signals:
     void newModifiedFiles(QSet<QString> modifiedFiles);
     void newValidatedFiles(QSet<QString> modifiedFiles);
+    void fileModificationsAvailable(QString modifiedFiles);
 
 protected:
     QString _path;
     QSet<QString> _validatedFiles;
     QSet<QString> _trackedFiles;
     QSet<QString> _modifiedFiles;
+    QMap<QString, FileVersionChange> _changeForFile;
 };
 
 #endif // ABSTRACTVERSIONCONTROL_H

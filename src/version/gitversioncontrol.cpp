@@ -15,6 +15,10 @@ GitVersionControl::GitVersionControl()
     //connect(_process, &QProcess::finished, this, &GitVersionControl::parseModifiedFiles); // does not work...
     connect(_processGitState, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=](int, QProcess::ExitStatus){processEnd();}); // but this crap is recomended
+
+    _processGitDiff = new QProcess(this);
+    connect(_processGitDiff, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            [=](int, QProcess::ExitStatus){processDiffEnd();}); // but this crap is recomended
 }
 
 GitVersionControl::~GitVersionControl()
@@ -77,6 +81,13 @@ void GitVersionControl::checkoutFile(const QSet<QString> &filesPath)
 bool GitVersionControl::isValid() const
 {
     return !_gitPath.isEmpty();
+}
+
+void GitVersionControl::requestFileModifications(const QString &filePath)
+{
+    QDir dir(_basePath);
+    _fileGitDiff = filePath;
+    _processGitDiff->start("git", QStringList()<<"diff"<<"--no-color"<<"--unified=0"<<dir.relativeFilePath(filePath));
 }
 
 void GitVersionControl::reqFetch()
@@ -144,6 +155,40 @@ void GitVersionControl::processEnd()
         emit newModifiedFiles(newmodifiedFiles);
     if (!validedFile.isEmpty())
         emit newValidatedFiles(validedFile);
+}
+
+void GitVersionControl::processDiffEnd()
+{
+    QTextStream stream(_processGitDiff);
+    FileVersionChange fileChanges;
+
+    QRegExp regContext("@@ -([0-9]+)(,([0-9]+))* \\+([0-9]+)(,([0-9]+))* @@");
+    bool valid = false;
+    VersionChange change;
+    while (!stream.atEnd())
+    {
+        QString line = stream.readLine();
+        if (line.startsWith("@@")) // new modif
+        {
+            if (valid)
+                fileChanges.changes().append(change);
+
+            regContext.indexIn(line);
+            int lineOld = regContext.cap(1).toInt();
+            int lineNew = regContext.cap(4).toInt();
+            change.setLineOld(lineOld);
+            change.setLineNew(lineNew);
+            valid = true;
+        }
+        if (!valid)
+            continue;
+        if (line.startsWith('+'))
+            change.addAddedLine(line.mid(1));
+        else if (line.startsWith('-'))
+            change.addAddedLine(line.mid(1));
+    }
+    _changeForFile[_fileGitDiff] = fileChanges;
+    emit fileModificationsAvailable(_fileGitDiff);
 }
 
 void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &outgoingFiles, QSet<QString> &incomingFiles)
@@ -216,6 +261,7 @@ void GitVersionControl::analysePath()
     _indexWatcher = new QFileSystemWatcher();
     _indexWatcher->addPath(_gitPath+"index");
     _processGitState->setWorkingDirectory(_basePath);
+    _processGitDiff->setWorkingDirectory(_basePath);
     connect(_indexWatcher, &QFileSystemWatcher::fileChanged, this, &GitVersionControl::indexCheck);
 
     _state = Check;

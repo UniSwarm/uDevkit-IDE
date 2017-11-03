@@ -113,6 +113,20 @@ void AbstractVersionControl::modifFile(const QSet<QString> &filesPath)
         emit newModifiedFiles(mnewModifiedFiles);
 }
 
+void AbstractVersionControl::requestFileModifications(const QString &filePath)
+{
+    Q_UNUSED(filePath)
+}
+
+FileVersionChange AbstractVersionControl::fileModifications(const QString &filePath)
+{
+    QMap<QString, FileVersionChange>::iterator localFind = _changeForFile.find(filePath);
+    if (localFind != _changeForFile.end())
+        return *localFind;
+    else
+        return FileVersionChange();
+}
+
 void AbstractVersionControl::analysePath()
 {
 }

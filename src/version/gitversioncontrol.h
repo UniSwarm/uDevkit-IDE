@@ -23,6 +23,8 @@ public:
 
     virtual bool isValid() const;
 
+    virtual void requestFileModifications(const QString &filePath);
+
 protected slots:
     void reqFetch();
     void reqModifFiles();
@@ -30,6 +32,8 @@ protected slots:
     void reqValidatedFiles();
     void indexCheck();
     void processEnd();
+
+    void processDiffEnd();
 
 protected:
     void parseFilesList(QSet<QString> &oldSed, QSet<QString> &outgoingFiles, QSet<QString> &incomingFiles);
@@ -53,6 +57,9 @@ protected:
     QFileSystemWatcher *_indexWatcher;
     QString _gitPath;
     QString _basePath;
+
+    QProcess *_processGitDiff;
+    QString _fileGitDiff;
 };
 
 #endif // GITVERSIONCONTROL_H
