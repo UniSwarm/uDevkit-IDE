@@ -12,7 +12,7 @@ IDI_ICON1               ICON    DISCARDABLE     "UNIdevkit.ico"
 
 // Local definitions
 #define VER_COMPANYNAME_STR "UniSwarm\0"
-#define VER_FILEDESCRIPTION_STR "Kicad Component creator\0"
+#define VER_FILEDESCRIPTION_STR "IDE for Uni-devkit\0"
 #define VER_INTERNALNAME_STR "rtide"
 #define VER_LEGALCOPYRIGHT_STR "UniSwarm 2017"
 #define VER_LEGALTRADEMARKS1_STR ""

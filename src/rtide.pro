@@ -50,7 +50,8 @@ SOURCES += \
     project/projectitemproxymodel.cpp \
     project/projecttreeview.cpp \
     project/projectwidget.cpp \
-    ui/logwidget.cpp
+    ui/logwidget.cpp \
+    version/versionchange.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -72,12 +73,15 @@ HEADERS += \
     project/projectitemproxymodel.h \
     project/projecttreeview.h \
     project/projectwidget.h \
-    ui/logwidget.h
+    ui/logwidget.h \
+    version/versionchange.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
 RESOURCES += \
         $$PWD/img.qrc
+
+win32 : RC_FILE = rtide.rc
 
 include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)
 include (../contrib/hexedit2.pri)
