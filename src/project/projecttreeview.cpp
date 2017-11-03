@@ -114,24 +114,24 @@ void ProjectTreeView::remove()
     }
     else
     {
+        if (QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove theses %1 files?")
+                                 .arg(selection.size())) != QMessageBox::Yes)
+            return;
+        QList<QPersistentModelIndex> pindex;
         foreach (QModelIndex selected, selection)
         {
             const QModelIndex &indexFile = _proxy->mapToSource(selected);
             if (!indexFile.isValid())
                 continue;
 
-            if (QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove theses %1 files?")
-                                     .arg(selection.size())) != QMessageBox::Yes)
-                return;
-
-            if (_project->projectItemModel()->isDir(indexFile))
-            {
-                _project->projectItemModel()->rmdir(indexFile);
-            }
-            else if (_project->projectItemModel()->isFile(indexFile))
-            {
-                _project->projectItemModel()->remove(indexFile);
-            }
+            pindex.append(indexFile);
+        }
+        foreach (QPersistentModelIndex index, pindex)
+        {
+            if (_project->projectItemModel()->isDir(index))
+                _project->projectItemModel()->rmdir(index);
+            else if (_project->projectItemModel()->isFile(index))
+                _project->projectItemModel()->remove(index);
         }
     }
 }
