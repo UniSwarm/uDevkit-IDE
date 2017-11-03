@@ -32,6 +32,7 @@ void EditorTabWidget::addEditor(Editor *editor)
     setCurrentIndex(count()-1);
     connect(editor, &Editor::filePathChanged, this, &EditorTabWidget::updateTab);
     connect(editor, &Editor::modified, this, &EditorTabWidget::updateTab);
+    connect(editor, &Editor::statusChanged, this, &EditorTabWidget::changeStatus);
     _mapPathEditor.insert(path, editor);
     _project->addOpenedFiles(QSet<QString>()<<path);
 }
@@ -219,6 +220,11 @@ void EditorTabWidget::activeTab(int id)
         currentFileChanged(editor->filePath());
         editor->active();
     }
+}
+
+void EditorTabWidget::changeStatus(QString status)
+{
+    statusChanged(status);
 }
 
 bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)

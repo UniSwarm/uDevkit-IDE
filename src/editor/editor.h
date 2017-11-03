@@ -77,6 +77,7 @@ signals:
     void filePathChanged(QString filePath);
     void modified(bool modified);
     void helpRequest(QString term);
+    void statusChanged(QString status);
 
 public:
     static Editor *createEditor(Type type, Project *project, QWidget *parent = nullptr);

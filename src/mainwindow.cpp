@@ -11,6 +11,7 @@
 #include <QMenuBar>
 #include <QThread>
 #include <QMessageBox>
+#include <QStatusBar>
 
 const int MainWindow::MaxOldProject = 8;
 
@@ -30,9 +31,11 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
     setCentralWidget(_editorTabWidget);
     connect(_editorTabWidget, &EditorTabWidget::editorChange, this, &MainWindow::updateTitle);
     connect(_editorTabWidget, &EditorTabWidget::currentEditorModified, this, &MainWindow::updateTitle);
+    connect(_editorTabWidget, &EditorTabWidget::statusChanged, this, &MainWindow::updateStatus);
 
     createDocks();
     createMenus();
+    setStatusBar(new QStatusBar());
 
     readSettings();
     if (!path.isEmpty())
@@ -247,6 +250,11 @@ void MainWindow::updateTitle(Editor *editor)
     title.append(_project->rootDir().dirName());
     title.append(") rtide");
     setWindowTitle(title);
+}
+
+void MainWindow::updateStatus(QString status)
+{
+    statusBar()->showMessage(status);
 }
 
 bool MainWindow::event(QEvent *event)

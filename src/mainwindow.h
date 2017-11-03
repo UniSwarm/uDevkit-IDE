@@ -50,6 +50,7 @@ protected slots:
     void makeprog();
     void makeclean();
     void updateTitle(Editor *editor=Q_NULLPTR);
+    void updateStatus(QString status);
 
     void openRecentFile();
 

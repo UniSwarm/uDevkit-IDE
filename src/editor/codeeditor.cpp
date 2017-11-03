@@ -25,6 +25,8 @@
 
 #include "edbee/models/chardocument/chartextdocument.h"
 
+#include <edbee/models/textdocumentscopes.h>
+
 bool CodeEditor::initialized = false;
 
 CodeEditor::CodeEditor(Project *project, QWidget *parent)
@@ -59,6 +61,7 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
 
     connect(_editorWidget->textDocument(), &edbee::TextDocument::persistedChanged, this, &CodeEditor::modificationAppend);
+    connect(_editorWidget->controller(), &edbee::TextEditorController::updateStatusTextSignal, this, &CodeEditor::updatePos);
 
     QAction *action;
     action = new QAction(QString("help"), this);
@@ -170,6 +173,27 @@ void CodeEditor::help()
 
         emit helpRequest(word);
     }
+}
+
+void CodeEditor::updatePos()
+{
+    QString status;
+    edbee::TextRange& range = _editorWidget->textSelection()->range(0);
+    int caret = range.caret();
+    int line = _editorWidget->textDocument()->lineFromOffset(caret);
+    int col = _editorWidget->textDocument()->columnFromOffsetAndLine(caret, line) + 1;
+
+    status.append(QString("l: %1 c: %2 ").arg(line).arg(col));
+    if( range.length() > 0 )
+        status.append(QString("sel: %1 ").arg(range.length()));
+
+    QVector<edbee::TextScope*> scopes = _editorWidget->textDocument()->scopes()->scopesAtOffset( caret ) ;
+    for( int i=0,cnt=scopes.size(); i<cnt; ++i ) {
+        edbee::TextScope* scope = scopes[i];
+        status.append( scope->name() );
+        status.append(" ");
+    }
+    emit statusChanged(status);
 }
 
 void CodeEditor::initialiseWidget()

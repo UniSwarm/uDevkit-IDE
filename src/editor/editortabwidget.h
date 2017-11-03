@@ -35,10 +35,12 @@ signals:
     void editorChange(Editor *editor);
     void currentEditorModified(Editor *editor);
     void currentFileChanged(QString filePath);
+    void statusChanged(QString status);
 
 protected slots:
     void updateTab();
     void activeTab(int id);
+    void changeStatus(QString status);
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);
