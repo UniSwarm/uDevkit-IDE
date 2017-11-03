@@ -55,6 +55,7 @@ void MainWindow::createDocks()
     setTabPosition(Qt::LeftDockWidgetArea, QTabWidget::North);
 
     _fileProjectDock = new QDockWidget(tr("project"), this);
+    _fileProjectDock->setObjectName("fileProjectDock");
     QWidget *fileProjectContent = new QWidget(_fileProjectDock);
     QLayout *fileProjectLayout = new QVBoxLayout();
     _fileProjectWidget = new ProjectWidget(_project);
@@ -67,6 +68,7 @@ void MainWindow::createDocks()
     addDockWidget(Qt::LeftDockWidgetArea, _fileProjectDock);
 
     _logDock = new QDockWidget(tr("log"), this);
+    _logDock->setObjectName("logDock");
     QWidget *logContent = new QWidget(_logDock);
     QLayout *logLayout = new QVBoxLayout();
     _logWidget = new LogWidget(_project);
@@ -78,6 +80,7 @@ void MainWindow::createDocks()
     addDockWidget(Qt::BottomDockWidgetArea, _logDock);
 
     _searchReplaceDock = new QDockWidget(tr("search / replace"), this);
+    _searchReplaceDock->setObjectName("searchReplaceDock");
     QWidget *searchReplaceContent = new QWidget(_searchReplaceDock);
     QLayout *searchReplaceLayout = new QVBoxLayout();
     _searchReplaceWidget = new SearchReplaceWidget();
@@ -285,9 +288,8 @@ void MainWindow::writeSettings()
 
     // MainWindow position/size/maximized
     settings.beginGroup("MainWindow");
-    settings.setValue("size", normalGeometry().size());
-    settings.setValue("pos", normalGeometry().topLeft());
-    settings.setValue("maximized", isMaximized());
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
     settings.endGroup();
 
     // old projects write
@@ -307,10 +309,8 @@ void MainWindow::readSettings()
 
     // MainWindow position/size/maximized
     settings.beginGroup("MainWindow");
-    resize(settings.value("size", QSize(800, 600)).toSize());
-    move(settings.value("pos", QPoint(200, 200)).toPoint());
-    if (settings.value("maximized", true).toBool())
-        showMaximized();
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("windowState").toByteArray());
     settings.endGroup();
 
     // old projects read
