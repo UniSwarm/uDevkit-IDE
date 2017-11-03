@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSet>
+#include <QMap>
 
 #include "fileversionchange.h"
 
