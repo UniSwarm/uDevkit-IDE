@@ -1,7 +1,9 @@
 #ifndef CODEEDITOR_H
 #define CODEEDITOR_H
 
-#include "editor.h"
+#include "editor/editor.h"
+
+#include "codeeditormargindelegate.h"
 
 namespace edbee {
     class TextEditorWidget;
@@ -40,10 +42,12 @@ protected slots:
     void modificationAppend();
     void help();
     void updatePos();
+    void updateModifications(const QString &filePath);
 
 private:
     static bool initialized;
     QVariant _searchTerm;
+    CodeEditorMarginDelegate *_codeEditorMarginDelegate;
 };
 
 #endif // CODEEDITOR_H

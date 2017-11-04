@@ -68,6 +68,9 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     action->setShortcut(QKeySequence("F1"));
     addAction(action);
     connect(action, &QAction::triggered, this, &CodeEditor::help);
+
+    _codeEditorMarginDelegate = new CodeEditorMarginDelegate();
+    _editorWidget->textMarginComponent()->giveDelegate(_codeEditorMarginDelegate);
 }
 
 bool CodeEditor::isModified() const
@@ -124,6 +127,8 @@ int CodeEditor::openFileData(const QString &filePath)
     _editorWidget->textDocument()->setPersisted(true);
 
     setFilePath(filePath);
+    _project->versionControl()->requestFileModifications(filePath);
+    connect(_project->versionControl(), &AbstractVersionControl::fileModificationsAvailable, this, &CodeEditor::updateModifications);
     emit modified(false);
 
     // TODO replace this section with .editorconfig
@@ -188,12 +193,21 @@ void CodeEditor::updatePos()
         status.append(QString("sel: %1 ").arg(range.length()));
 
     QVector<edbee::TextScope*> scopes = _editorWidget->textDocument()->scopes()->scopesAtOffset( caret ) ;
-    for( int i=0,cnt=scopes.size(); i<cnt; ++i ) {
+    for(int i=0,cnt=scopes.size(); i<cnt; ++i)
+    {
         edbee::TextScope* scope = scopes[i];
-        status.append( scope->name() );
+        status.append(scope->name());
         status.append(" ");
     }
     emit statusChanged(status);
+}
+
+void CodeEditor::updateModifications(const QString &filePath)
+{
+    if (filePath == _filePath)
+    {
+        _codeEditorMarginDelegate->setFileChange(_project->versionControl()->fileModifications(_filePath));
+    }
 }
 
 void CodeEditor::initialiseWidget()

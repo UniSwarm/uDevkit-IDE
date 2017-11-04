@@ -11,6 +11,7 @@ public:
     FileVersionChange();
 
     QList<VersionChange> &changes();
+    QList<VersionChange> changesForRange(int lineStart, int lineEnd) const;
 
 protected:
     QList<VersionChange> _changes;

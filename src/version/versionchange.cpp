@@ -44,3 +44,20 @@ void VersionChange::addRemovedLine(const QString &line)
 {
     _removedLines.append(line);
 }
+
+void VersionChange::clear()
+{
+    _lineOld = -1;
+    _lineNew = -1;
+    _addedLines.clear();
+    _removedLines.clear();
+}
+
+bool VersionChange::isValid() const
+{
+    if (_lineOld == -1 || _lineNew == -1)
+        return false;
+    if (_addedLines.isEmpty() && _removedLines.isEmpty())
+        return false;
+    return true;
+}

@@ -35,10 +35,11 @@ SOURCES += \
     mainwindow.cpp \
     editor/editor.cpp \
     editor/editortabwidget.cpp \
-    editor/codeeditor.cpp \
+    editor/codeeditor/codeeditormargindelegate.cpp \
+    editor/codeeditor/codeeditor.cpp \
+    editor/codeeditor/htmleditor.cpp \
     editor/hexeditor.cpp \
     editor/imageeditor.cpp \
-    editor/htmleditor.cpp \
     version/abstractversioncontrol.cpp \
     version/gitversioncontrol.cpp \
     ui/searchreplacewidget.cpp \
@@ -61,10 +62,11 @@ HEADERS += \
     editor/editor.h \
     editor/editors.h \
     editor/editortabwidget.h \
-    editor/codeeditor.h \
+    editor/codeeditor/codeeditormargindelegate.h \
+    editor/codeeditor/codeeditor.h \
+    editor/codeeditor/htmleditor.h \
     editor/hexeditor.h \
     editor/imageeditor.h \
-    editor/htmleditor.h \
     ui/searchreplacewidget.h \
     make/makeparser.h \
     project/fileprojectinfo.h \

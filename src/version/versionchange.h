@@ -20,6 +20,9 @@ public:
     const QStringList &removedLines() const;
     void addRemovedLine(const QString &line);
 
+    void clear();
+    bool isValid() const;
+
 protected:
     int _lineOld;
     int _lineNew;

@@ -170,8 +170,11 @@ void GitVersionControl::processDiffEnd()
         QString line = stream.readLine();
         if (line.startsWith("@@")) // new modif
         {
-            if (valid)
+            if (valid && change.isValid())
+            {
                 fileChanges.changes().append(change);
+                change.clear();
+            }
 
             regContext.indexIn(line);
             int lineOld = regContext.cap(1).toInt();
@@ -185,8 +188,10 @@ void GitVersionControl::processDiffEnd()
         if (line.startsWith('+'))
             change.addAddedLine(line.mid(1));
         else if (line.startsWith('-'))
-            change.addAddedLine(line.mid(1));
+            change.addRemovedLine(line.mid(1));
     }
+    if (valid && change.isValid())
+        fileChanges.changes().append(change);
     _changeForFile[_fileGitDiff] = fileChanges;
     emit fileModificationsAvailable(_fileGitDiff);
 }

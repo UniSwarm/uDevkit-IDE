@@ -1,9 +1,9 @@
 #ifndef EDITORS_H
 #define EDITORS_H
 
-#include "codeeditor.h"
-#include "hexeditor.h"
+#include "codeeditor/codeeditor.h"
+#include "codeeditor/htmleditor.h"
 #include "imageeditor.h"
-#include "htmleditor.h"
+#include "hexeditor.h"
 
 #endif // EDITORS_H
