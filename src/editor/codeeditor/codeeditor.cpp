@@ -186,8 +186,8 @@ void CodeEditor::updatePos()
     QString status;
     edbee::TextRange& range = _editorWidget->textSelection()->range(0);
     int caret = range.caret();
-    int line = _editorWidget->textDocument()->lineFromOffset(caret);
-    int col = _editorWidget->textDocument()->columnFromOffsetAndLine(caret, line) + 1;
+    int line = _editorWidget->textDocument()->lineFromOffset(caret) + 1;
+    int col = _editorWidget->textDocument()->columnFromOffsetAndLine(caret, line);
 
     status.append(QString("l: %1 c: %2 ").arg(line).arg(col));
     if( range.length() > 0 )
