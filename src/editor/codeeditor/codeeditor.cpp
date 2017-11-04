@@ -127,7 +127,7 @@ int CodeEditor::openFileData(const QString &filePath)
     _editorWidget->textDocument()->setPersisted(true);
 
     setFilePath(filePath);
-    _project->versionControl()->requestFileModifications(filePath);
+    _project->versionControl()->requestFileModifications(_filePath);
     connect(_project->versionControl(), &AbstractVersionControl::fileModificationsAvailable, this, &CodeEditor::updateModifications);
     emit modified(false);
 
@@ -156,6 +156,7 @@ int CodeEditor::saveFileData(const QString &filePath)
 
     _editorWidget->textDocument()->setPersisted(true);
     emit modified(false);
+    _project->versionControl()->requestFileModifications(_filePath);
 
     return 0;
 }
@@ -207,6 +208,7 @@ void CodeEditor::updateModifications(const QString &filePath)
     if (filePath == _filePath)
     {
         _codeEditorMarginDelegate->setFileChange(_project->versionControl()->fileModifications(_filePath));
+        _editorWidget->textMarginComponent()->update();
     }
 }
 
