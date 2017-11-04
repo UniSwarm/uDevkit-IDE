@@ -192,6 +192,7 @@ void Editor::setFilePath(const QString &filePath)
         _filePath = QFileInfo(filePath).absoluteFilePath();
         emit filePathChanged(_filePath);
         _reloadWatcher->addPath(_filePath);
+        _project->versionControl()->requestFileModifications(_filePath);
     }
 }
 
