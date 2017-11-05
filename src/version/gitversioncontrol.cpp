@@ -85,9 +85,9 @@ bool GitVersionControl::isValid() const
 
 void GitVersionControl::requestFileModifications(const QString &filePath)
 {
-    QDir dir(_basePath);
-    _fileGitDiff = filePath;
-    _processGitDiff->start("git", QStringList()<<"diff"<<"--no-color"<<"--unified=0"<<dir.relativeFilePath(filePath));
+    _diffRequestQueue.enqueue(filePath);
+    if (_processGitDiff->state() == QProcess::NotRunning)
+        reqFileModif(_diffRequestQueue.head());
 }
 
 void GitVersionControl::reqFetch()
@@ -157,6 +157,12 @@ void GitVersionControl::processEnd()
         emit newValidatedFiles(validedFile);
 }
 
+void GitVersionControl::reqFileModif(const QString &filePath)
+{
+    QDir dir(_basePath);
+    _processGitDiff->start("git", QStringList()<<"diff"<<"--no-color"<<"--unified=0"<<dir.relativeFilePath(filePath));
+}
+
 void GitVersionControl::processDiffEnd()
 {
     QTextStream stream(_processGitDiff);
@@ -192,8 +198,13 @@ void GitVersionControl::processDiffEnd()
     }
     if (valid && change.isValid())
         fileChanges.changes().append(change);
-    _changeForFile[_fileGitDiff] = fileChanges;
-    emit fileModificationsAvailable(_fileGitDiff);
+
+    QString fileGitDiff = _diffRequestQueue.dequeue();
+    _changeForFile[fileGitDiff] = fileChanges;
+    emit fileModificationsAvailable(fileGitDiff);
+
+    if (!_diffRequestQueue.isEmpty())
+        reqFileModif(_diffRequestQueue.head());
 }
 
 void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &outgoingFiles, QSet<QString> &incomingFiles)

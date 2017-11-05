@@ -4,6 +4,7 @@
 #include "abstractversioncontrol.h"
 
 #include <QFileSystemWatcher>
+#include <QQueue>
 
 class QProcess;
 
@@ -33,6 +34,7 @@ protected slots:
     void indexCheck();
     void processEnd();
 
+    void reqFileModif(const QString &filePath);
     void processDiffEnd();
 
 protected:
@@ -59,7 +61,7 @@ protected:
     QString _basePath;
 
     QProcess *_processGitDiff;
-    QString _fileGitDiff;
+    QQueue<QString> _diffRequestQueue;
 };
 
 #endif // GITVERSIONCONTROL_H
