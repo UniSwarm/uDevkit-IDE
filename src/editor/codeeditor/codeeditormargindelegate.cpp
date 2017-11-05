@@ -58,12 +58,18 @@ void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int
             int l = end;
             if (change.addedLines().count() > change.removedLines().count())
             {
-                l = marginComponent()->renderer()->yPosForLine(change.lineNew() + change.addedLines().count() - change.removedLines().count());
+                if (!change.removedLines().isEmpty())
+                    l = marginComponent()->renderer()->yPosForLine(change.lineNew() + change.addedLines().count() - change.removedLines().count());
+                else
+                    l = start;
                 painter->setPen(QPen(Qt::green, 2));
                 painter->drawLine(width-6, l+1, width-6, end-1);
             }
-            painter->setPen(QPen(Qt::blue, 2));
-            painter->drawLine(width-6, start+1, width-6, l-1);
+            if (l != start)
+            {
+                painter->setPen(QPen(Qt::blue, 2));
+                painter->drawLine(width-6, start+1, width-6, l-1);
+            }
         }
     }
 }
