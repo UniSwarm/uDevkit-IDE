@@ -20,6 +20,7 @@
 #include "edbee/util/lineending.h"
 #include "edbee/models/textsearcher.h"
 #include "edbee/models/textrange.h"
+#include "edbee/views/texttheme.h"
 #include "edbee/views/textselection.h"
 #include "edbee/views/components/texteditorcomponent.h"
 
@@ -38,9 +39,9 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
         edbee::Edbee* tm = edbee::Edbee::instance();
 
         // configure your paths
-        tm->setKeyMapPath( QApplication::applicationDirPath()+"/../contrib/edbee-data/keymaps/");
-        tm->setGrammarPath(  QApplication::applicationDirPath()+"/../contrib/edbee-data/syntaxfiles/" );
-        tm->setThemePath( QApplication::applicationDirPath()+"/../contrib/edbee-data/themes/" );
+        tm->setKeyMapPath(QApplication::applicationDirPath()+"/../contrib/edbee-data/keymaps/");
+        tm->setGrammarPath(QApplication::applicationDirPath()+"/../contrib/edbee-data/syntaxfiles/");
+        tm->setThemePath(QApplication::applicationDirPath()+"/../data/themes/");
 
         // initialize the library
         tm->init();
@@ -56,7 +57,6 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     font.setPixelSize(13);
     _editorWidget->config()->setFont(font);
     _editorWidget->config()->setThemeName("RtIDE");
-    //_editorWidget->config()->setThemeName("Monokai");
     //_editorWidget->config()->setShowWhitespaceMode(edbee::TextEditorConfig::ShowWhitespaces);
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
 
