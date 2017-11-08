@@ -23,7 +23,7 @@ before_build:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\build
-  - %make%
+  - nmake.exe
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
