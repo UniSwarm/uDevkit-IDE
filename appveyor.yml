@@ -1,9 +1,7 @@
 version: 0.{build}
 
 environment:
-  matrix:
-    - QTDIR: C:\Qt\5.9.1\mingw53_32
-    - QTDIR: C:\Qt\5.9.1\msvc2015
+  - QTDIR: C:\Qt\5.9.1\msvc2015
 
 clone_folder: c:\dev\rtide
 clone_depth: 5
@@ -15,14 +13,8 @@ install:
   - git submodule update --init --recursive
   - '%QTDIR%\bin\qtenv2.bat'
   - qmake -v
-  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
-  - if %QTDIR:msvc=%==%QTDIR% g++ --version
-  - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
-  - if %QTDIR:msvc=%==%QTDIR% %make% --version
-  - if not %QTDIR:msvc2013=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %ARCH%
-  - if not %QTDIR:msvc2015=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%
-  - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
-  - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
+  - call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%
+  - set make=nmake.exe
 
 before_build:
   - mkdir %APPVEYOR_BUILD_FOLDER%\build
@@ -31,7 +23,19 @@ before_build:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\build
-  - if %QTDIR:msvc=%==%QTDIR% %make% -j2
-  - if not %QTDIR:msvc=%==%QTDIR% %make%
+  - %make%
+
+after_build:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - 7z a rtide-win64-v0-nodll.zip "%APPVEYOR_BUILD_FOLDER%\*" -xr!build -xr!.git
+  - %QTDIR%\bin\windeployqt.exe %APPVEYOR_BUILD_FOLDER%\bin
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - 7z a rtide-win64-v0.zip "%APPVEYOR_BUILD_FOLDER%\*" -xr!build -xr!.git
+
+artifacts:
+  - path: rtide-win64-v0-nodll.zip
+    name: rtide-nodll
+  - path: rtide-win64-v0.zip
+    name: rtide
 
 test: off
