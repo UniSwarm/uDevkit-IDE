@@ -29,7 +29,7 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - 7z a rtide-win64-v0-nodll.zip "%APPVEYOR_BUILD_FOLDER%\*" -xr!build -xr!.git
   - windeployqt.exe "%APPVEYOR_BUILD_FOLDER%\bin"
-  - cd '%APPVEYOR_BUILD_FOLDER%'
+  - cd %APPVEYOR_BUILD_FOLDER%
   - 7z a rtide-win64-v0.zip "%APPVEYOR_BUILD_FOLDER%\*" -xr!build -xr!.git
 
 artifacts:
