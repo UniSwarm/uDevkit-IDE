@@ -29,9 +29,9 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - cp -r contrib\edbee-data\keymaps data\
   - cp -r contrib\edbee-data\syntaxfiles data\
-  - 7z a rtide-win64-v0-nodll.zip "%APPVEYOR_BUILD_FOLDER%\*" -xr!build -xr!.git -xr!src -xr!contrib
+  - 7z a rtide-win64-v0-nodll.zip "%APPVEYOR_BUILD_FOLDER%\..\*" -xr!build -xr!.git -xr!src -xr!contrib
   - windeployqt.exe "%APPVEYOR_BUILD_FOLDER%\bin"
-  - 7z a rtide-win64-v0.zip "%APPVEYOR_BUILD_FOLDER%\*" -xr!build -xr!.git -xr!src -xr!contrib -xr!rtide*.zip
+  - 7z a rtide-win64-v0.zip "%APPVEYOR_BUILD_FOLDER%\..\*" -xr!build -xr!.git -xr!src -xr!contrib -xr!rtide*.zip
 
 artifacts:
   - path: rtide-win64-v0-nodll.zip
