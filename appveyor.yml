@@ -1,7 +1,7 @@
 version: 0.{build}
 
 environment:
-  - QTDIR: C:\Qt\5.9.1\msvc2015
+  QTDIR: C:\Qt\5.9.1\msvc2015
 
 clone_folder: c:\dev\rtide
 clone_depth: 5
@@ -23,13 +23,13 @@ before_build:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\build
-  - nmake.exe
+  - '%make%'
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - 7z a rtide-win64-v0-nodll.zip "%APPVEYOR_BUILD_FOLDER%\*" -xr!build -xr!.git
-  - %QTDIR%\bin\windeployqt.exe %APPVEYOR_BUILD_FOLDER%\bin
-  - cd %APPVEYOR_BUILD_FOLDER%
+  - windeployqt.exe "%APPVEYOR_BUILD_FOLDER%\bin"
+  - cd '%APPVEYOR_BUILD_FOLDER%'
   - 7z a rtide-win64-v0.zip "%APPVEYOR_BUILD_FOLDER%\*" -xr!build -xr!.git
 
 artifacts:
