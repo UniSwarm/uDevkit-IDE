@@ -6,6 +6,7 @@
 #include <QMenu>
 
 #include "edbee/views/textrenderer.h"
+#include "edbee/views/texttheme.h"
 
 CodeEditorMarginDelegate::CodeEditorMarginDelegate()
     : edbee::TextMarginComponentDelegate()
@@ -28,11 +29,14 @@ void CodeEditorMarginDelegate::setFileChange(const FileVersionChange &fileChange
 
 int CodeEditorMarginDelegate::widthBeforeLineNumber()
 {
-    return 5;
+    return 10;
 }
 
 void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int endLine, int width)
 {
+    QLinearGradient linearGrad(QPointF(0, 0), QPointF(10, 0));
+    linearGrad.setColorAt(1, marginComponent()->renderer()->theme()->backgroundColor());
+
     QList<VersionChange> changesForRange = _fileChange.changesForRange(startLine, endLine);
     foreach (const VersionChange &change, changesForRange)
     {
@@ -47,11 +51,13 @@ void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int
             }
             else
             {
-                painter->setPen(QPen(Qt::green, 2));
-                painter->drawLine(width-6, start+1, width-6, end-1);
+                linearGrad.setFinalStop(QPointF(14, 0));
+                linearGrad.setColorAt(0, Qt::green);
+                painter->fillRect(QRect(0, start, 14, end-start), QBrush(linearGrad));
             }
-            painter->setPen(QPen(Qt::red, 2));
-            painter->drawLine(6, l+1, width-6, l+1);
+            linearGrad.setFinalStop(QPointF(width-8, 0));
+            linearGrad.setColorAt(0, Qt::red);
+            painter->fillRect(QRect(0, l, width-8, 2), QBrush(linearGrad));
         }
         else
         {
@@ -62,13 +68,15 @@ void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int
                     l = marginComponent()->renderer()->yPosForLine(change.lineNew() + change.addedLines().count() - change.removedLines().count());
                 else
                     l = start;
-                painter->setPen(QPen(Qt::green, 2));
-                painter->drawLine(width-6, l+1, width-6, end-1);
+                linearGrad.setFinalStop(QPointF(14, 0));
+                linearGrad.setColorAt(0, Qt::green);
+                painter->fillRect(QRect(0, l, 14, end-l), QBrush(linearGrad));
             }
             if (l != start)
             {
-                painter->setPen(QPen(Qt::blue, 2));
-                painter->drawLine(width-6, start+1, width-6, l-1);
+                linearGrad.setFinalStop(QPointF(14, 0));
+                linearGrad.setColorAt(0, Qt::blue);
+                painter->fillRect(QRect(0, start, 14, l-start), QBrush(linearGrad));
             }
         }
     }
