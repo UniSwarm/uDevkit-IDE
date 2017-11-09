@@ -4,6 +4,7 @@
 #include "editor/editor.h"
 
 #include "codeeditormargindelegate.h"
+#include "codeeditorscrollbar.h"
 
 namespace edbee {
     class TextEditorWidget;
@@ -48,6 +49,7 @@ private:
     static bool initialized;
     QVariant _searchTerm;
     CodeEditorMarginDelegate *_codeEditorMarginDelegate;
+    CodeEditorScrollBar *_codeEditorScrollBar;
 };
 
 #endif // CODEEDITOR_H

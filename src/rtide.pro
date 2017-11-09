@@ -4,9 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui widgets
 
 TARGET = rtide
 TEMPLATE = app
@@ -35,8 +33,9 @@ SOURCES += \
     mainwindow.cpp \
     editor/editor.cpp \
     editor/editortabwidget.cpp \
-    editor/codeeditor/codeeditormargindelegate.cpp \
     editor/codeeditor/codeeditor.cpp \
+    editor/codeeditor/codeeditorscrollbar.cpp \
+    editor/codeeditor/codeeditormargindelegate.cpp \
     editor/codeeditor/htmleditor.cpp \
     editor/hexeditor.cpp \
     editor/imageeditor.cpp \
@@ -62,8 +61,9 @@ HEADERS += \
     editor/editor.h \
     editor/editors.h \
     editor/editortabwidget.h \
-    editor/codeeditor/codeeditormargindelegate.h \
     editor/codeeditor/codeeditor.h \
+    editor/codeeditor/codeeditorscrollbar.h \
+    editor/codeeditor/codeeditormargindelegate.h \
     editor/codeeditor/htmleditor.h \
     editor/hexeditor.h \
     editor/imageeditor.h \

@@ -22,6 +22,7 @@
 #include "edbee/models/textrange.h"
 #include "edbee/views/texttheme.h"
 #include "edbee/views/textselection.h"
+#include "edbee/views/texteditorscrollarea.h"
 #include "edbee/views/components/texteditorcomponent.h"
 
 #include "edbee/models/chardocument/chartextdocument.h"
@@ -67,6 +68,12 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     _editorWidget->config()->setThemeName("RtIDE");
     //_editorWidget->config()->setShowWhitespaceMode(edbee::TextEditorConfig::ShowWhitespaces);
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
+
+    _codeEditorScrollBar = new CodeEditorScrollBar();
+    _codeEditorScrollBar->setTextRender(_editorWidget->textRenderer());
+    _editorWidget->setVerticalScrollBar(_codeEditorScrollBar);
+    _editorWidget->textMarginComponent()->init();
+    _editorWidget->textScrollArea()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     connect(_editorWidget->textDocument(), &edbee::TextDocument::persistedChanged, this, &CodeEditor::modificationAppend);
     connect(_editorWidget->controller(), &edbee::TextEditorController::updateStatusTextSignal, this, &CodeEditor::updatePos);
@@ -215,8 +222,10 @@ void CodeEditor::updateModifications(const QString &filePath)
 {
     if (filePath == _filePath)
     {
-        _codeEditorMarginDelegate->setFileChange(_project->versionControl()->fileModifications(_filePath));
+        FileVersionChange fileModifications = _project->versionControl()->fileModifications(_filePath);
+        _codeEditorMarginDelegate->setFileChange(fileModifications);
         _editorWidget->textMarginComponent()->update();
+        _codeEditorScrollBar->setFileChange(fileModifications);
     }
 }
 
