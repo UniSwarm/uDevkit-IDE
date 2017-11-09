@@ -45,9 +45,9 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
             tm->setKeyMapPath(QApplication::applicationDirPath()+"/../data/keymaps/");
 
         if (QFile::exists(QApplication::applicationDirPath()+"/../contrib/edbee-data/syntaxfiles/"))
-            tm->setKeyMapPath(QApplication::applicationDirPath()+"/../contrib/edbee-data/syntaxfiles/");
+            tm->setGrammarPath(QApplication::applicationDirPath()+"/../contrib/edbee-data/syntaxfiles/");
         else
-            tm->setKeyMapPath(QApplication::applicationDirPath()+"/../data/syntaxfiles/");
+            tm->setGrammarPath(QApplication::applicationDirPath()+"/../data/syntaxfiles/");
 
         tm->setThemePath(QApplication::applicationDirPath()+"/../data/themes/");
 
