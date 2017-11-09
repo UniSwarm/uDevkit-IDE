@@ -16,7 +16,7 @@ QList<VersionChange> FileVersionChange::changesForRange(int lineStart, int lineE
     QList<VersionChange> changes;
     foreach (const VersionChange &change, _changes)
     {
-        if (change.lineNew() <= lineEnd && (change.lineNew() + change.addedLines().count()) > lineStart)
+        if (change.lineNew() <= lineEnd + 1 && (change.lineNew() + change.addedLines().count()) > lineStart)
             changes.append(change);
     }
     return changes;
