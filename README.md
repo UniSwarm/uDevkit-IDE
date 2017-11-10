@@ -13,13 +13,23 @@ Still in development.
 ## Features
 
 * files project viewer with git integration
-* code highlighting (based on [edbee](https://github.com/edbee/edbee-lib))
+* code editor with highlighting and git integration (based on [edbee](https://github.com/edbee/edbee-lib))
 * hexadecimal editor (based on [qhexedit2](https://github.com/Simsys/qhexedit2))
 * dark theme to preserve developer eyes :wink: (based on [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet))
 * Makefile parser to extract external sources and rules
 * compile log with link to file
 * image viewer
 * HTML live preview
+
+## dependencies
+### Qt > 5.2
+
+Qt module used :
+
+- core
+- gui
+- widgets
+- webenginewidgets (Qt > 5.6) or webkitwidgets (Qt < 5.6) or a lite support for web
 
 ## Build
 
@@ -31,3 +41,13 @@ make -j
 ```
 
 Binaries will be placed in `bin/` directory.
+
+## Binaries downloads
+
+For convenience, a pre-built version is available at :
+
+https://ci.appveyor.com/api/projects/sebcaux/rtide-ad76d/artifacts/rtide-win64-v0.zip
+
+Without Qt DLL (very lite) :
+
+https://ci.appveyor.com/api/projects/sebcaux/rtide-ad76d/artifacts/rtide-win64-v0-nodll.zip
