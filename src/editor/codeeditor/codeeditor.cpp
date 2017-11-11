@@ -201,19 +201,20 @@ void CodeEditor::updatePos()
     QString status;
     edbee::TextRange& range = _editorWidget->textSelection()->range(0);
     int caret = range.caret();
-    int line = _editorWidget->textDocument()->lineFromOffset(caret) + 1;
-    int col = _editorWidget->textDocument()->columnFromOffsetAndLine(caret, line);
+    int line = _editorWidget->textDocument()->lineFromOffset(caret);
+    int col = _editorWidget->textDocument()->columnFromOffsetAndLine(caret, line) + 1;
 
-    status.append(QString("l: %1 c: %2 ").arg(line).arg(col));
+    status.append(QString("l: %1 c: %2 ").arg(line+1).arg(col));
     if( range.length() > 0 )
         status.append(QString("sel: %1 ").arg(range.length()));
 
     QVector<edbee::TextScope*> scopes = _editorWidget->textDocument()->scopes()->scopesAtOffset( caret ) ;
     for(int i=0,cnt=scopes.size(); i<cnt; ++i)
     {
+        if (i != 0)
+            status.append(" > ");
         edbee::TextScope* scope = scopes[i];
         status.append(scope->name());
-        status.append(" ");
     }
     emit statusChanged(status);
 }
@@ -247,6 +248,7 @@ void CodeEditor::initialiseWidget()
         setLayout(layout);
         repaint();
     }
+    updatePos();
 }
 
 void CodeEditor::giveFocus()
