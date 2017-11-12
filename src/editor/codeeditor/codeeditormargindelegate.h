@@ -11,8 +11,8 @@ public:
     CodeEditorMarginDelegate();
     virtual ~CodeEditorMarginDelegate();
 
-    const FileVersionChange &fileChange() const;
-    void setFileChange(const FileVersionChange &fileChange);
+    FileVersionChange *fileChange() const;
+    void setFileChange(FileVersionChange *fileChange);
 
     // TextMarginComponentDelegate interface
 public:
@@ -20,7 +20,7 @@ public:
     virtual void renderAfter(QPainter *painter, int startLine, int endLine, int width);
 
 protected:
-    FileVersionChange _fileChange;
+    FileVersionChange *_fileChange;
 
     // TextMarginComponentDelegate interface
 public:

@@ -25,6 +25,11 @@ void VersionChange::setLineNew(int line)
     _lineNew = line;
 }
 
+QStringList &VersionChange::addedLines()
+{
+    return _addedLines;
+}
+
 const QStringList &VersionChange::addedLines() const
 {
     return _addedLines;
@@ -33,6 +38,11 @@ const QStringList &VersionChange::addedLines() const
 void VersionChange::addAddedLine(const QString &line)
 {
     _addedLines.append(line);
+}
+
+QStringList &VersionChange::removedLines()
+{
+    return _removedLines;
 }
 
 const QStringList &VersionChange::removedLines() const

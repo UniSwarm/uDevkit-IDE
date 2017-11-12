@@ -111,6 +111,8 @@ int CodeEditor::openFileData(const QString &filePath)
     if (!file.open(QIODevice::ReadOnly))
         return -1;
 
+    disconnect(_editorWidget->textDocument(), &edbee::TextDocument::textAboutToBeChanged, this, &CodeEditor::insertedText);
+
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if (_editorWidget->textDocument()->length()>1)
     {
@@ -144,6 +146,7 @@ int CodeEditor::openFileData(const QString &filePath)
     setFilePath(filePath);
     _project->versionControl()->requestFileModifications(_filePath);
     connect(_project->versionControl(), &AbstractVersionControl::fileModificationsAvailable, this, &CodeEditor::updateModifications);
+    connect(_editorWidget->textDocument(), &edbee::TextDocument::textAboutToBeChanged, this, &CodeEditor::insertedText);
     emit modified(false);
 
     // TODO replace this section with .editorconfig
@@ -223,11 +226,57 @@ void CodeEditor::updateModifications(const QString &filePath)
 {
     if (filePath == _filePath)
     {
-        FileVersionChange fileModifications = _project->versionControl()->fileModifications(_filePath);
-        _codeEditorMarginDelegate->setFileChange(fileModifications);
-        _editorWidget->textMarginComponent()->update();
-        _codeEditorScrollBar->setFileChange(fileModifications);
+        _localFileChange = _project->versionControl()->fileModifications(_filePath);
+        notifyModificationChanged();
     }
+}
+
+void CodeEditor::notifyModificationChanged()
+{
+    _codeEditorMarginDelegate->setFileChange(&_localFileChange);
+    _editorWidget->textMarginComponent()->update();
+    _codeEditorScrollBar->setFileChange(&_localFileChange);
+}
+
+void CodeEditor::insertedText(edbee::TextBufferChange change)
+{
+    int startLine = _editorWidget->textDocument()->lineFromOffset(change.offset());
+    int startCol = _editorWidget->textDocument()->columnFromOffsetAndLine(change.offset(), startLine) + 1;
+    startLine++;
+
+    /*qDebug()<<"insertedchange"<<change.length()<<change.lineCount()<<change.offset()
+            <<change.newTextLength()<<change.newLineCount()
+            <<startLine<<startCol;*/
+
+    QString newData = QString(change.newText(), change.newTextLength());
+
+    VersionChange vchange;
+    vchange.setLineOld(startLine);
+    vchange.setLineNew(startLine);
+    for (int i=startLine; i<startLine+change.lineCount()+1 && i<_editorWidget->textDocument()->lineCount(); i++)
+        vchange.addRemovedLine(_editorWidget->textDocument()->lineWithoutNewline(i-1));
+
+    // added lines
+    QStringList linesAdded = newData.split(QRegExp("\n|\r\n|\r"));
+    int endCol = _editorWidget->textDocument()->columnFromOffsetAndLine(change.offset()+change.length(), startLine-1+change.lineCount());
+    QString newLine = vchange.removedLines().first().mid(0, startCol-1);
+    newLine.append(linesAdded.first());
+    if (change.newLineCount() > 0)
+    {
+        vchange.addAddedLine(newLine);
+        for (int i=1; i<linesAdded.count()-1; i++)
+            vchange.addAddedLine(linesAdded.at(i));
+        newLine = linesAdded.last();
+    }
+    newLine.append(vchange.removedLines().last().mid(endCol));
+    vchange.addAddedLine(newLine);
+
+    //qDebug()<<vchange.removedLines().count()<<vchange.addedLines().count();
+    //qDebug()<<vchange.removedLines()<<vchange.addedLines();
+
+    _localFileChange.insertChange(vchange);
+
+    notifyModificationChanged();
 }
 
 void CodeEditor::initialiseWidget()

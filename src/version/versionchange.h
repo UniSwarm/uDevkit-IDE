@@ -14,9 +14,11 @@ public:
     int lineNew() const;
     void setLineNew(int line);
 
+    QStringList &addedLines();
     const QStringList &addedLines() const;
     void addAddedLine(const QString &line);
 
+    QStringList &removedLines();
     const QStringList &removedLines() const;
     void addRemovedLine(const QString &line);
 

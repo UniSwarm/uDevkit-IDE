@@ -8,48 +8,52 @@
 #include "edbee/views/textrenderer.h"
 #include "edbee/views/texttheme.h"
 
+const int widthBar = 10;
+
 CodeEditorMarginDelegate::CodeEditorMarginDelegate()
     : edbee::TextMarginComponentDelegate()
 {
+    _fileChange = Q_NULLPTR;
 }
 
 CodeEditorMarginDelegate::~CodeEditorMarginDelegate()
 {
 }
 
-const FileVersionChange &CodeEditorMarginDelegate::fileChange() const
+FileVersionChange *CodeEditorMarginDelegate::fileChange() const
 {
     return _fileChange;
 }
 
-void CodeEditorMarginDelegate::setFileChange(const FileVersionChange &fileChange)
+void CodeEditorMarginDelegate::setFileChange(FileVersionChange *fileChange)
 {
     _fileChange = fileChange;
 }
 
 int CodeEditorMarginDelegate::widthBeforeLineNumber()
 {
-    return 10;
+    return widthBar;
 }
 
 void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int endLine, int width)
 {
-    const int widthBar = 10;
+    if (!_fileChange)
+        return;
 
     QLinearGradient linearGrad(QPointF(0, 0), QPointF(widthBar, 0));
     linearGrad.setColorAt(1, QColor(0, 0, 0, 0));
 
-    QList<VersionChange> changesForRange = _fileChange.changesForRange(startLine, endLine);
-    foreach (const VersionChange &change, changesForRange)
+    QList<VersionChange *> changesForRange = _fileChange->changesForRange(startLine+1, endLine+1);
+    foreach (VersionChange *change, changesForRange)
     {
-        int start = marginComponent()->renderer()->yPosForLine(change.lineNew()-1);
-        int end = marginComponent()->renderer()->yPosForLine(change.lineNew()-1 + change.addedLines().count());
-        if (change.addedLines().count() < change.removedLines().count())
+        int start = marginComponent()->renderer()->yPosForLine(change->lineNew()-1);
+        int end = marginComponent()->renderer()->yPosForLine(change->lineNew()-1 + change->addedLines().count());
+        if (change->addedLines().count() < change->removedLines().count())
         {
             int l = start;
-            if (change.addedLines().count() == 0)
+            if (change->addedLines().count() == 0)
             {
-                l = marginComponent()->renderer()->yPosForLine(change.lineNew());
+                l = marginComponent()->renderer()->yPosForLine(change->lineNew());
             }
             else
             {
@@ -64,10 +68,10 @@ void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int
         else
         {
             int l = end;
-            if (change.addedLines().count() > change.removedLines().count())
+            if (change->addedLines().count() > change->removedLines().count())
             {
-                if (!change.removedLines().isEmpty())
-                    l = marginComponent()->renderer()->yPosForLine(change.lineNew() + change.addedLines().count() - change.removedLines().count());
+                if (!change->removedLines().isEmpty())
+                    l = marginComponent()->renderer()->yPosForLine(change->lineNew() + change->addedLines().count() - change->removedLines().count());
                 else
                     l = start;
                 linearGrad.setFinalStop(QPointF(widthBar, 0));
@@ -89,11 +93,13 @@ void CodeEditorMarginDelegate::mousePressEvent(int line, QMouseEvent *event)
     if (event->button() == Qt::RightButton)
     {
         int line = marginComponent()->renderer()->lineIndexForYpos(event->y()) + 1;
-        QList<VersionChange> changesForRange = _fileChange.changesForRange(line, line);
+        QList<VersionChange *> changesForRange = _fileChange->changesForRange(line, line);
         if (!changesForRange.isEmpty())
         {
+            if (changesForRange.at(0)->removedLines().isEmpty())
+                return;
             QMenu menu;
-            foreach (QString line, changesForRange.at(0).removedLines())
+            foreach (QString line, changesForRange.at(0)->removedLines())
                 menu.addAction(line);
             menu.exec(event->screenPos().toPoint());
         }

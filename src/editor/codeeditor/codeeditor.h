@@ -45,11 +45,15 @@ protected slots:
     void updatePos();
     void updateModifications(const QString &filePath);
 
+    void insertedText(edbee::TextBufferChange change);
+
 private:
     static bool initialized;
     QVariant _searchTerm;
     CodeEditorMarginDelegate *_codeEditorMarginDelegate;
     CodeEditorScrollBar *_codeEditorScrollBar;
+    FileVersionChange _localFileChange;
+    void notifyModificationChanged();
 };
 
 #endif // CODEEDITOR_H

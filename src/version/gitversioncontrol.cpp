@@ -170,34 +170,36 @@ void GitVersionControl::processDiffEnd()
 
     QRegExp regContext("@@ -([0-9]+)(,([0-9]+))* \\+([0-9]+)(,([0-9]+))* @@");
     bool valid = false;
-    VersionChange change;
+    VersionChange *change = new VersionChange();
     while (!stream.atEnd())
     {
         QString line = stream.readLine();
         if (line.startsWith("@@")) // new modif
         {
-            if (valid && change.isValid())
+            if (valid && change->isValid())
             {
                 fileChanges.changes().append(change);
-                change.clear();
+                change = new VersionChange();
             }
 
             regContext.indexIn(line);
             int lineOld = regContext.cap(1).toInt();
             int lineNew = regContext.cap(4).toInt();
-            change.setLineOld(lineOld);
-            change.setLineNew(lineNew);
+            change->setLineOld(lineOld);
+            change->setLineNew(lineNew);
             valid = true;
         }
         if (!valid)
             continue;
         if (line.startsWith('+'))
-            change.addAddedLine(line.mid(1));
+            change->addAddedLine(line.mid(1));
         else if (line.startsWith('-'))
-            change.addRemovedLine(line.mid(1));
+            change->addRemovedLine(line.mid(1));
     }
-    if (valid && change.isValid())
+    if (valid && change->isValid())
         fileChanges.changes().append(change);
+    else
+        delete change;
 
     QString fileGitDiff = _diffRequestQueue.dequeue();
     _changeForFile[fileGitDiff] = fileChanges;

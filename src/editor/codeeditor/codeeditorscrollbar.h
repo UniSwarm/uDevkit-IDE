@@ -13,8 +13,8 @@ public:
     explicit CodeEditorScrollBar(QWidget *parent = Q_NULLPTR);
     explicit CodeEditorScrollBar(Qt::Orientation orientation, QWidget *parent = Q_NULLPTR);
 
-    FileVersionChange fileChange() const;
-    void setFileChange(const FileVersionChange &fileChange);
+    FileVersionChange *fileChange() const;
+    void setFileChange(FileVersionChange *fileChange);
 
     edbee::TextRenderer *textRender() const;
     void setTextRender(edbee::TextRenderer *textRender);
@@ -24,7 +24,7 @@ protected:
     virtual void paintEvent(QPaintEvent *event);
 
 protected:
-    FileVersionChange _fileChange;
+    FileVersionChange *_fileChange;
     edbee::TextRenderer *_textRender;
 };
 
