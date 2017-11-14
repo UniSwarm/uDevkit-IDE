@@ -259,7 +259,9 @@ void CodeEditor::insertedText(edbee::TextBufferChange change)
     // added lines
     QStringList linesAdded = newData.split(QRegExp("\n|\r\n|\r"));
     int endCol = _editorWidget->textDocument()->columnFromOffsetAndLine(change.offset()+change.length(), startLine-1+change.lineCount());
-    QString newLine = vchange.removedLines().first().mid(0, startCol-1);
+    QString newLine;
+    if (!vchange.removedLines().isEmpty())
+        newLine = vchange.removedLines().first().mid(0, startCol-1);
     newLine.append(linesAdded.first());
     if (change.newLineCount() > 0)
     {
@@ -268,7 +270,8 @@ void CodeEditor::insertedText(edbee::TextBufferChange change)
             vchange.addAddedLine(linesAdded.at(i));
         newLine = linesAdded.last();
     }
-    newLine.append(vchange.removedLines().last().mid(endCol));
+    if (!vchange.removedLines().isEmpty())
+        newLine.append(vchange.removedLines().last().mid(endCol));
     vchange.addAddedLine(newLine);
 
     //qDebug()<<vchange.removedLines().count()<<vchange.addedLines().count();
