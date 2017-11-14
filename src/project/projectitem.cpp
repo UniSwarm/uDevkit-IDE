@@ -186,13 +186,11 @@ void ProjectItem::updateModif(const QString &path)
     {
         _model->prepareModif();
         QSet<QString> files;
-        QDirIterator it(filePath());
+        QDirIterator it(filePath(), QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
         while (it.hasNext())
         {
             QString mfilePath = it.next();
             QFileInfo info(mfilePath);
-            if (info.fileName() == "." || info.fileName() == "..")
-                continue;
             files.insert(info.fileName());
             if (!_childrensMap.contains(info.fileName()))
             {
