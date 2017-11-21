@@ -126,6 +126,7 @@ void ProjectTreeView::remove()
 
             pindex.append(indexFile);
         }
+        selectionModel()->clearSelection();
         foreach (QPersistentModelIndex index, pindex)
         {
             if (_project->projectItemModel()->isDir(index))
@@ -156,7 +157,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     }
     QAction *fileRenameAction = menu.addAction("Rename");
     fileRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
-    QAction *fileRemoveAction = nullptr, *dirRemoveAction = nullptr, *openDirAction = nullptr;
+    QAction *dirRemoveAction = nullptr, *openDirAction = nullptr;
     if (_project->projectItemModel()->isDir(indexFile))
     {
         dirRemoveAction = menu.addAction("Remove directory");
@@ -166,8 +167,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     }
     else
     {
-        fileRemoveAction = menu.addAction("Remove file");
-        fileRemoveAction->setShortcut(QKeySequence::Delete);
+        menu.addAction(_removeAction);
     }
 
     // git commands

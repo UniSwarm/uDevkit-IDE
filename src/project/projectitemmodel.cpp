@@ -61,17 +61,21 @@ QString ProjectItemModel::fileName(const QModelIndex &index) const
 
 bool ProjectItemModel::rmdir(const QModelIndex &index)
 {
+    emit layoutAboutToBeChanged();
     QString mfileName = filePath(index);
     if (mfileName.isEmpty())
         return false;
+    emit layoutChanged();
     return QDir(mfileName).removeRecursively();
 }
 
 bool ProjectItemModel::remove(const QModelIndex &index)
 {
+    emit layoutAboutToBeChanged();
     QString mfileName = filePath(index);
     if (mfileName.isEmpty())
         return false;
+    emit layoutChanged();
     return QFile(mfileName).remove();
 }
 
