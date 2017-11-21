@@ -42,7 +42,11 @@ void GitVersionControl::validFile(const QSet<QString> &filesPath)
         return;
     QStringList args;
     args << "add";
-    args << filesPath.toList();
+
+    QDir dir(_basePath);
+    foreach (QString filePath, filesPath)
+        args<<dir.relativeFilePath(filePath);
+
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
     connect(newProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
@@ -56,7 +60,11 @@ void GitVersionControl::inValidFile(const QSet<QString> &filesPath)
         return;
     QStringList args;
     args << "reset" << "HEAD";
-    args << filesPath.toList();
+
+    QDir dir(_basePath);
+    foreach (QString filePath, filesPath)
+        args<<dir.relativeFilePath(filePath);
+
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
     connect(newProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
@@ -70,7 +78,11 @@ void GitVersionControl::checkoutFile(const QSet<QString> &filesPath)
         return;
     QStringList args;
     args << "checkout";
-    args << filesPath.toList();
+
+    QDir dir(_basePath);
+    foreach (QString filePath, filesPath)
+        args<<dir.relativeFilePath(filePath);
+
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
     connect(newProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
