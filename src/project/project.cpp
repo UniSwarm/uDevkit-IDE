@@ -46,6 +46,7 @@ void Project::setRootPath(const QString &path)
 
     _make->setPath(rootPath());
     _versionControl->setPath(rootPath());
+    _projectItemModel->clear();
     _projectItemModel->addRealDirItem(rootPath());
     emit rootPathChanged();
 }

@@ -71,6 +71,13 @@ void ProjectItem::removeChild(ProjectItem *child)
     delete child;
 }
 
+void ProjectItem::clear()
+{
+    qDeleteAll(_childrens);
+    _childrens.clear();
+    _childrensMap.clear();
+}
+
 void ProjectItem::addFileItem(const QString &path)
 {
     addChild(new ProjectItem(_info.project(), path, ProjectItem::IndividualFile, _model));

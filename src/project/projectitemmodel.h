@@ -18,6 +18,8 @@ public:
     void addLogicDirItem(const QString &name);
     void addItem(ProjectItem *item);
 
+    void clear();
+
     enum Role {
         FileIconRole = Qt::DecorationRole,
         FilePathRole = Qt::UserRole + 1,

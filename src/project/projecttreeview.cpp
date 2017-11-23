@@ -7,6 +7,8 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QProcess>
+#include <QApplication>
 
 #include "fileprojectinfo.h"
 #include "mainwindow.h"
@@ -207,9 +209,8 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
         edit(index);
     else if (trigered == openDirAction)
     {
-        Project *project = new Project(_project->projectItemModel()->filePath(indexFile));
-        MainWindow *w = new MainWindow(project);
-        w->show();
+        QString path  =_project->projectItemModel()->filePath(indexFile);
+        QProcess::startDetached(qApp->arguments()[0], QStringList()<<path);
     }
     else if (trigered == versionValidAction)
         _project->versionControl()->validFile(QSet<QString>()<<info.filePath());

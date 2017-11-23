@@ -31,6 +31,7 @@ public:
     ProjectItem *parentItem() const;
     void addChild(ProjectItem *child);
     void removeChild(ProjectItem *child);
+    void clear();
     Type type() const;
 
     void addFileItem(const QString &path);
