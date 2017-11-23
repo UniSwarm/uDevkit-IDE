@@ -99,35 +99,35 @@ void MainWindow::createMenus()
     setMenuBar(new QMenuBar(this));
     //addToolBar(new QToolBar(this));
 
-    // ============= Project =============
-    QMenu *projectMenu = menuBar()->addMenu(tr("&Project"));
+    // ============= file =============
+    QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 
     QAction *openDirAction = new QAction(tr("Open &project"), this);
     openDirAction->setStatusTip(tr("Opens a project as directory"));
-    projectMenu->addAction(openDirAction);
+    fileMenu->addAction(openDirAction);
     connect(openDirAction, SIGNAL(triggered()), this, SLOT(openDir()));
 
     QAction *openFilesAction = new QAction(tr("&Open files"), this);
     openFilesAction->setStatusTip(tr("Opens files"));
     openFilesAction->setShortcut(QKeySequence::Open);
-    projectMenu->addAction(openFilesAction);
+    fileMenu->addAction(openFilesAction);
     connect(openFilesAction, SIGNAL(triggered()), this, SLOT(openFiles()));
 
-    projectMenu->addSeparator();
+    fileMenu->addSeparator();
     for (int i=0; i<MaxOldProject; i++)
     {
         QAction *recentAction = new QAction(this);
-        projectMenu->addAction(recentAction);
+        fileMenu->addAction(recentAction);
         recentAction->setVisible(false);
         connect(recentAction, SIGNAL(triggered()), this, SLOT(openRecentFile()));
         _oldProjectsActions.append(recentAction);
     }
 
-    projectMenu->addSeparator();
+    fileMenu->addSeparator();
     QAction *exit = new QAction(tr("E&xit"), this);
     exit->setStatusTip(tr("Exits RtIDE"));
     exit->setShortcut(QKeySequence::Quit);
-    projectMenu->addAction(exit);
+    fileMenu->addAction(exit);
     connect(exit, SIGNAL(triggered()), this, SLOT(close()));
 
     QAction *action;
@@ -135,18 +135,6 @@ void MainWindow::createMenus()
     action->setShortcut(QKeySequence("F4"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::git);
-    action = new QAction(tr("make"), this);
-    action->setShortcut(QKeySequence("Ctrl+R"));
-    addAction(action);
-    connect(action, &QAction::triggered, this, &MainWindow::makeall);
-    action = new QAction(tr("makeprog"), this);
-    action->setShortcut(QKeySequence("Ctrl+T"));
-    addAction(action);
-    connect(action, &QAction::triggered, this, &MainWindow::makeprog);
-    action = new QAction(tr("makeclean"), this);
-    action->setShortcut(QKeySequence("Ctrl+E"));
-    addAction(action);
-    connect(action, &QAction::triggered, this, &MainWindow::makeclean);
 
     action = new QAction(tr("next tab"), this);
     action->setShortcut(QKeySequence::NextChild);
@@ -157,6 +145,24 @@ void MainWindow::createMenus()
     action->setShortcut(QKeySequence::QKeySequence::Find);
     addAction(action);
     connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activate);
+
+    // ============= Project =============
+    QMenu *projectMenu = menuBar()->addMenu(tr("&Project"));
+
+    action = projectMenu->addAction(tr("Clean"));
+    action->setShortcut(QKeySequence("Ctrl+E"));
+    addAction(action);
+    connect(action, &QAction::triggered, this, &MainWindow::makeclean);
+
+    action = projectMenu->addAction(tr("Compile"));
+    action->setShortcut(QKeySequence("Ctrl+R"));
+    addAction(action);
+    connect(action, &QAction::triggered, this, &MainWindow::makeall);
+
+    action = projectMenu->addAction(tr("Program"));
+    action->setShortcut(QKeySequence("Ctrl+T"));
+    addAction(action);
+    connect(action, &QAction::triggered, this, &MainWindow::makeprog);
 
     // ============= View =============
     QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
@@ -189,11 +195,8 @@ bool MainWindow::openDir(const QString &path)
             return false;
         mpath = dialog.selectedFiles().first();
     }
-    //_project->setRootPath(mpath);
+    _project->setRootPath(mpath);
 
-    Project *project = new Project(mpath);
-    MainWindow *w = new MainWindow(project);
-    w->show();
     return true;
 }
 
