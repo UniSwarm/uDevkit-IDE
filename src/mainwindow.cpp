@@ -191,6 +191,13 @@ bool MainWindow::openDir(const QString &path)
         QFileDialog dialog(this);
         dialog.setOption(QFileDialog::DontUseNativeDialog);
         dialog.setFileMode(QFileDialog::Directory);
+        if (_editorTabWidget->currentEditor())
+        {
+            QFileInfo file(_editorTabWidget->currentEditor()->filePath());
+            dialog.setDirectory(file.absolutePath());
+        }
+        else
+            dialog.setDirectory(_project->rootPath());
         if (!dialog.exec())
             return false;
         mpath = dialog.selectedFiles().first();
@@ -208,6 +215,13 @@ bool MainWindow::openFiles(const QStringList &paths)
         QFileDialog dialog(this);
         dialog.setOption(QFileDialog::DontUseNativeDialog);
         dialog.setFileMode(QFileDialog::ExistingFiles);
+        if (_editorTabWidget->currentEditor())
+        {
+            QFileInfo file(_editorTabWidget->currentEditor()->filePath());
+            dialog.setDirectory(file.absolutePath());
+        }
+        else
+            dialog.setDirectory(_project->rootPath());
         if (!dialog.exec())
             return false;
         mpaths = dialog.selectedFiles();
