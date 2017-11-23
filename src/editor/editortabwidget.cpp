@@ -169,6 +169,28 @@ void EditorTabWidget::saveAllEditors()
                 return;
 }
 
+void EditorTabWidget::switchHeader()
+{
+    Editor *editor = currentEditor();
+    if (!editor)
+        return;
+
+    QString filePathPair;
+    QString filePath = editor->filePath();
+    if (filePath.endsWith(".h"))
+    {
+        filePathPair = filePath.replace(QRegExp("\\.h$"), ".c");
+        if (QFile::exists(filePathPair))
+            openFileEditor(filePathPair);
+    }
+    else if (filePath.endsWith(".c"))
+    {
+        filePathPair = filePath.replace(QRegExp("\\.c$"), ".h");
+        if (QFile::exists(filePathPair))
+            openFileEditor(filePathPair);
+    }
+}
+
 void EditorTabWidget::nextTab()
 {
     if(_activedTab.count() < 2)
@@ -224,7 +246,7 @@ void EditorTabWidget::activeTab(int id)
 
 void EditorTabWidget::changeStatus(QString status)
 {
-    statusChanged(status);
+    emit statusChanged(status);
 }
 
 bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)

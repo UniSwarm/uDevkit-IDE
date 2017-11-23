@@ -28,6 +28,8 @@ public slots:
     void saveCurrentEditor();
     void saveAllEditors();
 
+    void switchHeader();
+
     void nextTab();
     void previousTab();
 

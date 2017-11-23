@@ -114,6 +114,14 @@ void MainWindow::createMenus()
     connect(openFilesAction, SIGNAL(triggered()), this, SLOT(openFiles()));
 
     fileMenu->addSeparator();
+
+    QAction *switchHeaderAction = new QAction(tr("&Switch header"), this);
+    switchHeaderAction->setStatusTip(tr("Switch between header and source"));
+    switchHeaderAction->setShortcut(QKeySequence("F4"));
+    fileMenu->addAction(switchHeaderAction);
+    connect(switchHeaderAction, SIGNAL(triggered()), _editorTabWidget, SLOT(switchHeader()));
+
+    fileMenu->addSeparator();
     for (int i=0; i<MaxOldProject; i++)
     {
         QAction *recentAction = new QAction(this);
@@ -132,7 +140,7 @@ void MainWindow::createMenus()
 
     QAction *action;
     action = new QAction(tr("git"), this);
-    action->setShortcut(QKeySequence("F4"));
+    action->setShortcut(QKeySequence("F5"));
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::git);
 
