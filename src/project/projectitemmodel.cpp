@@ -95,7 +95,6 @@ void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
         ProjectItem *item = new ProjectItem(_project, filePath, ProjectItem::IndividualFile, this);
         _externalFiles->addChild(item);
         _pathCache.insert(filePath, item);
-        qDebug().noquote().nospace()<<"      <itemPath>../"<<_project->rootDir().relativeFilePath(filePath)<<"</itemPath>";
     }
     emit layoutChanged();
 }
