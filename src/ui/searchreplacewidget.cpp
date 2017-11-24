@@ -27,13 +27,22 @@ void SearchReplaceWidget::setEditor(Editor *editor)
     _regexpCheckbox->setEnabled(_editor->hasRegExp());
 }
 
-void SearchReplaceWidget::activate()
+void SearchReplaceWidget::activateResearch()
 {
     if (parentWidget() && parentWidget()->parentWidget())
         parentWidget()->parentWidget()->show();
     show();
     _searchLineEdit->setFocus();
     _searchLineEdit->selectAll();
+}
+
+void SearchReplaceWidget::activateReplace()
+{
+    if (parentWidget() && parentWidget()->parentWidget())
+        parentWidget()->parentWidget()->show();
+    show();
+    _replaceLineEdit->setFocus();
+    _replaceLineEdit->selectAll();
 }
 
 Editor::SearchFlags SearchReplaceWidget::flags()

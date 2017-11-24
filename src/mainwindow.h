@@ -49,6 +49,8 @@ protected slots:
     void makeall();
     void makeprog();
     void makeclean();
+    void makesim();
+
     void updateTitle(Editor *editor=Q_NULLPTR);
     void updateStatus(QString status);
 

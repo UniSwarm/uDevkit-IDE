@@ -149,28 +149,35 @@ void MainWindow::createMenus()
     addAction(action);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::nextTab);
 
-    action = new QAction(tr("search"), this);
+    // ============= Edit =============
+    QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
+
+    action = editMenu->addAction(tr("Search"));
     action->setShortcut(QKeySequence::QKeySequence::Find);
-    addAction(action);
-    connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activate);
+    connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateResearch);
+
+    action = editMenu->addAction(tr("Replace"));
+    action->setShortcut(QKeySequence::QKeySequence::Replace);
+    connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateReplace);
 
     // ============= Project =============
     QMenu *projectMenu = menuBar()->addMenu(tr("&Project"));
 
     action = projectMenu->addAction(tr("Clean"));
     action->setShortcut(QKeySequence("Ctrl+E"));
-    addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::makeclean);
 
     action = projectMenu->addAction(tr("Compile"));
     action->setShortcut(QKeySequence("Ctrl+R"));
-    addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::makeall);
 
     action = projectMenu->addAction(tr("Program"));
     action->setShortcut(QKeySequence("Ctrl+T"));
-    addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::makeprog);
+
+    action = projectMenu->addAction(tr("Compile sim"));
+    action->setShortcut(QKeySequence("Ctrl+G"));
+    connect(action, &QAction::triggered, this, &MainWindow::makesim);
 
     // ============= View =============
     QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
@@ -254,6 +261,12 @@ void MainWindow::makeprog()
 {
     _editorTabWidget->saveAllEditors();
     _logWidget->start("make", QStringList()<<"prog"<<"-j"<<QString::number(QThread::idealThreadCount()));
+}
+
+void MainWindow::makesim()
+{
+    _editorTabWidget->saveAllEditors();
+    _logWidget->start("make", QStringList()<<"sim"<<"-j"<<QString::number(QThread::idealThreadCount()));
 }
 
 void MainWindow::makeclean()

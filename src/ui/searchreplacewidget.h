@@ -19,7 +19,9 @@ signals:
 
 public slots:
     void setEditor(Editor *editor);
-    void activate();
+
+    void activateResearch();
+    void activateReplace();
 
     Editor::SearchFlags flags();
 
