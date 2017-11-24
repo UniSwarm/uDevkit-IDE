@@ -1,5 +1,30 @@
 <RCC>
     <qresource prefix="/icons">
         <file>UNIdevkit.ico</file>
+        <file>img/icons8-about.png</file>
+        <file>img/icons8-back-to.png</file>
+        <file>img/icons8-binder.png</file>
+        <file>img/icons8-broom.png</file>
+        <file>img/icons8-console.png</file>
+        <file>img/icons8-copy.png</file>
+        <file>img/icons8-cut.png</file>
+        <file>img/icons8-find-and-replace.png</file>
+        <file>img/icons8-git.png</file>
+        <file>img/icons8-maintenance.png</file>
+        <file>img/icons8-next.png</file>
+        <file>img/icons8-next-page.png</file>
+        <file>img/icons8-open.png</file>
+        <file>img/icons8-open-box.png</file>
+        <file>img/icons8-paste.png</file>
+        <file>img/icons8-previous.png</file>
+        <file>img/icons8-quit.png</file>
+        <file>img/icons8-search.png</file>
+        <file>img/icons8-search-button.png</file>
+        <file>img/icons8-settings.png</file>
+        <file>img/icons8-software-installer.png</file>
+        <file>img/icons8-support.png</file>
+        <file>img/icons8-switch.png</file>
+        <file>img/icons8-system-information.png</file>
+        <file>img/icons8-test-tube.png</file>
     </qresource>
 </RCC>
