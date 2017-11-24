@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     if (argc > 1)
         project = new Project(argv[1]);
     else
-        project = new Project(QFileInfo(argv[0]).absolutePath());
+        project = new Project(QDir().absolutePath());
 
     MainWindow w(project);
     w.show();
