@@ -124,16 +124,19 @@ void SearchReplaceWidget::createWidgets()
 
     _prevButton = new QToolButton();
     _prevButton->setText("<");
+    _prevButton->setIcon(QIcon(":/icons/img/metro/icons8-previous.png"));
     searchLineLayout->addWidget(_prevButton);
     connect(_prevButton, &QToolButton::clicked, this, &SearchReplaceWidget::searchPrev);
 
     _nextButton = new QToolButton();
     _nextButton->setText(">");
+    _nextButton->setIcon(QIcon(":/icons/img/metro/icons8-next.png"));
     searchLineLayout->addWidget(_nextButton);
     connect(_nextButton, &QToolButton::clicked, this, &SearchReplaceWidget::searchNext);
 
     _allButton = new QToolButton();
     _allButton->setText("*");
+    _allButton->setIcon(QIcon(":/icons/img/metro/icons8-search.png"));
     searchLineLayout->addWidget(_allButton);
     connect(_allButton, &QToolButton::clicked, this, &SearchReplaceWidget::searchAll);
 
@@ -149,16 +152,19 @@ void SearchReplaceWidget::createWidgets()
 
     _replacePrevButton = new QToolButton();
     _replacePrevButton->setText("<");
+    _replacePrevButton->setIcon(QIcon(":/icons/img/metro/icons8-back-to.png"));
     replaceLineLayout->addWidget(_replacePrevButton);
     connect(_replacePrevButton, &QToolButton::clicked, this, &SearchReplaceWidget::replacePrev);
 
     _replaceNextButton = new QToolButton();
     _replaceNextButton->setText(">");
+    _replaceNextButton->setIcon(QIcon(":/icons/img/metro/icons8-next-page.png"));
     replaceLineLayout->addWidget(_replaceNextButton);
     connect(_replaceNextButton, &QToolButton::clicked, this, &SearchReplaceWidget::replaceNext);
 
     _replaceAllButton = new QToolButton();
     _replaceAllButton->setText("*");
+    _replaceAllButton->setIcon(QIcon(":/icons/img/metro/icons8-find-and-replace.png"));
     replaceLineLayout->addWidget(_replaceAllButton);
     connect(_replaceAllButton, &QToolButton::clicked, this, &SearchReplaceWidget::replaceAll);
 
