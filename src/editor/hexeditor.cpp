@@ -37,6 +37,11 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
     setLayout(layout);
 }
 
+HexEditor::~HexEditor()
+{
+    _file.close();
+}
+
 bool HexEditor::isModified() const
 {
     return _modified;

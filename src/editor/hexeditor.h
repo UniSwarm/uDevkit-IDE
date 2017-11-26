@@ -10,6 +10,7 @@ class HexEditor : public Editor
     Q_OBJECT
 public:
     explicit HexEditor(Project *project, QWidget *parent = 0);
+    ~HexEditor();
 
     bool isModified() const;
 
