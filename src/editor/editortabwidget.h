@@ -5,6 +5,8 @@
 #include <QMap>
 #include <QTabWidget>
 
+#include <project/projecticonprovider.h>
+
 #include "editor.h"
 #include "project/project.h"
 
@@ -51,6 +53,7 @@ protected:
     Project *_project;
     QStack<int> _activedTab;
     QMap<QString, Editor* > _mapPathEditor;
+    ProjectIconProvider *_iconProvider;
 };
 
 #endif // EDITORTABWIDGET_H

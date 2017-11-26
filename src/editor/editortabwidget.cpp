@@ -18,6 +18,8 @@ EditorTabWidget::EditorTabWidget(Project *project)
     setUsesScrollButtons(true);
     setFocusPolicy(Qt::NoFocus);
 
+    _iconProvider = new ProjectIconProvider();
+
     tabBar()->installEventFilter(this);
     registerAction();
 
@@ -27,8 +29,9 @@ EditorTabWidget::EditorTabWidget(Project *project)
 
 void EditorTabWidget::addEditor(Editor *editor)
 {
-    const QString &path = QFileInfo(editor->filePath()).absoluteFilePath();
-    addTab(editor, editor->fileName());
+    QFileInfo info(editor->filePath());
+    const QString &path = info.absoluteFilePath();
+    addTab(editor, _iconProvider->icon(info), editor->fileName());
     setCurrentIndex(count()-1);
     connect(editor, &Editor::filePathChanged, this, &EditorTabWidget::updateTab);
     connect(editor, &Editor::modified, this, &EditorTabWidget::updateTab);
