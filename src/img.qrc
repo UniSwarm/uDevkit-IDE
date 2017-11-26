@@ -33,6 +33,13 @@
         <file>img/mimetype/text-x-chdr.png</file>
         <file>img/mimetype/text-x-csrc.png</file>
         <file>img/mimetype/text-x-makefile.png</file>
+        <file>img/mimetype/text-x-asm.png</file>
+        <file>img/mimetype/text-x-hex.png</file>
+        <file>img/mimetype/text-xml.png</file>
+        <file>img/mimetype/text-x-readme.png</file>
+        <file>img/mimetype/text-x-script.png</file>
+        <file>img/mimetype/text-x-yacc.png</file>
+        <file>img/mimetype/application-octet-stream.png</file>
+        <file>img/mimetype/application-x-executable.png</file>
     </qresource>
 </RCC>
-
