@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QRegExp>
+#include <QRegularExpression>
 #include <QSaveFile>
 #include <QSplitter>
 
@@ -376,28 +377,62 @@ void CodeEditor::replace(const QVariant &replacePattern, Editor::SearchFlags fla
 {
     edbee::TextEditorController* controller = _editorWidget->controller();
     edbee::TextSearcher* searcher = controller->textSearcher();
+    edbee::TextSelection *textSelection = _editorWidget->textSelection();
 
-    bool find;
+    QString replaceString = replacePattern.toString();
+    replaceString.replace("\\r","\r");
+    replaceString.replace("\\n","\n");
+    replaceString.replace("\\t","\t");
+    replaceString.replace("\\\\","\\");
 
-    if (next)
-        find = searcher->findNext(_editorWidget);
-    else
-        find = searcher->findPrev(_editorWidget);
+    bool find = false;
+    bool match = false;
+
+    if (textSelection->rangeCount() == 1)
+    {
+        if (textSelection->range(0).length() > 0)
+        {
+            QString selection = _editorWidget->textDocument()->textPart(textSelection->range(0).anchor(), textSelection->range(0).length());
+            QRegularExpression regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+            if (regExp.match(selection).hasMatch())
+            {
+                match = true;
+                find = true;
+            }
+        }
+    }
+
+    if (!match)
+    {
+        if (next)
+            find = searcher->findNext(_editorWidget);
+        else
+            find = searcher->findPrev(_editorWidget);
+    }
 
     if (find)
     {
+        QString replaceText;
         edbee::TextRangeSet range(_editorWidget->textSelection());
-        QRegExp regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? Qt::CaseSensitive : Qt::CaseInsensitive);
         if (!flags.testFlag(RegExpMode))
-            _editorWidget->textDocument()->replaceRangeSet(range, replacePattern.toString());
-        else
         {
-            QString replaceText = range.getSelectedText();
-            replaceText.replace(regExp, replacePattern.toString());
+            replaceText = replaceString;
             _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
         }
+        else
+        {
+            QRegularExpression regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+            replaceText = range.getSelectedText();
+            replaceText.replace(regExp, replaceString);
+            _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
+        }
+        textSelection->range(0).setLength(0);
+        textSelection->range(0).moveCaret(_editorWidget->textDocument(), replaceText.length());
+
+        int index = controller->borderedTextRanges()->rangeIndexAtOffset(textSelection->range(0).anchor() + replaceText.length());
+        if (index >= 0)
+            controller->borderedTextRanges()->removeRange(index);
     }
-    controller->textSelection()->resetAnchors();
     controller->update();
 }
 
@@ -406,6 +441,12 @@ void CodeEditor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
     edbee::TextEditorController* controller = _editorWidget->controller();
     edbee::TextSearcher* searcher = controller->textSearcher();
 
+    QString replaceString = replacePattern.toString();
+    replaceString.replace("\\r","\r");
+    replaceString.replace("\\n","\n");
+    replaceString.replace("\\t","\t");
+    replaceString.replace("\\\\","\\");
+
     edbee::TextRangeSet *rangeSet = controller->borderedTextRanges();
     searcher->setCaseSensitive(flags.testFlag(CaseSensitive));
     searcher->markAll(rangeSet);
@@ -413,24 +454,24 @@ void CodeEditor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
     _editorWidget->textDocument()->beginChanges(controller);
     edbee::TextRangeSet range(_editorWidget->textDocument());
 
-    QRegExp regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? Qt::CaseSensitive : Qt::CaseInsensitive);
-
     for (int i=0; i<rangeSet->rangeCount(); i++)
     {
         range.clear();
         range.addRange(rangeSet->range(i));
 
         if (!flags.testFlag(RegExpMode))
-            _editorWidget->textDocument()->replaceRangeSet(range, replacePattern.toString());
+            _editorWidget->textDocument()->replaceRangeSet(range, replaceString);
         else
         {
+            QRegularExpression regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
             QString replaceText = range.getSelectedText();
-            replaceText.replace(regExp, replacePattern.toString());
+            replaceText.replace(regExp, replaceString);
             _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
         }
     }
     _editorWidget->textDocument()->endChanges(0xFF01);
 
-    controller->textSelection()->resetAnchors();
+    controller->borderedTextRanges()->clear();
+    controller->borderedTextRanges()->resetAnchors();
     controller->update();
 }
