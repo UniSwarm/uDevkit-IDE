@@ -4,6 +4,7 @@
 
 #include "projectitemmodel.h"
 
+#include "projecticonprovider.h"
 #include "project.h"
 
 ProjectItemModel::ProjectItemModel(Project *project) :
@@ -11,7 +12,7 @@ ProjectItemModel::ProjectItemModel(Project *project) :
 {
     _externalFiles = nullptr;
     _root = new ProjectItem(_project, "", ProjectItem::LogicDir, this);
-    _iconProvider = new QFileIconProvider;
+    _iconProvider = new ProjectIconProvider();
 }
 
 ProjectItemModel::~ProjectItemModel()
@@ -155,6 +156,7 @@ void ProjectItemModel::clear()
 {
     emit layoutAboutToBeChanged();
     _root->clear();
+    _externalFiles = Q_NULLPTR;
     emit layoutChanged();
 }
 

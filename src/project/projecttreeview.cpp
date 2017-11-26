@@ -19,6 +19,7 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     _proxy = new ProjectItemProxyModel(project);
     _proxy->setSourceModel(_project->projectItemModel());
     setHiddenFilter(QRegExp(""));
+    setIconSize(QSize(20, 20));
     _proxy->sort(0, Qt::AscendingOrder);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
