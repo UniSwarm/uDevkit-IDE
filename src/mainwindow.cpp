@@ -409,7 +409,7 @@ void MainWindow::readSettings()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, "RtIDE v0", QString("Copyright (C) 2017 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.fr</a>)<br>\
+    QMessageBox::about(this, "RtIDE v0", QString("Copyright (C) 2017 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
 <br>\
 This sofware is part of RtIDE distribution. To check for new version, please visit <a href=\"https://github.com/UniSwarm/rtide\">github.com/UniSwarm/rtide</a><br>\
 <br>\
@@ -428,5 +428,13 @@ GNU General Public License for more details.<br>\
 You should have received a copy of the GNU General Public License \
 along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\">www.gnu.org/licenses</a><br>\
 <br>\
-Build date: ") + __DATE__ + QString(" time: ")+__TIME__);
+Build date: ") + __DATE__ + QString(" time: ")+__TIME__ + QString("<br>\
+<br>\
+RtIDE use others open libraries :<br>\
+- edbee-lib, a code editor widget (code editor) <a href=\"https://github.com/edbee/edbee-lib\">github.com/edbee/edbee-lib</a> [MIT]<br>\
+- qhexedit2, a binary editor widget (hex editor) <a href=\"https://github.com/Simsys/qhexedit2\">github.com/Simsys/qhexedit2</a> [GPL]<br>\
+- QDarkStyleSheet, a nice dark theme for Qt (dark theme) <a href=\"https://github.com/ColinDuquesnoy/QDarkStyleSheet\">github.com/ColinDuquesnoy/QDarkStyleSheet</a> [MIT]<br>\
+- Open Icon Library, free icons lib (mimetype used) <a href=\"https://sourceforge.net/projects/openiconlibrary/\">sourceforge.net/projects/openiconlibrary/</a> [CC]<br>\
+- icons8, online icons library (menu and tool buttons) <a href=\"https://icons8.com\">icons8.com</a> [Free for Open]<br>\
+"));
 }
