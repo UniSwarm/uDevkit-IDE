@@ -54,6 +54,7 @@ protected:
     QStack<int> _activedTab;
     QMap<QString, Editor* > _mapPathEditor;
     ProjectIconProvider *_iconProvider;
+    int _idColor;
 };
 
 #endif // EDITORTABWIDGET_H

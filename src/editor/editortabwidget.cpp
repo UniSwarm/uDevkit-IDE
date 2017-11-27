@@ -17,6 +17,7 @@ EditorTabWidget::EditorTabWidget(Project *project)
     setMovable(true);
     setUsesScrollButtons(true);
     setFocusPolicy(Qt::NoFocus);
+    _idColor = 0;
 
     _iconProvider = new ProjectIconProvider();
 
@@ -31,8 +32,28 @@ void EditorTabWidget::addEditor(Editor *editor)
 {
     QFileInfo info(editor->filePath());
     const QString &path = info.absoluteFilePath();
-    addTab(editor, _iconProvider->icon(info), editor->fileName());
-    setCurrentIndex(count()-1);
+    int index = count();
+    QColor color;
+    for (int i=count()-1; i>=0; i--)
+    {
+        QFileInfo infoEditor(this->editor(i)->filePath());
+        if (infoEditor.absoluteDir() == info.absoluteDir())
+        {
+            color = tabBar()->tabTextColor(i);
+            if (!color.isValid())
+            {
+                _idColor++;
+                color = QColor::fromHsv(_idColor * 30, 255, 255);
+                tabBar()->setTabTextColor(i, color);
+            }
+            index = i + 1;
+            break;
+        }
+    }
+    insertTab(index, editor, _iconProvider->icon(info), editor->fileName());
+    if (color.isValid())
+        tabBar()->setTabTextColor(index, color);
+    setCurrentIndex(index);
     connect(editor, &Editor::filePathChanged, this, &EditorTabWidget::updateTab);
     connect(editor, &Editor::modified, this, &EditorTabWidget::updateTab);
     connect(editor, &Editor::statusChanged, this, &EditorTabWidget::changeStatus);
