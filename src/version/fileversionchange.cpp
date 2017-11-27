@@ -41,6 +41,8 @@ QList<VersionChange *> FileVersionChange::changesForRange(int lineStart, int lin
     {
         if (change->lineNew() <= lineEnd && (change->lineNew() + change->addedLines().count()) > lineStart)
             changes.append(change);
+        else if (change->addedLines().isEmpty() && change->lineNew() == lineStart)
+            changes.append(change);
     }
     return changes;
 }

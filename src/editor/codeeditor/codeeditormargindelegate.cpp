@@ -92,8 +92,7 @@ void CodeEditorMarginDelegate::mousePressEvent(int line, QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton)
     {
-        int line = marginComponent()->renderer()->lineIndexForYpos(event->y()) + 1;
-        QList<VersionChange *> changesForRange = _fileChange->changesForRange(line, line);
+        QList<VersionChange *> changesForRange = _fileChange->changesForRange(line+1, line+1);
         if (!changesForRange.isEmpty())
         {
             if (changesForRange.at(0)->removedLines().isEmpty())
