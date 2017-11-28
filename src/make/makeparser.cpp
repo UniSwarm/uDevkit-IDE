@@ -116,7 +116,7 @@ void MakeParser::processEnd()
     addSource(sourceFiles, _variables.values("SRC"));
     addSource(sourceFiles, _variables.values("ARCHI_SRC"));
     addSource(sourceFiles, _variables.values("HEADER"));
-    foreach ( QString file, _variables.values("ARCHI_SRC"))
+    addSource(sourceFiles, _variables.values("MAKEFILE_LIST"));
 
     outgoingFiles = _sourceFiles;
     outgoingFiles.subtract(sourceFiles);
