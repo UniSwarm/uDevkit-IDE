@@ -49,6 +49,14 @@ ProjectItem *ProjectItem::child(int row) const
     return _childrens.at(row);
 }
 
+ProjectItem *ProjectItem::child(const QString &name) const
+{
+    QHash<QString, ProjectItem*>::const_iterator i = _childrensMap.find(name);
+    if (i != _childrensMap.end())
+        return *i;
+    return Q_NULLPTR;
+}
+
 int ProjectItem::row() const
 {
     if (_parentItem)

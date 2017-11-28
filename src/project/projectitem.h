@@ -27,6 +27,7 @@ public:
 
     int count() const;
     ProjectItem *child(int row) const;
+    ProjectItem *child(const QString &name) const;
     int row() const;
     ProjectItem *parentItem() const;
     void addChild(ProjectItem *child);

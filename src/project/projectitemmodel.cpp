@@ -91,10 +91,20 @@ void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
     foreach (QString filePath, sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
-            continue;
+            continue; // not an external source
+
+        QFileInfo info(filePath);
+        QDir dir = info.absoluteDir();
+
+        ProjectItem *parent = _externalFiles->child(dir.dirName());
+        if (!parent)
+        {
+            parent = new ProjectItem(_project, dir.absolutePath(), ProjectItem::LogicDir, this);
+            _externalFiles->addChild(parent);
+        }
 
         ProjectItem *item = new ProjectItem(_project, filePath, ProjectItem::IndividualFile, this);
-        _externalFiles->addChild(item);
+        parent->addChild(item);
         _pathCache.insert(filePath, item);
     }
     emit layoutChanged();
