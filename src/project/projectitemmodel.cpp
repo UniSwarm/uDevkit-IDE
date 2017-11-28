@@ -119,11 +119,20 @@ void ProjectItemModel::removeExternalSource(QSet<QString> sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
             continue; // not external source
+
+        QFileInfo info(filePath);
+        QDir dir = info.absoluteDir();
+
+        ProjectItem *parent = _externalFiles->child(dir.dirName());
+
         ProjectItem *item = _pathCache[filePath];
         if (!item)
             continue;
-        _externalFiles->removeChild(item);
+        parent->removeChild(item);
         _pathCache.remove(filePath);
+
+        if (parent->count() == 0)
+            _externalFiles->removeChild(parent);
     }
     emit layoutChanged();
 }
