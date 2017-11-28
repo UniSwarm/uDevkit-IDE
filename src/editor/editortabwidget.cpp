@@ -127,11 +127,33 @@ void EditorTabWidget::openFileEditor(const QString &url)
 
 void EditorTabWidget::closeFileEditor(const QString &filePath)
 {
-    if(_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
+    QFileInfo infoPath(filePath);
+    QList<Editor*> editors;
+
+    if (infoPath.isDir())
     {
-        Editor *editor = _mapPathEditor.value(filePath);
-        int id = indexOf(editor);
-        closeEditor(id);
+        QDir dir(infoPath.absoluteFilePath());
+        QMap<QString, Editor* >::const_iterator it, end;
+        for (it = _mapPathEditor.cbegin(), end = _mapPathEditor.cend(); it != end; ++it)
+        {
+            QFileInfo editorInfo(it.key());
+            if (editorInfo.absoluteDir() == dir)
+                editors.append(it.value());
+        }
+        foreach (Editor *editor, editors)
+        {
+            int id = indexOf(editor);
+            closeEditor(id);
+        }
+    }
+    else
+    {
+        if(_mapPathEditor.contains(infoPath.absoluteFilePath()))
+        {
+            Editor *editor = _mapPathEditor.value(infoPath.absoluteFilePath());
+            int id = indexOf(editor);
+            closeEditor(id);
+        }
     }
 }
 

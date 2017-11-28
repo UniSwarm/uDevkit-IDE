@@ -234,8 +234,7 @@ void ProjectTreeView::mouseReleaseEvent(QMouseEvent *event)
             return;
 
         const QModelIndex &indexFile = _proxy->mapToSource(index);
-        if (!_project->projectItemModel()->isDir(indexFile))
-            emit closedFile(_project->projectItemModel()->filePath(indexFile));
+        emit closedFile(_project->projectItemModel()->filePath(indexFile));
     }
 }
 
