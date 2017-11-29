@@ -159,14 +159,21 @@ void MainWindow::createMenus()
     action = editMenu->addAction(tr("Cut"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-cut.png"));
     action->setShortcut(QKeySequence::QKeySequence::Cut);
+    action->setEnabled(false);
+    connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::cut);
+    connect(_editorTabWidget, &EditorTabWidget::copyAvailable, action, &QAction::setEnabled);
 
     action = editMenu->addAction(tr("Copy"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-copy.png"));
     action->setShortcut(QKeySequence::QKeySequence::Copy);
+    action->setEnabled(false);
+    connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::copy);
+    connect(_editorTabWidget, &EditorTabWidget::copyAvailable, action, &QAction::setEnabled);
 
     action = editMenu->addAction(tr("Paste"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-paste.png"));
     action->setShortcut(QKeySequence::QKeySequence::Paste);
+    connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::paste);
 
     editMenu->addSeparator();
 
@@ -319,7 +326,7 @@ void MainWindow::updateTitle(Editor *editor)
         title.append(" | ");
     }
     title.append("(");
-    title.append(_project->rootDir().dirName());
+    title.append(QDir(_project->rootDir().absolutePath()).dirName());
     title.append(") rtide");
     setWindowTitle(title);
 }

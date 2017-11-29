@@ -36,6 +36,10 @@ protected:
     void initialiseWidget();
     void giveFocus();
 
+    virtual void cutCommand();
+    virtual void copyCommand();
+    virtual void pasteCommand();
+
     int openFileData(const QString &filePath);
     int saveFileData(const QString &filePath=QString());
 

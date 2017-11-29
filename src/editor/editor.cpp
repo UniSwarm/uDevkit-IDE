@@ -178,6 +178,21 @@ void Editor::active()
     giveFocus();
 }
 
+void Editor::cut()
+{
+    cutCommand();
+}
+
+void Editor::copy()
+{
+    copyCommand();
+}
+
+void Editor::paste()
+{
+    pasteCommand();
+}
+
 void Editor::prepareReload()
 {
     QTimer::singleShot(100, this, SLOT(reload()));
@@ -202,6 +217,18 @@ void Editor::initialiseWidget()
 void Editor::giveFocus()
 {
     setFocus();
+}
+
+void Editor::cutCommand()
+{
+}
+
+void Editor::copyCommand()
+{
+}
+
+void Editor::pasteCommand()
+{
 }
 
 Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *parent)

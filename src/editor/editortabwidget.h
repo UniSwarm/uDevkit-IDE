@@ -35,16 +35,24 @@ public slots:
     void nextTab();
     void previousTab();
 
+    void cut();
+    void copy();
+    void paste();
+
 signals:
     void editorChange(Editor *editor);
     void currentEditorModified(Editor *editor);
     void currentFileChanged(QString filePath);
     void statusChanged(QString status);
 
+    void copyAvailable(bool available);
+
 protected slots:
     void updateTab();
     void activeTab(int id);
     void changeStatus(QString status);
+
+    void copyUpdate(bool available);
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);

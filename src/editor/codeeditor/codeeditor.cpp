@@ -60,7 +60,7 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
         initialized = true;
     }
 
-    _editorWidget =  new edbee::TextEditorWidget();
+    _editorWidget = new edbee::TextEditorWidget();
     QFont font = _editorWidget->config()->font();
     font.setFamily("monospace");
     font.setStyleHint(QFont::Monospace);
@@ -210,7 +210,14 @@ void CodeEditor::updatePos()
 
     status.append(QString("l: %1 c: %2 ").arg(line+1).arg(col));
     if( range.length() > 0 )
+    {
         status.append(QString("sel: %1 ").arg(range.length()));
+        emit copyAvailable(true);
+    }
+    else
+    {
+        emit copyAvailable(false);
+    }
 
     QVector<edbee::TextScope*> scopes = _editorWidget->textDocument()->scopes()->scopesAtOffset( caret ) ;
     for(int i=0,cnt=scopes.size(); i<cnt; ++i)
@@ -307,6 +314,21 @@ void CodeEditor::initialiseWidget()
 void CodeEditor::giveFocus()
 {
     _editorWidget->textEditorComponent()->setFocus();
+}
+
+void CodeEditor::cutCommand()
+{
+    _editorWidget->controller()->executeCommand("cut");
+}
+
+void CodeEditor::copyCommand()
+{
+    _editorWidget->controller()->executeCommand("copy");
+}
+
+void CodeEditor::pasteCommand()
+{
+    _editorWidget->controller()->executeCommand("paste");
 }
 
 Editor::SearchCaps CodeEditor::searchCap() const

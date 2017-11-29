@@ -70,6 +70,10 @@ public slots:
     void reload();
     void active();
 
+    void cut();
+    void copy();
+    void paste();
+
 protected slots:
     void prepareReload();
 
@@ -78,6 +82,8 @@ signals:
     void modified(bool modified);
     void helpRequest(QString term);
     void statusChanged(QString status);
+
+    void copyAvailable(bool available);
 
 public:
     static Editor *createEditor(Type type, Project *project, QWidget *parent = nullptr);
@@ -88,6 +94,10 @@ protected:
     void setFilePath(const QString &filePath);
     virtual void initialiseWidget();
     virtual void giveFocus();
+
+    virtual void cutCommand();
+    virtual void copyCommand();
+    virtual void pasteCommand();
 
     Project *_project;
     QString _filePath;
