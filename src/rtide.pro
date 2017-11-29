@@ -53,7 +53,8 @@ SOURCES += \
     ui/logwidget.cpp \
     version/versionchange.cpp \
     version/fileversionchange.cpp \
-    project/projecticonprovider.cpp
+    project/projecticonprovider.cpp \
+    project/fileproject.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -80,7 +81,8 @@ HEADERS += \
     ui/logwidget.h \
     version/versionchange.h \
     version/fileversionchange.h \
-    project/projecticonprovider.h
+    project/projecticonprovider.h \
+    project/fileproject.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
