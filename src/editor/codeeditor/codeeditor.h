@@ -36,6 +36,8 @@ protected:
     void initialiseWidget();
     void giveFocus();
 
+    virtual void undoCommand();
+    virtual void redoCommand();
     virtual void cutCommand();
     virtual void copyCommand();
     virtual void pasteCommand();

@@ -21,6 +21,7 @@
 #include "edbee/util/lineending.h"
 #include "edbee/models/textsearcher.h"
 #include "edbee/models/textrange.h"
+#include "edbee/models/textundostack.h"
 #include "edbee/views/texttheme.h"
 #include "edbee/views/textselection.h"
 #include "edbee/views/texteditorscrollarea.h"
@@ -203,6 +204,8 @@ void CodeEditor::help()
 void CodeEditor::updatePos()
 {
     QString status;
+    edbee::TextEditorController *controller = _editorWidget->controller();
+    edbee::TextDocument *textDocument = _editorWidget->textDocument();
     edbee::TextRange& range = _editorWidget->textSelection()->range(0);
     int caret = range.caret();
     int line = _editorWidget->textDocument()->lineFromOffset(caret);
@@ -218,6 +221,8 @@ void CodeEditor::updatePos()
     {
         emit copyAvailable(false);
     }
+    emit redoAvailable(textDocument->textUndoStack()->canRedo(controller));
+    emit undoAvailable(textDocument->textUndoStack()->canUndo(controller));
 
     QVector<edbee::TextScope*> scopes = _editorWidget->textDocument()->scopes()->scopesAtOffset( caret ) ;
     for(int i=0,cnt=scopes.size(); i<cnt; ++i)
@@ -314,6 +319,16 @@ void CodeEditor::initialiseWidget()
 void CodeEditor::giveFocus()
 {
     _editorWidget->textEditorComponent()->setFocus();
+}
+
+void CodeEditor::undoCommand()
+{
+    _editorWidget->controller()->executeCommand("undo");
+}
+
+void CodeEditor::redoCommand()
+{
+    _editorWidget->controller()->executeCommand("redo");
 }
 
 void CodeEditor::cutCommand()

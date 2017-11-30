@@ -26,6 +26,8 @@
         <file>img/metro/icons8-switch.png</file>
         <file>img/metro/icons8-system-information.png</file>
         <file>img/metro/icons8-test-tube.png</file>
+        <file>img/metro/icons8-undo.png</file>
+        <file>img/metro/icons8-redo.png</file>
     </qresource>
     <qresource prefix="/icons">
         <file>img/mimetype/text-x-c++hdr.png</file>

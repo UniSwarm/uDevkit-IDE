@@ -57,6 +57,8 @@ void EditorTabWidget::addEditor(Editor *editor)
     connect(editor, &Editor::filePathChanged, this, &EditorTabWidget::updateTab);
     connect(editor, &Editor::modified, this, &EditorTabWidget::updateTab);
     connect(editor, &Editor::statusChanged, this, &EditorTabWidget::changeStatus);
+    connect(editor, &Editor::undoAvailable, this, &EditorTabWidget::undoUpdate);
+    connect(editor, &Editor::redoAvailable, this, &EditorTabWidget::redoUpdate);
     connect(editor, &Editor::copyAvailable, this, &EditorTabWidget::copyUpdate);
     _mapPathEditor.insert(path, editor);
     _project->addOpenedFiles(QSet<QString>()<<path);
@@ -251,6 +253,22 @@ void EditorTabWidget::previousTab()
     // TODO implement me
 }
 
+void EditorTabWidget::undo()
+{
+    Editor *editor = currentEditor();
+    if (!editor)
+        return;
+    editor->undo();
+}
+
+void EditorTabWidget::redo()
+{
+    Editor *editor = currentEditor();
+    if (!editor)
+        return;
+    editor->redo();
+}
+
 void EditorTabWidget::cut()
 {
     Editor *editor = currentEditor();
@@ -318,6 +336,16 @@ void EditorTabWidget::activeTab(int id)
 void EditorTabWidget::changeStatus(QString status)
 {
     emit statusChanged(status);
+}
+
+void EditorTabWidget::undoUpdate(bool available)
+{
+    emit undoAvailable(available);
+}
+
+void EditorTabWidget::redoUpdate(bool available)
+{
+    emit redoAvailable(available);
 }
 
 void EditorTabWidget::copyUpdate(bool available)

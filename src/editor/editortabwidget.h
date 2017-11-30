@@ -35,6 +35,8 @@ public slots:
     void nextTab();
     void previousTab();
 
+    void undo();
+    void redo();
     void cut();
     void copy();
     void paste();
@@ -45,6 +47,8 @@ signals:
     void currentFileChanged(QString filePath);
     void statusChanged(QString status);
 
+    void undoAvailable(bool available);
+    void redoAvailable(bool available);
     void copyAvailable(bool available);
 
 protected slots:
@@ -52,6 +56,8 @@ protected slots:
     void activeTab(int id);
     void changeStatus(QString status);
 
+    void undoUpdate(bool available);
+    void redoUpdate(bool available);
     void copyUpdate(bool available);
 
 protected:

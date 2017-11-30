@@ -178,6 +178,16 @@ void Editor::active()
     giveFocus();
 }
 
+void Editor::undo()
+{
+    undoCommand();
+}
+
+void Editor::redo()
+{
+    redoCommand();
+}
+
 void Editor::cut()
 {
     cutCommand();
@@ -217,6 +227,14 @@ void Editor::initialiseWidget()
 void Editor::giveFocus()
 {
     setFocus();
+}
+
+void Editor::undoCommand()
+{
+}
+
+void Editor::redoCommand()
+{
 }
 
 void Editor::cutCommand()

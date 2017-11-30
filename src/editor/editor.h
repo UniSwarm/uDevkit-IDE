@@ -70,6 +70,8 @@ public slots:
     void reload();
     void active();
 
+    void undo();
+    void redo();
     void cut();
     void copy();
     void paste();
@@ -83,6 +85,8 @@ signals:
     void helpRequest(QString term);
     void statusChanged(QString status);
 
+    void undoAvailable(bool available);
+    void redoAvailable(bool available);
     void copyAvailable(bool available);
 
 public:
@@ -95,6 +99,8 @@ protected:
     virtual void initialiseWidget();
     virtual void giveFocus();
 
+    virtual void undoCommand();
+    virtual void redoCommand();
     virtual void cutCommand();
     virtual void copyCommand();
     virtual void pasteCommand();
