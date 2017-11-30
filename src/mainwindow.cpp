@@ -30,6 +30,7 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
 
     setCentralWidget(_editorTabWidget);
     connect(_editorTabWidget, &EditorTabWidget::editorChange, this, &MainWindow::updateTitle);
+    connect(_editorTabWidget, &EditorTabWidget::editorChange, this, &MainWindow::updateAction);
     connect(_editorTabWidget, &EditorTabWidget::currentEditorModified, this, &MainWindow::updateTitle);
     connect(_editorTabWidget, &EditorTabWidget::statusChanged, this, &MainWindow::updateStatus);
 
@@ -156,56 +157,75 @@ void MainWindow::createMenus()
     // ============= Edit =============
     QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
 
-    action = editMenu->addAction(tr("Cut"));
+    action = editMenu->addAction(tr("&Undo"));
+    action->setIcon(QIcon(":/icons/img/metro/icons8-undo.png"));
+    action->setShortcut(QKeySequence::QKeySequence::Undo);
+    action->setEnabled(false);
+    connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::undo);
+    connect(_editorTabWidget, &EditorTabWidget::undoAvailable, action, &QAction::setEnabled);
+
+    action = editMenu->addAction(tr("&Redo"));
+    action->setIcon(QIcon(":/icons/img/metro/icons8-redo.png"));
+    action->setShortcut(QKeySequence::QKeySequence::Redo);
+    action->setEnabled(false);
+    connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::redo);
+    connect(_editorTabWidget, &EditorTabWidget::redoAvailable, action, &QAction::setEnabled);
+
+    editMenu->addSeparator();
+
+    action = editMenu->addAction(tr("Cu&t"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-cut.png"));
     action->setShortcut(QKeySequence::QKeySequence::Cut);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::cut);
     connect(_editorTabWidget, &EditorTabWidget::copyAvailable, action, &QAction::setEnabled);
 
-    action = editMenu->addAction(tr("Copy"));
+    action = editMenu->addAction(tr("&Copy"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-copy.png"));
     action->setShortcut(QKeySequence::QKeySequence::Copy);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::copy);
     connect(_editorTabWidget, &EditorTabWidget::copyAvailable, action, &QAction::setEnabled);
 
-    action = editMenu->addAction(tr("Paste"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-paste.png"));
-    action->setShortcut(QKeySequence::QKeySequence::Paste);
-    connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::paste);
+    _pasteAction = editMenu->addAction(tr("&Paste"));
+    _pasteAction->setIcon(QIcon(":/icons/img/metro/icons8-paste.png"));
+    _pasteAction->setShortcut(QKeySequence::QKeySequence::Paste);
+    _pasteAction->setEnabled(false);
+    connect(_pasteAction, &QAction::triggered, _editorTabWidget, &EditorTabWidget::paste);
 
     editMenu->addSeparator();
 
-    action = editMenu->addAction(tr("Search"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-search-button.png"));
-    action->setShortcut(QKeySequence::QKeySequence::Find);
-    connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateResearch);
+    _searchAction = editMenu->addAction(tr("Search"));
+    _searchAction->setIcon(QIcon(":/icons/img/metro/icons8-search-button.png"));
+    _searchAction->setShortcut(QKeySequence::QKeySequence::Find);
+    _searchAction->setEnabled(false);
+    connect(_searchAction, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateResearch);
 
-    action = editMenu->addAction(tr("Replace"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-find-and-replace.png"));
-    action->setShortcut(QKeySequence::QKeySequence::Replace);
-    connect(action, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateReplace);
+    _replaceAction = editMenu->addAction(tr("Replace"));
+    _replaceAction->setIcon(QIcon(":/icons/img/metro/icons8-find-and-replace.png"));
+    _replaceAction->setShortcut(QKeySequence::QKeySequence::Replace);
+    _replaceAction->setEnabled(false);
+    connect(_replaceAction, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateReplace);
 
     // ============= Project =============
     QMenu *projectMenu = menuBar()->addMenu(tr("&Project"));
 
-    action = projectMenu->addAction(tr("Clean"));
+    action = projectMenu->addAction(tr("Clea&n"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-broom.png"));
     action->setShortcut(QKeySequence("Ctrl+E"));
     connect(action, &QAction::triggered, this, &MainWindow::makeclean);
 
-    action = projectMenu->addAction(tr("Compile"));
+    action = projectMenu->addAction(tr("&Compile"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-maintenance.png"));
     action->setShortcut(QKeySequence("Ctrl+R"));
     connect(action, &QAction::triggered, this, &MainWindow::makeall);
 
-    action = projectMenu->addAction(tr("Program"));
+    action = projectMenu->addAction(tr("&Program"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-software-installer.png"));
     action->setShortcut(QKeySequence("Ctrl+T"));
     connect(action, &QAction::triggered, this, &MainWindow::makeprog);
 
-    action = projectMenu->addAction(tr("Compile sim"));
+    action = projectMenu->addAction(tr("Compile &sim"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-test-tube.png"));
     action->setShortcut(QKeySequence("Ctrl+G"));
     connect(action, &QAction::triggered, this, &MainWindow::makesim);
@@ -329,6 +349,13 @@ void MainWindow::updateTitle(Editor *editor)
     title.append(QDir(_project->rootDir().absolutePath()).dirName());
     title.append(") rtide");
     setWindowTitle(title);
+}
+
+void MainWindow::updateAction(Editor *editor)
+{
+    _pasteAction->setEnabled(editor != Q_NULLPTR);
+    _searchAction->setEnabled(editor != Q_NULLPTR);
+    _replaceAction->setEnabled(editor != Q_NULLPTR);
 }
 
 void MainWindow::updateStatus(QString status)

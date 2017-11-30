@@ -52,6 +52,7 @@ protected slots:
     void makesim();
 
     void updateTitle(Editor *editor=Q_NULLPTR);
+    void updateAction(Editor *editor=Q_NULLPTR);
     void updateStatus(QString status);
 
     void openRecentFile();
@@ -66,6 +67,10 @@ private:
     static const int MaxOldProject;
     QList<QString> _oldProjects;
     QList<QAction*> _oldProjectsActions;
+
+    QAction *_pasteAction;
+    QAction *_searchAction;
+    QAction *_replaceAction;
 };
 
 #endif // MAINWINDOW_H
