@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QStatusBar>
 
+#include "ui/iconneddockstyle.h"
+
 const int MainWindow::MaxOldProject = 8;
 
 MainWindow::MainWindow(Project *project, QWidget *parent) :
@@ -69,6 +71,7 @@ void MainWindow::createDocks()
     connect(_editorTabWidget, &EditorTabWidget::currentFileChanged, _fileProjectWidget, &ProjectWidget::selectFile);
     fileProjectContent->setLayout(fileProjectLayout);
     _fileProjectDock->setWidget(fileProjectContent);
+    _fileProjectDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/metro/icons8-binder.png"), _fileProjectDock->style()));
     addDockWidget(Qt::LeftDockWidgetArea, _fileProjectDock);
 
     _logDock = new QDockWidget(tr("log"), this);
@@ -79,8 +82,9 @@ void MainWindow::createDocks()
     _logWidget->document()->setDefaultStyleSheet("p{margin: 0;}");
     logLayout->addWidget(_logWidget);
     logContent->setLayout(logLayout);
-    _logDock->setWidget(logContent);
+    _logDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/metro/icons8-console.png"), _logDock->style()));
     connect(_logWidget, &LogWidget::openFileRequested, _editorTabWidget, &EditorTabWidget::openFileEditor);
+    _logDock->setWidget(logContent);
     addDockWidget(Qt::BottomDockWidgetArea, _logDock);
 
     _searchReplaceDock = new QDockWidget(tr("search / replace"), this);
@@ -89,6 +93,7 @@ void MainWindow::createDocks()
     QLayout *searchReplaceLayout = new QVBoxLayout();
     _searchReplaceWidget = new SearchReplaceWidget();
     searchReplaceLayout->addWidget(_searchReplaceWidget);
+    _searchReplaceDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/metro/icons8-search-button.png"), _searchReplaceDock->style()));
     connect(_editorTabWidget, &EditorTabWidget::editorChange, _searchReplaceWidget, &SearchReplaceWidget::setEditor);
     searchReplaceContent->setLayout(searchReplaceLayout);
     _searchReplaceDock->setWidget(searchReplaceContent);
