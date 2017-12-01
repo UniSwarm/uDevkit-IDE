@@ -279,7 +279,13 @@ Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget 
     Type type;
     if(mime.name() == "text/html")
         type = Editor::HTML;
-    else if(mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml" || mime.name() == "application/x-shellscript")
+    else if(mime.name().startsWith("text") ||
+            mime.name() == "application/xml" ||
+            mime.name() == "application/x-yaml" ||
+            mime.name() == "application/x-shellscript" ||
+            mime.name() == "application/javascript" ||
+            mime.name() == "application/json" ||
+            file.size() == 0)
         type = Editor::Code;
     else if(mime.name().startsWith("image"))
         type = Editor::Image;
