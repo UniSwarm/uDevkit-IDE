@@ -1,6 +1,7 @@
 #include "projectitemproxymodel.h"
 
 #include <QDebug>
+#include <QApplication>
 #include "projectitemmodel.h"
 
 #include "project.h"
@@ -49,7 +50,7 @@ bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
 {
     ProjectItemModel *fsm = static_cast<ProjectItemModel*>(sourceModel());
     const QModelIndex index = fsm->index(source_row, 0, source_parent);
-    const QString &path = fsm->data(index, ProjectItemModel::FilePathRole).toString();
+    const QString &path = fsm->data(index, ProjectItemModel::FileNameRole).toString();
 
     // show all dir parent of project path
     /*if (!path.startsWith(_project->rootPath()))
@@ -63,10 +64,22 @@ bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
     }
 
     // show filter: show only if match
-    if (fsm->isDir(index))
-        return true; // TODO add recursive search
-    if (_showFilter.indexIn(path) == -1)
-        return false;
+    if (_showFilter.pattern().size()>=2)
+    {
+        if (fsm->isDir(index))
+        {
+            //QApplication::processEvents();
+            for (int i=0; i<fsm->rowCount(index); i++)
+            {
+                bool filtered = filterAcceptsRow(i, index);
+                if (filtered)
+                    return true;
+            }
+            return false;
+        }
+        if (_showFilter.indexIn(path) == -1)
+            return false;
+    }
 
     return true;
 }
