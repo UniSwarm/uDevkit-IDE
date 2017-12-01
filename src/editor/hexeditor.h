@@ -20,6 +20,7 @@ public:
 
 protected slots:
     void modificationAppend();
+    void updatePos();
 
 protected:
     QHexEdit *_hexEditor;

@@ -17,6 +17,7 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
     _hexEditor = new QHexEdit();
     _modified = false;
     connect(_hexEditor, &QHexEdit::dataChanged, this, &HexEditor::modificationAppend);
+    connect(_hexEditor, &QHexEdit::currentAddressChanged, this, &HexEditor::updatePos);
 
     // style
     QString style = "\
@@ -60,6 +61,14 @@ void HexEditor::modificationAppend()
     emit modified(isModified());
 }
 
+void HexEditor::updatePos()
+{
+    QString status;
+    QString addr = QString::number(_hexEditor->cursorPosition(), 16).rightJustified(_hexEditor->addressWidth(), '0');
+    status.append(QString("addr: 0x%1 size: %2 ").arg(addr).arg(_hexEditor->data().size()));
+    emit statusChanged(status);
+}
+
 int HexEditor::openFileData(const QString &filePath)
 {
     _file.setFileName(filePath);
@@ -96,6 +105,7 @@ int HexEditor::saveFileData(const QString &filePath)
 
 void HexEditor::giveFocus()
 {
+    updatePos();
     emit copyAvailable(true);
 }
 
