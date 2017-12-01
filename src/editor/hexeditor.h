@@ -28,6 +28,14 @@ protected:
 
     int openFileData(const QString &filePath);
     int saveFileData(const QString &filePath=QString());
+
+    void giveFocus();
+
+    virtual void undoCommand();
+    virtual void redoCommand();
+    virtual void cutCommand();
+    virtual void copyCommand();
+    virtual void pasteCommand();
 };
 
 #endif // HEXEDITOR_H
