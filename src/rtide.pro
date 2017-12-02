@@ -55,7 +55,10 @@ SOURCES += \
     version/fileversionchange.cpp \
     project/projecticonprovider.cpp \
     project/fileproject.cpp \
-    ui/iconneddockstyle.cpp
+    ui/iconneddockstyle.cpp \
+    settings/setting.cpp \
+    settings/settingsmanager.cpp \
+    settings/settingsclass.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -84,7 +87,10 @@ HEADERS += \
     version/fileversionchange.h \
     project/projecticonprovider.h \
     project/fileproject.h \
-    ui/iconneddockstyle.h
+    ui/iconneddockstyle.h \
+    settings/setting.h \
+    settings/settingsmanager.h \
+    settings/settingsclass.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
