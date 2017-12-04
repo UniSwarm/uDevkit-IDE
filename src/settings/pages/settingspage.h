@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QIcon>
 
+#include "settings/settingsmanager.h"
+
 class SettingsPage : public QWidget
 {
     Q_OBJECT

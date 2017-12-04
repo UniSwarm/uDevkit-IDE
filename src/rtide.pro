@@ -58,7 +58,11 @@ SOURCES += \
     ui/iconneddockstyle.cpp \
     settings/setting.cpp \
     settings/settingsmanager.cpp \
-    settings/settingsclass.cpp
+    settings/settingsclass.cpp \
+    settings/pages/settingswindow.cpp \
+    settings/pages/settingspage.cpp \
+    settings/pages/settingscateg.cpp \
+    settings/pages/codeeditorsettings.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -90,7 +94,11 @@ HEADERS += \
     ui/iconneddockstyle.h \
     settings/setting.h \
     settings/settingsmanager.h \
-    settings/settingsclass.h
+    settings/settingsclass.h \
+    settings/pages/settingswindow.h \
+    settings/pages/settingspage.h \
+    settings/pages/settingscateg.h \
+    settings/pages/codeeditorsettings.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 

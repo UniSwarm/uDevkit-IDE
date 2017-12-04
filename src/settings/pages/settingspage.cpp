@@ -27,5 +27,5 @@ void SettingsPage::setLabel(const QString &label)
 
 void SettingsPage::commit()
 {
-
+    execCommit();
 }

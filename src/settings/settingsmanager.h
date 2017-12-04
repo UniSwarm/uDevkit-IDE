@@ -15,10 +15,10 @@ protected:
 public:
     static SettingsManager *instance();
 
-    SettingsClass *registerClass(const QString &className);
-    Setting *registerSetting(const QString &className, const QString &name, const QVariant &defaultValue);
+    static SettingsClass *registerClass(const QString &className);
+    static Setting *registerSetting(const QString &className, const QString &name, const QVariant &defaultValue);
 
-    void save();
+    static void save();
 
 protected:
     static SettingsManager *settingsManager;

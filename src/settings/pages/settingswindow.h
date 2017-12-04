@@ -23,12 +23,14 @@ public slots:
 
 protected slots:
     void changePage(QListWidgetItem *current, QListWidgetItem *previous);
+    void buttonClick(QAbstractButton *button);
 
 protected:
     void createWidgets();
 
     QListWidget *_sectionsList;
     QStackedWidget *_sectionsStack;
+    QDialogButtonBox *_dialogButtonBox;
 };
 
 #endif // SETTINGSWINDOW_H

@@ -55,6 +55,8 @@ protected slots:
     void updateAction(Editor *editor=Q_NULLPTR);
     void updateStatus(QString status);
 
+    void showSettings();
+
     void openRecentFile();
 
     void about();

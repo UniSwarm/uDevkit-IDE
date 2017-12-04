@@ -14,6 +14,7 @@
 #include <QStatusBar>
 
 #include "ui/iconneddockstyle.h"
+#include "settings/pages/settingswindow.h"
 
 const int MainWindow::MaxOldProject = 8;
 
@@ -200,17 +201,25 @@ void MainWindow::createMenus()
 
     editMenu->addSeparator();
 
-    _searchAction = editMenu->addAction(tr("Search"));
+    _searchAction = editMenu->addAction(tr("&Search"));
     _searchAction->setIcon(QIcon(":/icons/img/metro/icons8-search-button.png"));
     _searchAction->setShortcut(QKeySequence::QKeySequence::Find);
     _searchAction->setEnabled(false);
     connect(_searchAction, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateResearch);
 
-    _replaceAction = editMenu->addAction(tr("Replace"));
+    _replaceAction = editMenu->addAction(tr("&Replace"));
     _replaceAction->setIcon(QIcon(":/icons/img/metro/icons8-find-and-replace.png"));
     _replaceAction->setShortcut(QKeySequence::QKeySequence::Replace);
     _replaceAction->setEnabled(false);
     connect(_replaceAction, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateReplace);
+
+    editMenu->addSeparator();
+
+    action = editMenu->addAction(tr("P&references"));
+    action->setIcon(QIcon(":/icons/img/metro/icons8-settings.png"));
+    action->setShortcut(QKeySequence::QKeySequence::Preferences);
+    action->setShortcut(QKeySequence("Ctrl+P"));
+    connect(action, &QAction::triggered, this, &MainWindow::showSettings);
 
     // ============= Project =============
     QMenu *projectMenu = menuBar()->addMenu(tr("&Project"));
@@ -239,14 +248,17 @@ void MainWindow::createMenus()
     QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
 
     action = _logDock->toggleViewAction();
+    action->setText(tr("View / Hide &log"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-console.png"));
     viewMenu->addAction(action);
 
     action = _fileProjectDock->toggleViewAction();
+    action->setText(tr("View / Hide &project file"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-binder.png"));
     viewMenu->addAction(action);
 
     action = _searchReplaceDock->toggleViewAction();
+    action->setText(tr("View / Hide &search/replace"));
     action->setIcon(QIcon(":/icons/img/metro/icons8-search-button.png"));
     viewMenu->addAction(action);
 
@@ -368,6 +380,12 @@ void MainWindow::updateStatus(QString status)
     statusBar()->showMessage(status);
 }
 
+void MainWindow::showSettings()
+{
+    SettingsWindow settingsWindow(this);
+    settingsWindow.exec();
+}
+
 bool MainWindow::event(QEvent *event)
 {
     if (event->type()==QEvent::Close)
@@ -403,7 +421,7 @@ void MainWindow::openRecentFile()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("UniSwarm", "RtIDE");
+    QSettings settings;
 
     // MainWindow position/size/maximized
     settings.beginGroup("MainWindow");
@@ -424,7 +442,7 @@ void MainWindow::writeSettings()
 
 void MainWindow::readSettings()
 {
-    QSettings settings("UniSwarm", "RtIDE");
+    QSettings settings;
 
     // MainWindow position/size/maximized
     settings.beginGroup("MainWindow");

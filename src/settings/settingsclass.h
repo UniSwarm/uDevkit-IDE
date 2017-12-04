@@ -14,6 +14,8 @@ public:
     SettingsClass(const QString &name);
 
     const QString &name() const;
+    QVariant setting(const QString &name, const QVariant &defaultValue=QVariant());
+    void setSetting(const QString &name, const QVariant &value);
 
     Setting *registerSetting(const QString &name, const QVariant &defaultValue=QVariant());
 

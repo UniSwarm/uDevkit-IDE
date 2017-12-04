@@ -3,10 +3,14 @@
 #include <QDebug>
 
 #include "project/project.h"
+#include "settings/settingsmanager.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setOrganizationName("UniSwarm");
+    a.setOrganizationDomain("UniSwarm");
+    a.setApplicationName("RtIDE");
 
     // apply dark style
     QFile f(":qdarkstyle/style.qss");
@@ -26,5 +30,7 @@ int main(int argc, char *argv[])
     MainWindow w(project);
     w.show();
 
-    return a.exec();
+    int ret = a.exec();
+    SettingsManager::save();
+    return ret;
 }

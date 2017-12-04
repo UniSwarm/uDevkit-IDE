@@ -6,6 +6,8 @@
 #include "codeeditormargindelegate.h"
 #include "codeeditorscrollbar.h"
 
+#include "settings/settingsclass.h"
+
 namespace edbee {
     class TextEditorWidget;
 }
@@ -36,6 +38,8 @@ protected:
     void initialiseWidget();
     void giveFocus();
 
+    SettingsClass *_settingsClass;
+
     virtual void undoCommand();
     virtual void redoCommand();
     virtual void cutCommand();
@@ -46,6 +50,7 @@ protected:
     int saveFileData(const QString &filePath=QString());
 
 protected slots:
+    void updateSettings();
     void modificationAppend();
     void help();
     void updatePos();

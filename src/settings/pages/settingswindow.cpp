@@ -1,12 +1,23 @@
 #include "settingswindow.h"
 
+#include <QAbstractButton>
 #include <QBoxLayout>
+
+#include "codeeditorsettings.h"
 
 SettingsWindow::SettingsWindow(QWidget *parent)
     : QDialog (parent)
 {
     setMinimumSize(800, 600);
     createWidgets();
+
+    SettingsCateg *categ;
+    categ = addCategory(QIcon(":/icons/img/metro/icons8-console.png"), "Editors");
+    categ->addPage(new CodeEditorSettings());
+
+    /*categ = addCategory(QIcon(":/icons/img/metro/icons8-console.png"), "Editors 2");
+    categ->addPage(new CodeEditorSettings());
+    categ->addPage(new CodeEditorSettings());*/
 }
 
 SettingsCateg *SettingsWindow::category(int i) const
@@ -27,7 +38,7 @@ void SettingsWindow::addCategory(SettingsCateg *category)
     QListWidgetItem *itemList = new QListWidgetItem(_sectionsList);
     itemList->setIcon(category->icon());
     itemList->setText(category->label());
-    itemList->setTextAlignment(Qt::AlignHCenter);
+    itemList->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     itemList->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     // added to stack widget
@@ -51,6 +62,25 @@ void SettingsWindow::changePage(QListWidgetItem *current, QListWidgetItem *previ
     _sectionsStack->setCurrentIndex(_sectionsList->row(current));
 }
 
+void SettingsWindow::buttonClick(QAbstractButton *button)
+{
+    switch (_dialogButtonBox->buttonRole(button))
+    {
+    case QDialogButtonBox::AcceptRole:
+        commitChange();
+        accept();
+        break;
+    case QDialogButtonBox::RejectRole:
+        reject();
+        break;
+    case QDialogButtonBox::ApplyRole:
+        commitChange();
+        break;
+    default:
+        break;
+    }
+}
+
 void SettingsWindow::createWidgets()
 {
     QVBoxLayout *layout = new QVBoxLayout();
@@ -62,6 +92,8 @@ void SettingsWindow::createWidgets()
     _sectionsList = new QListWidget();
     _sectionsList->setViewMode(QListView::ListMode);
     _sectionsList->setMaximumWidth(200);
+    _sectionsList->setIconSize(QSize(48, 48));
+    _sectionsList->setStyleSheet("QListView::item:focus{border:none;}");
     connect(_sectionsList, &QListWidget::currentItemChanged, this, &SettingsWindow::changePage);
     layoutV->addWidget(_sectionsList);
 
@@ -69,10 +101,9 @@ void SettingsWindow::createWidgets()
     layoutV->addWidget(_sectionsStack);
 
     layout->addLayout(layoutV);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
-    layout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    _dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
+    layout->addWidget(_dialogButtonBox);
+    connect(_dialogButtonBox, &QDialogButtonBox::clicked, this, &SettingsWindow::buttonClick);
 
     setLayout(layout);
 }

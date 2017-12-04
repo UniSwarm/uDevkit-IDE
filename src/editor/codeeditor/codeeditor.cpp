@@ -26,10 +26,10 @@
 #include "edbee/views/textselection.h"
 #include "edbee/views/texteditorscrollarea.h"
 #include "edbee/views/components/texteditorcomponent.h"
-
 #include "edbee/models/chardocument/chartextdocument.h"
+#include "edbee/models/textdocumentscopes.h"
 
-#include <edbee/models/textdocumentscopes.h>
+#include "settings/settingsmanager.h"
 
 bool CodeEditor::initialized = false;
 
@@ -61,12 +61,10 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
         initialized = true;
     }
 
+    _settingsClass = SettingsManager::registerClass("codeEditor");
+    connect(_settingsClass, &SettingsClass::classModified, this, &CodeEditor::updateSettings);
+
     _editorWidget = new edbee::TextEditorWidget();
-    QFont font = _editorWidget->config()->font();
-    font.setFamily("monospace");
-    font.setStyleHint(QFont::Monospace);
-    font.setPixelSize(13);
-    _editorWidget->config()->setFont(font);
     _editorWidget->config()->setThemeName("RtIDE");
     //_editorWidget->config()->setShowWhitespaceMode(edbee::TextEditorConfig::ShowWhitespaces);
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
@@ -88,6 +86,8 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
 
     _codeEditorMarginDelegate = new CodeEditorMarginDelegate();
     _editorWidget->textMarginComponent()->giveDelegate(_codeEditorMarginDelegate);
+
+    updateSettings();
 }
 
 bool CodeEditor::isModified() const
@@ -179,6 +179,15 @@ int CodeEditor::saveFileData(const QString &filePath)
     _project->versionControl()->requestFileModifications(_filePath);
 
     return 0;
+}
+
+void CodeEditor::updateSettings()
+{
+    QFont font = _editorWidget->config()->font();
+    font.setFamily(_settingsClass->setting("fontFamily", "monospace").toString());
+    font.setStyleHint(QFont::Monospace);
+    font.setPixelSize(_settingsClass->setting("fontSize", 10).toInt());
+    _editorWidget->config()->setFont(font);
 }
 
 void CodeEditor::modificationAppend()
