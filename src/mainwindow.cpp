@@ -72,7 +72,7 @@ void MainWindow::createDocks()
     connect(_editorTabWidget, &EditorTabWidget::currentFileChanged, _fileProjectWidget, &ProjectWidget::selectFile);
     fileProjectContent->setLayout(fileProjectLayout);
     _fileProjectDock->setWidget(fileProjectContent);
-    _fileProjectDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/metro/icons8-binder.png"), _fileProjectDock->style()));
+    _fileProjectDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/dark/icons8-binder.png"), _fileProjectDock->style()));
     addDockWidget(Qt::LeftDockWidgetArea, _fileProjectDock);
 
     _logDock = new QDockWidget(tr("log"), this);
@@ -83,7 +83,7 @@ void MainWindow::createDocks()
     _logWidget->document()->setDefaultStyleSheet("p{margin: 0;}");
     logLayout->addWidget(_logWidget);
     logContent->setLayout(logLayout);
-    _logDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/metro/icons8-console.png"), _logDock->style()));
+    _logDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/dark/icons8-console.png"), _logDock->style()));
     connect(_logWidget, &LogWidget::openFileRequested, _editorTabWidget, &EditorTabWidget::openFileEditor);
     _logDock->setWidget(logContent);
     addDockWidget(Qt::BottomDockWidgetArea, _logDock);
@@ -94,7 +94,7 @@ void MainWindow::createDocks()
     QLayout *searchReplaceLayout = new QVBoxLayout();
     _searchReplaceWidget = new SearchReplaceWidget();
     searchReplaceLayout->addWidget(_searchReplaceWidget);
-    _searchReplaceDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/metro/icons8-search-button.png"), _searchReplaceDock->style()));
+    _searchReplaceDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/dark/icons8-search-button.png"), _searchReplaceDock->style()));
     connect(_editorTabWidget, &EditorTabWidget::editorChange, _searchReplaceWidget, &SearchReplaceWidget::setEditor);
     searchReplaceContent->setLayout(searchReplaceLayout);
     _searchReplaceDock->setWidget(searchReplaceContent);
@@ -110,13 +110,13 @@ void MainWindow::createMenus()
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 
     QAction *openDirAction = new QAction(tr("Open &project"), this);
-    openDirAction->setIcon(QIcon(":/icons/img/metro/icons8-open-box.png"));
+    openDirAction->setIcon(QIcon(":/icons/img/dark/icons8-open-box.png"));
     openDirAction->setStatusTip(tr("Opens a project as directory"));
     fileMenu->addAction(openDirAction);
     connect(openDirAction, SIGNAL(triggered()), this, SLOT(openDir()));
 
     QAction *openFilesAction = new QAction(tr("&Open files"), this);
-    openFilesAction->setIcon(QIcon(":/icons/img/metro/icons8-open.png"));
+    openFilesAction->setIcon(QIcon(":/icons/img/dark/icons8-open.png"));
     openFilesAction->setStatusTip(tr("Opens files"));
     openFilesAction->setShortcut(QKeySequence::Open);
     fileMenu->addAction(openFilesAction);
@@ -125,7 +125,7 @@ void MainWindow::createMenus()
     fileMenu->addSeparator();
 
     QAction *switchHeaderAction = new QAction(tr("&Switch header"), this);
-    switchHeaderAction->setIcon(QIcon(":/icons/img/metro/icons8-switch.png"));
+    switchHeaderAction->setIcon(QIcon(":/icons/img/dark/icons8-switch.png"));
     switchHeaderAction->setStatusTip(tr("Switch between header and source"));
     switchHeaderAction->setShortcut(QKeySequence("F4"));
     fileMenu->addAction(switchHeaderAction);
@@ -143,7 +143,7 @@ void MainWindow::createMenus()
 
     fileMenu->addSeparator();
     QAction *exitAction = new QAction(tr("E&xit"), this);
-    exitAction->setIcon(QIcon(":/icons/img/metro/icons8-quit.png"));
+    exitAction->setIcon(QIcon(":/icons/img/dark/icons8-quit.png"));
     exitAction->setStatusTip(tr("Exits RtIDE"));
     exitAction->setShortcut(QKeySequence::Quit);
     fileMenu->addAction(exitAction);
@@ -164,14 +164,14 @@ void MainWindow::createMenus()
     QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
 
     action = editMenu->addAction(tr("&Undo"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-undo.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-undo.png"));
     action->setShortcut(QKeySequence::QKeySequence::Undo);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::undo);
     connect(_editorTabWidget, &EditorTabWidget::undoAvailable, action, &QAction::setEnabled);
 
     action = editMenu->addAction(tr("&Redo"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-redo.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-redo.png"));
     action->setShortcut(QKeySequence::QKeySequence::Redo);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::redo);
@@ -180,21 +180,21 @@ void MainWindow::createMenus()
     editMenu->addSeparator();
 
     action = editMenu->addAction(tr("Cu&t"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-cut.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-cut.png"));
     action->setShortcut(QKeySequence::QKeySequence::Cut);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::cut);
     connect(_editorTabWidget, &EditorTabWidget::copyAvailable, action, &QAction::setEnabled);
 
     action = editMenu->addAction(tr("&Copy"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-copy.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-copy.png"));
     action->setShortcut(QKeySequence::QKeySequence::Copy);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::copy);
     connect(_editorTabWidget, &EditorTabWidget::copyAvailable, action, &QAction::setEnabled);
 
     _pasteAction = editMenu->addAction(tr("&Paste"));
-    _pasteAction->setIcon(QIcon(":/icons/img/metro/icons8-paste.png"));
+    _pasteAction->setIcon(QIcon(":/icons/img/dark/icons8-paste.png"));
     _pasteAction->setShortcut(QKeySequence::QKeySequence::Paste);
     _pasteAction->setEnabled(false);
     connect(_pasteAction, &QAction::triggered, _editorTabWidget, &EditorTabWidget::paste);
@@ -202,13 +202,13 @@ void MainWindow::createMenus()
     editMenu->addSeparator();
 
     _searchAction = editMenu->addAction(tr("&Search"));
-    _searchAction->setIcon(QIcon(":/icons/img/metro/icons8-search-button.png"));
+    _searchAction->setIcon(QIcon(":/icons/img/dark/icons8-search-button.png"));
     _searchAction->setShortcut(QKeySequence::QKeySequence::Find);
     _searchAction->setEnabled(false);
     connect(_searchAction, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateResearch);
 
     _replaceAction = editMenu->addAction(tr("&Replace"));
-    _replaceAction->setIcon(QIcon(":/icons/img/metro/icons8-find-and-replace.png"));
+    _replaceAction->setIcon(QIcon(":/icons/img/dark/icons8-find-and-replace.png"));
     _replaceAction->setShortcut(QKeySequence::QKeySequence::Replace);
     _replaceAction->setEnabled(false);
     connect(_replaceAction, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateReplace);
@@ -216,7 +216,7 @@ void MainWindow::createMenus()
     editMenu->addSeparator();
 
     action = editMenu->addAction(tr("P&references"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-settings.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-settings.png"));
     action->setShortcut(QKeySequence::QKeySequence::Preferences);
     action->setShortcut(QKeySequence("Ctrl+P"));
     connect(action, &QAction::triggered, this, &MainWindow::showSettings);
@@ -225,22 +225,22 @@ void MainWindow::createMenus()
     QMenu *projectMenu = menuBar()->addMenu(tr("&Project"));
 
     action = projectMenu->addAction(tr("Clea&n"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-broom.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-broom.png"));
     action->setShortcut(QKeySequence("Ctrl+E"));
     connect(action, &QAction::triggered, this, &MainWindow::makeclean);
 
     action = projectMenu->addAction(tr("&Compile"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-maintenance.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-maintenance.png"));
     action->setShortcut(QKeySequence("Ctrl+R"));
     connect(action, &QAction::triggered, this, &MainWindow::makeall);
 
     action = projectMenu->addAction(tr("&Program"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-software-installer.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-software-installer.png"));
     action->setShortcut(QKeySequence("Ctrl+T"));
     connect(action, &QAction::triggered, this, &MainWindow::makeprog);
 
     action = projectMenu->addAction(tr("Compile &sim"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-test-tube.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-test-tube.png"));
     action->setShortcut(QKeySequence("Ctrl+G"));
     connect(action, &QAction::triggered, this, &MainWindow::makesim);
 
@@ -249,29 +249,29 @@ void MainWindow::createMenus()
 
     action = _logDock->toggleViewAction();
     action->setText(tr("View / Hide &log"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-console.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-console.png"));
     viewMenu->addAction(action);
 
     action = _fileProjectDock->toggleViewAction();
     action->setText(tr("View / Hide &project file"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-binder.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-binder.png"));
     viewMenu->addAction(action);
 
     action = _searchReplaceDock->toggleViewAction();
     action->setText(tr("View / Hide &search/replace"));
-    action->setIcon(QIcon(":/icons/img/metro/icons8-search-button.png"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-search-button.png"));
     viewMenu->addAction(action);
 
     // ============= Help =============
     QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
 
     QAction *aboutAction = new QAction(tr("&About"), this);
-    aboutAction->setIcon(QIcon(":/icons/img/metro/icons8-about.png"));
+    aboutAction->setIcon(QIcon(":/icons/img/dark/icons8-about.png"));
     connect(aboutAction, SIGNAL(triggered(bool)), this, SLOT(about()));
     helpMenu->addAction(aboutAction);
 
     QAction *aboutQtAction = new QAction(tr("About &Qt"), this);
-    aboutQtAction->setIcon(QIcon(":/icons/img/metro/icons8-system-information.png"));
+    aboutQtAction->setIcon(QIcon(":/icons/img/dark/icons8-system-information.png"));
     connect(aboutQtAction, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     helpMenu->addAction(aboutQtAction);
 }
