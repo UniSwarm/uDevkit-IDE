@@ -1,8 +1,11 @@
 #include "settingsmanager.h"
 
+#include <QApplication>
+
 SettingsManager *SettingsManager::settingsManager = Q_NULLPTR;
 
-SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
+SettingsManager::SettingsManager(QObject *parent)
+    : QObject(parent)
 {
 }
 
@@ -27,6 +30,15 @@ SettingsClass *SettingsManager::registerClass(const QString &className)
     {
         settingClass = new SettingsClass(className);
         instance()->_classesMap.insert(className, settingClass);
+
+        // load
+        QSettings settings(QApplication::organizationName(), QApplication::applicationName());
+        settings.beginGroup(className);
+        foreach (QString key, settings.allKeys())
+        {
+            settingClass->registerSetting(key, settings.value(key));
+        }
+        settings.endGroup();
     }
 
     return settingClass;
@@ -40,10 +52,9 @@ Setting *SettingsManager::registerSetting(const QString &className, const QStrin
 
 void SettingsManager::save()
 {
-    instance()->_settings.beginGroup("save");
-    instance()->_settings.beginGroup("save2");
-    instance()->_settings.setValue("a", 2);
-    instance()->_settings.endGroup();
-    instance()->_settings.endGroup();
-
+    QSettings settings(QApplication::organizationName(), QApplication::applicationName());
+    foreach (SettingsClass *settingClass, instance()->_classesMap)
+    {
+        settingClass->save(&settings);
+    }
 }

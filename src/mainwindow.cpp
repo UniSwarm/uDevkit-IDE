@@ -61,7 +61,7 @@ void MainWindow::createDocks()
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
     setTabPosition(Qt::LeftDockWidgetArea, QTabWidget::North);
 
-    _fileProjectDock = new QDockWidget(tr("project"), this);
+    _fileProjectDock = new QDockWidget(tr("Project"), this);
     _fileProjectDock->setObjectName("fileProjectDock");
     QWidget *fileProjectContent = new QWidget(_fileProjectDock);
     QLayout *fileProjectLayout = new QVBoxLayout();
@@ -75,7 +75,7 @@ void MainWindow::createDocks()
     _fileProjectDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/dark/icons8-binder.png"), _fileProjectDock->style()));
     addDockWidget(Qt::LeftDockWidgetArea, _fileProjectDock);
 
-    _logDock = new QDockWidget(tr("log"), this);
+    _logDock = new QDockWidget(tr("Log"), this);
     _logDock->setObjectName("logDock");
     QWidget *logContent = new QWidget(_logDock);
     QLayout *logLayout = new QVBoxLayout();
@@ -88,7 +88,7 @@ void MainWindow::createDocks()
     _logDock->setWidget(logContent);
     addDockWidget(Qt::BottomDockWidgetArea, _logDock);
 
-    _searchReplaceDock = new QDockWidget(tr("search / replace"), this);
+    _searchReplaceDock = new QDockWidget(tr("Search / replace"), this);
     _searchReplaceDock->setObjectName("searchReplaceDock");
     QWidget *searchReplaceContent = new QWidget(_searchReplaceDock);
     QLayout *searchReplaceLayout = new QVBoxLayout();
@@ -421,7 +421,7 @@ void MainWindow::openRecentFile()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings;
+    QSettings settings(QApplication::organizationName(), QApplication::applicationName());
 
     // MainWindow position/size/maximized
     settings.beginGroup("MainWindow");
@@ -442,7 +442,7 @@ void MainWindow::writeSettings()
 
 void MainWindow::readSettings()
 {
-    QSettings settings;
+    QSettings settings(QApplication::organizationName(), QApplication::applicationName());
 
     // MainWindow position/size/maximized
     settings.beginGroup("MainWindow");

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QSettings>
 #include <QMap>
 
 #include "setting.h"
@@ -20,6 +21,7 @@ public:
     Setting *registerSetting(const QString &name, const QVariant &defaultValue=QVariant());
 
     bool isModified() const;
+    void save(QSettings *settings);
 
 signals:
     void classModified();

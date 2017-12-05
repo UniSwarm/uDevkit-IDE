@@ -65,6 +65,7 @@ void SettingsWindow::commitChange()
         SettingsCateg *categ = static_cast<SettingsCateg *>(_sectionsStack->widget(i));
         categ->commitChange();
     }
+    SettingsManager::save();
 }
 
 void SettingsWindow::changePage(QListWidgetItem *current, QListWidgetItem *previous)

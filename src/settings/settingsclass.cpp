@@ -64,3 +64,13 @@ bool SettingsClass::isModified() const
 {
     return _modified;
 }
+
+void SettingsClass::save(QSettings *settings)
+{
+    settings->beginGroup(_name);
+    foreach (Setting *setting, _settingsMap)
+    {
+        settings->setValue(setting->name() ,setting->value());
+    }
+    settings->endGroup();
+}

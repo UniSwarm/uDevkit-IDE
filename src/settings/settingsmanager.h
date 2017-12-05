@@ -24,7 +24,6 @@ protected:
     static SettingsManager *settingsManager;
 
     QMap<QString, SettingsClass*> _classesMap;
-    QSettings _settings;
 };
 
 #endif // SETTINGSMANAGER_H
