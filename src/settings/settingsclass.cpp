@@ -5,6 +5,19 @@ SettingsClass::SettingsClass(const QString &name)
 {
 }
 
+SettingsClass::SettingsClass(const SettingsClass &other)
+{
+    _name = other.name();
+    _modified = false;
+    foreach (Setting *setting, other._settingsMap)
+        registerSetting(setting->name(), setting->value());
+}
+
+SettingsClass::~SettingsClass()
+{
+    qDeleteAll(_settingsMap);
+}
+
 const QString &SettingsClass::name() const
 {
     return _name;

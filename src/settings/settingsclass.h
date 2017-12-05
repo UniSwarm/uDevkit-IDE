@@ -13,6 +13,8 @@ class SettingsClass : public QObject
     Q_OBJECT
 public:
     SettingsClass(const QString &name);
+    SettingsClass(const SettingsClass &other);
+    ~SettingsClass();
 
     const QString &name() const;
     QVariant setting(const QString &name, const QVariant &defaultValue=QVariant());
