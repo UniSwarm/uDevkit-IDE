@@ -131,6 +131,7 @@ void PathEditWidget::setupWidgets()
     QLayout *layout2 = new QHBoxLayout();
 
     _pathLineEdit = new QLineEdit();
+    _pathLineEdit->setPlaceholderText("Leave empty to use system PATH");
     _pathLineEdit->setCompleter(new QCompleter(_filesModel));
     connect(_pathLineEdit, SIGNAL(editingFinished()), this, SLOT(checkLineEdit()));
     layout2->addWidget(_pathLineEdit);

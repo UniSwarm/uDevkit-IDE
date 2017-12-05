@@ -19,6 +19,9 @@ GitVersionControl::GitVersionControl()
     _processGitDiff = new QProcess(this);
     connect(_processGitDiff, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=](int, QProcess::ExitStatus){processDiffEnd();}); // but this crap is recomended
+
+    _settingsClass = SettingsManager::registerClass("gitversion");
+    connect(_settingsClass, &SettingsClass::classModified, this, &GitVersionControl::updateSettings);
 }
 
 GitVersionControl::~GitVersionControl()
@@ -167,6 +170,19 @@ void GitVersionControl::processEnd()
         emit newModifiedFiles(newmodifiedFiles);
     if (!validedFile.isEmpty())
         emit newValidatedFiles(validedFile);
+}
+
+void GitVersionControl::updateSettings()
+{
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();;
+#if defined(Q_OS_WIN)
+    char listSep = ';';
+#else
+    char listSep = ':';
+#endif
+    env.insert("PATH", _settingsClass->setting("path").toString() + listSep + env.value("PATH") );
+    _processGitState->setProcessEnvironment(env);
+    _processGitDiff->setProcessEnvironment(env);
 }
 
 void GitVersionControl::reqFileModif(const QString &filePath)

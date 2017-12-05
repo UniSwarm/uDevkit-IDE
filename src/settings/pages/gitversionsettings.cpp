@@ -5,12 +5,14 @@
 GitVersionSettings::GitVersionSettings()
     : SettingsPage(QIcon(":/icons/img/dark/icons8-git.png"), "Git version")
 {
+    _settingsClass = SettingsManager::registerClass("gitversion");
     createWidgets();
 }
 
 void GitVersionSettings::execCommit()
 {
-
+    _settingsClass->setSetting("path", _pathEditWidget->path());
+    _settingsClass->commit();
 }
 
 void GitVersionSettings::createWidgets()
@@ -20,7 +22,7 @@ void GitVersionSettings::createWidgets()
 
     _pathEditWidget = new PathEditWidget();
     _pathEditWidget->setProgramm("git");
-    _pathEditWidget->setPath("");
+    _pathEditWidget->setPath(_settingsClass->setting("path").toString());
     _pathEditWidget->setVersionArg("--version");
     _pathEditWidget->checkProgramm();
     layout->addRow(tr("Git path"), _pathEditWidget);
