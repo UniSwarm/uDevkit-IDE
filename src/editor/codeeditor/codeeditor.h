@@ -24,6 +24,10 @@ public:
 
     Type type() const {return Code;}
 
+    void setText(const QString &text);
+    void setGrammar(const QString &grammarName);
+    void setSettingsClass(SettingsClass *settingsClass);
+
     virtual SearchCaps searchCap() const;
     virtual int search(const QVariant &searchTerm, SearchFlags flags=SearchFlag(NoFlag));
     virtual void searchNext();

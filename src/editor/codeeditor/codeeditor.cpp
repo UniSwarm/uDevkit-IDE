@@ -104,6 +104,28 @@ void CodeEditor::gotoLine(int x, int y)
     controller->scrollCaretVisible();
 }
 
+void CodeEditor::setText(const QString &text)
+{
+    _editorWidget->textDocument()->setText(text);
+}
+
+void CodeEditor::setGrammar(const QString &grammarName)
+{
+    edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
+    edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename("source." + grammarName.toLower());
+    if (grammar)
+        _editorWidget->textDocument()->setLanguageGrammar(grammar);
+}
+
+void CodeEditor::setSettingsClass(SettingsClass *settingsClass)
+{
+    QFont font = _editorWidget->config()->font();
+    font.setFamily(settingsClass->setting("fontFamily", "monospace").toString());
+    font.setStyleHint(QFont::Monospace);
+    font.setPixelSize(settingsClass->setting("fontSize", 10).toInt());
+    _editorWidget->config()->setFont(font);
+}
+
 int CodeEditor::openFileData(const QString &filePath)
 {
     QFile file (filePath);
@@ -183,11 +205,7 @@ int CodeEditor::saveFileData(const QString &filePath)
 
 void CodeEditor::updateSettings()
 {
-    QFont font = _editorWidget->config()->font();
-    font.setFamily(_settingsClass->setting("fontFamily", "monospace").toString());
-    font.setStyleHint(QFont::Monospace);
-    font.setPixelSize(_settingsClass->setting("fontSize", 10).toInt());
-    _editorWidget->config()->setFont(font);
+    setSettingsClass(_settingsClass);
 }
 
 void CodeEditor::modificationAppend()
