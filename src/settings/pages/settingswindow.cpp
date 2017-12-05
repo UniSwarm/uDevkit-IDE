@@ -4,6 +4,11 @@
 #include <QBoxLayout>
 
 #include "codeeditorsettings.h"
+#include "htmleditorsettings.h"
+#include "hexeditorsettings.h"
+#include "imageeditorsettings.h"
+
+#include "gitversionsettings.h"
 
 SettingsWindow::SettingsWindow(QWidget *parent)
     : QDialog (parent)
@@ -12,12 +17,20 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     createWidgets();
 
     SettingsCateg *categ;
-    categ = addCategory(QIcon(":/icons/img/metro/icons8-console.png"), "Editors");
+    categ = addCategory(QIcon(":/icons/img/dark/icons8-editor.png"), "Editors");
     categ->addPage(new CodeEditorSettings());
+    categ->addPage(new HtmlEditorSettings());
+    categ->addPage(new HexEditorSettings());
+    categ->addPage(new ImageEditorSettings());
 
-    /*categ = addCategory(QIcon(":/icons/img/metro/icons8-console.png"), "Editors 2");
-    categ->addPage(new CodeEditorSettings());
-    categ->addPage(new CodeEditorSettings());*/
+    categ = addCategory(QIcon(":/icons/img/dark/icons8-versions.png"), "Version management");
+    categ->addPage(new GitVersionSettings());
+
+    categ = addCategory(QIcon(":/icons/img/dark/icons8-toolbox.png"), "Tools");
+    //categ->addPage(new GitVersionSettings());
+
+    QModelIndex modelIndex = _sectionsList->model()->index(0, 0, _sectionsList->rootIndex());
+    _sectionsList->setCurrentIndex(modelIndex);
 }
 
 SettingsCateg *SettingsWindow::category(int i) const
@@ -93,7 +106,8 @@ void SettingsWindow::createWidgets()
     _sectionsList->setViewMode(QListView::ListMode);
     _sectionsList->setMaximumWidth(200);
     _sectionsList->setIconSize(QSize(48, 48));
-    _sectionsList->setStyleSheet("QListView::item:focus{border:none;}");
+    _sectionsList->setUniformItemSizes(true);
+    _sectionsList->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(_sectionsList, &QListWidget::currentItemChanged, this, &SettingsWindow::changePage);
     layoutV->addWidget(_sectionsList);
 

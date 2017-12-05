@@ -9,7 +9,6 @@
         <file>img/dark/icons8-copy.png</file>
         <file>img/dark/icons8-cut.png</file>
         <file>img/dark/icons8-find-and-replace.png</file>
-        <file>img/dark/icons8-git.png</file>
         <file>img/dark/icons8-maintenance.png</file>
         <file>img/dark/icons8-next.png</file>
         <file>img/dark/icons8-next-page.png</file>
@@ -28,6 +27,14 @@
         <file>img/dark/icons8-test-tube.png</file>
         <file>img/dark/icons8-undo.png</file>
         <file>img/dark/icons8-redo.png</file>
+        <file>img/dark/icons8-editor.png</file>
+        <file>img/dark/icons8-code.png</file>
+        <file>img/dark/icons8-html-5.png</file>
+        <file>img/dark/icons8-binary-file.png</file>
+        <file>img/dark/icons8-picture.png</file>
+        <file>img/dark/icons8-versions.png</file>
+        <file>img/dark/icons8-git.png</file>
+        <file>img/dark/icons8-toolbox.png</file>
     </qresource>
     <qresource prefix="/icons">
         <file>img/mimetype/text-x-c++hdr.png</file>

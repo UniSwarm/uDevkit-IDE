@@ -3,7 +3,7 @@
 #include <QFormLayout>
 
 CodeEditorSettings::CodeEditorSettings()
-    : SettingsPage(QIcon(), "Code editor")
+    : SettingsPage(QIcon(":/icons/img/dark/icons8-code.png"), "Code editor")
 {
     _settingsClass = SettingsManager::registerClass("codeEditor");
     createWidgets();

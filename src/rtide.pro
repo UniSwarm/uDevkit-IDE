@@ -59,10 +59,15 @@ SOURCES += \
     settings/setting.cpp \
     settings/settingsmanager.cpp \
     settings/settingsclass.cpp \
+    settings/widgets/patheditwidget.cpp \
     settings/pages/settingswindow.cpp \
     settings/pages/settingspage.cpp \
     settings/pages/settingscateg.cpp \
-    settings/pages/codeeditorsettings.cpp
+    settings/pages/codeeditorsettings.cpp \
+    settings/pages/hexeditorsettings.cpp \
+    settings/pages/imageeditorsettings.cpp \
+    settings/pages/htmleditorsettings.cpp \
+    settings/pages/gitversionsettings.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -95,10 +100,15 @@ HEADERS += \
     settings/setting.h \
     settings/settingsmanager.h \
     settings/settingsclass.h \
+    settings/widgets/patheditwidget.h \
     settings/pages/settingswindow.h \
     settings/pages/settingspage.h \
     settings/pages/settingscateg.h \
-    settings/pages/codeeditorsettings.h
+    settings/pages/codeeditorsettings.h \
+    settings/pages/hexeditorsettings.h \
+    settings/pages/imageeditorsettings.h \
+    settings/pages/htmleditorsettings.h \
+    settings/pages/gitversionsettings.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 

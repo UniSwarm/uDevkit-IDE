@@ -27,6 +27,8 @@ protected:
 
     virtual void execCommit() =0;
     virtual void createWidgets() =0;
+
+    SettingsClass *_settingsClass;
 };
 
 #endif // SETTINGSPAGE_H

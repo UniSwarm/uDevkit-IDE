@@ -19,8 +19,6 @@ protected:
 
     QFontComboBox *_fontComboBox;
     QSpinBox *_fontSizeSpinBox;
-
-    SettingsClass *_settingsClass;
 };
 
 #endif // CODEEDITORSETTINGS_H
