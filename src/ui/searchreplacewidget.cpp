@@ -3,6 +3,7 @@
 #include <QBoxLayout>
 #include <QDebug>
 #include <QEvent>
+#include <QRegularExpression>
 
 SearchReplaceWidget::SearchReplaceWidget(QWidget *parent) : QWidget(parent)
 {
@@ -61,6 +62,15 @@ void SearchReplaceWidget::upadteSearch()
         return;
 
     int found = _editor->search(_searchLineEdit->text(), flags());
+    if (found == 0 && _regexpCheckbox->isEnabled())
+    {
+        QRegularExpression regexp(_searchLineEdit->text());
+        if (!regexp.isValid())
+        {
+            _statusLabel->setText("<span style='color:red;'>" + regexp.errorString() + "</span>");
+            return;
+        }
+    }
     _statusLabel->setText(QString("%1 occurence%2 found").arg(found).arg(found>1 ? "s" : ""));
 }
 
@@ -189,6 +199,7 @@ void SearchReplaceWidget::createWidgets()
 
     // status
     _statusLabel = new QLabel();
+    _statusLabel->setTextFormat(Qt::RichText);
     _statusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
     layout->addWidget(_statusLabel);
 
