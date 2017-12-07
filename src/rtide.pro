@@ -112,10 +112,18 @@ HEADERS += \
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
-RESOURCES += \
-        $$PWD/img.qrc
+RESOURCES += $$PWD/img.qrc
 
 win32 : RC_FILE = rtide.rc
 
 include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)
 include (../contrib/hexedit2.pri)
+
+TRANSLATIONS = $$PWD/translations/rtide_fr.ts \
+               $$PWD/translations/rtide_en.ts
+qtPrepareTool(LRELEASE, lrelease)
+for(tsfile, TRANSLATIONS) {
+    command = $$LRELEASE $$tsfile
+    system($$command)|error("Failed to run: $$command")
+}
+RESOURCES += $$PWD/translations/translations.qrc

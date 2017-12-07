@@ -71,7 +71,7 @@ void SearchReplaceWidget::upadteSearch()
             return;
         }
     }
-    _statusLabel->setText(QString("%1 occurence%2 found").arg(found).arg(found>1 ? "s" : ""));
+    _statusLabel->setText(tr("%n occurence(s) found", "", found));
 }
 
 void SearchReplaceWidget::searchNext()
@@ -126,7 +126,7 @@ void SearchReplaceWidget::createWidgets()
     QHBoxLayout *searchLineLayout = new QHBoxLayout();
     searchLineLayout->setMargin(0);
     _searchLineEdit = new QLineEdit();
-    _searchLineEdit->setPlaceholderText("search");
+    _searchLineEdit->setPlaceholderText(tr("search"));
     _searchLineEdit->installEventFilter(this);
     searchLineLayout->addWidget(_searchLineEdit);
     connect(_searchLineEdit, &QLineEdit::textChanged, this, &SearchReplaceWidget::upadteSearch);
@@ -156,7 +156,7 @@ void SearchReplaceWidget::createWidgets()
     QHBoxLayout *replaceLineLayout = new QHBoxLayout();
     replaceLineLayout->setMargin(0);
     _replaceLineEdit = new QLineEdit();
-    _replaceLineEdit->setPlaceholderText("replace");
+    _replaceLineEdit->setPlaceholderText(tr("replace"));
     replaceLineLayout->addWidget(_replaceLineEdit);
     connect(_replaceLineEdit, &QLineEdit::returnPressed, this, &SearchReplaceWidget::replaceNext);
 
@@ -184,12 +184,12 @@ void SearchReplaceWidget::createWidgets()
     QHBoxLayout *optionsLineLayout = new QHBoxLayout();
     optionsLineLayout->setMargin(0);
 
-    _regexpCheckbox = new QCheckBox("regexp");
+    _regexpCheckbox = new QCheckBox(tr("regexp"));
     _regexpCheckbox->setChecked(true);
     optionsLineLayout->addWidget(_regexpCheckbox);
     connect(_regexpCheckbox, &QCheckBox::stateChanged, this, &SearchReplaceWidget::upadteSearch);
 
-    _caseSensitivityCheckbox = new QCheckBox("case sensitive");
+    _caseSensitivityCheckbox = new QCheckBox(tr("case sensitive"));
     _caseSensitivityCheckbox->setChecked(true);
     optionsLineLayout->addWidget(_caseSensitivityCheckbox);
     connect(_caseSensitivityCheckbox, &QCheckBox::stateChanged, this, &SearchReplaceWidget::upadteSearch);
@@ -201,6 +201,7 @@ void SearchReplaceWidget::createWidgets()
     _statusLabel = new QLabel();
     _statusLabel->setTextFormat(Qt::RichText);
     _statusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    _statusLabel->setCursor(Qt::IBeamCursor);
     layout->addWidget(_statusLabel);
 
     setLayout(layout);

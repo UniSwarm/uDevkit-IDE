@@ -111,7 +111,7 @@ void MainWindow::createMenus()
 
     QAction *openDirAction = new QAction(tr("Open &project"), this);
     openDirAction->setIcon(QIcon(":/icons/img/dark/icons8-open-box.png"));
-    openDirAction->setStatusTip(tr("Opens a project as directory"));
+    openDirAction->setStatusTip(tr("Opens a project"));
     fileMenu->addAction(openDirAction);
     connect(openDirAction, SIGNAL(triggered()), this, SLOT(openDir()));
 

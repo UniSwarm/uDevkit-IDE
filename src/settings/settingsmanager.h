@@ -20,6 +20,8 @@ public:
 
     static void save();
 
+    static QString language();
+
 protected:
     static SettingsManager *settingsManager;
 

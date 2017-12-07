@@ -1,16 +1,18 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QDebug>
+#include <QTranslator>
+#include <QLibraryInfo>
 
 #include "project/project.h"
 #include "settings/settingsmanager.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    a.setOrganizationName("UniSwarm");
-    a.setOrganizationDomain("UniSwarm");
-    a.setApplicationName("RtIDE");
+    QApplication app(argc, argv);
+    app.setOrganizationName("UniSwarm");
+    app.setOrganizationDomain("UniSwarm");
+    app.setApplicationName("RtIDE");
 
     // apply dark style
     QFile f(":qdarkstyle/style.qss");
@@ -21,6 +23,15 @@ int main(int argc, char *argv[])
         qApp->setStyleSheet(ts.readAll());
     }
 
+    // translate app
+    QTranslator qtTranslator;
+    QString lang = SettingsManager::language();
+    qtTranslator.load("qt_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    app.installTranslator(&qtTranslator);
+    QTranslator rtideTranslator;
+    rtideTranslator.load("rtide_" + lang, ":/translations");
+    app.installTranslator(&rtideTranslator);
+
     Project *project = nullptr;
     if (argc > 1)
         project = new Project(argv[1]);
@@ -30,7 +41,7 @@ int main(int argc, char *argv[])
     MainWindow w(project);
     w.show();
 
-    int ret = a.exec();
+    int ret = app.exec();
     SettingsManager::save();
     return ret;
 }

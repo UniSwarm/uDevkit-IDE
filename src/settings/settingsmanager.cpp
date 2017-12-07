@@ -58,3 +58,8 @@ void SettingsManager::save()
         settingClass->save(&settings);
     }
 }
+
+QString SettingsManager::language()
+{
+    return registerSetting("global", "language", QLocale::system().name().mid(0,2))->value().toString();
+}
