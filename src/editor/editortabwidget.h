@@ -54,6 +54,7 @@ signals:
 protected slots:
     void updateTab();
     void activeTab(int id);
+    void tabContextMenu(const QPoint &pos);
     void changeStatus(QString status);
 
     void undoUpdate(bool available);

@@ -37,6 +37,13 @@ QString Editor::filePath() const
     return _filePath;
 }
 
+int Editor::openFile(const QString &filePath)
+{
+    setFilePath(filePath);
+    openFileData(filePath);
+    return 0;
+}
+
 int Editor::saveFile(const QString &filePath)
 {
     QString path = filePath.isEmpty() ? _filePath : filePath;
@@ -269,6 +276,24 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
 
 Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget *parent)
 {
+    Type type = typeFromPath(filePath);
+
+    Editor *editor;
+    editor = createEditor(type, project, parent);
+    if (editor)
+        editor->openFileData(filePath);
+    return editor;
+}
+
+Editor::Type Editor::typeFromExt(const QString &ext)
+{
+    if (ext == "o")
+        return Editor::Hexa;
+    return Editor::Code;
+}
+
+Editor::Type Editor::typeFromPath(const QString &filePath)
+{
     QMimeDatabase db;
     QFile file(filePath);
     file.open(QIODevice::ReadOnly);
@@ -292,16 +317,5 @@ Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget 
     else
         type = Editor::Hexa;
 
-    Editor *editor;
-    editor = createEditor(type, project, parent);
-    if (editor)
-        editor->openFileData(filePath);
-    return editor;
-}
-
-Editor::Type Editor::typeFromExt(const QString &ext)
-{
-    if (ext == "o")
-        return Editor::Hexa;
-    return Editor::Code;
+    return type;
 }

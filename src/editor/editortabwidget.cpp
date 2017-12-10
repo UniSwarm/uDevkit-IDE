@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QEvent>
 #include <QFileInfo>
+#include <QMenu>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QTabBar>
@@ -22,6 +23,8 @@ EditorTabWidget::EditorTabWidget(Project *project)
     _iconProvider = new ProjectIconProvider();
 
     tabBar()->installEventFilter(this);
+    tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(tabBar(), &QTabBar::customContextMenuRequested, this, &EditorTabWidget::tabContextMenu);
     registerAction();
 
     connect(this, &QTabWidget::tabCloseRequested, this, &EditorTabWidget::closeEditor);
@@ -101,7 +104,7 @@ void EditorTabWidget::openFileEditor(const QString &url)
         return;
 
     Editor *editor = nullptr;
-    if(!_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
+    if (!_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
     {
         editor = Editor::createEditor(filePath, _project);
         if (!editor)
@@ -330,6 +333,45 @@ void EditorTabWidget::activeTab(int id)
     {
         currentFileChanged(editor->filePath());
         editor->active();
+    }
+}
+
+void EditorTabWidget::tabContextMenu(const QPoint &pos)
+{
+    int index = tabBar()->tabAt(pos);
+    if (index == -1)
+        return;
+
+    QString path = editor(index)->filePath();
+    setCurrentIndex(index);
+
+    QMenu menu;
+    QAction *reopen;
+    Editor::Type type;
+    if (currentEditor()->type() != Editor::Hexa)
+    {
+        type = Editor::Hexa;
+        reopen = menu.addAction("Open in hex editor");
+    }
+    else
+    {
+        type = Editor::typeFromPath(path);
+        reopen = menu.addAction("Open in default editor");
+    }
+    QAction *close = menu.addAction("Close");
+
+    QAction *action = menu.exec(tabBar()->mapToGlobal(pos));
+    if (action == close)
+        closeEditor(index);
+    else if (action == reopen)
+    {
+        QColor tabColor = tabBar()->tabTextColor(index);
+        closeEditor(index);
+        Editor *editor = Editor::createEditor(type, _project, this);
+        editor->openFile(path);
+        insertTab(index, editor, editor->fileName());
+        tabBar()->setTabTextColor(index, tabColor);
+        setCurrentIndex(index);
     }
 }
 

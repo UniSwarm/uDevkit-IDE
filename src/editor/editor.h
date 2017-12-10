@@ -17,6 +17,7 @@ public:
     QString fileName() const;
     QString filePath() const;
 
+    int openFile(const QString &filePath);
     int saveFile(const QString &filePath=QString());
 
     virtual bool isModified() const =0;
@@ -93,6 +94,7 @@ public:
     static Editor *createEditor(Type type, Project *project, QWidget *parent = nullptr);
     static Editor *createEditor(const QString &filePath, Project *project, QWidget *parent = nullptr);
     static Type typeFromExt(const QString &ext);
+    static Type typeFromPath(const QString &filePath);
 
 protected:
     void setFilePath(const QString &filePath);
