@@ -39,6 +39,9 @@ public:
     void addExternalSource(QSet<QString> sourceFiles);
     void removeExternalSource(QSet<QString> sourceFiles);
 
+    void addOtherSource(QSet<QString> sourceFiles);
+    void removeOtherSource(QSet<QString> sourceFiles);
+
     void prepareModif();
     void endModif();
 
@@ -67,6 +70,7 @@ protected:
 
     // high level interface
     ProjectItem *_externalFiles;
+    ProjectItem *_otherFiles;
 };
 
 #endif // PROJECTMODEL_H

@@ -76,6 +76,7 @@ void Project::addOpenedFiles(QSet<QString> openedFiles)
     foreach (QString file, openedFiles)
         _openedFiles.insert(file);
     _projectItemModel->filesUpdated(openedFiles);
+    _projectItemModel->addOtherSource(openedFiles);
 }
 
 void Project::removeOpenedFiles(QSet<QString> openedFiles)
@@ -83,6 +84,7 @@ void Project::removeOpenedFiles(QSet<QString> openedFiles)
     foreach (QString file, openedFiles)
         _openedFiles.remove(file);
     _projectItemModel->filesUpdated(openedFiles);
+    _projectItemModel->removeOtherSource(openedFiles);
 }
 
 MakeParser *Project::make() const

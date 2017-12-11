@@ -10,7 +10,8 @@
 ProjectItemModel::ProjectItemModel(Project *project) :
     _project(project)
 {
-    _externalFiles = nullptr;
+    _externalFiles = Q_NULLPTR;
+    _otherFiles = Q_NULLPTR;
     _root = new ProjectItem(_project, "", ProjectItem::LogicDir, this);
     _iconProvider = new ProjectIconProvider();
 }
@@ -83,15 +84,16 @@ bool ProjectItemModel::remove(const QModelIndex &index)
 void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
 {
     emit layoutAboutToBeChanged();
-    if (!_externalFiles)
-    {
-        _externalFiles = new ProjectItem(_project, "ext src", ProjectItem::LogicDir, this);
-        _root->addChild(_externalFiles);
-    }
     foreach (QString filePath, sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
             continue; // not an external source
+
+        if (!_externalFiles)
+        {
+            _externalFiles = new ProjectItem(_project, "ext src", ProjectItem::LogicDir, this);
+            _root->addChild(_externalFiles);
+        }
 
         QFileInfo info(filePath);
         QDir dir = info.absoluteDir();
@@ -124,6 +126,8 @@ void ProjectItemModel::removeExternalSource(QSet<QString> sourceFiles)
         QDir dir = info.absoluteDir();
 
         ProjectItem *parent = _externalFiles->child(dir.dirName());
+        if (!parent)
+            continue;
 
         ProjectItem *item = _pathCache[filePath];
         if (!item)
@@ -133,6 +137,45 @@ void ProjectItemModel::removeExternalSource(QSet<QString> sourceFiles)
 
         if (parent->count() == 0)
             _externalFiles->removeChild(parent);
+    }
+    emit layoutChanged();
+}
+
+void ProjectItemModel::addOtherSource(QSet<QString> sourceFiles)
+{
+    emit layoutAboutToBeChanged();
+    foreach (QString filePath, sourceFiles)
+    {
+        if (filePath.startsWith(_project->rootPath()))
+            continue; // not an external source
+        if (_pathCache.contains(filePath))
+            return;
+
+        if (!_otherFiles)
+        {
+            _otherFiles = new ProjectItem(_project, "opened files", ProjectItem::LogicDir, this);
+            _root->addChild(_otherFiles);
+        }
+
+        ProjectItem *item = new ProjectItem(_project, filePath, ProjectItem::IndividualFile, this);
+        _otherFiles->addChild(item);
+        _pathCache.insert(filePath, item);
+    }
+    emit layoutChanged();
+}
+
+void ProjectItemModel::removeOtherSource(QSet<QString> sourceFiles)
+{
+    if (!_otherFiles)
+        return;
+    emit layoutAboutToBeChanged();
+    foreach (QString filePath, sourceFiles)
+    {
+        ProjectItem *item = _pathCache[filePath];
+        if (!item)
+            continue;
+        _otherFiles->removeChild(item);
+        _pathCache.remove(filePath);
     }
     emit layoutChanged();
 }
