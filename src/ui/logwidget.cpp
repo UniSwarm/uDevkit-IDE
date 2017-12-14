@@ -19,6 +19,14 @@ LogWidget::LogWidget(Project *project, QWidget *parent)
     env.insert("TERM", "xterm");
     _process->setProcessEnvironment(env);
 
+#ifdef WIN32
+    QFont font("Consolas");
+#else
+    QFont font("monospace");
+#endif
+    font.setStyleHint(QFont::Monospace);
+    setFont(font);
+
     connect(_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(readProcess()));
     connect(_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readProcess()));
     connect(_process, SIGNAL(readyReadStandardError()), this, SLOT(readProcess()));
@@ -37,7 +45,6 @@ void LogWidget::start(const QString &program, const QStringList &arguments)
 {
     clear();
     document()->setDefaultStyleSheet("\
-* {font-family: monospace;}\n\
 .color30 { color: black; }\n\
 .color31 { color: red; }\n\
 .color32 { color: green; }\n\
@@ -46,6 +53,7 @@ void LogWidget::start(const QString &program, const QStringList &arguments)
 .color35 { color: magenta; }\n\
 .color36 { color: cyan; }\n\
 .color37 { color: white; }\n\
+a { color: white; }\n\
 ");
     _process->start(program, arguments);
 }
@@ -55,6 +63,7 @@ void LogWidget::parseOutput(QByteArray data, bool error)
     QString html;
     QByteArray dataRead;
     QTextStream stream(&data);
+    stream.setCodec("UTF-8");
 
     while (!stream.atEnd())
     {
