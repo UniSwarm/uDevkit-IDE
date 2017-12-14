@@ -128,7 +128,7 @@ void CodeEditor::setSettingsClass(SettingsClass *settingsClass)
 
 int CodeEditor::openFileData(const QString &filePath)
 {
-    QFile file (filePath);
+    QFile file(filePath);
     QFileInfo info(file);
     if (!info.isReadable() || !info.isFile())
         return -1;
@@ -141,27 +141,27 @@ int CodeEditor::openFileData(const QString &filePath)
     if (_editorWidget->textDocument()->length()>1)
     {
         edbee::CharTextDocument document;
-        edbee::TextDocumentSerializer serializer( &document );
-        if( !serializer.loadWithoutOpening( &file ) )
+        edbee::TextDocumentSerializer serializer(&document);
+        if (!serializer.loadWithoutOpening(&file))
         {
             QApplication::restoreOverrideCursor();
             return -1;
         }
 
-        _editorWidget->controller()->replace( 0, _editorWidget->textDocument()->length(), document.text(), 0 );
+        _editorWidget->controller()->replace(0, _editorWidget->textDocument()->length(), document.text(), 0);
     }
     else
     {
-        edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
-        if( !serializer.loadWithoutOpening( &file ) )
+        edbee::TextDocumentSerializer serializer(_editorWidget->textDocument());
+        if (!serializer.loadWithoutOpening(&file))
         {
             QApplication::restoreOverrideCursor();
             return -1;
         }
 
         edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
-        edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename( filePath );
-        _editorWidget->textDocument()->setLanguageGrammar( grammar );
+        edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename(filePath);
+        _editorWidget->textDocument()->setLanguageGrammar(grammar);
     }
     QApplication::restoreOverrideCursor();
 
@@ -189,8 +189,8 @@ int CodeEditor::saveFileData(const QString &filePath)
     if (!file.open(QIODevice::WriteOnly))
         return -1;
 
-    edbee::TextDocumentSerializer serializer( _editorWidget->textDocument() );
-    if(!serializer.saveWithoutOpening(&file))
+    edbee::TextDocumentSerializer serializer(_editorWidget->textDocument());
+    if (!serializer.saveWithoutOpening(&file))
         return -1;
 
     if (!file.commit())
@@ -239,7 +239,7 @@ void CodeEditor::updatePos()
     int col = _editorWidget->textDocument()->columnFromOffsetAndLine(caret, line) + 1;
 
     status.append(QString("l: %1 c: %2 ").arg(line+1).arg(col));
-    if( range.length() > 0 )
+    if (range.length() > 0)
     {
         status.append(QString("sel: %1 ").arg(range.length()));
         emit copyAvailable(true);
@@ -251,7 +251,7 @@ void CodeEditor::updatePos()
     emit redoAvailable(textDocument->textUndoStack()->canRedo(controller));
     emit undoAvailable(textDocument->textUndoStack()->canUndo(controller));
 
-    QVector<edbee::TextScope*> scopes = _editorWidget->textDocument()->scopes()->scopesAtOffset( caret ) ;
+    QVector<edbee::TextScope*> scopes = _editorWidget->textDocument()->scopes()->scopesAtOffset(caret);
     for(int i=0,cnt=scopes.size(); i<cnt; ++i)
     {
         if (i != 0)
