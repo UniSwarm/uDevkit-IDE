@@ -142,6 +142,11 @@ bool Editor::hasPreview() const
     return false;
 }
 
+QWidget *Editor::editorWidget()
+{
+    return this;
+}
+
 void Editor::reload()
 {
     QFileInfo info(_filePath);

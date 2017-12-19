@@ -67,6 +67,8 @@ public:
     virtual QWidget *previewWidget() const;
     virtual bool hasPreview() const;
 
+    virtual QWidget *editorWidget();
+
 public slots:
     void reload();
     void active();

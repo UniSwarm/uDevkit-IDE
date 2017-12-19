@@ -539,3 +539,8 @@ void CodeEditor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
     controller->borderedTextRanges()->resetAnchors();
     controller->update();
 }
+
+QWidget *CodeEditor::editorWidget()
+{
+    return _editorWidget->textEditorComponent();
+}
