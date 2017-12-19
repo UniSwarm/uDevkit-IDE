@@ -10,6 +10,8 @@
 
 #include "gitversionsettings.h"
 
+#include "globalsettings.h".h"
+
 SettingsWindow::SettingsWindow(QWidget *parent)
     : QDialog (parent)
 {
@@ -28,6 +30,9 @@ SettingsWindow::SettingsWindow(QWidget *parent)
 
     categ = addCategory(QIcon(":/icons/img/dark/icons8-toolbox.png"), "Tools");
     //categ->addPage(new GitVersionSettings());
+
+    categ = addCategory(QIcon(":/icons/img/dark/icons8-settings.png"), "Global");
+    categ->addPage(new GlobalSettings());
 
     QModelIndex modelIndex = _sectionsList->model()->index(0, 0, _sectionsList->rootIndex());
     _sectionsList->setCurrentIndex(modelIndex);
