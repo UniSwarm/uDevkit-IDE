@@ -4,6 +4,7 @@
 #include <QStack>
 #include <QMap>
 #include <QTabWidget>
+#include <QListWidget>
 
 #include <project/projecticonprovider.h>
 
@@ -32,8 +33,10 @@ public slots:
 
     void switchHeader();
 
+    void initiateSwitchTab();
     void nextTab();
     void previousTab();
+    void endSwitchTab();
 
     void undo();
     void redo();
@@ -66,10 +69,20 @@ protected:
     void registerAction();
 
     Project *_project;
-    QStack<int> _activedTab;
     QMap<QString, Editor* > _mapPathEditor;
     ProjectIconProvider *_iconProvider;
     int _idColor;
+
+    // tab switching
+    QListWidget *_switchTabListWidget;
+    QStack<int> _activedTab;
+    bool _switchTabActive;
+    void updateSwitchTab();
+
+    // QWidget interface
+protected:
+    virtual void resizeEvent(QResizeEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // EDITORTABWIDGET_H

@@ -155,11 +155,6 @@ void MainWindow::createMenus()
     addAction(action);
     connect(action, &QAction::triggered, this, &MainWindow::git);
 
-    action = new QAction(tr("next tab"), this);
-    action->setShortcut(QKeySequence::NextChild);
-    addAction(action);
-    connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::nextTab);
-
     // ============= Edit =============
     QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
 

@@ -7,6 +7,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QKeyEvent>
 #include <QTabBar>
 
 EditorTabWidget::EditorTabWidget(Project *project)
@@ -26,6 +27,12 @@ EditorTabWidget::EditorTabWidget(Project *project)
     tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(tabBar(), &QTabBar::customContextMenuRequested, this, &EditorTabWidget::tabContextMenu);
     registerAction();
+
+    _switchTabListWidget = new QListWidget(this);
+    _switchTabListWidget->hide();
+    _switchTabListWidget->setFocusPolicy(Qt::ClickFocus);
+    _switchTabActive = false;
+    _switchTabListWidget->installEventFilter(this);
 
     connect(this, &QTabWidget::tabCloseRequested, this, &EditorTabWidget::closeEditor);
     connect(this, &QTabWidget::currentChanged, this, &EditorTabWidget::activeTab);
@@ -54,6 +61,7 @@ void EditorTabWidget::addEditor(Editor *editor)
         }
     }
     insertTab(index, editor, _iconProvider->icon(info), editor->fileName());
+    editor->editorWidget()->installEventFilter(this);
     if (color.isValid())
         tabBar()->setTabTextColor(index, color);
     setCurrentIndex(index);
@@ -243,6 +251,30 @@ void EditorTabWidget::switchHeader()
     }
 }
 
+void EditorTabWidget::initiateSwitchTab()
+{
+    // fill list
+    _switchTabListWidget->clear();
+    foreach (int id, _activedTab)
+    {
+        Editor *editor = this->editor(id);
+        if (!editor)
+            continue;
+        QFileInfo info(editor->filePath());
+        QListWidgetItem *item = new QListWidgetItem(_iconProvider->icon(info), editor->fileName());
+        item->setData(Qt::UserRole, id);
+        _switchTabListWidget->addItem(item);
+    }
+    _switchTabListWidget->setCurrentRow(0);
+
+    // show list
+    updateSwitchTab();
+    _switchTabListWidget->show();
+    _switchTabListWidget->update();
+    _switchTabListWidget->setFocus(Qt::PopupFocusReason);
+    _switchTabActive = true;
+}
+
 void EditorTabWidget::nextTab()
 {
     if(_activedTab.count() < 2)
@@ -254,6 +286,12 @@ void EditorTabWidget::nextTab()
 void EditorTabWidget::previousTab()
 {
     // TODO implement me
+}
+
+void EditorTabWidget::endSwitchTab()
+{
+    _switchTabActive = false;
+    _switchTabListWidget->hide();
 }
 
 void EditorTabWidget::undo()
@@ -370,6 +408,7 @@ void EditorTabWidget::tabContextMenu(const QPoint &pos)
         Editor *editor = Editor::createEditor(type, _project, this);
         editor->openFile(path);
         insertTab(index, editor, editor->fileName());
+        editor->editorWidget()->installEventFilter(this);
         tabBar()->setTabTextColor(index, tabColor);
         setCurrentIndex(index);
     }
@@ -397,7 +436,16 @@ void EditorTabWidget::copyUpdate(bool available)
 
 bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
 {
-    if (o == tabBar() && e->type() == QEvent::MouseButtonPress)
+    if (e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
+        if (e->type() == QEvent::KeyPress && keyEvent->modifiers() & Qt::ControlModifier && keyEvent->key() == Qt::Key_Tab)
+            initiateSwitchTab();
+        else if (_switchTabActive && e->type() == QEvent::KeyRelease && keyEvent->modifiers() == Qt::NoModifier)
+            endSwitchTab();
+        return QObject::eventFilter(o, e);
+    }
+    else if (o == tabBar() && e->type() == QEvent::MouseButtonPress)
     {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
         if (mouseEvent->button() == Qt::MiddleButton)
@@ -405,6 +453,36 @@ bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
             closeEditor(tabBar()->tabAt(mouseEvent->pos()));
             return true;
         }
+    }
+    else if (o == _switchTabListWidget)
+    {
+        if (e->type() == QEvent::FocusOut)
+            endSwitchTab();
+        else if (e->type() == QEvent::KeyPress || e->type() == QEvent::ShortcutOverride)
+        {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
+            if (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab)
+            {
+                int id = _switchTabListWidget->currentRow();
+                if (keyEvent->modifiers() & Qt::ShiftModifier)
+                {
+                    id--;
+                    if (id < 0)
+                        id = _switchTabListWidget->count() - 1;
+                }
+                else
+                {
+                    id++;
+                    if (id >= _switchTabListWidget->count())
+                        id = 0;
+                }
+                _switchTabListWidget->setCurrentRow(id);
+                /*keyEvent->accept();
+                return false;*/
+            }
+        }
+
+        return QObject::eventFilter(o, e);
     }
     return QTabWidget::eventFilter(o, e);
 }
@@ -427,4 +505,26 @@ void EditorTabWidget::registerAction()
     action->setShortcut(QKeySequence::Close);
     connect(action, &QAction::triggered, this, &EditorTabWidget::closeEditor);
     addAction(action);
+}
+
+void EditorTabWidget::updateSwitchTab()
+{
+    QRect mgeometry = _switchTabListWidget->geometry();
+    mgeometry.setWidth(150);
+    mgeometry.setHeight(30 * 8);
+    mgeometry.moveLeft((size().width() - mgeometry.width()) / 2);
+    mgeometry.moveTop((size().height() - mgeometry.height()) / 2);
+    _switchTabListWidget->setGeometry(mgeometry);
+}
+
+void EditorTabWidget::resizeEvent(QResizeEvent *event)
+{
+    if (_switchTabActive)
+        updateSwitchTab();
+    QTabWidget::resizeEvent(event);
+}
+
+void EditorTabWidget::keyPressEvent(QKeyEvent *event)
+{
+    //QWidget::keyPressEvent(event); // disable QTabWidget Ctrl + tab
 }
