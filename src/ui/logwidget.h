@@ -28,6 +28,7 @@ protected:
 
 protected slots:
     void readProcess();
+    void errorProcess();
     void anchorClick(const QUrl &link);
 };
 

@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include <QTextStream>
+#include <QStandardPaths>
 
 LogWidget::LogWidget(Project *project, QWidget *parent)
     : QTextBrowser(parent), _project(project)
@@ -28,6 +29,7 @@ LogWidget::LogWidget(Project *project, QWidget *parent)
     setFont(font);
 
     connect(_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(readProcess()));
+    connect(_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(errorProcess()));
     connect(_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readProcess()));
     connect(_process, SIGNAL(readyReadStandardError()), this, SLOT(readProcess()));
     _process->setWorkingDirectory(_project->rootPath());
@@ -44,6 +46,16 @@ LogWidget::~LogWidget()
 void LogWidget::start(const QString &program, const QStringList &arguments)
 {
     clear();
+    QString command = "> " + program + " " + arguments.join(' ');
+    insertHtml("<i style=\"color: green\">" + command.toHtmlEscaped() + "</i>");
+
+    QString path = QStandardPaths::findExecutable(program);
+    if (path.isEmpty())
+    {
+        insertHtml("<br/><i style=\"color: red\">" + tr("Cannot find command '%1'").arg(program).toHtmlEscaped() + "</i>");
+        return;
+    }
+
     document()->setDefaultStyleSheet("\
 .color30 { color: black; }\n\
 .color31 { color: red; }\n\
@@ -88,6 +100,13 @@ void LogWidget::readProcess()
 {
     parseOutput(_process->readAllStandardOutput(), false);
     parseOutput(_process->readAllStandardError(), true);
+}
+
+void LogWidget::errorProcess()
+{
+    QByteArray data;
+    data.append(_process->errorString());
+    parseOutput(data, true);
 }
 
 void LogWidget::anchorClick(const QUrl &link)
