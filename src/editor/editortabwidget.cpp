@@ -28,7 +28,7 @@ EditorTabWidget::EditorTabWidget(Project *project)
     connect(tabBar(), &QTabBar::customContextMenuRequested, this, &EditorTabWidget::tabContextMenu);
     registerAction();
 
-    _switchTabListWidget = new QListWidget(this);
+    _switchTabListWidget = new EditorTabSwitchWidget(this);
     _switchTabListWidget->hide();
     _switchTabListWidget->setFocusPolicy(Qt::ClickFocus);
     _switchTabActive = false;
@@ -251,8 +251,11 @@ void EditorTabWidget::switchHeader()
     }
 }
 
-void EditorTabWidget::initiateSwitchTab()
+void EditorTabWidget::initiateSwitchTab(bool next)
 {
+    if (count() < 2)
+        return;
+
     // fill list
     _switchTabListWidget->clear();
     foreach (int id, _activedTab)
@@ -265,7 +268,7 @@ void EditorTabWidget::initiateSwitchTab()
         item->setData(Qt::UserRole, id);
         _switchTabListWidget->addItem(item);
     }
-    _switchTabListWidget->setCurrentRow(0);
+    _switchTabListWidget->setId(next ? 1 : count()-1);
 
     // show list
     updateSwitchTab();
@@ -290,8 +293,21 @@ void EditorTabWidget::previousTab()
 
 void EditorTabWidget::endSwitchTab()
 {
+    if (!_switchTabActive)
+        return;
     _switchTabActive = false;
     _switchTabListWidget->hide();
+    int id = _switchTabListWidget->id();
+    if (id == 0)
+    {
+        currentEditor()->editorWidget()->setFocus();
+    }
+    else
+    {
+        int tabId = _switchTabListWidget->item(id)->data(Qt::UserRole).toInt();
+        setCurrentIndex(tabId);
+        currentEditor()->editorWidget()->setFocus();
+    }
 }
 
 void EditorTabWidget::undo()
@@ -439,8 +455,10 @@ bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
     if (e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease)
     {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
-        if (e->type() == QEvent::KeyPress && keyEvent->modifiers() & Qt::ControlModifier && keyEvent->key() == Qt::Key_Tab)
-            initiateSwitchTab();
+        if (!_switchTabActive && e->type() == QEvent::KeyPress
+                && keyEvent->modifiers() & Qt::ControlModifier
+                && (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab))
+            initiateSwitchTab(!(keyEvent->modifiers() & Qt::ShiftModifier));
         else if (_switchTabActive && e->type() == QEvent::KeyRelease && keyEvent->modifiers() == Qt::NoModifier)
             endSwitchTab();
         return QObject::eventFilter(o, e);
@@ -458,29 +476,6 @@ bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
     {
         if (e->type() == QEvent::FocusOut)
             endSwitchTab();
-        else if (e->type() == QEvent::KeyPress || e->type() == QEvent::ShortcutOverride)
-        {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
-            if (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab)
-            {
-                int id = _switchTabListWidget->currentRow();
-                if (keyEvent->modifiers() & Qt::ShiftModifier)
-                {
-                    id--;
-                    if (id < 0)
-                        id = _switchTabListWidget->count() - 1;
-                }
-                else
-                {
-                    id++;
-                    if (id >= _switchTabListWidget->count())
-                        id = 0;
-                }
-                _switchTabListWidget->setCurrentRow(id);
-                /*keyEvent->accept();
-                return false;*/
-            }
-        }
 
         return QObject::eventFilter(o, e);
     }
@@ -510,8 +505,8 @@ void EditorTabWidget::registerAction()
 void EditorTabWidget::updateSwitchTab()
 {
     QRect mgeometry = _switchTabListWidget->geometry();
-    mgeometry.setWidth(150);
-    mgeometry.setHeight(30 * 8);
+    mgeometry.setWidth(qMin(200, width()-20));
+    mgeometry.setHeight(qMin(30 * 8, height()-20));
     mgeometry.moveLeft((size().width() - mgeometry.width()) / 2);
     mgeometry.moveTop((size().height() - mgeometry.height()) / 2);
     _switchTabListWidget->setGeometry(mgeometry);
@@ -526,5 +521,5 @@ void EditorTabWidget::resizeEvent(QResizeEvent *event)
 
 void EditorTabWidget::keyPressEvent(QKeyEvent *event)
 {
-    //QWidget::keyPressEvent(event); // disable QTabWidget Ctrl + tab
+    QWidget::keyPressEvent(event); // disable QTabWidget Ctrl + tab
 }

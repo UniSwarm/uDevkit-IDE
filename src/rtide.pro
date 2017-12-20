@@ -33,6 +33,7 @@ SOURCES += \
     mainwindow.cpp \
     editor/editor.cpp \
     editor/editortabwidget.cpp \
+    editor/editortabswitchwidget.cpp \
     editor/codeeditor/codeeditor.cpp \
     editor/codeeditor/codeeditorscrollbar.cpp \
     editor/codeeditor/codeeditormargindelegate.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     editor/editor.h \
     editor/editors.h \
     editor/editortabwidget.h \
+    editor/editortabswitchwidget.h \
     editor/codeeditor/codeeditor.h \
     editor/codeeditor/codeeditorscrollbar.h \
     editor/codeeditor/codeeditormargindelegate.h \
