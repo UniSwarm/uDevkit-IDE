@@ -29,6 +29,7 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
             border: 1px solid #76797C;\
             border-radius: 2px;\
             color: #eff0f1;\
+            border: none;\
     }";
     _hexEditor->setStyleSheet(style);
     _hexEditor->setAddressAreaColor(0x31363B);

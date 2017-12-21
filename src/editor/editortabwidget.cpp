@@ -10,6 +10,8 @@
 #include <QKeyEvent>
 #include <QTabBar>
 
+#include "editortabbarstyleproxy.h"
+
 EditorTabWidget::EditorTabWidget(Project *project)
     : _project(project)
 {
@@ -21,10 +23,32 @@ EditorTabWidget::EditorTabWidget(Project *project)
     setFocusPolicy(Qt::NoFocus);
     _idColor = 0;
 
+    setStyleSheet("\
+      EditorTabWidget::pane {\
+          border: 0 solid #76797C;\
+          padding: 0 5px 5px 5px;\
+      }\
+      EditorTabWidget > QTabBar::tab:top {\
+          border: 1px solid #76797C;\
+          border-bottom: 0px transparent black;\
+          background-color: #232629;\
+      }\
+      EditorTabWidget > QTabBar::tab:top:!selected\
+      {\
+          background-color: #54575B;\
+          border: 1px solid #76797C;\
+          border-bottom: 0px transparent black;\
+      }\
+      EditorTabWidget > QTabBar::tab:top:!selected:hover {\
+          background-color: #3daee9;\
+      }\
+    ");
+
     _iconProvider = new ProjectIconProvider();
 
     tabBar()->installEventFilter(this);
     tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
+    tabBar()->setStyle(new EditorTabBarStyleProxy(style()));
     connect(tabBar(), &QTabBar::customContextMenuRequested, this, &EditorTabWidget::tabContextMenu);
     registerAction();
 
@@ -471,6 +495,14 @@ bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
             closeEditor(tabBar()->tabAt(mouseEvent->pos()));
             return true;
         }
+    }
+    else if (o == tabBar() && e->type() == QEvent::Paint)
+    {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
+        if (mouseEvent->button() == Qt::MiddleButton)
+        {
+            closeEditor(tabBar()->tabAt(mouseEvent->pos()));
+            return true;
     }
     else if (o == _switchTabListWidget)
     {
