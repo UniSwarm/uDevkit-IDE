@@ -10,8 +10,6 @@
 #include <QKeyEvent>
 #include <QTabBar>
 
-#include "editortabbarstyleproxy.h"
-
 EditorTabWidget::EditorTabWidget(Project *project)
     : _project(project)
 {
@@ -48,7 +46,6 @@ EditorTabWidget::EditorTabWidget(Project *project)
 
     tabBar()->installEventFilter(this);
     tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
-    tabBar()->setStyle(new EditorTabBarStyleProxy(style()));
     connect(tabBar(), &QTabBar::customContextMenuRequested, this, &EditorTabWidget::tabContextMenu);
     registerAction();
 
@@ -495,14 +492,6 @@ bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
             closeEditor(tabBar()->tabAt(mouseEvent->pos()));
             return true;
         }
-    }
-    else if (o == tabBar() && e->type() == QEvent::Paint)
-    {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
-        if (mouseEvent->button() == Qt::MiddleButton)
-        {
-            closeEditor(tabBar()->tabAt(mouseEvent->pos()));
-            return true;
     }
     else if (o == _switchTabListWidget)
     {
