@@ -69,7 +69,8 @@ SOURCES += \
     settings/pages/imageeditorsettings.cpp \
     settings/pages/htmleditorsettings.cpp \
     settings/pages/gitversionsettings.cpp \
-    settings/pages/globalsettings.cpp
+    settings/pages/globalsettings.cpp \
+    project/projecttreeviewitemdelegate.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -112,7 +113,8 @@ HEADERS += \
     settings/pages/imageeditorsettings.h \
     settings/pages/htmleditorsettings.h \
     settings/pages/gitversionsettings.h \
-    settings/pages/globalsettings.h
+    settings/pages/globalsettings.h \
+    project/projecttreeviewitemdelegate.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 

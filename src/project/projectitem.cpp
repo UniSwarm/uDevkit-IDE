@@ -147,7 +147,12 @@ QVariant ProjectItem::data(int column, int role) const
         if (role == Qt::TextColorRole)
         {
             if (_info.isValidated())
-                return QVariant(QColor(0, 255, 0));
+            {
+                if (_info.isModified())
+                    return QVariant(QColor(255, 127, 0));
+                else
+                    return QVariant(QColor(0, 255, 0));
+            }
             if (!_info.isTracked())
                 return QColor(127, 127, 127);
             return QVariant();

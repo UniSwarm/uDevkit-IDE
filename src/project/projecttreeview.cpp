@@ -9,9 +9,12 @@
 #include <QMouseEvent>
 #include <QProcess>
 #include <QApplication>
+#include <QProxyStyle>
 
 #include "fileprojectinfo.h"
 #include "mainwindow.h"
+
+#include "projecttreeviewitemdelegate.h"
 
 ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     : QTreeView(parent), _project(project)
@@ -30,6 +33,7 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
         hideColumn(i);
     setStyleSheet("QTreeView { selection-background-color: transparent; }");
     header()->close();
+    setItemDelegate(new ProjectTreeViewItemDelegate());
 
     _removeAction = new QAction(this);
     _removeAction->setText("remove");
