@@ -18,9 +18,6 @@ void ProjectTreeViewItemDelegate::paint(QPainter *painter, const QStyleOptionVie
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
 
-    const QWidget *widget = option.widget;
-    QStyle *style = widget ? widget->style() : QApplication::style();
-
     painter->save();
     painter->setRenderHint(QPainter::TextAntialiasing);
     QRect rect = option.rect;
@@ -37,7 +34,7 @@ void ProjectTreeViewItemDelegate::paint(QPainter *painter, const QStyleOptionVie
     if (index.data(Qt::DecorationRole).canConvert(QMetaType::QIcon))
     {
         const QIcon &icon = index.data(Qt::DecorationRole).value<QIcon>();
-        painter->drawPixmap(rect.topLeft()+QPoint(1, 1), icon.pixmap(rect.height(), rect.height()));
+        icon.paint(painter, rect.x()+1, rect.y()+1, rect.height()-2, rect.height()-2, Qt::AlignVCenter | Qt::AlignHCenter);
         rect = rect.adjusted(rect.height()+5, 0, 0, 0);
     }
     painter->setPen(textColor);
