@@ -290,6 +290,10 @@ void EditorTabWidget::initiateSwitchTab(bool next)
         QFileInfo info(editor->filePath());
         QListWidgetItem *item = new QListWidgetItem(_iconProvider->icon(info), editor->fileName());
         item->setData(Qt::UserRole, id);
+        QColor textColor = tabBar()->tabTextColor(id);
+        if (!textColor.isValid())
+            textColor = palette().color(QPalette::Foreground);
+        item->setData(Qt::ForegroundRole, textColor);
         _switchTabListWidget->addItem(item);
     }
     _switchTabListWidget->setId(next ? 1 : count()-1);
