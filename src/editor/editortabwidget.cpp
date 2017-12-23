@@ -21,18 +21,21 @@ EditorTabWidget::EditorTabWidget(Project *project)
     setFocusPolicy(Qt::NoFocus);
     _idColor = 0;
 
+    // remove bottom border, fixed tabTextColor overriden
     setStyleSheet("\
       EditorTabWidget::pane {\
           border: 0 solid #76797C;\
           padding: 0 5px 5px 5px;\
       }\
       EditorTabWidget > QTabBar::tab:top {\
+          color: palette(foreground);\
           border: 1px solid #76797C;\
           border-bottom: 0px transparent black;\
           background-color: #232629;\
       }\
       EditorTabWidget > QTabBar::tab:top:!selected\
       {\
+          color: palette(foreground);\
           background-color: #54575B;\
           border: 1px solid #76797C;\
           border-bottom: 0px transparent black;\
