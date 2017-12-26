@@ -47,7 +47,7 @@ void PathEditWidget::setPath(const QString &path)
 
 bool PathEditWidget::isValid() const
 {
-    if(_pathLineEdit->text().isEmpty())
+    if (_pathLineEdit->text().isEmpty())
         return true;
     return false;
 }
@@ -60,8 +60,8 @@ void PathEditWidget::setEnv(QProcessEnvironment env)
 
 void PathEditWidget::buttonClicked()
 {
-    QString dir =QFileDialog::getExistingDirectory(this, "Choose existing directory", _pathLineEdit->text());
-    if(!dir.isEmpty())
+    QString dir =QFileDialog::getExistingDirectory(this, tr("Choose existing directory"), _pathLineEdit->text());
+    if (!dir.isEmpty())
         setPath(dir);
 }
 
@@ -74,20 +74,20 @@ void PathEditWidget::checkProgramm()
 #endif
     QString programm = _programm;
     QProcess *process = new QProcess();
-    if(_programm.isEmpty())
+    if (_programm.isEmpty())
         return;
     QProcessEnvironment env = _env;
-    if(!_path.isEmpty())
+    if (!_path.isEmpty())
         env.insert("PATH", _path + listSep + env.value("PATH") );
     QString path = QStandardPaths::findExecutable(_programm, env.value("PATH").split(listSep));
-    if(!path.isEmpty())
+    if (!path.isEmpty())
         programm = path;
     process->setProcessEnvironment(env);
     QStringList args;
     args.append(_versionArg);
 
     process->start(programm, args);
-    if(!process->waitForFinished(3000))
+    if (!process->waitForFinished(3000))
     {
         QFont font = _labelVersion->font();
         font.setBold(true);
@@ -95,7 +95,7 @@ void PathEditWidget::checkProgramm()
         QPalette palette = _labelVersion->palette();
         palette.setColor(QPalette::WindowText, Qt::red);
         _labelVersion->setPalette(palette);
-        _labelVersion->setText(_programm + " not found " + process->errorString());
+        _labelVersion->setText(tr("%1 not found: %2").arg(_programm).arg(process->errorString()));
         delete process;
         return;
     }
@@ -104,7 +104,7 @@ void PathEditWidget::checkProgramm()
     font.setBold(false);
     _labelVersion->setFont(font);
     _labelVersion->setPalette(QPalette());
-    _labelVersion->setText(version + tr(" in path '") + path + '\'');
+    _labelVersion->setText(tr("%1 in path '%2'").arg(version).arg(path));
     delete process;
     return;
 }
@@ -131,7 +131,7 @@ void PathEditWidget::setupWidgets()
     QLayout *layout2 = new QHBoxLayout();
 
     _pathLineEdit = new QLineEdit();
-    _pathLineEdit->setPlaceholderText("Leave empty to use system PATH");
+    _pathLineEdit->setPlaceholderText(tr("Leave empty to use system PATH"));
     _pathLineEdit->setCompleter(new QCompleter(_filesModel));
     connect(_pathLineEdit, SIGNAL(editingFinished()), this, SLOT(checkLineEdit()));
     layout2->addWidget(_pathLineEdit);
