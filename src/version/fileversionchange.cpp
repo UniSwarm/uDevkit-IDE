@@ -72,6 +72,11 @@ void FileVersionChange::insertChange(const VersionChange &change)
     //qDebug()<<nchange->removedLines()<<nchange->addedLines();
 }
 
+void FileVersionChange::clear()
+{
+    _changes.clear();
+}
+
 void FileVersionChange::insertLines(int fromLine, int lineCount)
 {
     foreach (VersionChange *change, _changes)

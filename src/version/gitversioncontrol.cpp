@@ -8,8 +8,9 @@
 GitVersionControl::GitVersionControl()
     : AbstractVersionControl ()
 {
-    _indexWatcher = nullptr;
-    _state = None;
+    _indexWatcher = Q_NULLPTR;
+    _statusState = StatusNone;
+    _diffState = DiffNone;
 
     _processGitState = new QProcess(this);
     //connect(_process, &QProcess::finished, this, &GitVersionControl::parseModifiedFiles); // does not work...
@@ -103,30 +104,30 @@ void GitVersionControl::requestFileModifications(const QString &filePath)
 {
     _diffRequestQueue.enqueue(filePath);
     if (_processGitDiff->state() == QProcess::NotRunning)
-        reqFileModif(_diffRequestQueue.head());
+        reqFileModifHead(_diffRequestQueue.head());
 }
 
 void GitVersionControl::reqFetch()
 {
-    _state = Fetch;
+    _statusState = StatusFetch;
     _processGitState->start(_programPath, QStringList()<<"fetch");
 }
 
 void GitVersionControl::reqModifFiles()
 {
-    _state = ModifiedFiles;
+    _statusState = StatusModifiedFiles;
     _processGitState->start(_programPath, QStringList()<<"ls-files"<<"-m"<<".");
 }
 
 void GitVersionControl::reqTrackedFiles()
 {
-    _state = TrackedFiles;
+    _statusState = StatusTrackedFiles;
     _processGitState->start(_programPath, QStringList()<<"ls-files"<<".");
 }
 
 void GitVersionControl::reqValidatedFiles()
 {
-    _state = ValidatedFiles;
+    _statusState = StatusValidatedFiles;
     _processGitState->start(_programPath, QStringList()<<"diff"<<"--cached"<<"--name-only");
 }
 
@@ -140,30 +141,28 @@ void GitVersionControl::processEnd()
 {
     QSet<QString> newmodifiedFiles, validedFile;
 
-    switch (_state) {
-    case GitVersionControl::None:
+    switch (_statusState) {
+    case GitVersionControl::StatusNone:
         break;
-    case GitVersionControl::Fetch:
+    case GitVersionControl::StatusFetch:
         reqModifFiles();
         break;
-    case GitVersionControl::Check:
+    case GitVersionControl::StatusCheck:
         if (_processGitState->exitCode() != 0)
             reqFetch();
         else
             reqModifFiles();
         break;
-    case GitVersionControl::ModifiedFiles:
+    case GitVersionControl::StatusModifiedFiles:
         parseFilesList(_modifiedFiles, validedFile, newmodifiedFiles);
         reqTrackedFiles();
         break;
-    case GitVersionControl::TrackedFiles:
+    case GitVersionControl::StatusTrackedFiles:
         parseFilesList(_trackedFiles, validedFile, newmodifiedFiles);
         reqValidatedFiles();
         break;
-    case GitVersionControl::ValidatedFiles:
+    case GitVersionControl::StatusValidatedFiles:
         parseFilesList(_validatedFiles, validedFile, newmodifiedFiles);
-        break;
-    case GitVersionControl::DiffFile:
         break;
     }
 
@@ -194,56 +193,92 @@ void GitVersionControl::updateSettings()
     _processGitDiff->setProcessEnvironment(env);
 }
 
-void GitVersionControl::reqFileModif(const QString &filePath)
+void GitVersionControl::reqFileModifHead(const QString &filePath)
 {
     QDir dir(_basePath);
+    _diffState = DiffHead;
+    _fileGitDiff = filePath;
+    _fileChanges.clear();
+    _processGitDiff->start(_programPath, QStringList()<<"diff"<<"HEAD"<<"--no-color"<<"--unified=0"<<dir.relativeFilePath(filePath));
+}
+
+void GitVersionControl::reqFileModifNormal(const QString &filePath)
+{
+    QDir dir(_basePath);
+    _diffState = DiffNormal;
+    _fileGitDiff = filePath;
     _processGitDiff->start(_programPath, QStringList()<<"diff"<<"--no-color"<<"--unified=0"<<dir.relativeFilePath(filePath));
 }
 
 void GitVersionControl::processDiffEnd()
 {
     QTextStream stream(_processGitDiff);
-    FileVersionChange fileChanges;
-
     QRegExp regContext("@@ -([0-9]+)(,([0-9]+))* \\+([0-9]+)(,([0-9]+))* @@");
     bool valid = false;
-    VersionChange *change = new VersionChange();
-    while (!stream.atEnd())
+
+    switch (_diffState)
     {
-        QString line = stream.readLine();
-        if (line.startsWith("@@")) // new modif
+    case GitVersionControl::DiffNone:
+        break;
+    case GitVersionControl::DiffHead:
+    {
+        VersionChange *change = new VersionChange();
+        while (!stream.atEnd())
         {
-            if (valid && change->isValid())
+            QString line = stream.readLine();
+            if (line.startsWith("@@")) // new modif
             {
-                fileChanges.changes().append(change);
-                change = new VersionChange();
+                if (valid && change->isValid())
+                {
+                    _fileChanges.changes().append(change);
+                    change = new VersionChange();
+                }
+
+                regContext.indexIn(line);
+                int lineOld = regContext.cap(1).toInt();
+                int lineNew = regContext.cap(4).toInt();
+                change->setLineOld(lineOld);
+                change->setLineNew(lineNew);
+                change->setStaged(true);
+                valid = true;
             }
-
-            regContext.indexIn(line);
-            int lineOld = regContext.cap(1).toInt();
-            int lineNew = regContext.cap(4).toInt();
-            change->setLineOld(lineOld);
-            change->setLineNew(lineNew);
-            valid = true;
+            if (!valid)
+                continue;
+            if (line.startsWith('+'))
+                change->addAddedLine(line.mid(1));
+            else if (line.startsWith('-'))
+                change->addRemovedLine(line.mid(1));
         }
-        if (!valid)
-            continue;
-        if (line.startsWith('+'))
-            change->addAddedLine(line.mid(1));
-        else if (line.startsWith('-'))
-            change->addRemovedLine(line.mid(1));
+        if (valid && change->isValid())
+            _fileChanges.changes().append(change);
+        else
+            delete change;
+        reqFileModifNormal(_fileGitDiff);
+        break;
     }
-    if (valid && change->isValid())
-        fileChanges.changes().append(change);
-    else
-        delete change;
+    case GitVersionControl::DiffNormal:
+        while (!stream.atEnd())
+        {
+            QString line = stream.readLine();
 
-    QString fileGitDiff = _diffRequestQueue.dequeue();
-    _changeForFile[fileGitDiff] = fileChanges;
-    emit fileModificationsAvailable(fileGitDiff);
+            if (line.startsWith("@@")) // new modif
+            {
+                regContext.indexIn(line);
+                int lineNew = regContext.cap(4).toInt();
+                QList<VersionChange *> changesForRange = _fileChanges.changesForRange(lineNew, lineNew);
+                if (!changesForRange.isEmpty())
+                    changesForRange.first()->setStaged(false);
+            }
+        }
 
-    if (!_diffRequestQueue.isEmpty())
-        reqFileModif(_diffRequestQueue.head());
+        _changeForFile[_fileGitDiff] = _fileChanges;
+        _diffRequestQueue.dequeue();
+        emit fileModificationsAvailable(_fileGitDiff);
+        _diffState = DiffNone;
+        if (!_diffRequestQueue.isEmpty())
+            reqFileModifHead(_diffRequestQueue.head());
+        break;
+    }
 }
 
 void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &outgoingFiles, QSet<QString> &incomingFiles)
@@ -319,6 +354,6 @@ void GitVersionControl::analysePath()
     _processGitDiff->setWorkingDirectory(_basePath);
     connect(_indexWatcher, &QFileSystemWatcher::fileChanged, this, &GitVersionControl::indexCheck);
 
-    _state = Check;
+    _statusState = StatusCheck;
     _processGitState->start(_programPath, QStringList()<<"status");
 }

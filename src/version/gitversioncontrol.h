@@ -37,7 +37,8 @@ protected slots:
     void processEnd();
     void updateSettings();
 
-    void reqFileModif(const QString &filePath);
+    void reqFileModifHead(const QString &filePath);
+    void reqFileModifNormal(const QString &filePath);
     void processDiffEnd();
 
 protected:
@@ -47,25 +48,32 @@ protected:
     void findGitDir();
     virtual void analysePath();
 
-    enum State {
-        None,
-        Check,
-        Fetch,
-        ModifiedFiles,
-        TrackedFiles,
-        ValidatedFiles,
-        DiffFile
+    enum StatusState {
+        StatusNone,
+        StatusCheck,
+        StatusFetch,
+        StatusModifiedFiles,
+        StatusTrackedFiles,
+        StatusValidatedFiles
     };
-    State _state;
-
-    QString _programPath;
-
+    StatusState _statusState;
     QProcess *_processGitState;
+
     QFileSystemWatcher *_indexWatcher;
     QString _gitPath;
     QString _basePath;
-    SettingsClass *_settingsClass;
 
+    SettingsClass *_settingsClass;
+    QString _programPath;
+
+    enum DiffState {
+        DiffNone,
+        DiffHead,
+        DiffNormal
+    };
+    DiffState _diffState;
+    QString _fileGitDiff;
+    FileVersionChange _fileChanges;
     QProcess *_processGitDiff;
     QQueue<QString> _diffRequestQueue;
 };

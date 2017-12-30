@@ -17,6 +17,7 @@ public:
     QList<VersionChange *> changesForRange(int lineStart, int lineEnd) const;
 
     void insertChange(const VersionChange &change);
+    void clear();
 
 protected:
     void insertLines(int fromLine, int lineCount);

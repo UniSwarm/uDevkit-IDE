@@ -2,7 +2,7 @@
 
 VersionChange::VersionChange()
 {
-
+    _staged = false;
 }
 
 int VersionChange::lineOld() const
@@ -70,4 +70,14 @@ bool VersionChange::isValid() const
     if (_addedLines.isEmpty() && _removedLines.isEmpty())
         return false;
     return true;
+}
+
+bool VersionChange::isStaged() const
+{
+    return _staged;
+}
+
+void VersionChange::setStaged(bool staged)
+{
+    _staged = staged;
 }

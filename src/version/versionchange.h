@@ -25,11 +25,15 @@ public:
     void clear();
     bool isValid() const;
 
+    bool isStaged() const;
+    void setStaged(bool staged);
+
 protected:
     int _lineOld;
     int _lineNew;
     QStringList _addedLines;
     QStringList _removedLines;
+    bool _staged;
 };
 
 #endif // VERSIONCHANGE_H
