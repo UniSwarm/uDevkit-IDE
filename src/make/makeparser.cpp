@@ -156,11 +156,16 @@ void MakeParser::updateSettings()
 {
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     QString makePath = _settingPath->value().toString();
+#if defined(Q_OS_WIN)
+    QChar listSep = ';';
+#else
+    QChar listSep = ':';
+#endif
     if (!makePath.isEmpty())
     {
         makePath = QDir::toNativeSeparators(makePath);
-        env.insert("PATH", makePath + QDir::listSeparator() + env.value("PATH"));
-        _programPath = QStandardPaths::findExecutable("make", env.value("PATH").split(QDir::listSeparator()));
+        env.insert("PATH", makePath + listSep + env.value("PATH"));
+        _programPath = QStandardPaths::findExecutable("make", env.value("PATH").split(listSep));
     }
     else
         _programPath = "make";

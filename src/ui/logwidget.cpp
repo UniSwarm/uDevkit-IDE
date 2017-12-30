@@ -53,15 +53,20 @@ void LogWidget::start(const QString &program, const QStringList &arguments)
     insertHtml("<i style=\"color: green\">" + command.toHtmlEscaped() + "</i>");
 
     QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
+#if defined(Q_OS_WIN)
+    QChar listSep = ';';
+#else
+    QChar listSep = ':';
+#endif
     QString makePath = rtset()->setting("tools/make/path").toString();
     if (!makePath.isEmpty())
     {
         makePath = QDir::toNativeSeparators(makePath);
-        env.insert("PATH", makePath + QDir::listSeparator() + env.value("PATH"));
+        env.insert("PATH", makePath + listSep + env.value("PATH"));
     }
     _process->setProcessEnvironment(env);
 
-    QString path = QStandardPaths::findExecutable(program, env.value("PATH").split(QDir::listSeparator()));
+    QString path = QStandardPaths::findExecutable(program, env.value("PATH").split(listSep));
     if (path.isEmpty())
     {
         insertHtml("<br/><i style=\"color: red\">" + tr("Cannot find command '%1'").arg(program).toHtmlEscaped() + "</i>");

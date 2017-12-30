@@ -177,11 +177,16 @@ void GitVersionControl::updateSettings()
 {
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     QString gitPath = _settingsClass->setting("path").toString();
+#if defined(Q_OS_WIN)
+    QChar listSep = ';';
+#else
+    QChar listSep = ':';
+#endif
     if (!gitPath.isEmpty())
     {
-        _programPath = gitPath + "git";
+        _programPath = gitPath + QDir::separator() + "git";
         gitPath = QDir::toNativeSeparators(gitPath);
-        env.insert("PATH", gitPath + QDir::listSeparator() + env.value("PATH"));
+        env.insert("PATH", gitPath + listSep + env.value("PATH"));
     }
     else
         _programPath = "git";
