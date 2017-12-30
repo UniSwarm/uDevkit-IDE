@@ -70,6 +70,7 @@ SOURCES += \
     settings/pages/htmleditorsettings.cpp \
     settings/pages/gitversionsettings.cpp \
     settings/pages/globalsettings.cpp \
+    settings/pages/toolsversionsettings.cpp \
     project/projecttreeviewitemdelegate.cpp
 
 HEADERS += \
@@ -114,6 +115,7 @@ HEADERS += \
     settings/pages/htmleditorsettings.h \
     settings/pages/gitversionsettings.h \
     settings/pages/globalsettings.h \
+    settings/pages/toolsversionsettings.h \
     project/projecttreeviewitemdelegate.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc

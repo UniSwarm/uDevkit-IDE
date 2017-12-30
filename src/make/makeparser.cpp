@@ -8,6 +8,8 @@
 #include <QTextStream>
 #include <QStandardPaths>
 
+#include "settings/settingsmanager.h"
+
 MakeParser::MakeParser(const QString &basePath)
     : QObject(nullptr)
 {
@@ -19,6 +21,10 @@ MakeParser::MakeParser(const QString &basePath)
 
     _makeWatcher = new QFileSystemWatcher();
     connect(_makeWatcher, &QFileSystemWatcher::fileChanged, this, &MakeParser::analyseMakefile);
+
+    _settingPath = rtset()->registerSetting("tools/make/path");
+    connect(_settingPath, &Setting::valueChanged, this, &MakeParser::updateSettings);
+    updateSettings();
 }
 
 MakeParser::~MakeParser()
@@ -139,11 +145,26 @@ void MakeParser::analyseMakefile(const QString path)
     _makeWatcher->removePath(_basePath);
     if (QFile(_makefileFilePath).exists()) // TODO add a Makefile detection an -f name option in case of different file name
     {
-        _processMake->start("make", QStringList()<<"-pnR");
+        _processMake->start(_programPath, QStringList()<<"-pnR");
         _makeWatcher->addPath(_makefileFilePath);
     }
     else
         _makeWatcher->addPath(_basePath);
+}
+
+void MakeParser::updateSettings()
+{
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QString makePath = _settingPath->value().toString();
+    if (!makePath.isEmpty())
+    {
+        makePath = QDir::toNativeSeparators(makePath);
+        env.insert("PATH", makePath + QDir::listSeparator() + env.value("PATH"));
+        _programPath = QStandardPaths::findExecutable("make", env.value("PATH").split(QDir::listSeparator()));
+    }
+    else
+        _programPath = "make";
+    _processMake->setProcessEnvironment(env);
 }
 
 void MakeParser::addSource(QSet<QString> &sourcesList, const QStringList &varList)

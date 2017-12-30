@@ -7,6 +7,8 @@
 #include <QSet>
 #include <QFileSystemWatcher>
 
+#include "settings/settingsclass.h"
+
 class QProcess;
 
 class MakeParser : public QObject
@@ -32,6 +34,7 @@ public slots:
 protected slots:
     void processEnd();
     void analyseMakefile(const QString path);
+    void updateSettings();
 
 protected:
     QFileSystemWatcher *_makeWatcher;
@@ -43,6 +46,9 @@ protected:
     QSet<QString> _sourceFiles;
     QMultiMap<QString, QString> _variables;
     QMultiMap<QString, QString> _vpath;
+
+    QString _programPath;
+    Setting *_settingPath;
 };
 
 #endif // MAKEPARSER_H

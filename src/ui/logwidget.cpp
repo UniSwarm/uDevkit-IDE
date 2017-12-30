@@ -1,10 +1,12 @@
 #include "logwidget.h"
 
 #include "project/project.h"
+#include "settings/settingsmanager.h"
 
 #include <QDebug>
 #include <QTextStream>
 #include <QStandardPaths>
+#include <QDir>
 
 LogWidget::LogWidget(Project *project, QWidget *parent)
     : QTextBrowser(parent), _project(project)
@@ -49,7 +51,16 @@ void LogWidget::start(const QString &program, const QStringList &arguments)
     QString command = "> " + program + " " + arguments.join(' ');
     insertHtml("<i style=\"color: green\">" + command.toHtmlEscaped() + "</i>");
 
-    QString path = QStandardPaths::findExecutable(program);
+    QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
+    QString makePath = rtset()->setting("tools/make/path").toString();
+    if (!makePath.isEmpty())
+    {
+        makePath = QDir::toNativeSeparators(makePath);
+        env.insert("PATH", makePath + QDir::listSeparator() + env.value("PATH"));
+    }
+    _process->setProcessEnvironment(env);
+
+    QString path = QStandardPaths::findExecutable(program, env.value("PATH").split(QDir::listSeparator()));
     if (path.isEmpty())
     {
         insertHtml("<br/><i style=\"color: red\">" + tr("Cannot find command '%1'").arg(program).toHtmlEscaped() + "</i>");
@@ -67,7 +78,7 @@ void LogWidget::start(const QString &program, const QStringList &arguments)
 .color37 { color: white; }\n\
 a { color: white; }\n\
 ");
-    _process->start(program, arguments);
+    _process->start(path, arguments);
 }
 
 void LogWidget::parseOutput(QByteArray data, bool error)
