@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QStandardPaths>
 #include <QDir>
+#include <QRegularExpression>
 
 LogWidget::LogWidget(Project *project, QWidget *parent)
     : QTextBrowser(parent), _project(project)
@@ -84,9 +85,12 @@ a { color: white; }\n\
 void LogWidget::parseOutput(QByteArray data, bool error)
 {
     QString html;
-    QByteArray dataRead;
     QTextStream stream(&data);
     stream.setCodec("UTF-8");
+
+    QRegularExpression colorReg("(\\x001b|)\\[([0-9]+)m");
+    QRegularExpression colorRstReg("(\\x001b\\(B\\x001b\\[m|\\[0;10m)");
+    QRegularExpression linkReg("([\\-\\._a-zA-Z/\\\\0-9]+\\.[a-zA-Z]+)(:[0-9]+)*(:[0-9]+)*");
 
     while (!stream.atEnd())
     {
@@ -94,11 +98,11 @@ void LogWidget::parseOutput(QByteArray data, bool error)
         QString errorFormat = error ? " class=\"color31\"" : "";
         stringRead = "<br/><span" + errorFormat + ">" + stringRead.toHtmlEscaped() + "</span>";
         stringRead.replace(" ","&nbsp;");
-        stringRead.replace(QRegExp("\\x001b\\[([0-9]+)m"),"</span><span class=\"color\\1\">");
-        stringRead.replace(QRegExp("\\x001b\\(B\\x001b\\[m"),"</span><span>"); // reset color
+        stringRead.replace(colorReg,"</span><span class=\"color\\2\">");
+        stringRead.replace(colorRstReg,"</span><span>"); // reset color
         stringRead.replace("<span></span>","");
 
-        stringRead.replace(QRegExp("([\\-\\._a-zA-Z/\\\\0-9]+\\.[a-zA-Z]+)(:[0-9]+)*(:[0-9]+)*"),"<a href=\"\\1\\2\\3\">\\1\\2\\3</a>");
+        stringRead.replace(linkReg,"<a href=\"\\1\\2\\3\">\\1\\2\\3</a>");
 
         html.append(stringRead);
     }
