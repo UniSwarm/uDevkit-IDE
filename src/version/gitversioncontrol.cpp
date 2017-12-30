@@ -20,7 +20,7 @@ GitVersionControl::GitVersionControl()
     connect(_processGitDiff, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=](int, QProcess::ExitStatus){processDiffEnd();}); // but this crap is recomended
 
-    _settingsClass = SettingsManager::registerClass("gitversion");
+    _settingsClass = rtset()->registerClass("gitversion");
     connect(_settingsClass, &SettingsClass::classModified, this, &GitVersionControl::updateSettings);
 }
 

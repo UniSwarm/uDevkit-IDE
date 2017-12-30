@@ -61,7 +61,7 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
         initialized = true;
     }
 
-    _settingsClass = SettingsManager::registerClass("codeEditor");
+    _settingsClass = rtset()->registerClass("codeEditor");
     connect(_settingsClass, &SettingsClass::classModified, this, &CodeEditor::updateSettings);
 
     _editorWidget = new edbee::TextEditorWidget();

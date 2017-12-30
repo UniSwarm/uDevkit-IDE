@@ -6,7 +6,7 @@
 CodeEditorSettings::CodeEditorSettings()
     : SettingsPage(QIcon(":/icons/img/dark/icons8-code.png"), "Code editor")
 {
-    _settingsClass = SettingsManager::registerClass("codeEditor");
+    _settingsClass = rtset()->registerClass("codeEditor");
     createWidgets();
 }
 
@@ -53,6 +53,7 @@ void CodeEditorSettings::createWidgets()
     return 0;\n\
 }");
     _editorTest->setGrammar("c");
+    updateTest();
 
     setLayout(layout);
 }

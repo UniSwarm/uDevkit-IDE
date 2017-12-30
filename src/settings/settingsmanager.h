@@ -6,26 +6,25 @@
 
 #include "settingsclass.h"
 
-class SettingsManager : public QObject
+class SettingsManager : public SettingsClass
 {
     Q_OBJECT
 protected:
-    SettingsManager(QObject *parent = nullptr);
+    SettingsManager(QObject *parent = Q_NULLPTR);
 
 public:
     static SettingsManager *instance();
 
-    static SettingsClass *registerClass(const QString &className);
-    static Setting *registerSetting(const QString &className, const QString &name, const QVariant &defaultValue);
-
     static void save();
+    void load(SettingsClass *settingsClass);
 
+// helpers
     static QString language();
 
 protected:
     static SettingsManager *settingsManager;
-
-    QMap<QString, SettingsClass*> _classesMap;
 };
+
+#define rtset() SettingsManager::instance()
 
 #endif // SETTINGSMANAGER_H

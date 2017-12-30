@@ -5,7 +5,7 @@
 GitVersionSettings::GitVersionSettings()
     : SettingsPage(QIcon(":/icons/img/dark/icons8-git.png"), "Git version")
 {
-    _settingsClass = SettingsManager::registerClass("gitversion");
+    _settingsClass = rtset()->registerClass("gitversion");
     createWidgets();
 }
 

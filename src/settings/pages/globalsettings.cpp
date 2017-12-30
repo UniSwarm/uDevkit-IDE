@@ -5,7 +5,7 @@
 GlobalSettings::GlobalSettings()
     : SettingsPage(QIcon(":/icons/img/dark/icons8-settings.png"), "Global")
 {
-    _settingsClass = SettingsManager::registerClass("global");
+    _settingsClass = rtset()->registerClass("global");
     createWidgets();
 }
 

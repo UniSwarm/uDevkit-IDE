@@ -1,7 +1,11 @@
 #include "settingsclass.h"
 
-SettingsClass::SettingsClass(const QString &name)
-    : _name(name)
+#include "settingsmanager.h"
+
+#include <QDebug>
+
+SettingsClass::SettingsClass(const QString &name, QObject *parent)
+    : QObject(parent), _name(name)
 {
 }
 
@@ -11,11 +15,23 @@ SettingsClass::SettingsClass(const SettingsClass &other)
     _modified = false;
     foreach (Setting *setting, other._settingsMap)
         registerSetting(setting->name(), setting->value());
+    foreach (SettingsClass *settingClass, other._classesMap)
+    {
+        SettingsClass *newSettingClass = new SettingsClass(settingClass->name());
+        _classesMap.insert(newSettingClass->name(), newSettingClass);
+    }
 }
 
 SettingsClass::~SettingsClass()
 {
     qDeleteAll(_settingsMap);
+    qDeleteAll(_classesMap);
+}
+
+QVariant SettingsClass::setting(const QString &name, const QVariant &defaultValue)
+{
+    Setting *setting = registerSetting(name, defaultValue);
+    return setting->value();
 }
 
 const QString &SettingsClass::name() const
@@ -23,45 +39,97 @@ const QString &SettingsClass::name() const
     return _name;
 }
 
-QVariant SettingsClass::setting(const QString &name, const QVariant &defaultValue)
+SettingsClass *SettingsClass::registerClass(const QString &className)
 {
-    QMap<QString, Setting*>::const_iterator find = _settingsMap.constFind(name);
-    if (find != _settingsMap.cend())
+    SettingsClass *settingClass;
+
+    QMap<QString, SettingsClass*>::const_iterator find = _classesMap.constFind(className);
+    if (find != _classesMap.cend())
     {
-        return (*find)->value();
+        settingClass = *find;
     }
-    registerSetting(name, defaultValue);
-    return defaultValue;
+    else
+    {
+        settingClass = new SettingsClass(className);
+        _classesMap.insert(className, settingClass);
+
+        // load
+        SettingsManager::instance()->load(settingClass);
+    }
+
+    return settingClass;
 }
 
 void SettingsClass::setSetting(const QString &name, const QVariant &value)
 {
-    QMap<QString, Setting*>::const_iterator find = _settingsMap.constFind(name);
-    _modified = true;
-    if (find != _settingsMap.cend())
-    {
-        (*find)->setValue(value);
-        return;
-    }
-    registerSetting(name, value);
+    Setting *setting = registerSetting(name, value);
+    setting->setValue(value);
 }
 
-Setting *SettingsClass::registerSetting(const QString &name, const QVariant &defaultValue)
+Setting *SettingsClass::registerSetting(const QString &path, const QVariant &defaultValue)
 {
-    Setting *setting;
-
-    QMap<QString, Setting*>::const_iterator find = _settingsMap.constFind(name);
-    if (find != _settingsMap.cend())
+    int pos = path.indexOf('/');
+    if (pos == -1)
     {
-        setting = *find;
+        Setting *setting = Q_NULLPTR;
+        QMap<QString, Setting*>::const_iterator find = _settingsMap.constFind(path);
+        if (find != _settingsMap.cend())
+        {
+            setting = *find;
+        }
+        else
+        {
+            setting = new Setting(this, path, defaultValue);
+            _settingsMap.insert(path, setting);
+        }
+        return setting;
     }
     else
     {
-        setting = new Setting(this, name, defaultValue);
-        _settingsMap.insert(name, setting);
+        QMap<QString, SettingsClass*>::const_iterator find = _classesMap.constFind(path.mid(0, pos));
+        if (find != _classesMap.cend())
+        {
+            return (*find)->registerSetting(path.mid(pos + 1), defaultValue);
+        }
+        else
+        {
+            QString className = path.mid(0, pos);
+            SettingsClass *settingClass;
+            QMap<QString, SettingsClass*>::const_iterator find = _classesMap.constFind(className);
+            if (find != _classesMap.cend())
+            {
+                settingClass = *find;
+            }
+            else
+            {
+                settingClass = new SettingsClass(className);
+                _classesMap.insert(className, settingClass);
+
+                // load
+                SettingsManager::instance()->load(settingClass);
+            }
+            return settingClass->registerSetting(path.mid(pos + 1), defaultValue);
+        }
+    }
+}
+
+Setting *SettingsClass::getSetting(const QString &path)
+{
+    int pos = path.indexOf('/');
+    if (pos == -1)
+    {
+        QMap<QString, Setting*>::const_iterator find = _settingsMap.constFind(path);
+        if (find != _settingsMap.cend())
+            return *find;
+    }
+    else
+    {
+        QMap<QString, SettingsClass*>::const_iterator find = _classesMap.constFind(path.mid(0, pos));
+        if (find != _classesMap.cend())
+            return (*find)->getSetting(path.mid(pos + 1));
     }
 
-    return setting;
+    return Q_NULLPTR;
 }
 
 void SettingsClass::commit()
@@ -84,6 +152,10 @@ void SettingsClass::save(QSettings *settings)
     foreach (Setting *setting, _settingsMap)
     {
         settings->setValue(setting->name() ,setting->value());
+    }
+    foreach (SettingsClass *settingClass, _classesMap)
+    {
+        settingClass->save(settings);
     }
     settings->endGroup();
 }
