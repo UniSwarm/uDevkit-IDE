@@ -85,6 +85,11 @@ void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int
                 painter->fillRect(QRect(0, start, widthBar, l-start), QBrush(linearGrad));
             }
         }
+        if (change->isStaged())
+        {
+            painter->setPen(QColor(255, 128, 0, 200));
+            painter->drawLine(0, start, 0, end);
+        }
     }
 }
 
