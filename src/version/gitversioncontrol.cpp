@@ -22,6 +22,7 @@ GitVersionControl::GitVersionControl()
 
     _settingsClass = rtset()->registerClass("gitversion");
     connect(_settingsClass, &SettingsClass::classModified, this, &GitVersionControl::updateSettings);
+    updateSettings();
 }
 
 GitVersionControl::~GitVersionControl()
@@ -54,7 +55,7 @@ void GitVersionControl::validFile(const QSet<QString> &filesPath)
     newProcess->setWorkingDirectory(_basePath);
     connect(newProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=](int, QProcess::ExitStatus){delete sender();});
-    newProcess->start("git", args);
+    newProcess->start(_programPath, args);
 }
 
 void GitVersionControl::inValidFile(const QSet<QString> &filesPath)
@@ -72,7 +73,7 @@ void GitVersionControl::inValidFile(const QSet<QString> &filesPath)
     newProcess->setWorkingDirectory(_basePath);
     connect(newProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=](int, QProcess::ExitStatus){delete sender();});
-    newProcess->start("git", args);
+    newProcess->start(_programPath, args);
 }
 
 void GitVersionControl::checkoutFile(const QSet<QString> &filesPath)
@@ -90,7 +91,7 @@ void GitVersionControl::checkoutFile(const QSet<QString> &filesPath)
     newProcess->setWorkingDirectory(_basePath);
     connect(newProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=](int, QProcess::ExitStatus){delete sender();});
-    newProcess->start("git", args);
+    newProcess->start(_programPath, args);
 }
 
 bool GitVersionControl::isValid() const
@@ -108,25 +109,25 @@ void GitVersionControl::requestFileModifications(const QString &filePath)
 void GitVersionControl::reqFetch()
 {
     _state = Fetch;
-    _processGitState->start("git", QStringList()<<"fetch");
+    _processGitState->start(_programPath, QStringList()<<"fetch");
 }
 
 void GitVersionControl::reqModifFiles()
 {
     _state = ModifiedFiles;
-    _processGitState->start("git", QStringList()<<"ls-files"<<"-m"<<".");
+    _processGitState->start(_programPath, QStringList()<<"ls-files"<<"-m"<<".");
 }
 
 void GitVersionControl::reqTrackedFiles()
 {
     _state = TrackedFiles;
-    _processGitState->start("git", QStringList()<<"ls-files"<<".");
+    _processGitState->start(_programPath, QStringList()<<"ls-files"<<".");
 }
 
 void GitVersionControl::reqValidatedFiles()
 {
     _state = ValidatedFiles;
-    _processGitState->start("git", QStringList()<<"diff"<<"--cached"<<"--name-only");
+    _processGitState->start(_programPath, QStringList()<<"diff"<<"--cached"<<"--name-only");
 }
 
 void GitVersionControl::indexCheck()
@@ -174,13 +175,16 @@ void GitVersionControl::processEnd()
 
 void GitVersionControl::updateSettings()
 {
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();;
-#if defined(Q_OS_WIN)
-    char listSep = ';';
-#else
-    char listSep = ':';
-#endif
-    env.insert("PATH", _settingsClass->setting("path").toString() + listSep + env.value("PATH") );
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QString gitPath = _settingsClass->setting("path").toString();
+    if (!gitPath.isEmpty())
+    {
+        _programPath = gitPath + "git";
+        gitPath = QDir::toNativeSeparators(gitPath);
+        env.insert("PATH", gitPath + QDir::listSeparator() + env.value("PATH"));
+    }
+    else
+        _programPath = "git";
     _processGitState->setProcessEnvironment(env);
     _processGitDiff->setProcessEnvironment(env);
 }
@@ -188,7 +192,7 @@ void GitVersionControl::updateSettings()
 void GitVersionControl::reqFileModif(const QString &filePath)
 {
     QDir dir(_basePath);
-    _processGitDiff->start("git", QStringList()<<"diff"<<"--no-color"<<"--unified=0"<<dir.relativeFilePath(filePath));
+    _processGitDiff->start(_programPath, QStringList()<<"diff"<<"--no-color"<<"--unified=0"<<dir.relativeFilePath(filePath));
 }
 
 void GitVersionControl::processDiffEnd()
@@ -305,11 +309,11 @@ void GitVersionControl::analysePath()
 
     delete _indexWatcher;
     _indexWatcher = new QFileSystemWatcher();
-    _indexWatcher->addPath(_gitPath+"index");
+    _indexWatcher->addPath(_gitPath + "index");
     _processGitState->setWorkingDirectory(_basePath);
     _processGitDiff->setWorkingDirectory(_basePath);
     connect(_indexWatcher, &QFileSystemWatcher::fileChanged, this, &GitVersionControl::indexCheck);
 
     _state = Check;
-    _processGitState->start("git", QStringList()<<"status");
+    _processGitState->start(_programPath, QStringList()<<"status");
 }

@@ -58,6 +58,8 @@ protected:
     };
     State _state;
 
+    QString _programPath;
+
     QProcess *_processGitState;
     QFileSystemWatcher *_indexWatcher;
     QString _gitPath;
