@@ -11,7 +11,7 @@
 PathEditWidget::PathEditWidget(QWidget *parent) : QWidget(parent)
 {
     _filesModel = new QFileSystemModel();
-    _filesModel->setFilter(QDir::AllDirs);
+    _filesModel->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot);
     _filesModel->setRootPath("");
     _versionArg = "-v";
 
@@ -37,7 +37,7 @@ QString PathEditWidget::path() const
 void PathEditWidget::setPath(const QString &path)
 {
     _path = path;
-    if(QDir::fromNativeSeparators(_pathLineEdit->text()) != path)
+    if (QDir::fromNativeSeparators(_pathLineEdit->text()) != path)
     {
         _pathLineEdit->setText(QDir::toNativeSeparators(path));
         _filesModel->setRootPath(path);
@@ -68,9 +68,9 @@ void PathEditWidget::buttonClicked()
 void PathEditWidget::checkProgramm()
 {
 #if defined(Q_OS_WIN)
-    char listSep = ';';
+    QChar listSep = ';';
 #else
-    char listSep = ':';
+    QChar listSep = ':';
 #endif
     QString programm = _programm;
     QProcess *process = new QProcess();
@@ -78,7 +78,7 @@ void PathEditWidget::checkProgramm()
         return;
     QProcessEnvironment env = _env;
     if (!_path.isEmpty())
-        env.insert("PATH", _path + listSep + env.value("PATH") );
+        env.insert("PATH", _path + listSep + env.value("PATH"));
     QString path = QStandardPaths::findExecutable(_programm, env.value("PATH").split(listSep));
     if (!path.isEmpty())
         programm = path;
@@ -89,22 +89,12 @@ void PathEditWidget::checkProgramm()
     process->start(programm, args);
     if (!process->waitForFinished(3000))
     {
-        QFont font = _labelVersion->font();
-        font.setBold(true);
-        _labelVersion->setFont(font);
-        QPalette palette = _labelVersion->palette();
-        palette.setColor(QPalette::WindowText, Qt::red);
-        _labelVersion->setPalette(palette);
-        _labelVersion->setText(tr("%1 not found: %2").arg(_programm).arg(process->errorString()));
+        _labelVersion->setText(tr("<span style=\"color: red;\">%1 not found: %2</span>").arg(_programm).arg(process->errorString()));
         delete process;
         return;
     }
-    QString version = process->readAll();
-    QFont font = _labelVersion->font();
-    font.setBold(false);
-    _labelVersion->setFont(font);
-    _labelVersion->setPalette(QPalette());
-    _labelVersion->setText(tr("%1 in path '%2'").arg(version).arg(path));
+    QString version = process->readLine();
+    _labelVersion->setText(tr("%1 in path '%2'").arg(version).arg(QDir::toNativeSeparators(path)));
     delete process;
     return;
 }
@@ -144,6 +134,8 @@ void PathEditWidget::setupWidgets()
     layout->addItem(layout2);
 
     _labelVersion = new QLabel("");
+    _labelVersion->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    _labelVersion->setCursor(Qt::IBeamCursor);
     layout->addWidget(_labelVersion);
 
     setLayout(layout);
