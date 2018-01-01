@@ -263,13 +263,14 @@ void ProjectTreeView::keyPressEvent(QKeyEvent *event)
 {
     QTreeView::keyPressEvent(event);
 
-    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return )
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
     {
         if (!hasFocus())
             return;
 
-        const QModelIndexList indexList = selectionModel()->selectedIndexes();
+        QStringList filesPathToOpen;
 
+        const QModelIndexList indexList = selectionModel()->selectedIndexes();
         foreach (const QModelIndex &index, indexList)
         {
             if (!index.isValid())
@@ -277,7 +278,10 @@ void ProjectTreeView::keyPressEvent(QKeyEvent *event)
 
             const QModelIndex &indexFile = _proxy->mapToSource(index);
             if (!_project->projectItemModel()->isDir(indexFile))
-                emit openedFile(_project->projectItemModel()->filePath(indexFile));
+                filesPathToOpen.append(_project->projectItemModel()->filePath(indexFile));
         }
+
+        foreach (const QString &path, filesPathToOpen)
+            emit openedFile(path);
     }
 }
