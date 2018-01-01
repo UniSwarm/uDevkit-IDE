@@ -36,7 +36,7 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     setItemDelegate(new ProjectTreeViewItemDelegate());
 
     _removeAction = new QAction(this);
-    _removeAction->setText("remove");
+    _removeAction->setText(tr("Remove"));
     _removeAction->setShortcut(QKeySequence::Delete);
     _removeAction->setShortcutContext(Qt::WidgetShortcut);
     connect(_removeAction, SIGNAL(triggered(bool)), this, SLOT(remove()));
@@ -108,20 +108,20 @@ void ProjectTreeView::remove()
 
         if (_project->projectItemModel()->isDir(indexFile))
         {
-            if (QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove '%1'?")
+            if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove '%1'?")
                                      .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
                 _project->projectItemModel()->rmdir(indexFile);
         }
         else if (_project->projectItemModel()->isFile(indexFile))
         {
-            if (QMessageBox::question(this, "Remove file?", QString("Do you realy want to remove '%1'?")
+            if (QMessageBox::question(this, tr("Remove file?"), tr("Do you realy want to remove '%1'?")
                                       .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
                 _project->projectItemModel()->remove(indexFile);
         }
     }
     else
     {
-        if (QMessageBox::question(this, "Remove directory?", QString("Do you realy want to remove theses %1 files?")
+        if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove theses %1 files?")
                                  .arg(selection.size())) != QMessageBox::Yes)
             return;
         QList<QPersistentModelIndex> pindex;
@@ -159,18 +159,18 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     QAction *fileCreateAction = nullptr;
     if (_project->projectItemModel()->isDir(indexFile))
     {
-        fileCreateAction = menu.addAction("Add new file here");
+        fileCreateAction = menu.addAction(tr("Add new file here"));
         fileCreateAction->setShortcut(QKeySequence::Delete);
     }
-    QAction *fileRenameAction = menu.addAction("Rename");
+    QAction *fileRenameAction = menu.addAction(tr("Rename"));
     fileRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
     QAction *dirRemoveAction = nullptr, *openDirAction = nullptr;
     if (_project->projectItemModel()->isDir(indexFile))
     {
-        dirRemoveAction = menu.addAction("Remove directory");
+        dirRemoveAction = menu.addAction(tr("Remove directory"));
         dirRemoveAction->setShortcut(QKeySequence::Delete);
 
-        openDirAction = menu.addAction("Open directory as project");
+        openDirAction = menu.addAction(tr("Open directory as project"));
     }
     else
     {
@@ -199,7 +199,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     // analyse clicked menu
     if (trigered == fileCreateAction)
     {
-        QString fileName = QInputDialog::getText(this, "New file name", "Enter a name for this new file");
+        QString fileName = QInputDialog::getText(this, tr("New file name"), tr("Enter a name for this new file"));
         QString filePath = _project->projectItemModel()->filePath(indexFile) + "/" + fileName;
         QFile file(filePath);
         if (!file.exists())
@@ -222,7 +222,8 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     else if (trigered == versionInvalidAction)
         _project->versionControl()->inValidFile(QSet<QString>()<<info.filePath());
     else if (trigered == versionCheckoutAction)
-        if (QMessageBox::question(this, "Checkout file?", QString("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.")
+        if (QMessageBox::question(this, tr("Checkout file?"),
+                                  QString(tr("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state."))
                                   .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
             _project->versionControl()->checkoutFile(QSet<QString>()<<info.filePath());
 }
