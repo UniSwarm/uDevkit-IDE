@@ -292,6 +292,10 @@ bool MainWindow::openDir(const QString &path)
     }
     _project->setRootPath(mpath);
 
+    _oldProjects.removeOne(mpath);
+    _oldProjects.prepend(mpath);
+    updateOldProjects();
+
     return true;
 }
 
@@ -327,19 +331,19 @@ void MainWindow::git()
 void MainWindow::makeall()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("make", QStringList()<<"all"<<"-j"<<QString::number(QThread::idealThreadCount()));
+    _logWidget->start("make", QStringList()<<"all"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
 }
 
 void MainWindow::makeprog()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("make", QStringList()<<"prog"<<"-j"<<QString::number(QThread::idealThreadCount()));
+    _logWidget->start("make", QStringList()<<"prog"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
 }
 
 void MainWindow::makesim()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("make", QStringList()<<"sim"<<"-j"<<QString::number(QThread::idealThreadCount()));
+    _logWidget->start("make", QStringList()<<"sim"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
 }
 
 void MainWindow::makeclean()
