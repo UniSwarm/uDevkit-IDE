@@ -19,10 +19,6 @@ LogWidget::LogWidget(Project *project, QWidget *parent)
 
     _process = new QProcess(this);
 
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert("TERM", "xterm");
-    _process->setProcessEnvironment(env);
-
 #ifdef WIN32
     QFont font("Consolas");
 #else
@@ -64,6 +60,7 @@ void LogWidget::start(const QString &program, const QStringList &arguments)
         makePath = QDir::toNativeSeparators(makePath);
         env.insert("PATH", makePath + listSep + env.value("PATH"));
     }
+    env.insert("TERM", "xterm");
     _process->setProcessEnvironment(env);
 
     QString path = QStandardPaths::findExecutable(program, env.value("PATH").split(listSep));
@@ -84,6 +81,7 @@ void LogWidget::start(const QString &program, const QStringList &arguments)
 .color37 { color: white; }\n\
 a { color: white; }\n\
 ");
+    _process->setWorkingDirectory(_project->rootPath());
     _process->start(path, arguments);
 }
 
