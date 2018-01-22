@@ -215,6 +215,11 @@ void Editor::paste()
     pasteCommand();
 }
 
+void Editor::format()
+{
+    formatCommand();
+}
+
 void Editor::prepareReload()
 {
     QTimer::singleShot(100, this, SLOT(reload()));
@@ -258,6 +263,10 @@ void Editor::copyCommand()
 }
 
 void Editor::pasteCommand()
+{
+}
+
+void Editor::formatCommand()
 {
 }
 

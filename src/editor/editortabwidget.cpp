@@ -378,6 +378,14 @@ void EditorTabWidget::paste()
     editor->paste();
 }
 
+void EditorTabWidget::format()
+{
+    Editor *editor = currentEditor();
+    if (!editor)
+        return;
+    editor->format();
+}
+
 void EditorTabWidget::updateTab()
 {
     Editor* editor = qobject_cast<Editor*>(sender());

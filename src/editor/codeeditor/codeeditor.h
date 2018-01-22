@@ -51,6 +51,7 @@ protected:
     virtual void cutCommand();
     virtual void copyCommand();
     virtual void pasteCommand();
+    virtual void formatCommand();
 
     int openFileData(const QString &filePath);
     int saveFileData(const QString &filePath=QString());

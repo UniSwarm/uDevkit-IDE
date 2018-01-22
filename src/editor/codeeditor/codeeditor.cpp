@@ -373,6 +373,35 @@ void CodeEditor::pasteCommand()
     _editorWidget->controller()->executeCommand("paste");
 }
 
+void CodeEditor::formatCommand()
+{
+    edbee::TextEditorController* controller = _editorWidget->controller();
+    edbee::TextSearcher* searcher = controller->textSearcher();
+
+    _editorWidget->textDocument()->beginChanges(controller);
+    edbee::TextRangeSet range(_editorWidget->textSelection());
+    QString replaceString;
+
+    range.clear();
+    searcher->setSearchTerm("\t");
+    replaceString = "    ";
+    searcher->markAll(&range);
+    _editorWidget->textDocument()->replaceRangeSet(range, replaceString);
+
+    range.clear();
+    searcher->setSyntax(edbee::TextSearcher::SyntaxRegExp);
+    searcher->setSearchTerm(" +$");
+    replaceString = "";
+    searcher->markAll(&range);
+    _editorWidget->textDocument()->replaceRangeSet(range, replaceString);
+
+    _editorWidget->textDocument()->endChanges(0xFF02);
+
+    controller->borderedTextRanges()->clear();
+    controller->borderedTextRanges()->resetAnchors();
+    controller->update();
+}
+
 Editor::SearchCaps CodeEditor::searchCap() const
 {
     return Editor::SearchCaps(Editor::HasSearch | Editor::HasRegexp | Editor::HasReplace);

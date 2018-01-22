@@ -160,14 +160,14 @@ void MainWindow::createMenus()
 
     action = editMenu->addAction(tr("&Undo"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-undo.png"));
-    action->setShortcut(QKeySequence::QKeySequence::Undo);
+    action->setShortcut(QKeySequence::Undo);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::undo);
     connect(_editorTabWidget, &EditorTabWidget::undoAvailable, action, &QAction::setEnabled);
 
     action = editMenu->addAction(tr("&Redo"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-redo.png"));
-    action->setShortcut(QKeySequence::QKeySequence::Redo);
+    action->setShortcut(QKeySequence::Redo);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::redo);
     connect(_editorTabWidget, &EditorTabWidget::redoAvailable, action, &QAction::setEnabled);
@@ -176,21 +176,21 @@ void MainWindow::createMenus()
 
     action = editMenu->addAction(tr("Cu&t"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-cut.png"));
-    action->setShortcut(QKeySequence::QKeySequence::Cut);
+    action->setShortcut(QKeySequence::Cut);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::cut);
     connect(_editorTabWidget, &EditorTabWidget::copyAvailable, action, &QAction::setEnabled);
 
     action = editMenu->addAction(tr("&Copy"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-copy.png"));
-    action->setShortcut(QKeySequence::QKeySequence::Copy);
+    action->setShortcut(QKeySequence::Copy);
     action->setEnabled(false);
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::copy);
     connect(_editorTabWidget, &EditorTabWidget::copyAvailable, action, &QAction::setEnabled);
 
     _pasteAction = editMenu->addAction(tr("&Paste"));
     _pasteAction->setIcon(QIcon(":/icons/img/dark/icons8-paste.png"));
-    _pasteAction->setShortcut(QKeySequence::QKeySequence::Paste);
+    _pasteAction->setShortcut(QKeySequence::Paste);
     _pasteAction->setEnabled(false);
     connect(_pasteAction, &QAction::triggered, _editorTabWidget, &EditorTabWidget::paste);
 
@@ -198,21 +198,28 @@ void MainWindow::createMenus()
 
     _searchAction = editMenu->addAction(tr("&Search"));
     _searchAction->setIcon(QIcon(":/icons/img/dark/icons8-search-button.png"));
-    _searchAction->setShortcut(QKeySequence::QKeySequence::Find);
+    _searchAction->setShortcut(QKeySequence::Find);
     _searchAction->setEnabled(false);
     connect(_searchAction, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateResearch);
 
     _replaceAction = editMenu->addAction(tr("&Replace"));
     _replaceAction->setIcon(QIcon(":/icons/img/dark/icons8-find-and-replace.png"));
-    _replaceAction->setShortcut(QKeySequence::QKeySequence::Replace);
+    _replaceAction->setShortcut(QKeySequence::Replace);
     _replaceAction->setEnabled(false);
     connect(_replaceAction, &QAction::triggered, _searchReplaceWidget, &SearchReplaceWidget::activateReplace);
 
     editMenu->addSeparator();
 
+    action = editMenu->addAction(tr("&Format text"));
+    action->setStatusTip(tr("Removes end spaces, replaces tabs by spaces"));
+    action->setShortcut(QKeySequence("Ctrl+D"));
+    connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::format);
+
+    editMenu->addSeparator();
+
     action = editMenu->addAction(tr("P&references"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-settings.png"));
-    action->setShortcut(QKeySequence::QKeySequence::Preferences);
+    action->setShortcut(QKeySequence::Preferences);
     action->setShortcut(QKeySequence("Ctrl+P"));
     connect(action, &QAction::triggered, this, &MainWindow::showSettings);
 

@@ -43,6 +43,7 @@ public slots:
     void cut();
     void copy();
     void paste();
+    void format();
 
 signals:
     void editorChange(Editor *editor);

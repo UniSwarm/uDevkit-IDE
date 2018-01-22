@@ -79,6 +79,8 @@ public slots:
     void copy();
     void paste();
 
+    void format();
+
 protected slots:
     void prepareReload();
 
@@ -108,6 +110,8 @@ protected:
     virtual void cutCommand();
     virtual void copyCommand();
     virtual void pasteCommand();
+
+    virtual void formatCommand();
 
     Project *_project;
     QString _filePath;
