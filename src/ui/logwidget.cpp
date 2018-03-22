@@ -91,8 +91,8 @@ void LogWidget::parseOutput(QByteArray data, bool error)
     QTextStream stream(&data);
     stream.setCodec("UTF-8");
 
-    QRegularExpression colorReg("(\\x001b|)\\[([0-9]+)m");
-    QRegularExpression colorRstReg("(\\x001b\\(B\\x001b\\[m|\\[0;10m)");
+    QRegularExpression colorReg("(\u001b)\\[([0-9]+)m");
+    QRegularExpression colorRstReg("(\u001b\\(B\u001b\\[m|\u001b\\[0;10m)");
     QRegularExpression linkReg("([\\-\\._a-zA-Z/\\\\0-9]+\\.[a-zA-Z]+)(:[0-9]+)*(:[0-9]+)*");
 
     while (!stream.atEnd())
