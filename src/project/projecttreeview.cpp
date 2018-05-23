@@ -29,10 +29,10 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
 
     setModel(_proxy);
     setEditTriggers(QAbstractItemView::EditKeyPressed);
-    for (int i = 1; i < _proxy->columnCount(); ++i)
-        hideColumn(i);
     setStyleSheet("QTreeView { selection-background-color: transparent; }");
     header()->close();
+    header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setStretchLastSection(false);
     setItemDelegate(new ProjectTreeViewItemDelegate());
 
     _removeAction = new QAction(this);
@@ -43,6 +43,7 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     addAction(_removeAction);
 
     expandToDepth(0);
+
 }
 
 ProjectItemProxyModel *ProjectTreeView::proxy() const
