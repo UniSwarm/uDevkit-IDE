@@ -6,7 +6,7 @@
 
 QT       += core gui widgets
 
-TARGET = rtide
+TARGET = udk-ide
 TEMPLATE = app
 DESTDIR = $$PWD/../bin
 
@@ -31,6 +31,10 @@ qtHaveModule(webenginewidgets) {
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    version/abstractversioncontrol.cpp \
+    version/gitversioncontrol.cpp \
+    version/versionchange.cpp \
+    version/fileversionchange.cpp \
     editor/editor.cpp \
     editor/editortabwidget.cpp \
     editor/editortabswitchwidget.cpp \
@@ -40,22 +44,19 @@ SOURCES += \
     editor/codeeditor/htmleditor.cpp \
     editor/hexeditor.cpp \
     editor/imageeditor.cpp \
-    version/abstractversioncontrol.cpp \
-    version/gitversioncontrol.cpp \
-    ui/searchreplacewidget.cpp \
     make/makeparser.cpp \
+    project/fileproject.cpp \
     project/fileprojectinfo.cpp \
     project/project.cpp \
     project/projectitemmodel.cpp \
     project/projectitem.cpp \
     project/projectitemproxymodel.cpp \
     project/projecttreeview.cpp \
+    project/projecttreeviewitemdelegate.cpp \
     project/projectwidget.cpp \
-    ui/logwidget.cpp \
-    version/versionchange.cpp \
-    version/fileversionchange.cpp \
     project/projecticonprovider.cpp \
-    project/fileproject.cpp \
+    ui/searchreplacewidget.cpp \
+    ui/logwidget.cpp \
     ui/iconneddockstyle.cpp \
     settings/setting.cpp \
     settings/settingsmanager.cpp \
@@ -70,13 +71,14 @@ SOURCES += \
     settings/pages/htmleditorsettings.cpp \
     settings/pages/gitversionsettings.cpp \
     settings/pages/globalsettings.cpp \
-    settings/pages/toolsversionsettings.cpp \
-    project/projecttreeviewitemdelegate.cpp
+    settings/pages/toolsversionsettings.cpp
 
 HEADERS += \
     mainwindow.h \
     version/abstractversioncontrol.h \
     version/gitversioncontrol.h \
+    version/versionchange.h \
+    version/fileversionchange.h \
     editor/editor.h \
     editor/editors.h \
     editor/editortabwidget.h \
@@ -87,20 +89,19 @@ HEADERS += \
     editor/codeeditor/htmleditor.h \
     editor/hexeditor.h \
     editor/imageeditor.h \
-    ui/searchreplacewidget.h \
     make/makeparser.h \
+    project/fileproject.h \
     project/fileprojectinfo.h \
     project/project.h \
     project/projectitemmodel.h \
     project/projectitem.h \
     project/projectitemproxymodel.h \
     project/projecttreeview.h \
+    project/projecttreeviewitemdelegate.h \
     project/projectwidget.h \
-    ui/logwidget.h \
-    version/versionchange.h \
-    version/fileversionchange.h \
     project/projecticonprovider.h \
-    project/fileproject.h \
+    ui/searchreplacewidget.h \
+    ui/logwidget.h \
     ui/iconneddockstyle.h \
     settings/setting.h \
     settings/settingsmanager.h \
@@ -115,20 +116,19 @@ HEADERS += \
     settings/pages/htmleditorsettings.h \
     settings/pages/gitversionsettings.h \
     settings/pages/globalsettings.h \
-    settings/pages/toolsversionsettings.h \
-    project/projecttreeviewitemdelegate.h
+    settings/pages/toolsversionsettings.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
 RESOURCES += $$PWD/img.qrc
 
-win32 : RC_FILE = rtide.rc
+win32 : RC_FILE = udk-ide.rc
 
 include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)
 include (../contrib/hexedit2.pri)
 
-TRANSLATIONS = $$PWD/translations/rtide_fr.ts \
-               $$PWD/translations/rtide_en.ts
+TRANSLATIONS = $$PWD/translations/udk-ide_fr.ts \
+               $$PWD/translations/udk-ide_en.ts
 qtPrepareTool(LRELEASE, lrelease)
 for(tsfile, TRANSLATIONS) {
     command = $$LRELEASE $$tsfile

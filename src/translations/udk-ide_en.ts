@@ -113,7 +113,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="147"/>
-        <source>Exits RtIDE</source>
+        <source>Exits uDevkit-IDE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

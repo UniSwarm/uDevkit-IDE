@@ -3,7 +3,7 @@ version: 0.{build}
 environment:
   QTDIR: C:\Qt\5.9\msvc2015
 
-clone_folder: c:\dev\rtide
+clone_folder: c:\dev\udk-ide
 clone_depth: 5
 
 init:
@@ -19,7 +19,7 @@ install:
 before_build:
   - mkdir %APPVEYOR_BUILD_FOLDER%\build
   - cd %APPVEYOR_BUILD_FOLDER%\build
-  - qmake ..\src\rtide.pro -r -Wall CONFIG+=release
+  - qmake ..\src\udk-ide.pro -r -Wall CONFIG+=release
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\build
@@ -29,14 +29,14 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - cp -r contrib\edbee-data\keymaps data\
   - cp -r contrib\edbee-data\syntaxfiles data\
-  - 7z a rtide-win64-v0-nodll.zip "%APPVEYOR_BUILD_FOLDER%\..\*" -xr!build -xr!.git -xr!src -xr!contrib
+  - 7z a udk-ide-win64-v0-nodll.zip "%APPVEYOR_BUILD_FOLDER%\..\*" -xr!build -xr!.git -xr!src -xr!contrib
   - windeployqt.exe "%APPVEYOR_BUILD_FOLDER%\bin"
-  - 7z a rtide-win64-v0.zip "%APPVEYOR_BUILD_FOLDER%\..\*" -xr!build -xr!.git -xr!src -xr!contrib -xr!rtide*.zip
+  - 7z a udk-ide-win64-v0.zip "%APPVEYOR_BUILD_FOLDER%\..\*" -xr!build -xr!.git -xr!src -xr!contrib -xr!udk-ide*.zip
 
 artifacts:
-  - path: rtide-win64-v0-nodll.zip
-    name: rtide-nodll
-  - path: rtide-win64-v0.zip
-    name: rtide
+  - path: udk-ide-win64-v0-nodll.zip
+    name: udk-ide-nodll
+  - path: udk-ide-win64-v0.zip
+    name: udk-ide
 
 test: off

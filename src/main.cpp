@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setOrganizationName("UniSwarm");
     app.setOrganizationDomain("UniSwarm");
-    app.setApplicationName("RtIDE");
+    app.setApplicationName("udk-ide");
 
     // apply dark style
     QFile f(":qdarkstyle/style.qss");

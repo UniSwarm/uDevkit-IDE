@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/translations">
-        <file>rtide_en.qm</file>
-        <file>rtide_fr.qm</file>
+        <file>udk-ide_en.qm</file>
+        <file>udk-ide_fr.qm</file>
     </qresource>
 </RCC>

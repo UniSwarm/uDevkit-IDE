@@ -41,6 +41,8 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
     createMenus();
     setStatusBar(new QStatusBar());
 
+    setGeometry(100, 100, 800, 600);
+
     readSettings();
     if (!path.isEmpty())
     {
@@ -144,7 +146,7 @@ void MainWindow::createMenus()
     fileMenu->addSeparator();
     QAction *exitAction = new QAction(tr("E&xit"), this);
     exitAction->setIcon(QIcon(":/icons/img/dark/icons8-quit.png"));
-    exitAction->setStatusTip(tr("Exits RtIDE"));
+    exitAction->setStatusTip(tr("Exits uDevkit-IDE"));
     exitAction->setShortcut(QKeySequence::Quit);
     fileMenu->addAction(exitAction);
     connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -370,7 +372,7 @@ void MainWindow::updateTitle(Editor *editor)
     }
     title.append("(");
     title.append(QDir(_project->rootDir().absolutePath()).dirName());
-    title.append(") rtide");
+    title.append(") uDevkit IDE");
     setWindowTitle(title);
 }
 
@@ -472,9 +474,9 @@ void MainWindow::readSettings()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, "RtIDE v0", QString("Copyright (C) 2017 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
+    QMessageBox::about(this, "uDevkit-IDE v0", QString("Copyright (C) 2017 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
 <br>\
-This sofware is part of RtIDE distribution. To check for new version, please visit <a href=\"https://github.com/UniSwarm/rtide\">github.com/UniSwarm/rtide</a><br>\
+This sofware is part of uDevkit distribution. To check for new version, please visit <a href=\"https://github.com/UniSwarm/uDevkit-IDE\">github.com/UniSwarm/uDevkit-IDE</a><br>\
 <br>\
 Written by <a href=\"https://github.com/sebcaux\">Sébastien CAUX (sebcaux)</a><br>\
 <br>\
@@ -493,7 +495,7 @@ along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\">ww
 <br>\
 Build date: ") + __DATE__ + QString(" time: ")+__TIME__ + QString("<br>\
 <br>\
-RtIDE use others open libraries :<br>\
+uDevkit-IDE use others open libraries :<br>\
 - edbee-lib, a code editor widget (code editor) <a href=\"https://github.com/edbee/edbee-lib\">github.com/edbee/edbee-lib</a> [MIT]<br>\
 - qhexedit2, a binary editor widget (hex editor) <a href=\"https://github.com/Simsys/qhexedit2\">github.com/Simsys/qhexedit2</a> [GPL]<br>\
 - QDarkStyleSheet, a nice dark theme for Qt (dark theme) <a href=\"https://github.com/ColinDuquesnoy/QDarkStyleSheet\">github.com/ColinDuquesnoy/QDarkStyleSheet</a> [MIT]<br>\
