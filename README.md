@@ -1,8 +1,8 @@
 # uDevkit-IDE
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
-[![Build Status](https://travis-ci.org/UniSwarm/rtide.svg?branch=master)](https://travis-ci.org/UniSwarm/uDevkit-IDE)
-[![Build status](https://ci.appveyor.com/api/projects/status/s0fgqgvdwm9g34vj?svg=true)](https://ci.appveyor.com/project/sebcaux/rtide-ad76d)
+[![Build Status](https://travis-ci.org/UniSwarm/uDevkit-IDE.svg?branch=master)](https://travis-ci.org/UniSwarm/uDevkit-IDE)
+[![Build status](https://ci.appveyor.com/api/projects/status/7ts34vord4jnooub?svg=true)](https://ci.appveyor.com/project/sebcaux/udevkit-ide)
 
 A simple IDE for [RtProg](https://github.com/UniSwarm/rtprog) written in Qt5. This IDE want to be very lightweight and fast to load without a huge project management system.
 
@@ -46,8 +46,8 @@ Binaries will be placed in `bin/` directory.
 
 For convenience, a pre-built version is available at :
 
-https://ci.appveyor.com/api/projects/sebcaux/rtide-ad76d/artifacts/rtide-win64-v0.zip
+https://ci.appveyor.com/api/projects/sebcaux/udevkit-IDE/artifacts/udk-ide-win64-v0-nodll.zip
 
 Without Qt DLL (very lite) :
 
-https://ci.appveyor.com/api/projects/sebcaux/rtide-ad76d/artifacts/rtide-win64-v0-nodll.zip
+https://ci.appveyor.com/api/projects/sebcaux/udevkit-IDE/artifacts/udk-ide-win64-v0.zip

@@ -65,7 +65,7 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     connect(_settingsClass, &SettingsClass::classModified, this, &CodeEditor::updateSettings);
 
     _editorWidget = new edbee::TextEditorWidget();
-    _editorWidget->config()->setThemeName("uDevkit-IDE");
+    _editorWidget->config()->setThemeName("udk-ide");
     //_editorWidget->config()->setShowWhitespaceMode(edbee::TextEditorConfig::ShowWhitespaces);
     _editorWidget->textDocument()->setLineEnding(edbee::LineEnding::unixType());
 
