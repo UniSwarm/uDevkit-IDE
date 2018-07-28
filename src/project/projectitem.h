@@ -32,6 +32,7 @@ public:
     ProjectItem *parentItem() const;
     void addChild(ProjectItem *child);
     void removeChild(ProjectItem *child);
+    void remove();
     void clear();
     Type type() const;
 

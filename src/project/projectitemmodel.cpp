@@ -63,22 +63,31 @@ QString ProjectItemModel::fileName(const QModelIndex &index) const
 
 bool ProjectItemModel::rmdir(const QModelIndex &index)
 {
-    emit layoutAboutToBeChanged();
     QString mfileName = filePath(index);
     if (mfileName.isEmpty())
         return false;
+    emit layoutAboutToBeChanged();
+    bool valid = QDir(mfileName).removeRecursively();
     emit layoutChanged();
-    return QDir(mfileName).removeRecursively();
+    return valid;
 }
 
 bool ProjectItemModel::remove(const QModelIndex &index)
 {
-    emit layoutAboutToBeChanged();
+    if (!index.isValid())
+        return false;
     QString mfileName = filePath(index);
     if (mfileName.isEmpty())
         return false;
-    emit layoutChanged();
-    return QFile(mfileName).remove();
+    ProjectItem *mitem = static_cast<ProjectItem*>(index.internalPointer());
+    if (mitem == Q_NULLPTR)
+        return false;
+    beginRemoveRows(index.parent(), mitem->row(), mitem->row());
+    bool valid = QFile(mfileName).remove();
+    if (valid)
+        mitem->remove();
+    endRemoveRows();
+    return valid;
 }
 
 void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
@@ -270,7 +279,7 @@ QModelIndex ProjectItemModel::index(int row, int column, const QModelIndex &pare
 
 QModelIndex ProjectItemModel::parent(const QModelIndex &child) const
 {
-    if (!child.isValid() || child.internalPointer()==NULL)
+    if (!child.isValid() || child.internalPointer() == Q_NULLPTR)
         return QModelIndex();
 
     ProjectItem *childItem = static_cast<ProjectItem*>(child.internalPointer());

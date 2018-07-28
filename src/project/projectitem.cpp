@@ -79,6 +79,13 @@ void ProjectItem::removeChild(ProjectItem *child)
     delete child;
 }
 
+void ProjectItem::remove()
+{
+    if (!_parentItem)
+        return;
+    _parentItem->removeChild(this);
+}
+
 void ProjectItem::clear()
 {
     qDeleteAll(_childrens);
