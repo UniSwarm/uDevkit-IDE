@@ -11,7 +11,7 @@ class ProjectTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    ProjectTreeView(Project *project, QWidget *parent = 0);
+    ProjectTreeView(Project *project, QWidget *parent = Q_NULLPTR);
 
     ProjectItemProxyModel *proxy() const;
 
@@ -26,6 +26,7 @@ public slots:
     void setShowFilter(const QString &pattern);
 
     void remove();
+    void rename();
 
 signals:
     void openedFile(QString fileName);
@@ -34,7 +35,9 @@ signals:
 protected:
     Project *_project;
     ProjectItemProxyModel *_proxy;
+
     QAction *_removeAction;
+    QAction *_fileRenameAction;
 
     // QWidget interface
 protected:

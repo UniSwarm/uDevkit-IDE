@@ -39,11 +39,16 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     _removeAction->setText(tr("Remove"));
     _removeAction->setShortcut(QKeySequence::Delete);
     _removeAction->setShortcutContext(Qt::WidgetShortcut);
-    connect(_removeAction, SIGNAL(triggered(bool)), this, SLOT(remove()));
+    connect(_removeAction, &QAction::triggered, this, &ProjectTreeView::remove);
     addAction(_removeAction);
 
-    expandToDepth(0);
+    _fileRenameAction = new QAction(this);
+    _fileRenameAction->setText(tr("Rename"));
+    _fileRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
+    connect(_fileRenameAction, &QAction::triggered, this, &ProjectTreeView::rename);
+    addAction(_fileRenameAction);
 
+    expandToDepth(0);
 }
 
 ProjectItemProxyModel *ProjectTreeView::proxy() const
@@ -145,6 +150,18 @@ void ProjectTreeView::remove()
     }
 }
 
+void ProjectTreeView::rename()
+{
+    QModelIndexList selection = selectionModel()->selectedIndexes();
+    if (selection.isEmpty())
+        return;
+
+    if (selection.size() != 1)
+        return;
+
+    edit(selection.first());
+}
+
 void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
     const QModelIndex &index = indexAt(event->pos());
@@ -161,20 +178,20 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     if (_project->projectItemModel()->isDir(indexFile))
     {
         fileCreateAction = menu.addAction(tr("Add new file here"));
-        fileCreateAction->setShortcut(QKeySequence::Delete);
+        //fileCreateAction->setShortcut(QKeySequence::New);
     }
-    QAction *fileRenameAction = menu.addAction(tr("Rename"));
-    fileRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
-    QAction *dirRemoveAction = nullptr, *openDirAction = nullptr;
+    menu.addAction(_fileRenameAction);
+    QAction *openDirAction = nullptr;
     if (_project->projectItemModel()->isDir(indexFile))
     {
-        dirRemoveAction = menu.addAction(tr("Remove directory"));
-        dirRemoveAction->setShortcut(QKeySequence::Delete);
+        _removeAction->setText(tr("Remove directory"));
+        menu.addAction(_removeAction);
 
         openDirAction = menu.addAction(tr("Open directory as project"));
     }
     else
     {
+        _removeAction->setText(tr("Remove"));
         menu.addAction(_removeAction);
     }
 
@@ -211,8 +228,6 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
             emit openedFile(filePath);
         }
     }
-    else if (trigered == fileRenameAction)
-        edit(index);
     else if (trigered == openDirAction)
     {
         QString path  =_project->projectItemModel()->filePath(indexFile);

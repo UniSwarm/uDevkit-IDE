@@ -18,6 +18,7 @@ ProjectWidget::ProjectWidget(Project *project, QWidget *parent) : QWidget(parent
 
     _filterEdit = new QLineEdit();
     _filterEdit->setClearButtonEnabled(true);
+    _filterEdit->setPlaceholderText("Search files...");
     filterLayout->addWidget(_filterEdit);
     _menuBtn = new QToolButton();
     _menuBtn->setText("...");

@@ -66,16 +66,19 @@ bool ProjectItemModel::rmdir(const QModelIndex &index)
     QString mfileName = filePath(index);
     if (mfileName.isEmpty())
         return false;
-    emit layoutAboutToBeChanged();
+    ProjectItem *mitem = static_cast<ProjectItem*>(index.internalPointer());
+    if (mitem == Q_NULLPTR)
+        return false;
+    beginRemoveRows(index.parent(), mitem->row(), mitem->row());
     bool valid = QDir(mfileName).removeRecursively();
-    emit layoutChanged();
+    if (valid)
+        mitem->remove();
+    endRemoveRows();
     return valid;
 }
 
 bool ProjectItemModel::remove(const QModelIndex &index)
 {
-    if (!index.isValid())
-        return false;
     QString mfileName = filePath(index);
     if (mfileName.isEmpty())
         return false;
