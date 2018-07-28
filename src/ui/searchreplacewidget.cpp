@@ -31,7 +31,12 @@ void SearchReplaceWidget::setEditor(Editor *editor)
 void SearchReplaceWidget::activateResearch()
 {
     if (parentWidget() && parentWidget()->parentWidget())
+    {
+        parentWidget()->show();
+        parentWidget()->raise();
         parentWidget()->parentWidget()->show();
+        parentWidget()->parentWidget()->raise();
+    }
     show();
     _searchLineEdit->setFocus();
     _searchLineEdit->selectAll();
@@ -62,7 +67,7 @@ void SearchReplaceWidget::upadteSearch()
         return;
 
     int found = _editor->search(_searchLineEdit->text(), flags());
-    if (found == 0 && _regexpCheckbox->isEnabled())
+    if (found == 0 && _regexpCheckbox->isEnabled() && _regexpCheckbox->isChecked())
     {
         QRegularExpression regexp(_searchLineEdit->text());
         if (!regexp.isValid())

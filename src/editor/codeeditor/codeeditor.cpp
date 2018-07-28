@@ -6,7 +6,6 @@
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
 #include <QRegularExpression>
 #include <QSaveFile>
 #include <QSplitter>
@@ -98,7 +97,7 @@ bool CodeEditor::isModified() const
 void CodeEditor::gotoLine(int x, int y)
 {
     edbee::TextEditorController* controller = _editorWidget->controller();
-    if (y==-1)
+    if (y == -1)
         y = 0;
     controller->moveCaretTo(x-1, y-1, false);
     controller->scrollCaretVisible();
@@ -297,7 +296,7 @@ void CodeEditor::insertedText(edbee::TextBufferChange change)
         vchange.addRemovedLine(_editorWidget->textDocument()->lineWithoutNewline(i-1));
 
     // added lines
-    QStringList linesAdded = newData.split(QRegExp("\n|\r\n|\r"));
+    QStringList linesAdded = newData.split(QRegularExpression("\n|\r\n|\r"));
     int endCol = _editorWidget->textDocument()->columnFromOffsetAndLine(change.offset()+change.length(), startLine-1+change.lineCount());
     QString newLine;
     if (!vchange.removedLines().isEmpty())
@@ -417,14 +416,15 @@ int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
     // regexp mode
     if (flags.testFlag(RegExpMode))
     {
+        _searchTerm = searchTerm;
         searcher->setSyntax(edbee::TextSearcher::SyntaxRegExp);
-        searcher->setSearchTerm(searchTerm.toString());
     }
     else
     {
+        _searchTerm = QRegularExpression::escape(searchTerm.toString());
         searcher->setSyntax(edbee::TextSearcher::SyntaxPlainString);
-        searcher->setSearchTerm(QRegExp::escape(searchTerm.toString()));
     }
+    searcher->setSearchTerm(searchTerm.toString());
 
     // case sensitivity
     searcher->setCaseSensitive(flags.testFlag(CaseSensitive));
