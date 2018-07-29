@@ -11,7 +11,7 @@ class AbstractVersionControl : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractVersionControl(QObject *parent = nullptr);
+    explicit AbstractVersionControl(QObject *parent = Q_NULLPTR);
 
     virtual QString versionControlName() const;
     void setPath(const QString &path);

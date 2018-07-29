@@ -134,7 +134,7 @@ void Editor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
 
 QWidget *Editor::previewWidget() const
 {
-    return nullptr;
+    return Q_NULLPTR;
 }
 
 bool Editor::hasPreview() const
@@ -285,7 +285,7 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
     case Editor::ELF:
         break;
     }
-    return nullptr;
+    return Q_NULLPTR;
 }
 
 Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget *parent)

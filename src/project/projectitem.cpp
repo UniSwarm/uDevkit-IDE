@@ -9,11 +9,11 @@
 #include <QTimer>
 
 ProjectItem::ProjectItem(Project *project, const QString path, Type type, ProjectItemModel *model)
-    : QObject(nullptr), _type(type), _info(path, project), _model(model)
+    : QObject(Q_NULLPTR), _type(type), _info(path, project), _model(model)
 {
-    _parentItem = nullptr;
+    _parentItem = Q_NULLPTR;
 
-    _watcher = nullptr;
+    _watcher = Q_NULLPTR;
     if (type == RealDir)
     {
         _watcher = new QFileSystemWatcher();

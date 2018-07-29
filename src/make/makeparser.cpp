@@ -11,7 +11,7 @@
 #include "settings/settingsmanager.h"
 
 MakeParser::MakeParser(const QString &basePath)
-    : QObject(nullptr)
+    : QObject(Q_NULLPTR)
 {
     _processMake = new QProcess(this);
     connect(_processMake, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),

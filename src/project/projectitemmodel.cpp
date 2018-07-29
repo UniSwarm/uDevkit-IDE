@@ -237,7 +237,7 @@ void ProjectItemModel::clear()
 const ProjectItem *ProjectItemModel::item(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return nullptr;
+        return Q_NULLPTR;
     return static_cast<ProjectItem*>(index.internalPointer());
 }
 

@@ -13,7 +13,7 @@ class SearchReplaceWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SearchReplaceWidget(QWidget *parent = nullptr);
+    explicit SearchReplaceWidget(QWidget *parent = Q_NULLPTR);
 
 signals:
 

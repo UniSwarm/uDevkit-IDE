@@ -11,7 +11,7 @@ class Editor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Editor(Project *project, QWidget *parent = nullptr);
+    explicit Editor(Project *project, QWidget *parent = Q_NULLPTR);
     virtual ~Editor();
 
     QString fileName() const;
@@ -95,8 +95,8 @@ signals:
     void copyAvailable(bool available);
 
 public:
-    static Editor *createEditor(Type type, Project *project, QWidget *parent = nullptr);
-    static Editor *createEditor(const QString &filePath, Project *project, QWidget *parent = nullptr);
+    static Editor *createEditor(Type type, Project *project, QWidget *parent = Q_NULLPTR);
+    static Editor *createEditor(const QString &filePath, Project *project, QWidget *parent = Q_NULLPTR);
     static Type typeFromExt(const QString &ext);
     static Type typeFromPath(const QString &filePath);
 

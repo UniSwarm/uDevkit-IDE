@@ -137,7 +137,7 @@ void EditorTabWidget::openFileEditor(const QString &url)
             return;
     }
 
-    Editor *editor = nullptr;
+    Editor *editor = Q_NULLPTR;
     if (!_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
     {
         editor = Editor::createEditor(filePath, _project);

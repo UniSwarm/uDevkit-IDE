@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     rtideTranslator.load("rtide_" + lang, ":/translations");
     app.installTranslator(&rtideTranslator);
 
-    Project *project = nullptr;
+    Project *project = Q_NULLPTR;
     if (argc > 1)
         project = new Project(argv[1]);
     else

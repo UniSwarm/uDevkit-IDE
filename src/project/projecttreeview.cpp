@@ -174,14 +174,14 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     QMenu menu;
 
     // file commands
-    QAction *fileCreateAction = nullptr;
+    QAction *fileCreateAction = Q_NULLPTR;
     if (_project->projectItemModel()->isDir(indexFile))
     {
         fileCreateAction = menu.addAction(tr("Add new file here"));
         //fileCreateAction->setShortcut(QKeySequence::New);
     }
     menu.addAction(_fileRenameAction);
-    QAction *openDirAction = nullptr;
+    QAction *openDirAction = Q_NULLPTR;
     if (_project->projectItemModel()->isDir(indexFile))
     {
         _removeAction->setText(tr("Remove directory"));
@@ -196,7 +196,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     }
 
     // git commands
-    QAction *versionValidAction = nullptr, *versionInvalidAction = nullptr, *versionCheckoutAction = nullptr;
+    QAction *versionValidAction = Q_NULLPTR, *versionInvalidAction = Q_NULLPTR, *versionCheckoutAction = Q_NULLPTR;
     FileProjectInfo info(_project->projectItemModel()->filePath(indexFile), _project);
     if (_project->versionControl()->isValid())
     {
@@ -211,7 +211,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 
     // exec menu
     QAction *trigered = menu.exec(event->globalPos());
-    if (trigered == nullptr)
+    if (trigered == Q_NULLPTR)
         return;
 
     // analyse clicked menu

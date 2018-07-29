@@ -7,10 +7,10 @@
 
 SearchReplaceWidget::SearchReplaceWidget(QWidget *parent) : QWidget(parent)
 {
-    _editor = nullptr;
+    _editor = Q_NULLPTR;
 
     createWidgets();
-    setEditor(nullptr);
+    setEditor(Q_NULLPTR);
     setFocusPolicy(Qt::StrongFocus);
 }
 
