@@ -93,7 +93,7 @@ void LogWidget::parseOutput(QByteArray data, bool error)
 
     QRegularExpression colorReg("(\u001b)\\[([0-9]+)m");
     QRegularExpression colorRstReg("(\u001b\\(B\u001b\\[m|\u001b\\[0;10m)");
-    QRegularExpression linkReg("([\\-\\._a-zA-Z/\\\\0-9]+\\.[a-zA-Z]+)(:[0-9]+)*(:[0-9]+)*");
+    QRegularExpression linkReg("([\\-\\._a-zA-Z/\\\\0-9]+\\.[a-zA-Z]+)(:[0-9]+)(:[0-9]+)*");
 
     while (!stream.atEnd())
     {

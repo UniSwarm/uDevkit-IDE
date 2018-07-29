@@ -121,8 +121,10 @@ void MakeParser::processEnd()
     //   improve with an auto detection of source
     addSource(sourceFiles, _variables.values("SRC"));
     addSource(sourceFiles, _variables.values("ARCHI_SRC"));
+    addSource(sourceFiles, _variables.values("SOURCEFILES"));
     addSource(sourceFiles, _variables.values("HEADER"));
     addSource(sourceFiles, _variables.values("MAKEFILE_LIST"));
+    //qDebug()<<_variables;
 
     outgoingFiles = _sourceFiles;
     outgoingFiles.subtract(sourceFiles);

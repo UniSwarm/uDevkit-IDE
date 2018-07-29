@@ -1,0 +1,10 @@
+PROJECT_NAME           = "uDevkit-IDE"
+PROJECT_BRIEF          = "A tool to simplify module inclusions in embedded systems"
+OUTPUT_DIRECTORY       = doc/
+OPTIMIZE_OUTPUT_FOR_C  = YES
+
+INPUT                  = .
+RECURSIVE              = YES
+EXCLUDE_PATTERNS       = */build/* */include/* */nbproject/* */distrib/*
+
+GENERATE_TODOLIST      = YES

@@ -2,22 +2,11 @@
 #define FILEPROJECT_H
 
 #include <QObject>
-#include <QSharedData>
 
 #include "fileprojectinfo.h"
 #include "version/abstractversioncontrol.h"
 
 class Editor;
-
-class FileProjectData : public QSharedData
-{
-public:
-    FileProjectInfo _info;
-    Project *_project;
-
-    AbstractVersionControl *_versionControl;
-    FileVersionChange *_fileChange;
-};
 
 class FileProject : public QObject
 {
@@ -44,7 +33,6 @@ protected:
 
 private:
     Q_DISABLE_COPY(FileProject)
-    //QSharedDataPointer<FileProjectData> _d;
     FileProjectInfo _info;
     Project *_project;
 

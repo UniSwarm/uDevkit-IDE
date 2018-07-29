@@ -340,7 +340,7 @@ void MainWindow::git()
 void MainWindow::makeall()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("make", QStringList()<<"all"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
+    _logWidget->start("make", QStringList()<<"hex"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
 }
 
 void MainWindow::makeprog()

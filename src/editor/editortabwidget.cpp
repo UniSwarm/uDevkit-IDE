@@ -131,9 +131,11 @@ void EditorTabWidget::openFileEditor(const QString &url)
         column = urlFilePath.cap(3).mid(1);
 
     if (!QFile(filePath).exists())
+    {
         filePath = _project->make()->resolveFilePath(filePath);
-    if (!QFile(filePath).exists())
-        return;
+        if (!QFile(filePath).exists())
+            return;
+    }
 
     Editor *editor = nullptr;
     if (!_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))

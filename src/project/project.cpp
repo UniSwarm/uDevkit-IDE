@@ -95,6 +95,9 @@ MakeParser *Project::make() const
 void Project::newSource(QSet<QString> sources)
 {
     _projectItemModel->addExternalSource(sources);
+    /*qWarning()<<"\n\n";
+    foreach (QString str, sources)
+        qWarning()<<str;*/
 }
 
 void Project::oldSource(QSet<QString> sources)

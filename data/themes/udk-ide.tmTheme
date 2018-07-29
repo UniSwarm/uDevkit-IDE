@@ -391,6 +391,19 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Markup: Quote</string>
+			<key>scope</key>
+			<string>markup.italic</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#ff0000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Markup: List</string>
 			<key>scope</key>
 			<string>markup.list</string>
