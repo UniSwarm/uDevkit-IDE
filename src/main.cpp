@@ -35,8 +35,6 @@ int main(int argc, char *argv[])
     Project *project = Q_NULLPTR;
     if (argc > 1)
         project = new Project(argv[1]);
-    else
-        project = new Project(QDir().absolutePath());
 
     MainWindow w(project);
     w.show();

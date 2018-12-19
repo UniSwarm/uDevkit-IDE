@@ -24,7 +24,7 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
     setWindowIcon(QIcon(":/icons/UNIdevkit.ico"));
     QString path;
     if (!_project)
-        _project = new Project(QDir::home().canonicalPath());
+        _project = new Project();
     else
         path = _project->rootPath();
     updateTitle();
