@@ -23,7 +23,7 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
     QString style = "\
     QFrame\
     {\
-            background-color: #232629;\
+            background-color: #19232D;\
             padding: 5px;\
             border-style: solid;\
             border: 1px solid #76797C;\
