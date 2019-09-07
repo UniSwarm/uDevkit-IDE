@@ -3,13 +3,13 @@ image: Visual Studio 2017
 version: 0.{build}
 
 environment:
-  QTDIR: C:\Qt\5.12.2\msvc2017
+  QTDIR: C:\Qt\5.13\msvc2017
 
 clone_folder: c:\dev\udk-ide
 clone_depth: 5
 
 init:
-  - set PATH=C:\msys64;C:\Qt\5.12.2\msvc2017\bin;%PATH%
+  - set PATH=C:\msys64;C:\Qt\5.13\msvc2017\bin;%PATH%
 
 install:
   - git submodule update --init --recursive
