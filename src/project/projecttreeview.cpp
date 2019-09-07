@@ -182,12 +182,14 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     }
     menu.addAction(_fileRenameAction);
     QAction *openDirAction = Q_NULLPTR;
+    QAction *openTermDirAction = Q_NULLPTR;
     if (_project->projectItemModel()->isDir(indexFile))
     {
         _removeAction->setText(tr("Remove directory"));
         menu.addAction(_removeAction);
 
         openDirAction = menu.addAction(tr("Open directory as project"));
+        openTermDirAction= menu.addAction(tr("Open in terminal"));
     }
     else
     {
@@ -232,6 +234,11 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     {
         QString path  =_project->projectItemModel()->filePath(indexFile);
         QProcess::startDetached(qApp->arguments()[0], QStringList()<<path);
+    }
+    else if (trigered == openTermDirAction)
+    {
+        QString path  =_project->projectItemModel()->filePath(indexFile);
+        QProcess::startDetached("gnome-terminal", QStringList()<<"--working-directory="+path); // TODO make it work on all platforms
     }
     else if (trigered == versionValidAction)
         _project->versionControl()->validFile(QSet<QString>()<<info.filePath());
