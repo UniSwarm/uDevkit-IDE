@@ -280,6 +280,8 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
         return new HexEditor(project, parent);
     case Editor::HTML:
         return new HtmlEditor(project, parent);
+    case Editor::Markdown:
+        return new MarkdownEditor(project, parent);
     case Editor::Image:
         return new ImageEditor(project, parent);
     case Editor::ELF:
@@ -318,6 +320,8 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
     Type type;
     if(mime.name() == "text/html")
         type = Editor::HTML;
+    else if(mime.name().startsWith("text/markdown"))
+        type = Editor::Markdown;
     else if(mime.name().startsWith("text") ||
             mime.name() == "application/xml" ||
             mime.name() == "application/x-yaml" ||

@@ -28,6 +28,7 @@ public:
     enum Type {
         Code,
         Hexa,
+        Markdown,
         HTML,
         Image,
         ELF

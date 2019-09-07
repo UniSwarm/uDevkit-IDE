@@ -21,16 +21,7 @@
 HtmlEditor::HtmlEditor(Project *project, QWidget *parent)
     : CodeEditor (project, parent)
 {
-#ifdef WEBENGINE
-    _htmlPreview = new QWebEngineView();
-#endif
-#ifdef WEBKIT
-    _htmlPreview = new QWebView();
-#endif
-#ifdef NOWEBKIT
-    _htmlPreview = new QTextBrowser();
-    _htmlPreview->setReadOnly(true);
-#endif
+    createPreview();
     connect(_editorWidget->textDocument(), &edbee::TextDocument::textChanged, this, &HtmlEditor::updatePreview);
 }
 
@@ -61,4 +52,18 @@ int HtmlEditor::openFileData(const QString &filePath)
     int res = CodeEditor::openFileData(filePath);
     updatePreview();
     return res;
+}
+
+void HtmlEditor::createPreview()
+{
+#ifdef WEBENGINE
+    _htmlPreview = new QWebEngineView();
+#endif
+#ifdef WEBKIT
+    _htmlPreview = new QWebView();
+#endif
+#ifdef NOWEBKIT
+    _htmlPreview = new QTextBrowser();
+    _htmlPreview->setReadOnly(true);
+#endif
 }

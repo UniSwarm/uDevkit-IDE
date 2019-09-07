@@ -29,6 +29,7 @@ qtHaveModule(webenginewidgets) {
 }
 
 SOURCES += \
+    editor/codeeditor/markdowneditor.cpp \
     main.cpp \
     mainwindow.cpp \
     version/abstractversioncontrol.cpp \
@@ -74,6 +75,7 @@ SOURCES += \
     settings/pages/toolsversionsettings.cpp
 
 HEADERS += \
+    editor/codeeditor/markdowneditor.h \
     mainwindow.h \
     version/abstractversioncontrol.h \
     version/gitversioncontrol.h \
@@ -126,6 +128,7 @@ win32 : RC_FILE = udk-ide.rc
 
 include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)
 include (../contrib/hexedit2.pri)
+include (../contrib/discount/discount.pri)
 
 TRANSLATIONS = $$PWD/translations/udk-ide_fr.ts \
                $$PWD/translations/udk-ide_en.ts

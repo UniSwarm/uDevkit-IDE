@@ -31,10 +31,12 @@ public:
     virtual bool hasPreview() const;
 
 protected slots:
-    void updatePreview();
+    virtual void updatePreview();
     int openFileData(const QString &filePath);
 
 protected:
+    void createPreview();
+
 #ifdef WEBENGINE
     QWebEngineView *_htmlPreview;
 #endif
