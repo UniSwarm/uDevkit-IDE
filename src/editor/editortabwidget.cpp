@@ -443,14 +443,14 @@ void EditorTabWidget::tabContextMenu(const QPoint &pos)
     if (currentEditor()->type() != Editor::Hexa)
     {
         type = Editor::Hexa;
-        reopen = menu.addAction("Open in hex editor");
+        reopen = menu.addAction(tr("Open in hex editor"));
     }
     else
     {
         type = Editor::typeFromPath(path);
-        reopen = menu.addAction("Open in default editor");
+        reopen = menu.addAction(tr("Open in default editor"));
     }
-    QAction *close = menu.addAction("Close");
+    QAction *close = menu.addAction(tr("Close"));
 
     QAction *action = menu.exec(tabBar()->mapToGlobal(pos));
     if (action == close)
@@ -524,17 +524,17 @@ void EditorTabWidget::registerAction()
 {
     QAction *action;
 
-    action = new QAction(QString("save"), this);
+    action = new QAction(tr("save"), this);
     action->setShortcut(QKeySequence::Save);
     connect(action, &QAction::triggered, this, &EditorTabWidget::saveCurrentEditor);
     addAction(action);
 
-    action = new QAction(QString("save all"), this);
+    action = new QAction(tr("save all"), this);
     action->setShortcut(QKeySequence("Ctrl+Shift+S"));
     connect(action, &QAction::triggered, this, &EditorTabWidget::saveAllEditors);
     addAction(action);
 
-    action = new QAction(QString("close tab"), this);
+    action = new QAction(tr("close tab"), this);
     action->setShortcut(QKeySequence::Close);
     connect(action, &QAction::triggered, this, &EditorTabWidget::closeEditor);
     addAction(action);

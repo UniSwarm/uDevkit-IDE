@@ -5,7 +5,7 @@
 #include <QGroupBox>
 
 ToolsVersionSettings::ToolsVersionSettings()
-    : SettingsPage(QIcon(":/icons/img/dark/icons8-toolbox.png"), "Tools version")
+    : SettingsPage(QIcon(":/icons/img/dark/icons8-toolbox.png"), tr("Tools version"))
 {
     _settingsClass = rtset()->registerClass("tools");
     createWidgets();

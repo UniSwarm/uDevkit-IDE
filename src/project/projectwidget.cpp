@@ -18,7 +18,7 @@ ProjectWidget::ProjectWidget(Project *project, QWidget *parent) : QWidget(parent
 
     _filterEdit = new QLineEdit();
     _filterEdit->setClearButtonEnabled(true);
-    _filterEdit->setPlaceholderText("Search files...");
+    _filterEdit->setPlaceholderText(tr("Search files..."));
     filterLayout->addWidget(_filterEdit);
     _menuBtn = new QToolButton();
     _menuBtn->setText("...");
@@ -61,7 +61,7 @@ void ProjectWidget::createMenu()
 {
     QMenu *menu = new QMenu();
 
-    QAction *enFilter = menu->addAction("enable filter");
+    QAction *enFilter = menu->addAction(tr("enable filter"));
     enFilter->setCheckable(true);
     enFilter->setChecked(true);
     connect(enFilter, &QAction::toggled, _projectView->proxy(), &ProjectItemProxyModel::enableHiddenFilter);

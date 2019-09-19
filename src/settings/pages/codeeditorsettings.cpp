@@ -4,7 +4,7 @@
 #include <QDebug>
 
 CodeEditorSettings::CodeEditorSettings()
-    : SettingsPage(QIcon(":/icons/img/dark/icons8-code.png"), "Code editor")
+    : SettingsPage(QIcon(":/icons/img/dark/icons8-code.png"), tr("Code editor"))
 {
     _settingsClass = rtset()->registerClass("codeEditor");
     createWidgets();

@@ -3,7 +3,7 @@
 #include <QFormLayout>
 
 GitVersionSettings::GitVersionSettings()
-    : SettingsPage(QIcon(":/icons/img/dark/icons8-git.png"), "Git version")
+    : SettingsPage(QIcon(":/icons/img/dark/icons8-git.png"), tr("Git version"))
 {
     _settingsClass = rtset()->registerClass("gitversion");
     createWidgets();

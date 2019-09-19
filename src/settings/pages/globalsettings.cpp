@@ -3,7 +3,7 @@
 #include <QFormLayout>
 
 GlobalSettings::GlobalSettings()
-    : SettingsPage(QIcon(":/icons/img/dark/icons8-settings.png"), "Global")
+    : SettingsPage(QIcon(":/icons/img/dark/icons8-settings.png"), tr("Global"))
 {
     _settingsClass = rtset()->registerClass("global");
     createWidgets();

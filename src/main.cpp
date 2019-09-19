@@ -28,9 +28,9 @@ int main(int argc, char *argv[])
     QString lang = SettingsManager::language();
     qtTranslator.load("qt_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     app.installTranslator(&qtTranslator);
-    QTranslator rtideTranslator;
-    rtideTranslator.load("rtide_" + lang, ":/translations");
-    app.installTranslator(&rtideTranslator);
+    QTranslator udkideTranslator;
+    udkideTranslator.load("udk-ide_" + lang, ":/translations");
+    app.installTranslator(&udkideTranslator);
 
     Project *project = Q_NULLPTR;
     if (argc > 1)

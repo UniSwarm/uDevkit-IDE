@@ -2,6 +2,7 @@
 
 #include "project.h"
 
+#include <QCoreApplication>
 #include <QDateTime>
 
 FileProjectInfo::FileProjectInfo(const QString &filePath, Project *project)
@@ -44,10 +45,13 @@ QString FileProjectInfo::humanSize() const
 {
     double num = size();
     QStringList list;
-    list << "kB" << "MB" << "GB" << "TB";
+    list << QCoreApplication::translate("FileProjectInfo", "kB")
+         << QCoreApplication::translate("FileProjectInfo", "MB")
+         << QCoreApplication::translate("FileProjectInfo", "GB")
+         << QCoreApplication::translate("FileProjectInfo", "TB");
 
     QStringListIterator i(list);
-    QString unit("bytes");
+    QString unit(QCoreApplication::translate("FileProjectInfo", "bytes"));
 
     while(num >= 1024.0 && i.hasNext())
     {
@@ -60,11 +64,11 @@ QString FileProjectInfo::humanSize() const
 QString FileProjectInfo::toolTips() const
 {
     QString toolTip;
-    toolTip.append("Size: ");
+    toolTip.append(QCoreApplication::translate("FileProjectInfo", "Size: "));
     toolTip.append(humanSize());
     toolTip.append("<br/>");
 
-    toolTip.append("Modified: ");
+    toolTip.append(QCoreApplication::translate("FileProjectInfo", "Modified: "));
     toolTip.append(lastModified().toString("yyyy-MM-dd hh:mm:ss"));
     toolTip.append("<br/>");
     return toolTip;

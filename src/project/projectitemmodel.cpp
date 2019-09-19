@@ -103,7 +103,7 @@ void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
 
         if (!_externalFiles)
         {
-            _externalFiles = new ProjectItem(_project, "ext src", ProjectItem::LogicDir, this);
+            _externalFiles = new ProjectItem(_project, tr("ext src"), ProjectItem::LogicDir, this);
             _root->addChild(_externalFiles);
         }
 

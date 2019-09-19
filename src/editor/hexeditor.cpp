@@ -66,7 +66,7 @@ void HexEditor::updatePos()
 {
     QString status;
     QString addr = QString::number(_hexEditor->cursorPosition(), 16).rightJustified(_hexEditor->addressWidth(), '0');
-    status.append(QString("addr: 0x%1 size: %2 ").arg(addr).arg(_hexEditor->data().size()));
+    status.append(tr("addr: 0x%1 size: %2 ").arg(addr).arg(_hexEditor->data().size()));
     emit statusChanged(status);
 }
 

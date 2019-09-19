@@ -28,7 +28,7 @@ Editor::~Editor()
 QString Editor::fileName() const
 {
     if (_filePath.isEmpty())
-        return QString("new file");
+        return QString(tr("new file"));
     return QFileInfo(_filePath).fileName();
 }
 

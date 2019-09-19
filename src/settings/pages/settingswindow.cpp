@@ -21,19 +21,19 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     createWidgets();
 
     SettingsCateg *categ;
-    categ = addCategory(QIcon(":/icons/img/dark/icons8-editor.png"), "Editors");
+    categ = addCategory(QIcon(":/icons/img/dark/icons8-editor.png"), tr("Editors"));
     categ->addPage(new CodeEditorSettings());
     categ->addPage(new HtmlEditorSettings());
     categ->addPage(new HexEditorSettings());
     categ->addPage(new ImageEditorSettings());
 
-    categ = addCategory(QIcon(":/icons/img/dark/icons8-versions.png"), "Version management");
+    categ = addCategory(QIcon(":/icons/img/dark/icons8-versions.png"), tr("Version management"));
     categ->addPage(new GitVersionSettings());
 
-    categ = addCategory(QIcon(":/icons/img/dark/icons8-toolbox.png"), "Tools");
+    categ = addCategory(QIcon(":/icons/img/dark/icons8-toolbox.png"), tr("Tools"));
     categ->addPage(new ToolsVersionSettings());
 
-    categ = addCategory(QIcon(":/icons/img/dark/icons8-settings.png"), "Global");
+    categ = addCategory(QIcon(":/icons/img/dark/icons8-settings.png"), tr("Global"));
     categ->addPage(new GlobalSettings());
 
     QModelIndex modelIndex = _sectionsList->model()->index(0, 0, _sectionsList->rootIndex());
