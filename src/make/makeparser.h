@@ -7,6 +7,8 @@
 #include <QSet>
 #include <QFileSystemWatcher>
 
+#include "makerule.h"
+
 #include "settings/settingsclass.h"
 
 class QProcess;
@@ -23,6 +25,10 @@ public:
 
     const QMultiMap<QString, QString> &variables() const;
     QStringList sourceFiles() const;
+
+    const QMap<QString, MakeRule> &rules() const;
+    const MakeRule buildRule(const QString &filePath) const;
+    const QList<MakeRule> includedInRules(const QString &filePath) const;
 
 signals:
     void sourceChanged();
@@ -46,6 +52,7 @@ protected:
     QSet<QString> _sourceFiles;
     QMultiMap<QString, QString> _variables;
     QMultiMap<QString, QString> _vpath;
+    QMap<QString, MakeRule> _rules;
 
     QString _programPath;
     Setting *_settingPath;

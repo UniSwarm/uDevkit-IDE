@@ -7,6 +7,8 @@
 #include <QSet>
 #include <QTextStream>
 #include <QStandardPaths>
+#include <QDateTime>
+#include <QStack>
 
 #include "settings/settingsmanager.h"
 
@@ -62,11 +64,22 @@ QString MakeParser::resolveFilePath(const QString &filePath)
 
 void MakeParser::processEnd()
 {
-    //qDebug()<<QStandardPaths::findExecutable("make");
+    QStack<QString> directoryStack;
+    directoryStack.push(_basePath);
+    QDir dir(_basePath);
+
+    QRegExp regVar(" *([A-Za-z0-9\\\\\\/.\\_\\-]+) *:*= *");
+    QRegExp regVarValue("([A-Za-z0-9\\\\\\/.\\_\\-]+) *");
+    QRegExp regVpath("vpath \\%\\.([a-zA-Z0-9]+) ");
+    QRegExp regPath("([A-Za-z0-9\\\\\\/.\\_\\-]+):*");
+    QRegExp regRule("^([A-Za-z0-9\\\\\\/.\\_\\-]+):");
+    QRegExp regEnterDir("^# make\\[1\\]: (Entering|Leaving) directory \\'(.+)\\'");
+    bool notATarget = false;
+
+    qint64 start = QDateTime::currentMSecsSinceEpoch();
     if (_processMake->exitStatus() != QProcess::NormalExit)
         return;
 
-    QRegExp regVar(" *([A-Za-z0-9\\\\\\/.\\_\\-]+) *:*= *");
     _vpath.clear();
     _variables.clear();
 
@@ -75,8 +88,31 @@ void MakeParser::processEnd()
     while (!stream.atEnd())
     {
         QString line = stream.readLine(10000);
-        if (line.startsWith('#') || line.size() == 0) // comments
+        //qDebug()<<line;
+
+        if (line == "# Not a target:")
+        {
+            notATarget = true;
             continue;
+        }
+        if (regEnterDir.indexIn(line) == 0) // variable
+        {
+            MakeRule rule;
+            if (regEnterDir.cap(1) == "Entering")
+                directoryStack.push(regEnterDir.cap(2));
+            else
+                directoryStack.pop();
+            dir.setPath(directoryStack.back());
+            //qDebug()<<"directory"<<dir.path();
+            notATarget = true;
+            continue;
+        }
+
+        if (line.startsWith('#') || line.size() == 0) // comments
+        {
+            notATarget = false;
+            continue;
+        }
 
         if (regVar.indexIn(line) == 0) // variable
         {
@@ -84,20 +120,18 @@ void MakeParser::processEnd()
 
             // TODO add a state machine parser for parenthesys matching
             //QRegExp regVarValue("([A-Za-z0-9\\\\\\/.\\_\\-]+|\\$\\([A-Za-z0-9\\\\\\\\(\\)/.\\_\\-]+\\)) *");
-            QRegExp regVarValue("([A-Za-z0-9\\\\\\/.\\_\\-]+) *");
             while ((pos = regVarValue.indexIn(line, pos)) != -1)
             {
                 QString value = regVarValue.cap(1);
                 _variables.insert(regVar.cap(1), value);
                 pos += regVarValue.matchedLength();
             }
+            notATarget = false;
             continue;
         }
 
         if (line.startsWith("vpath")) // vpath
         {
-            QRegExp regVpath("vpath \\%\\.([a-zA-Z0-9]+) ");
-            QRegExp regPath("([A-Za-z0-9\\\\\\/.\\_\\-]+):*");
             int pos = regVpath.indexIn(line);
             if (pos == 0)
             {
@@ -110,9 +144,32 @@ void MakeParser::processEnd()
                     pos += regPath.matchedLength();
                 }
             }
+            notATarget = false;
+            continue;
+        }
+
+        if (regRule.indexIn(line) == 0) // variable
+        {
+            MakeRule rule;
+            rule.target = makeDir.relativeFilePath(dir.path() + "/" + regRule.cap(1));
+            rule.isTarget = !notATarget;
+
+            int pos = regRule.matchedLength()+1;
+            while ((pos = regVarValue.indexIn(line, pos)) != -1)
+            {
+                QString value = makeDir.relativeFilePath(dir.path() + "/" + regVarValue.cap(1));
+                rule.dependencies.append(value);
+                pos += regVarValue.matchedLength();
+            }
+            rule.dependencies.removeDuplicates();
+
+            //qDebug()<<">>>" << rule.isTarget << rule.target << rule.dependencies;
+            _rules.insert(rule.target, rule);
+            notATarget = false;
             continue;
         }
     }
+    //qDebug()<<"end"<<QDateTime::currentMSecsSinceEpoch() - start;
 
     QSet<QString> sourceFiles;
     QSet<QString> outgoingFiles, incomingFiles;
@@ -182,6 +239,42 @@ void MakeParser::addSource(QSet<QString> &sourcesList, const QStringList &varLis
         if (!path.isEmpty())
             sourcesList << path;
     }
+}
+
+const QMap<QString, MakeRule> &MakeParser::rules() const
+{
+    return _rules;
+}
+
+const MakeRule MakeParser::buildRule(const QString &filePath) const
+{
+    QDir makeDir(_basePath);
+    QString makeFilePath = makeDir.relativeFilePath(filePath);
+    foreach(const MakeRule &rule, _rules)
+    {
+        if (rule.dependencies.isEmpty())
+            continue;
+        if (rule.dependencies.first() == makeFilePath)
+            return rule;
+    }
+    return MakeRule();
+}
+
+const QList<MakeRule> MakeParser::includedInRules(const QString &filePath) const
+{
+    QList<MakeRule> includedInRules;
+    QDir makeDir(_basePath);
+    QString makeFilePath = makeDir.relativeFilePath(filePath);
+    foreach(const MakeRule &rule, _rules)
+    {
+        if (rule.dependencies.isEmpty())
+            continue;
+        if (rule.dependencies.contains(makeFilePath))
+        {
+            includedInRules.append(rule);
+        }
+    }
+    return includedInRules;
 }
 
 QStringList MakeParser::sourceFiles() const

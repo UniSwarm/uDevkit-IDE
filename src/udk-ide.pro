@@ -32,6 +32,7 @@ SOURCES += \
     editor/codeeditor/markdowneditor.cpp \
     main.cpp \
     mainwindow.cpp \
+    make/makerule.cpp \
     version/abstractversioncontrol.cpp \
     version/gitversioncontrol.cpp \
     version/versionchange.cpp \
@@ -77,6 +78,7 @@ SOURCES += \
 HEADERS += \
     editor/codeeditor/markdowneditor.h \
     mainwindow.h \
+    make/makerule.h \
     version/abstractversioncontrol.h \
     version/gitversioncontrol.h \
     version/versionchange.h \
