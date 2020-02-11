@@ -52,13 +52,23 @@ QString MakeParser::resolveFilePath(const QString &filePath)
 {
     QFileInfo info(filePath);
 
+    if (QFile(filePath).exists())
+    {
+        return QDir::cleanPath(filePath);
+    }
     if (QFile(_basePath+"/"+filePath).exists())
+    {
         return QDir::cleanPath(_basePath+"/"+filePath);
+    }
 
     QString suffixe = info.suffix();
     foreach (QString path, _vpath.values(suffixe))
+    {
         if (QFile(path+"/"+filePath).exists())
+        {
             return QDir::cleanPath(path+"/"+filePath);
+        }
+    }
     return QString();
 }
 
@@ -139,7 +149,11 @@ void MakeParser::processEnd()
                 QString suffixe = regVpath.cap(1);
                 while ((pos = regPath.indexIn(line, pos)) != -1)
                 {
-                    QString path = QDir::cleanPath(makeDir.path()+"/"+regPath.cap(1));
+                    QString path = QDir::cleanPath(regPath.cap(1));
+                    if (!QDir(path).isAbsolute())
+                    {
+                        path = QDir::cleanPath(makeDir.path() + "/" + regPath.cap(1));
+                    }
                     _vpath.insert(suffixe, path);
                     pos += regPath.matchedLength();
                 }
@@ -154,10 +168,14 @@ void MakeParser::processEnd()
             rule.target = makeDir.relativeFilePath(dir.path() + "/" + regRule.cap(1));
             rule.isTarget = !notATarget;
 
-            int pos = regRule.matchedLength()+1;
+            int pos = regRule.matchedLength() + 1;
             while ((pos = regVarValue.indexIn(line, pos)) != -1)
             {
-                QString value = makeDir.relativeFilePath(dir.path() + "/" + regVarValue.cap(1));
+                QString value = regVarValue.cap(1);
+                if (!QFileInfo(regVarValue.cap(1)).isAbsolute())
+                {
+                    value = makeDir.relativeFilePath(dir.path() + "/" + regVarValue.cap(1));
+                }
                 rule.dependencies.append(value);
                 pos += regVarValue.matchedLength();
             }
