@@ -217,6 +217,11 @@ void MainWindow::createMenus()
     action->setShortcut(QKeySequence("Ctrl+D"));
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::format);
 
+    action = editMenu->addAction(tr("&clang-format"));
+    action->setStatusTip(tr("Call clang-format inplace"));
+    action->setShortcut(QKeySequence("F6"));
+    connect(action, &QAction::triggered, this, &MainWindow::launchFormat);
+
     editMenu->addSeparator();
 
     action = editMenu->addAction(tr("P&references"));
@@ -358,6 +363,12 @@ void MainWindow::makesim()
 void MainWindow::makeclean()
 {
     _logWidget->start("make", QStringList()<<"clean");
+}
+
+void MainWindow::launchFormat()
+{
+    _editorTabWidget->saveAllEditors();
+    _logWidget->start("clang-format", QStringList()<<"-i"<<_editorTabWidget->currentFilePath());
 }
 
 void MainWindow::updateTitle(Editor *editor)

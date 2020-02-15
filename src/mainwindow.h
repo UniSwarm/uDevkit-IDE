@@ -51,6 +51,8 @@ protected slots:
     void makeclean();
     void makesim();
 
+    void launchFormat();
+
     void updateTitle(Editor *editor=Q_NULLPTR);
     void updateAction(Editor *editor=Q_NULLPTR);
     void updateStatus(QString status);
