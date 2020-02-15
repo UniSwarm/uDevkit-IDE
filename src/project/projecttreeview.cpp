@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QHeaderView>
+#include <QHostInfo>
 #include <QItemSelectionModel>
 #include <QInputDialog>
 #include <QMenu>
@@ -238,7 +239,11 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     else if (trigered == openTermDirAction)
     {
         QString path  =_project->projectItemModel()->filePath(indexFile);
+#if defined(Q_OS_LINUX)
         QProcess::startDetached("gnome-terminal", QStringList()<<"--working-directory="+path); // TODO make it work on all platforms
+#elif defined(Q_OS_WIN)
+        QProcess::startDetached("mintty.exe", QStringList()<<"--dir"<<path);
+#endif
     }
     else if (trigered == versionValidAction)
         _project->versionControl()->validFile(QSet<QString>()<<info.filePath());
