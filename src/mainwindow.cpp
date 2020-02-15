@@ -485,13 +485,13 @@ void MainWindow::readSettings()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, "uDevkit-IDE v0", QString("Copyright (C) 2017 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
+    QMessageBox::about(this, "uDevkit-IDE v0", QString("Copyright (C) 2017-2020 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
 <br>\
 This sofware is part of uDevkit distribution. To check for new version, please visit <a href=\"https://github.com/UniSwarm/uDevkit-IDE\">github.com/UniSwarm/uDevkit-IDE</a><br>\
 <br>\
 Written by <a href=\"https://github.com/sebcaux\">Sébastien CAUX (sebcaux)</a><br>\
 <br>\
-RtIDE is a free software: you can redistribute it and/or modify \
+uDevkit-IDE is a free software: you can redistribute it and/or modify \
 it under the terms of the GNU General Public License as published by \
 the Free Software Foundation, either version 3 of the License, or \
 (at your option) any later version.<br>\
@@ -504,7 +504,7 @@ GNU General Public License for more details.<br>\
 You should have received a copy of the GNU General Public License \
 along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\">www.gnu.org/licenses</a><br>\
 <br>\
-Build date: ") + __DATE__ + QString(" time: ")+__TIME__ + QString("<br>\
+Build date: ") + __DATE__ + QString(" time: ") + __TIME__ + QString("<br>\
 <br>\
 uDevkit-IDE use others open libraries :<br>\
 - edbee-lib, a code editor widget (code editor) <a href=\"https://github.com/edbee/edbee-lib\">github.com/edbee/edbee-lib</a> [MIT]<br>\
