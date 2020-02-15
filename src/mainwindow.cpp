@@ -345,13 +345,13 @@ void MainWindow::git()
 void MainWindow::makeall()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("make", QStringList()<<"hex"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
+    _logWidget->start("make", QStringList()<<"hex"<<"--no-print-directory"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
 }
 
 void MainWindow::makeprog()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("make", QStringList()<<"prog"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
+    _logWidget->start("make", QStringList()<<"prog"<<"--no-print-directory"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
 }
 
 void MainWindow::makesim()
