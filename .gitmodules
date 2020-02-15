@@ -1,6 +1,6 @@
 [submodule "contrib/edbee-lib"]
 	path = contrib/edbee-lib
-	url = https://github.com/edbee/edbee-lib.git
+	url = https://github.com/UniSwarm/edbee-lib.git
 [submodule "contrib/edbee-data"]
 	path = contrib/edbee-data
 	url = https://github.com/edbee/edbee-data.git
