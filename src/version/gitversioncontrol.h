@@ -76,6 +76,8 @@ protected:
     FileVersionChange _fileChanges;
     QProcess *_processGitDiff;
     QQueue<QString> _diffRequestQueue;
+
+    void launch(const QString &program, const QStringList &arguments);
 };
 
 #endif // GITVERSIONCONTROL_H

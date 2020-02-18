@@ -19,7 +19,7 @@ GitVersionControl::GitVersionControl()
 
     _processGitDiff = new QProcess(this);
     connect(_processGitDiff, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus){processDiffEnd();}); // but this crap is recomended
+            [=](int, QProcess::ExitStatus){processDiffEnd();});
 
     _settingsClass = rtset()->registerClass("gitversion");
     connect(_settingsClass, &SettingsClass::classModified, this, &GitVersionControl::updateSettings);
@@ -50,7 +50,7 @@ void GitVersionControl::validFile(const QSet<QString> &filesPath)
 
     QDir dir(_basePath);
     foreach (QString filePath, filesPath)
-        args<<dir.relativeFilePath(filePath);
+        args << dir.relativeFilePath(filePath);
 
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
@@ -68,7 +68,7 @@ void GitVersionControl::inValidFile(const QSet<QString> &filesPath)
 
     QDir dir(_basePath);
     foreach (QString filePath, filesPath)
-        args<<dir.relativeFilePath(filePath);
+        args << dir.relativeFilePath(filePath);
 
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
@@ -86,7 +86,7 @@ void GitVersionControl::checkoutFile(const QSet<QString> &filesPath)
 
     QDir dir(_basePath);
     foreach (QString filePath, filesPath)
-        args<<dir.relativeFilePath(filePath);
+        args << dir.relativeFilePath(filePath);
 
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
@@ -110,30 +110,30 @@ void GitVersionControl::requestFileModifications(const QString &filePath)
 void GitVersionControl::reqFetch()
 {
     _statusState = StatusFetch;
-    _processGitState->start(_programPath, QStringList()<<"fetch");
+    launch(_programPath, QStringList() << "fetch");
 }
 
 void GitVersionControl::reqModifFiles()
 {
     _statusState = StatusModifiedFiles;
-    _processGitState->start(_programPath, QStringList()<<"ls-files"<<"-m"<<".");
+    launch(_programPath, QStringList() << "ls-files" << "-m" << ".");
 }
 
 void GitVersionControl::reqTrackedFiles()
 {
     _statusState = StatusTrackedFiles;
-    _processGitState->start(_programPath, QStringList()<<"ls-files"<<".");
+    launch(_programPath, QStringList() << "ls-files" << ".");
 }
 
 void GitVersionControl::reqValidatedFiles()
 {
     _statusState = StatusValidatedFiles;
-    _processGitState->start(_programPath, QStringList()<<"diff"<<"--cached"<<"--name-only");
+    launch(_programPath, QStringList() << "diff" << "--cached" << "--name-only");
 }
 
 void GitVersionControl::indexCheck()
 {
-    _indexWatcher->addPath(_gitPath+"index");
+    _indexWatcher->addPath(_gitPath + "index");
     reqModifFiles();
 }
 
@@ -141,17 +141,19 @@ void GitVersionControl::processEnd()
 {
     QSet<QString> newmodifiedFiles, validedFile;
 
-    switch (_statusState) {
+    switch (_statusState)
+    {
     case GitVersionControl::StatusNone:
         break;
     case GitVersionControl::StatusFetch:
-        reqModifFiles();
+        indexCheck();
         break;
     case GitVersionControl::StatusCheck:
+        connect(_indexWatcher, &QFileSystemWatcher::fileChanged, this, &GitVersionControl::indexCheck);
         if (_processGitState->exitCode() != 0)
             reqFetch();
         else
-            reqModifFiles();
+            indexCheck();
         break;
     case GitVersionControl::StatusModifiedFiles:
         parseFilesList(_modifiedFiles, validedFile, newmodifiedFiles);
@@ -199,7 +201,7 @@ void GitVersionControl::reqFileModifHead(const QString &filePath)
     _diffState = DiffHead;
     _fileGitDiff = filePath;
     _fileChanges.clear();
-    _processGitDiff->start(_programPath, QStringList()<<"diff"<<"HEAD"<<"--no-color"<<"--unified=0"<<dir.relativeFilePath(filePath));
+    _processGitDiff->start(_programPath, QStringList() << "diff" << "HEAD" << "--no-color" << "--unified=0" << dir.relativeFilePath(filePath));
 }
 
 void GitVersionControl::reqFileModifNormal(const QString &filePath)
@@ -207,7 +209,7 @@ void GitVersionControl::reqFileModifNormal(const QString &filePath)
     QDir dir(_basePath);
     _diffState = DiffNormal;
     _fileGitDiff = filePath;
-    _processGitDiff->start(_programPath, QStringList()<<"diff"<<"--no-color"<<"--unified=0"<<dir.relativeFilePath(filePath));
+    _processGitDiff->start(_programPath, QStringList() << "diff" << "--no-color" << "--unified=0" << dir.relativeFilePath(filePath));
 }
 
 void GitVersionControl::processDiffEnd()
@@ -352,8 +354,12 @@ void GitVersionControl::analysePath()
     _indexWatcher->addPath(_gitPath + "index");
     _processGitState->setWorkingDirectory(_basePath);
     _processGitDiff->setWorkingDirectory(_basePath);
-    connect(_indexWatcher, &QFileSystemWatcher::fileChanged, this, &GitVersionControl::indexCheck);
 
     _statusState = StatusCheck;
-    _processGitState->start(_programPath, QStringList()<<"status");
+    launch(_programPath, QStringList() << "status");
+}
+
+void GitVersionControl::launch(const QString &program, const QStringList &arguments)
+{
+    _processGitState->start(program, arguments);
 }
