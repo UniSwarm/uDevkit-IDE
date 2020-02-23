@@ -1,25 +1,26 @@
 #include "gitversioncontrol.h"
 
-#include <QDirIterator>
 #include <QDebug>
+#include <QDirIterator>
 #include <QProcess>
 #include <QTextStream>
 
-GitVersionControl::GitVersionControl()
-    : AbstractVersionControl ()
+GitVersionControl::GitVersionControl() : AbstractVersionControl()
 {
     _indexWatcher = Q_NULLPTR;
     _statusState = StatusNone;
     _diffState = DiffNone;
 
     _processGitState = new QProcess(this);
-    //connect(_process, &QProcess::finished, this, &GitVersionControl::parseModifiedFiles); // does not work...
-    connect(_processGitState, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus){processEnd();}); // but this crap is recomended
+    // connect(_process, &QProcess::finished, this, &GitVersionControl::parseModifiedFiles); // does not work...
+    connect(_processGitState,
+            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            [=](int, QProcess::ExitStatus) { processEnd(); }); // but this crap is recomended
 
     _processGitDiff = new QProcess(this);
-    connect(_processGitDiff, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus){processDiffEnd();});
+    connect(_processGitDiff,
+            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            [=](int, QProcess::ExitStatus) { processDiffEnd(); });
 
     _settingsClass = rtset()->registerClass("gitversion");
     connect(_settingsClass, &SettingsClass::classModified, this, &GitVersionControl::updateSettings);
@@ -44,54 +45,70 @@ QString GitVersionControl::basePath() const
 void GitVersionControl::validFile(const QSet<QString> &filesPath)
 {
     if (!isValid())
+    {
         return;
+    }
     QStringList args;
     args << "add";
 
     QDir dir(_basePath);
     foreach (QString filePath, filesPath)
+    {
         args << dir.relativeFilePath(filePath);
+    }
 
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
-    connect(newProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus){delete sender();});
+    connect(newProcess,
+            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            [=](int, QProcess::ExitStatus) { delete sender(); });
     newProcess->start(_programPath, args);
 }
 
 void GitVersionControl::inValidFile(const QSet<QString> &filesPath)
 {
     if (!isValid())
+    {
         return;
+    }
     QStringList args;
-    args << "reset" << "HEAD";
+    args << "reset"
+         << "HEAD";
 
     QDir dir(_basePath);
     foreach (QString filePath, filesPath)
+    {
         args << dir.relativeFilePath(filePath);
+    }
 
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
-    connect(newProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus){delete sender();});
+    connect(newProcess,
+            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            [=](int, QProcess::ExitStatus) { delete sender(); });
     newProcess->start(_programPath, args);
 }
 
 void GitVersionControl::checkoutFile(const QSet<QString> &filesPath)
 {
     if (!isValid())
+    {
         return;
+    }
     QStringList args;
     args << "checkout";
 
     QDir dir(_basePath);
     foreach (QString filePath, filesPath)
+    {
         args << dir.relativeFilePath(filePath);
+    }
 
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
-    connect(newProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus){delete sender();});
+    connect(newProcess,
+            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            [=](int, QProcess::ExitStatus) { delete sender(); });
     newProcess->start(_programPath, args);
 }
 
@@ -104,7 +121,9 @@ void GitVersionControl::requestFileModifications(const QString &filePath)
 {
     _diffRequestQueue.enqueue(filePath);
     if (_processGitDiff->state() == QProcess::NotRunning)
+    {
         reqFileModifHead(_diffRequestQueue.head());
+    }
 }
 
 void GitVersionControl::reqFetch()
@@ -116,19 +135,27 @@ void GitVersionControl::reqFetch()
 void GitVersionControl::reqModifFiles()
 {
     _statusState = StatusModifiedFiles;
-    launch(_programPath, QStringList() << "ls-files" << "-m" << ".");
+    launch(_programPath,
+           QStringList() << "ls-files"
+                         << "-m"
+                         << ".");
 }
 
 void GitVersionControl::reqTrackedFiles()
 {
     _statusState = StatusTrackedFiles;
-    launch(_programPath, QStringList() << "ls-files" << ".");
+    launch(_programPath,
+           QStringList() << "ls-files"
+                         << ".");
 }
 
 void GitVersionControl::reqValidatedFiles()
 {
     _statusState = StatusValidatedFiles;
-    launch(_programPath, QStringList() << "diff" << "--cached" << "--name-only");
+    launch(_programPath,
+           QStringList() << "diff"
+                         << "--cached"
+                         << "--name-only");
 }
 
 void GitVersionControl::indexCheck()
@@ -151,9 +178,13 @@ void GitVersionControl::processEnd()
     case GitVersionControl::StatusCheck:
         connect(_indexWatcher, &QFileSystemWatcher::fileChanged, this, &GitVersionControl::indexCheck);
         if (_processGitState->exitCode() != 0)
+        {
             reqFetch();
+        }
         else
+        {
             indexCheck();
+        }
         break;
     case GitVersionControl::StatusModifiedFiles:
         parseFilesList(_modifiedFiles, validedFile, newmodifiedFiles);
@@ -169,9 +200,13 @@ void GitVersionControl::processEnd()
     }
 
     if (!newmodifiedFiles.isEmpty())
+    {
         emit newModifiedFiles(newmodifiedFiles);
+    }
     if (!validedFile.isEmpty())
+    {
         emit newValidatedFiles(validedFile);
+    }
 }
 
 void GitVersionControl::updateSettings()
@@ -190,7 +225,9 @@ void GitVersionControl::updateSettings()
         env.insert("PATH", gitPath + listSep + env.value("PATH"));
     }
     else
+    {
         _programPath = "git";
+    }
     _processGitState->setProcessEnvironment(env);
     _processGitDiff->setProcessEnvironment(env);
 }
@@ -201,7 +238,11 @@ void GitVersionControl::reqFileModifHead(const QString &filePath)
     _diffState = DiffHead;
     _fileGitDiff = filePath;
     _fileChanges.clear();
-    _processGitDiff->start(_programPath, QStringList() << "diff" << "HEAD" << "--no-color" << "--unified=0" << dir.relativeFilePath(filePath));
+    _processGitDiff->start(_programPath,
+                           QStringList() << "diff"
+                                         << "HEAD"
+                                         << "--no-color"
+                                         << "--unified=0" << dir.relativeFilePath(filePath));
 }
 
 void GitVersionControl::reqFileModifNormal(const QString &filePath)
@@ -209,7 +250,10 @@ void GitVersionControl::reqFileModifNormal(const QString &filePath)
     QDir dir(_basePath);
     _diffState = DiffNormal;
     _fileGitDiff = filePath;
-    _processGitDiff->start(_programPath, QStringList() << "diff" << "--no-color" << "--unified=0" << dir.relativeFilePath(filePath));
+    _processGitDiff->start(_programPath,
+                           QStringList() << "diff"
+                                         << "--no-color"
+                                         << "--unified=0" << dir.relativeFilePath(filePath));
 }
 
 void GitVersionControl::processDiffEnd()
@@ -222,6 +266,7 @@ void GitVersionControl::processDiffEnd()
     {
     case GitVersionControl::DiffNone:
         break;
+
     case GitVersionControl::DiffHead:
     {
         VersionChange *change = new VersionChange();
@@ -245,19 +290,30 @@ void GitVersionControl::processDiffEnd()
                 valid = true;
             }
             if (!valid)
+            {
                 continue;
+            }
             if (line.startsWith('+'))
+            {
                 change->addAddedLine(line.mid(1));
+            }
             else if (line.startsWith('-'))
+            {
                 change->addRemovedLine(line.mid(1));
+            }
         }
         if (valid && change->isValid())
+        {
             _fileChanges.changes().append(change);
+        }
         else
+        {
             delete change;
+        }
         reqFileModifNormal(_fileGitDiff);
         break;
     }
+
     case GitVersionControl::DiffNormal:
         while (!stream.atEnd())
         {
@@ -269,7 +325,9 @@ void GitVersionControl::processDiffEnd()
                 int lineNew = regContext.cap(4).toInt();
                 QList<VersionChange *> changesForRange = _fileChanges.changesForRange(lineNew, lineNew);
                 if (!changesForRange.isEmpty())
+                {
                     changesForRange.first()->setStaged(false);
+                }
             }
         }
 
@@ -278,21 +336,27 @@ void GitVersionControl::processDiffEnd()
         emit fileModificationsAvailable(_fileGitDiff);
         _diffState = DiffNone;
         if (!_diffRequestQueue.isEmpty())
+        {
             reqFileModifHead(_diffRequestQueue.head());
+        }
         break;
     }
 }
 
-void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &outgoingFiles, QSet<QString> &incomingFiles)
+void GitVersionControl::parseFilesList(QSet<QString> &oldSed,
+                                       QSet<QString> &outgoingFiles,
+                                       QSet<QString> &incomingFiles)
 {
     QSet<QString> modifiedFiles;
     if (_processGitState->exitStatus() == QProcess::NormalExit)
     {
         QTextStream stream(_processGitState);
         while (!stream.atEnd())
-            modifiedFiles.insert(_basePath+"/"+stream.readLine(1000));
+        {
+            modifiedFiles.insert(_basePath + "/" + stream.readLine(1000));
+        }
     }
-    //if (!oldSed.isEmpty())
+    // if (!oldSed.isEmpty())
     {
         outgoingFiles = oldSed;
         outgoingFiles.subtract(modifiedFiles);
@@ -322,32 +386,38 @@ void GitVersionControl::findGitDir()
                 QString parentPath;
                 QFile gitFile(dir.canonicalPath() + "/.git");
                 if (!gitFile.open(QIODevice::ReadOnly | QIODevice::Text))
+                {
                     continue;
+                }
                 QTextStream stream(&gitFile);
                 QString word;
                 while (!stream.atEnd())
                 {
                     stream >> word;
                     if (word != "gitdir:")
+                    {
                         continue;
+                    }
                     stream >> parentPath;
                     if (dir.exists(parentPath))
                     {
-                        _gitPath = dir.absoluteFilePath(parentPath) +"/";
+                        _gitPath = dir.absoluteFilePath(parentPath) + "/";
                         _basePath = dir.path();
                         return;
                     }
                 }
             }
         }
-    } while(dir.cdUp());
+    } while (dir.cdUp());
 }
 
 void GitVersionControl::analysePath()
 {
     findGitDir();
     if (_gitPath.isEmpty())
+    {
         return;
+    }
 
     delete _indexWatcher;
     _indexWatcher = new QFileSystemWatcher();

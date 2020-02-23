@@ -1,9 +1,9 @@
 #ifndef ABSTRACTVERSIONCONTROL_H
 #define ABSTRACTVERSIONCONTROL_H
 
+#include <QMap>
 #include <QObject>
 #include <QSet>
-#include <QMap>
 
 #include "fileversionchange.h"
 

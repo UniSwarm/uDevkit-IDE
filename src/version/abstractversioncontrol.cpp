@@ -1,7 +1,7 @@
 #include "abstractversioncontrol.h"
 
-#include <QDir>
 #include <QDebug>
+#include <QDir>
 
 AbstractVersionControl::AbstractVersionControl(QObject *parent) : QObject(parent)
 {
@@ -29,11 +29,17 @@ QString AbstractVersionControl::basePath() const
 bool AbstractVersionControl::isDirTracked(const QString &filePath) const
 {
     if (!isValid())
+    {
         return true;
+    }
     QSetIterator<QString> i(_trackedFiles);
     while (i.hasNext())
+    {
         if (i.next().startsWith(filePath))
+        {
             return true;
+        }
+    }
     return false;
 }
 
@@ -46,15 +52,21 @@ bool AbstractVersionControl::isDirModified(const QString &filePath) const
 {
     QSetIterator<QString> i(_modifiedFiles);
     while (i.hasNext())
+    {
         if (i.next().startsWith(filePath))
+        {
             return true;
+        }
+    }
     return false;
 }
 
 bool AbstractVersionControl::isFileTracked(const QString &filePath) const
 {
     if (!isValid())
+    {
         return true;
+    }
     return _trackedFiles.contains(filePath);
 }
 
@@ -110,7 +122,9 @@ void AbstractVersionControl::modifFile(const QSet<QString> &filesPath)
         }
     }
     if (!mnewModifiedFiles.isEmpty())
+    {
         emit newModifiedFiles(mnewModifiedFiles);
+    }
 }
 
 void AbstractVersionControl::requestFileModifications(const QString &filePath)
@@ -122,9 +136,13 @@ FileVersionChange AbstractVersionControl::fileModifications(const QString &fileP
 {
     QMap<QString, FileVersionChange>::iterator localFind = _changeForFile.find(filePath);
     if (localFind != _changeForFile.end())
+    {
         return *localFind;
+    }
     else
+    {
         return FileVersionChange();
+    }
 }
 
 void AbstractVersionControl::analysePath()

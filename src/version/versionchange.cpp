@@ -66,9 +66,13 @@ void VersionChange::clear()
 bool VersionChange::isValid() const
 {
     if (_lineOld == -1 || _lineNew == -1)
+    {
         return false;
+    }
     if (_addedLines.isEmpty() && _removedLines.isEmpty())
+    {
         return false;
+    }
     return true;
 }
 

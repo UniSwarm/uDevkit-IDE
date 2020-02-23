@@ -48,7 +48,8 @@ protected:
     void findGitDir();
     virtual void analysePath();
 
-    enum StatusState {
+    enum StatusState
+    {
         StatusNone,
         StatusCheck,
         StatusFetch,
@@ -66,7 +67,8 @@ protected:
     SettingsClass *_settingsClass;
     QString _programPath;
 
-    enum DiffState {
+    enum DiffState
+    {
         DiffNone,
         DiffHead,
         DiffNormal
