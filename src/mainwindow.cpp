@@ -24,9 +24,13 @@ MainWindow::MainWindow(Project *project, QWidget *parent) :
     setWindowIcon(QIcon(":/icons/UNIdevkit.ico"));
     QString path;
     if (!_project)
+    {
         _project = new Project();
+    }
     else
+    {
         path = _project->rootPath();
+    }
     updateTitle();
 
     _editorTabWidget = new EditorTabWidget(_project);
@@ -257,17 +261,17 @@ void MainWindow::createMenus()
     QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
 
     action = _logDock->toggleViewAction();
-    action->setText(tr("View / Hide &log"));
+    action->setText(tr("        &Log"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-console.png"));
     viewMenu->addAction(action);
 
     action = _fileProjectDock->toggleViewAction();
-    action->setText(tr("View / Hide &project file"));
+    action->setText(tr("        &Project file"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-binder.png"));
     viewMenu->addAction(action);
 
     action = _searchReplaceDock->toggleViewAction();
-    action->setText(tr("View / Hide &search/replace"));
+    action->setText(tr("        &Search/replace"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-search-button.png"));
     viewMenu->addAction(action);
 
@@ -299,9 +303,13 @@ bool MainWindow::openDir(const QString &path)
             dialog.setDirectory(file.absolutePath());
         }
         else
+        {
             dialog.setDirectory(_project->rootPath());
+        }
         if (!dialog.exec())
+        {
             return false;
+        }
         mpath = dialog.selectedFiles().first();
     }
     _project->setRootPath(mpath);
@@ -309,6 +317,8 @@ bool MainWindow::openDir(const QString &path)
     _oldProjects.removeOne(mpath);
     _oldProjects.prepend(mpath);
     updateOldProjects();
+
+    updateTitle();
 
     return true;
 }
@@ -327,13 +337,19 @@ bool MainWindow::openFiles(const QStringList &paths)
             dialog.setDirectory(file.absolutePath());
         }
         else
+        {
             dialog.setDirectory(_project->rootPath());
+        }
         if (!dialog.exec())
+        {
             return false;
+        }
         mpaths = dialog.selectedFiles();
     }
     foreach (QString apath, mpaths)
+    {
         _editorTabWidget->openFileEditor(apath);
+    }
     return true;
 }
 
@@ -378,7 +394,9 @@ void MainWindow::updateTitle(Editor *editor)
     {
         title = _project->rootDir().relativeFilePath(editor->filePath());
         if (editor->isModified())
+        {
             title.append("*");
+        }
         title.append(" | ");
     }
     title.append("(");
@@ -435,7 +453,9 @@ void MainWindow::openRecentFile()
 {
     QAction *action = qobject_cast<QAction *>(sender());
     if (action)
+    {
         openDir(action->data().toString());
+    }
 }
 
 void MainWindow::writeSettings()
@@ -475,8 +495,10 @@ void MainWindow::readSettings()
     {
         settings.setArrayIndex(i);
         QString path = settings.value("path", "").toString();
-        if (!_oldProjects.contains(path) && !path.isEmpty())
+        if (!_oldProjects.contains(path) && !path.isEmpty() && QDir(path).exists())
+        {
             _oldProjects.append(path);
+        }
     }
     settings.endArray();
 
