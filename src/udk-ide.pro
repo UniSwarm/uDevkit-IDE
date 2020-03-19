@@ -45,6 +45,8 @@ SOURCES += \
     editor/codeeditor/codeeditormargindelegate.cpp \
     editor/codeeditor/htmleditor.cpp \
     editor/hexeditor.cpp \
+    editor/hexfile.cpp \
+    editor/hexfileeditor.cpp \
     editor/imageeditor.cpp \
     make/makeparser.cpp \
     project/fileproject.cpp \
@@ -92,6 +94,8 @@ HEADERS += \
     editor/codeeditor/codeeditormargindelegate.h \
     editor/codeeditor/htmleditor.h \
     editor/hexeditor.h \
+    editor/hexfile.h \
+    editor/hexfileeditor.h \
     editor/imageeditor.h \
     make/makeparser.h \
     project/fileproject.h \

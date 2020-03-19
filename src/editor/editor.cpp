@@ -28,7 +28,9 @@ Editor::~Editor()
 QString Editor::fileName() const
 {
     if (_filePath.isEmpty())
+    {
         return QString(tr("new file"));
+    }
     return QFileInfo(_filePath).fileName();
 }
 
@@ -51,7 +53,9 @@ int Editor::saveFile(const QString &filePath)
     {
         path = QFileDialog::getSaveFileName(this, tr("Save file"));
         if (path.isEmpty())
+        {
             return -1;
+        }
     }
     setFilePath(path);
     _reloadWatcher->removePath(_filePath);
@@ -64,13 +68,19 @@ int Editor::saveFile(const QString &filePath)
 bool Editor::isActiveEditor() const
 {
     if (!parent())
+    {
         return false;
+    }
     if (!parent()->parent())
+    {
         return false;
+    }
 
     EditorTabWidget *tabWidget = static_cast<EditorTabWidget*>(parent()->parent());
     if (!tabWidget)
+    {
         return false;
+    }
     return (tabWidget->currentEditor() == this);
 }
 
@@ -160,7 +170,9 @@ void Editor::reload()
     _extModifDetected = true;
 
     if (!isActiveEditor())
+    {
         return;
+    }
 
     if (isModified())
     {
@@ -169,7 +181,9 @@ void Editor::reload()
                                              QMessageBox::Yes | QMessageBox::No,
                                              QMessageBox::Yes);
         if (response == QMessageBox::No)
+        {
             needReload = false;
+        }
     }
 
     if (needReload)
@@ -184,7 +198,9 @@ void Editor::reload()
 void Editor::active()
 {
     if (_extModifDetected)
+    {
         reload();
+    }
 
     initialiseWidget();
     giveFocus();
@@ -230,7 +246,9 @@ void Editor::setFilePath(const QString &filePath)
     if (filePath != _filePath)
     {
         if (!_filePath.isEmpty())
+        {
             _reloadWatcher->removePath(_filePath);
+        }
         _filePath = QFileInfo(filePath).absoluteFilePath();
         emit filePathChanged(_filePath);
         _reloadWatcher->addPath(_filePath);
@@ -276,14 +294,22 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
     {
     case Editor::Code:
         return new CodeEditor(project, parent);
+
+    case Editor::HexFile:
+      return new HexFileEditor(project, parent);
+
     case Editor::Hexa:
         return new HexEditor(project, parent);
+
     case Editor::HTML:
         return new HtmlEditor(project, parent);
+
     case Editor::Markdown:
         return new MarkdownEditor(project, parent);
+
     case Editor::Image:
         return new ImageEditor(project, parent);
+
     case Editor::ELF:
         break;
     }
@@ -297,14 +323,18 @@ Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget 
     Editor *editor;
     editor = createEditor(type, project, parent);
     if (editor)
+    {
         editor->openFileData(filePath);
+    }
     return editor;
 }
 
 Editor::Type Editor::typeFromExt(const QString &ext)
 {
     if (ext == "o")
+    {
         return Editor::Hexa;
+    }
     return Editor::Code;
 }
 
@@ -318,22 +348,36 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
     //qDebug()<<mime;
 
     Type type;
-    if(mime.name() == "text/html")
+    if (mime.name() == "text/x-hex")
+    {
+        type = Editor::HexFile;
+    }
+    else if (mime.name() == "text/html")
+    {
         type = Editor::HTML;
-    else if(mime.name().startsWith("text/markdown"))
+    }
+    else if (mime.name().startsWith("text/markdown"))
+    {
         type = Editor::Markdown;
-    else if(mime.name().startsWith("text") ||
+    }
+    else if (mime.name().startsWith("text") ||
             mime.name() == "application/xml" ||
             mime.name() == "application/x-yaml" ||
             mime.name() == "application/x-shellscript" ||
             mime.name() == "application/javascript" ||
             mime.name() == "application/json" ||
             file.size() == 0)
+    {
         type = Editor::Code;
-    else if(mime.name().startsWith("image"))
+    }
+    else if (mime.name().startsWith("image"))
+    {
         type = Editor::Image;
+    }
     else
+    {
         type = Editor::Hexa;
+    }
 
     return type;
 }

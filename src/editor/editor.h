@@ -27,6 +27,7 @@ public:
 
     enum Type {
         Code,
+        HexFile,
         Hexa,
         Markdown,
         HTML,

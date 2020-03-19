@@ -6,5 +6,6 @@
 #include "codeeditor/markdowneditor.h"
 #include "imageeditor.h"
 #include "hexeditor.h"
+#include "hexfileeditor.h"
 
 #endif // EDITORS_H
