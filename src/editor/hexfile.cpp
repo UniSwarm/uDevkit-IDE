@@ -66,8 +66,8 @@ bool HexFile::read()
         {
             if (offsetAddr + addr > _prog.size())
             {
-                _prog.append(_prog.size() - (offsetAddr + addr + dataCount), static_cast<char>(0xFF));
-                qDebug() << "outData" << QString::number(offsetAddr + addr, 16) << line.mid(index, 2 * dataCount);
+                _prog.append(QByteArray(_prog.size() - (offsetAddr + addr + dataCount), static_cast<char>(0xFF)));
+                // qDebug() << "outData" << QString::number(offsetAddr + addr, 16) << line.mid(index, 2 * dataCount);
             }
             // else
             {
@@ -91,7 +91,7 @@ bool HexFile::read()
                 return false;
             }
             index += 4;
-            qDebug() << "offset" << QString::number(offsetAddr, 16);
+            // qDebug() << "offset" << QString::number(offsetAddr, 16);
         }
         else if (type == 1)
         {
@@ -99,7 +99,7 @@ bool HexFile::read()
         }
         else
         {
-            qDebug() << "unknow type" << type << "at line" << lineCount;
+            // qDebug() << "unknow type" << type << "at line" << lineCount;
         }
 
         checkSum = line.mid(index, 2).toInt(&ok, 16);
