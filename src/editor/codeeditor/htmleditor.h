@@ -4,9 +4,9 @@
 #include "codeeditor.h"
 
 #ifndef NOWEBKIT
-    #if !defined(WEBENGINE) && !defined(WEBKIT)
-        #define NOWEBKIT
-    #endif
+#if !defined(WEBENGINE) && !defined(WEBKIT)
+#define NOWEBKIT
+#endif
 #endif
 
 #ifdef WEBENGINE
@@ -23,16 +23,16 @@ class HtmlEditor : public CodeEditor
 {
     Q_OBJECT
 public:
-    HtmlEditor(Project *project, QWidget *parent = 0);
+    HtmlEditor(Project *project, QWidget *parent = nullptr);
 
     // Editor interface
 public:
-    virtual QWidget *previewWidget() const;
-    virtual bool hasPreview() const;
+    QWidget *previewWidget() const override;
+    bool hasPreview() const override;
 
 protected slots:
     virtual void updatePreview();
-    int openFileData(const QString &filePath);
+    int openFileData(const QString &filePath) override;
 
 protected:
     void createPreview();

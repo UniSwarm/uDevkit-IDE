@@ -20,7 +20,7 @@ ImageEditor::ImageEditor(Project *project, QWidget *parent)
 
 bool ImageEditor::isModified() const
 {
-    return  _modified;
+    return _modified;
 }
 
 Editor::SearchCaps ImageEditor::searchCap() const
@@ -32,7 +32,9 @@ int ImageEditor::openFileData(const QString &filePath)
 {
     QImage image(filePath);
     if (image.isNull())
+    {
         return -1;
+    }
     _imageData = image;
 
     _imageView->setPixmap(QPixmap::fromImage(_imageData));

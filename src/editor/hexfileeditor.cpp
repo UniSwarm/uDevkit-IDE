@@ -2,22 +2,21 @@
 
 #include <QApplication>
 
-#include "qhexedit.h"
 #include "hexfile.h"
+#include "qhexedit.h"
 
 HexFileEditor::HexFileEditor(Project *project, QWidget *parent)
     : HexEditor(project, parent)
 {
-
 }
 
 HexFileEditor::~HexFileEditor()
 {
-
 }
 
 int HexFileEditor::openFileData(const QString &filePath)
 {
+    qint64 localCursorPosition = _hexEditor->cursorPosition();
     _file.setFileName(filePath);
     class HexFile hexFile(filePath);
     hexFile.read();
@@ -25,6 +24,7 @@ int HexFileEditor::openFileData(const QString &filePath)
     _modified = false;
     emit modified(isModified());
     setFilePath(filePath);
+    _hexEditor->setCursorPosition(localCursorPosition);
     return 0;
 }
 

@@ -3,8 +3,8 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QDebug>
-#include <QSaveFile>
 #include <QKeyEvent>
+#include <QSaveFile>
 
 #include "qhexedit.h"
 
@@ -89,13 +89,17 @@ int HexEditor::saveFileData(const QString &filePath)
     QFile file(tmpFileName);
     bool ok = _hexEditor->write(file);
     if (QFile::exists(path))
+    {
         ok = QFile::remove(path);
+    }
     if (ok)
     {
         file.setFileName(tmpFileName);
         ok = file.copy(path);
         if (ok)
+        {
             ok = QFile::remove(tmpFileName);
+        }
     }
     QApplication::restoreOverrideCursor();
     _modified = false;
@@ -122,8 +126,8 @@ void HexEditor::redoCommand()
 
 void HexEditor::cutCommand()
 {
-    QKeyEvent * eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_X, Qt::ControlModifier);
-    QKeyEvent * eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_X, Qt::ControlModifier);
+    QKeyEvent *eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_X, Qt::ControlModifier);
+    QKeyEvent *eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_X, Qt::ControlModifier);
 
     qApp->postEvent(_hexEditor, static_cast<QEvent *>(eve1));
     qApp->postEvent(_hexEditor, static_cast<QEvent *>(eve2));
@@ -131,8 +135,8 @@ void HexEditor::cutCommand()
 
 void HexEditor::copyCommand()
 {
-    QKeyEvent * eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_C, Qt::ControlModifier);
-    QKeyEvent * eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_C, Qt::ControlModifier);
+    QKeyEvent *eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_C, Qt::ControlModifier);
+    QKeyEvent *eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_C, Qt::ControlModifier);
 
     qApp->postEvent(_hexEditor, static_cast<QEvent *>(eve1));
     qApp->postEvent(_hexEditor, static_cast<QEvent *>(eve2));
@@ -140,8 +144,8 @@ void HexEditor::copyCommand()
 
 void HexEditor::pasteCommand()
 {
-    QKeyEvent * eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_V, Qt::ControlModifier);
-    QKeyEvent * eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_V, Qt::ControlModifier);
+    QKeyEvent *eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_V, Qt::ControlModifier);
+    QKeyEvent *eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_V, Qt::ControlModifier);
 
     qApp->postEvent(_hexEditor, static_cast<QEvent *>(eve1));
     qApp->postEvent(_hexEditor, static_cast<QEvent *>(eve2));

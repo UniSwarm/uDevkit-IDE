@@ -11,22 +11,22 @@
 #include <QSplitter>
 
 #include "edbee/edbee.h"
-#include "edbee/texteditorwidget.h"
 #include "edbee/io/textdocumentserializer.h"
-#include "edbee/models/textdocument.h"
-#include "edbee/models/textgrammar.h"
-#include "edbee/models/texteditorconfig.h"
-#include "edbee/texteditorcontroller.h"
-#include "edbee/util/lineending.h"
-#include "edbee/models/textsearcher.h"
-#include "edbee/models/textrange.h"
-#include "edbee/models/textundostack.h"
-#include "edbee/views/texttheme.h"
-#include "edbee/views/textselection.h"
-#include "edbee/views/texteditorscrollarea.h"
-#include "edbee/views/components/texteditorcomponent.h"
 #include "edbee/models/chardocument/chartextdocument.h"
+#include "edbee/models/textdocument.h"
 #include "edbee/models/textdocumentscopes.h"
+#include "edbee/models/texteditorconfig.h"
+#include "edbee/models/textgrammar.h"
+#include "edbee/models/textrange.h"
+#include "edbee/models/textsearcher.h"
+#include "edbee/models/textundostack.h"
+#include "edbee/texteditorcontroller.h"
+#include "edbee/texteditorwidget.h"
+#include "edbee/util/lineending.h"
+#include "edbee/views/components/texteditorcomponent.h"
+#include "edbee/views/texteditorscrollarea.h"
+#include "edbee/views/textselection.h"
+#include "edbee/views/texttheme.h"
 
 #include "settings/settingsmanager.h"
 
@@ -38,20 +38,28 @@ CodeEditor::CodeEditor(Project *project, QWidget *parent)
     if (!initialized)
     {
         // get the edbee instance
-        edbee::Edbee* tm = edbee::Edbee::instance();
+        edbee::Edbee *tm = edbee::Edbee::instance();
 
         // configure your paths
-        if (QFile::exists(QApplication::applicationDirPath()+"/../contrib/edbee-data/keymaps/"))
-            tm->setKeyMapPath(QApplication::applicationDirPath()+"/../contrib/edbee-data/keymaps/");
+        if (QFile::exists(QApplication::applicationDirPath() + "/../contrib/edbee-data/keymaps/"))
+        {
+            tm->setKeyMapPath(QApplication::applicationDirPath() + "/../contrib/edbee-data/keymaps/");
+        }
         else
-            tm->setKeyMapPath(QApplication::applicationDirPath()+"/../data/keymaps/");
+        {
+            tm->setKeyMapPath(QApplication::applicationDirPath() + "/../data/keymaps/");
+        }
 
-        if (QFile::exists(QApplication::applicationDirPath()+"/../contrib/edbee-data/syntaxfiles/"))
-            tm->setGrammarPath(QApplication::applicationDirPath()+"/../contrib/edbee-data/syntaxfiles/");
+        if (QFile::exists(QApplication::applicationDirPath() + "/../contrib/edbee-data/syntaxfiles/"))
+        {
+            tm->setGrammarPath(QApplication::applicationDirPath() + "/../contrib/edbee-data/syntaxfiles/");
+        }
         else
-            tm->setGrammarPath(QApplication::applicationDirPath()+"/../data/syntaxfiles/");
+        {
+            tm->setGrammarPath(QApplication::applicationDirPath() + "/../data/syntaxfiles/");
+        }
 
-        tm->setThemePath(QApplication::applicationDirPath()+"/../data/themes/");
+        tm->setThemePath(QApplication::applicationDirPath() + "/../data/themes/");
 
         // initialize the library
         tm->init();
@@ -96,10 +104,12 @@ bool CodeEditor::isModified() const
 
 void CodeEditor::gotoLine(int x, int y)
 {
-    edbee::TextEditorController* controller = _editorWidget->controller();
+    edbee::TextEditorController *controller = _editorWidget->controller();
     if (y == -1)
+    {
         y = 0;
-    controller->moveCaretTo(x-1, y-1, false);
+    }
+    controller->moveCaretTo(x - 1, y - 1, false);
     controller->scrollCaretVisible();
 }
 
@@ -110,10 +120,12 @@ void CodeEditor::setText(const QString &text)
 
 void CodeEditor::setGrammar(const QString &grammarName)
 {
-    edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
-    edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename("source." + grammarName.toLower());
+    edbee::TextGrammarManager *grammarManager = edbee::Edbee::instance()->grammarManager();
+    edbee::TextGrammar *grammar = grammarManager->detectGrammarWithFilename("source." + grammarName.toLower());
     if (grammar)
+    {
         _editorWidget->textDocument()->setLanguageGrammar(grammar);
+    }
 }
 
 void CodeEditor::setSettingsClass(SettingsClass *settingsClass)
@@ -130,14 +142,18 @@ int CodeEditor::openFileData(const QString &filePath)
     QFile file(filePath);
     QFileInfo info(file);
     if (!info.isReadable() || !info.isFile())
+    {
         return -1;
+    }
     if (!file.open(QIODevice::ReadOnly))
+    {
         return -1;
+    }
 
     disconnect(_editorWidget->textDocument(), &edbee::TextDocument::textAboutToBeChanged, this, &CodeEditor::insertedText);
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    if (_editorWidget->textDocument()->length()>1)
+    if (_editorWidget->textDocument()->length() > 1)
     {
         edbee::CharTextDocument document;
         edbee::TextDocumentSerializer serializer(&document);
@@ -158,8 +174,8 @@ int CodeEditor::openFileData(const QString &filePath)
             return -1;
         }
 
-        edbee::TextGrammarManager* grammarManager = edbee::Edbee::instance()->grammarManager();
-        edbee::TextGrammar* grammar = grammarManager->detectGrammarWithFilename(filePath);
+        edbee::TextGrammarManager *grammarManager = edbee::Edbee::instance()->grammarManager();
+        edbee::TextGrammar *grammar = grammarManager->detectGrammarWithFilename(filePath);
         _editorWidget->textDocument()->setLanguageGrammar(grammar);
     }
     QApplication::restoreOverrideCursor();
@@ -173,10 +189,14 @@ int CodeEditor::openFileData(const QString &filePath)
     emit modified(false);
 
     // TODO replace this section with .editorconfig
-    if (info.suffix()=="mk" || info.fileName()=="Makefile")
+    if (info.suffix() == "mk" || info.fileName() == "Makefile")
+    {
         _editorWidget->config()->setUseTabChar(true);
+    }
     else
+    {
         _editorWidget->config()->setUseTabChar(false);
+    }
 
     return 0;
 }
@@ -186,14 +206,20 @@ int CodeEditor::saveFileData(const QString &filePath)
     QString path = filePath.isEmpty() ? _filePath : filePath;
     QSaveFile file(path);
     if (!file.open(QIODevice::WriteOnly))
+    {
         return -1;
+    }
 
     edbee::TextDocumentSerializer serializer(_editorWidget->textDocument());
     if (!serializer.saveWithoutOpening(&file))
+    {
         return -1;
+    }
 
     if (!file.commit())
+    {
         return -1;
+    }
 
     _editorWidget->textDocument()->setPersisted(true);
     emit modified(false);
@@ -220,7 +246,7 @@ void CodeEditor::help()
         wordUnderCursor->expandToWords(_editorWidget->textDocument()->config()->whitespaces(), _editorWidget->textDocument()->config()->charGroups());
 
         QString word = _editorWidget->textDocument()->textPart(wordUnderCursor->range(0).anchor(), wordUnderCursor->range(0).length());
-        qDebug()<<wordUnderCursor->rangesAsString()<<word;
+        qDebug() << wordUnderCursor->rangesAsString() << word;
         delete wordUnderCursor;
 
         emit helpRequest(word);
@@ -232,12 +258,12 @@ void CodeEditor::updatePos()
     QString status;
     edbee::TextEditorController *controller = _editorWidget->controller();
     edbee::TextDocument *textDocument = _editorWidget->textDocument();
-    edbee::TextRange& range = _editorWidget->textSelection()->range(0);
+    edbee::TextRange &range = _editorWidget->textSelection()->range(0);
     int caret = range.caret();
     int line = _editorWidget->textDocument()->lineFromOffset(caret);
     int col = _editorWidget->textDocument()->columnFromOffsetAndLine(caret, line) + 1;
 
-    status.append(QString("l: %1 c: %2 ").arg(line+1).arg(col));
+    status.append(QString("l: %1 c: %2 ").arg(line + 1).arg(col));
     if (range.length() > 0)
     {
         status.append(QString("sel: %1 ").arg(range.length()));
@@ -250,12 +276,14 @@ void CodeEditor::updatePos()
     emit redoAvailable(textDocument->textUndoStack()->canRedo(controller));
     emit undoAvailable(textDocument->textUndoStack()->canUndo(controller));
 
-    QVector<edbee::TextScope*> scopes = _editorWidget->textDocument()->scopes()->scopesAtOffset(caret);
-    for(int i=0,cnt=scopes.size(); i<cnt; ++i)
+    QVector<edbee::TextScope *> scopes = _editorWidget->textDocument()->scopes()->scopesAtOffset(caret);
+    for (int i = 0, cnt = scopes.size(); i < cnt; ++i)
     {
         if (i != 0)
+        {
             status.append(" > ");
-        edbee::TextScope* scope = scopes[i];
+        }
+        edbee::TextScope *scope = scopes[i];
         status.append(scope->name());
     }
     emit statusChanged(status);
@@ -292,29 +320,37 @@ void CodeEditor::insertedText(edbee::TextBufferChange change)
     VersionChange vchange;
     vchange.setLineOld(startLine);
     vchange.setLineNew(startLine);
-    for (int i=startLine; i<startLine+change.lineCount()+1 && i<_editorWidget->textDocument()->lineCount(); i++)
-        vchange.addRemovedLine(_editorWidget->textDocument()->lineWithoutNewline(i-1));
+    for (int i = startLine; i < startLine + change.lineCount() + 1 && i < _editorWidget->textDocument()->lineCount(); i++)
+    {
+        vchange.addRemovedLine(_editorWidget->textDocument()->lineWithoutNewline(i - 1));
+    }
 
     // added lines
     QStringList linesAdded = newData.split(QRegularExpression("\n|\r\n|\r"));
-    int endCol = _editorWidget->textDocument()->columnFromOffsetAndLine(change.offset()+change.length(), startLine-1+change.lineCount());
+    int endCol = _editorWidget->textDocument()->columnFromOffsetAndLine(change.offset() + change.length(), startLine - 1 + change.lineCount());
     QString newLine;
     if (!vchange.removedLines().isEmpty())
-        newLine = vchange.removedLines().first().mid(0, startCol-1);
+    {
+        newLine = vchange.removedLines().first().mid(0, startCol - 1);
+    }
     newLine.append(linesAdded.first());
     if (change.newLineCount() > 0)
     {
         vchange.addAddedLine(newLine);
-        for (int i=1; i<linesAdded.count()-1; i++)
+        for (int i = 1; i < linesAdded.count() - 1; i++)
+        {
             vchange.addAddedLine(linesAdded.at(i));
+        }
         newLine = linesAdded.last();
     }
     if (!vchange.removedLines().isEmpty())
-        newLine.append(vchange.removedLines().last().mid(endCol));
+    {
+        newLine.append(vchange.removedLines().last().midRef(endCol));
+    }
     vchange.addAddedLine(newLine);
 
-    //qDebug()<<vchange.removedLines().count()<<vchange.addedLines().count();
-    //qDebug()<<vchange.removedLines()<<vchange.addedLines();
+    // qDebug()<<vchange.removedLines().count()<<vchange.addedLines().count();
+    // qDebug()<<vchange.removedLines()<<vchange.addedLines();
 
     _localFileChange.insertChange(vchange);
 
@@ -335,7 +371,9 @@ void CodeEditor::initialiseWidget()
             layout->addWidget(splitter);
         }
         else
+        {
             layout->addWidget(_editorWidget);
+        }
         setLayout(layout);
         repaint();
     }
@@ -374,8 +412,8 @@ void CodeEditor::pasteCommand()
 
 void CodeEditor::formatCommand()
 {
-    edbee::TextEditorController* controller = _editorWidget->controller();
-    edbee::TextSearcher* searcher = controller->textSearcher();
+    edbee::TextEditorController *controller = _editorWidget->controller();
+    edbee::TextSearcher *searcher = controller->textSearcher();
 
     _editorWidget->textDocument()->beginChanges(controller);
     edbee::TextRangeSet range(_editorWidget->textSelection());
@@ -408,8 +446,8 @@ Editor::SearchCaps CodeEditor::searchCap() const
 
 int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
 {
-    edbee::TextEditorController* controller = _editorWidget->controller();
-    edbee::TextSearcher* searcher = controller->textSearcher();
+    edbee::TextEditorController *controller = _editorWidget->controller();
+    edbee::TextSearcher *searcher = controller->textSearcher();
 
     _searchTerm = searchTerm;
 
@@ -438,8 +476,8 @@ int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
 
 void CodeEditor::searchNext()
 {
-    edbee::TextEditorController* controller = _editorWidget->controller();
-    edbee::TextSearcher* searcher = controller->textSearcher();
+    edbee::TextEditorController *controller = _editorWidget->controller();
+    edbee::TextSearcher *searcher = controller->textSearcher();
 
     searcher->findNext(_editorWidget);
 
@@ -448,8 +486,8 @@ void CodeEditor::searchNext()
 
 void CodeEditor::searchPrev()
 {
-    edbee::TextEditorController* controller = _editorWidget->controller();
-    edbee::TextSearcher* searcher = controller->textSearcher();
+    edbee::TextEditorController *controller = _editorWidget->controller();
+    edbee::TextSearcher *searcher = controller->textSearcher();
 
     searcher->findPrev(_editorWidget);
 
@@ -458,8 +496,8 @@ void CodeEditor::searchPrev()
 
 void CodeEditor::searchSelectAll()
 {
-    edbee::TextEditorController* controller = _editorWidget->controller();
-    edbee::TextSearcher* searcher = controller->textSearcher();
+    edbee::TextEditorController *controller = _editorWidget->controller();
+    edbee::TextSearcher *searcher = controller->textSearcher();
 
     searcher->selectAll(_editorWidget);
 
@@ -468,15 +506,15 @@ void CodeEditor::searchSelectAll()
 
 void CodeEditor::replace(const QVariant &replacePattern, Editor::SearchFlags flags, bool next)
 {
-    edbee::TextEditorController* controller = _editorWidget->controller();
-    edbee::TextSearcher* searcher = controller->textSearcher();
+    edbee::TextEditorController *controller = _editorWidget->controller();
+    edbee::TextSearcher *searcher = controller->textSearcher();
     edbee::TextSelection *textSelection = _editorWidget->textSelection();
 
     QString replaceString = replacePattern.toString();
-    replaceString.replace("\\r","\r");
-    replaceString.replace("\\n","\n");
-    replaceString.replace("\\t","\t");
-    replaceString.replace("\\\\","\\");
+    replaceString.replace("\\r", "\r");
+    replaceString.replace("\\n", "\n");
+    replaceString.replace("\\t", "\t");
+    replaceString.replace("\\\\", "\\");
 
     bool find = false;
     bool match = false;
@@ -498,9 +536,13 @@ void CodeEditor::replace(const QVariant &replacePattern, Editor::SearchFlags fla
     if (!match)
     {
         if (next)
+        {
             find = searcher->findNext(_editorWidget);
+        }
         else
+        {
             find = searcher->findPrev(_editorWidget);
+        }
     }
 
     if (find)
@@ -524,21 +566,23 @@ void CodeEditor::replace(const QVariant &replacePattern, Editor::SearchFlags fla
 
         int index = controller->borderedTextRanges()->rangeIndexAtOffset(textSelection->range(0).anchor() + replaceText.length());
         if (index >= 0)
+        {
             controller->borderedTextRanges()->removeRange(index);
+        }
     }
     controller->update();
 }
 
 void CodeEditor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
 {
-    edbee::TextEditorController* controller = _editorWidget->controller();
-    edbee::TextSearcher* searcher = controller->textSearcher();
+    edbee::TextEditorController *controller = _editorWidget->controller();
+    edbee::TextSearcher *searcher = controller->textSearcher();
 
     QString replaceString = replacePattern.toString();
-    replaceString.replace("\\r","\r");
-    replaceString.replace("\\n","\n");
-    replaceString.replace("\\t","\t");
-    replaceString.replace("\\\\","\\");
+    replaceString.replace("\\r", "\r");
+    replaceString.replace("\\n", "\n");
+    replaceString.replace("\\t", "\t");
+    replaceString.replace("\\\\", "\\");
 
     edbee::TextRangeSet *rangeSet = controller->borderedTextRanges();
     searcher->setCaseSensitive(flags.testFlag(CaseSensitive));
@@ -547,13 +591,15 @@ void CodeEditor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
     _editorWidget->textDocument()->beginChanges(controller);
     edbee::TextRangeSet range(_editorWidget->textDocument());
 
-    for (int i=0; i<rangeSet->rangeCount(); i++)
+    for (int i = 0; i < rangeSet->rangeCount(); i++)
     {
         range.clear();
         range.addRange(rangeSet->range(i));
 
         if (!flags.testFlag(RegExpMode))
+        {
             _editorWidget->textDocument()->replaceRangeSet(range, replaceString);
+        }
         else
         {
             QRegularExpression regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);

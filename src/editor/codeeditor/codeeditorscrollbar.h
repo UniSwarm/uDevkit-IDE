@@ -21,7 +21,7 @@ public:
 
     // QWidget interface
 protected:
-    virtual void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
 protected:
     FileVersionChange *_fileChange;

@@ -1,13 +1,13 @@
 #ifndef HEXFILE_H
 #define HEXFILE_H
 
-#include <QString>
 #include <QByteArray>
+#include <QString>
 
 class HexFile
 {
 public:
-    HexFile(const QString &fileName=QString());
+    HexFile(const QString &fileName = QString());
 
     bool read();
     const QByteArray &prog() const;

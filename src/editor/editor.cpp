@@ -4,14 +4,15 @@
 #include "editortabwidget.h"
 
 #include <QDebug>
-#include <QFileInfo>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QMessageBox>
 #include <QMimeDatabase>
 #include <QTimer>
 
 Editor::Editor(Project *project, QWidget *parent)
-    : QWidget(parent), _project(project)
+    : QWidget(parent)
+    , _project(project)
 {
     _reloadWatcher = new QFileSystemWatcher();
     connect(_reloadWatcher, &QFileSystemWatcher::fileChanged, this, &Editor::prepareReload);
@@ -60,7 +61,7 @@ int Editor::saveFile(const QString &filePath)
     setFilePath(path);
     _reloadWatcher->removePath(_filePath);
     int ret = saveFileData(_filePath);
-    _project->versionControl()->modifFile(QSet<QString>()<<_filePath);
+    _project->versionControl()->modifFile(QSet<QString>() << _filePath);
     _reloadWatcher->addPath(_filePath);
     return ret;
 }
@@ -76,7 +77,7 @@ bool Editor::isActiveEditor() const
         return false;
     }
 
-    EditorTabWidget *tabWidget = static_cast<EditorTabWidget*>(parent()->parent());
+    EditorTabWidget *tabWidget = dynamic_cast<EditorTabWidget *>(parent()->parent());
     if (!tabWidget)
     {
         return false;
@@ -160,7 +161,7 @@ QWidget *Editor::editorWidget()
 void Editor::reload()
 {
     QFileInfo info(_filePath);
-    if (!info.exists() || info.size()==0)
+    if (!info.exists() || info.size() == 0)
     {
         _reloadWatcher->addPath(info.path());
         return;
@@ -176,7 +177,8 @@ void Editor::reload()
 
     if (isModified())
     {
-        int response = QMessageBox::question(this, tr("File externally modified"),
+        int response = QMessageBox::question(this,
+                                             tr("File externally modified"),
                                              tr("File '%1' has been externally modified, do you want to reload it and lost your modifications?").arg(fileName()),
                                              QMessageBox::Yes | QMessageBox::No,
                                              QMessageBox::Yes);
@@ -296,7 +298,7 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
         return new CodeEditor(project, parent);
 
     case Editor::HexFile:
-      return new HexFileEditor(project, parent);
+        return new HexFileEditor(project, parent);
 
     case Editor::Hexa:
         return new HexEditor(project, parent);
@@ -345,7 +347,7 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
     file.open(QIODevice::ReadOnly);
     QMimeType mime = db.mimeTypeForFileNameAndData(filePath, file.read(100));
     file.close();
-    //qDebug()<<mime;
+    // qDebug()<<mime;
 
     Type type;
     if (mime.name() == "text/x-hex")
@@ -360,13 +362,8 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
     {
         type = Editor::Markdown;
     }
-    else if (mime.name().startsWith("text") ||
-            mime.name() == "application/xml" ||
-            mime.name() == "application/x-yaml" ||
-            mime.name() == "application/x-shellscript" ||
-            mime.name() == "application/javascript" ||
-            mime.name() == "application/json" ||
-            file.size() == 0)
+    else if (mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml" || mime.name() == "application/x-shellscript" ||
+             mime.name() == "application/javascript" || mime.name() == "application/json" || file.size() == 0)
     {
         type = Editor::Code;
     }

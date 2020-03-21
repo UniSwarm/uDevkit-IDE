@@ -7,14 +7,17 @@ class HexFileEditor : public HexEditor
 {
     Q_OBJECT
 public:
-    explicit HexFileEditor(Project *project, QWidget *parent = 0);
-    ~HexFileEditor();
+    explicit HexFileEditor(Project *project, QWidget *parent = nullptr);
+    ~HexFileEditor() override;
 
-    Type type() const {return Hexa;}
+    Type type() const override
+    {
+        return Hexa;
+    }
 
 protected:
-    int openFileData(const QString &filePath);
-    int saveFileData(const QString &filePath=QString());
+    int openFileData(const QString &filePath) override;
+    int saveFileData(const QString &filePath = QString()) override;
 };
 
 #endif // HEXFILEEDITOR_H

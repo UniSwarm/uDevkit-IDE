@@ -8,53 +8,57 @@
 
 #include "settings/settingsclass.h"
 
-namespace edbee {
-    class TextEditorWidget;
+namespace edbee
+{
+class TextEditorWidget;
 }
 
 class CodeEditor : public Editor
 {
     Q_OBJECT
 public:
-    explicit CodeEditor(Project *project, QWidget *parent = 0);
+    explicit CodeEditor(Project *project, QWidget *parent = nullptr);
 
-    bool isModified() const;
+    bool isModified() const override;
 
-    void gotoLine(int x, int y=-1);
+    void gotoLine(int x, int y = -1) override;
 
-    Type type() const {return Code;}
+    Type type() const override
+    {
+        return Code;
+    }
 
     void setText(const QString &text);
     void setGrammar(const QString &grammarName);
     void setSettingsClass(SettingsClass *settingsClass);
 
-    virtual SearchCaps searchCap() const;
-    virtual int search(const QVariant &searchTerm, SearchFlags flags=SearchFlag(NoFlag));
-    virtual void searchNext();
-    virtual void searchPrev();
-    virtual void searchSelectAll();
+    SearchCaps searchCap() const override;
+    int search(const QVariant &searchTerm, SearchFlags flags = SearchFlag(NoFlag)) override;
+    void searchNext() override;
+    void searchPrev() override;
+    void searchSelectAll() override;
 
-    virtual void replace(const QVariant &replacePattern, SearchFlags flags=SearchFlag(NoFlag), bool next=true);
-    virtual void replaceAll(const QVariant &replacePattern, SearchFlags flags=SearchFlag(NoFlag));
+    void replace(const QVariant &replacePattern, SearchFlags flags = SearchFlag(NoFlag), bool next = true) override;
+    void replaceAll(const QVariant &replacePattern, SearchFlags flags = SearchFlag(NoFlag)) override;
 
-    virtual QWidget *editorWidget();
+    QWidget *editorWidget() override;
 
 protected:
-    edbee::TextEditorWidget* _editorWidget;
-    void initialiseWidget();
-    void giveFocus();
+    edbee::TextEditorWidget *_editorWidget;
+    void initialiseWidget() override;
+    void giveFocus() override;
 
     SettingsClass *_settingsClass;
 
-    virtual void undoCommand();
-    virtual void redoCommand();
-    virtual void cutCommand();
-    virtual void copyCommand();
-    virtual void pasteCommand();
-    virtual void formatCommand();
+    void undoCommand() override;
+    void redoCommand() override;
+    void cutCommand() override;
+    void copyCommand() override;
+    void pasteCommand() override;
+    void formatCommand() override;
 
-    int openFileData(const QString &filePath);
-    int saveFileData(const QString &filePath=QString());
+    int openFileData(const QString &filePath) override;
+    int saveFileData(const QString &filePath = QString()) override;
 
 protected slots:
     void updateSettings();

@@ -1,8 +1,8 @@
 #include "hexfile.h"
 
+#include <QDebug>
 #include <QFile>
 #include <QTextStream>
-#include <QDebug>
 
 HexFile::HexFile(const QString &fileName)
 {
@@ -66,12 +66,12 @@ bool HexFile::read()
         {
             if (offsetAddr + addr > _prog.size())
             {
-                //_prog.append(_prog.size() - (offsetAddr + addr + 8), static_cast<char>(0xFF));
+                _prog.append(_prog.size() - (offsetAddr + addr + dataCount), static_cast<char>(0xFF));
                 qDebug() << "outData" << QString::number(offsetAddr + addr, 16) << line.mid(index, 2 * dataCount);
             }
-            else
+            // else
             {
-                for(int i=0; i<dataCount; i++)
+                for (int i = 0; i < dataCount; i++)
                 {
                     int data = line.mid(index, 2).toInt(&ok, 16);
                     if (!ok)
@@ -85,13 +85,13 @@ bool HexFile::read()
         }
         else if (type == 4)
         {
-            offsetAddr = line.mid(index, 4).toInt(&ok, 16)*0x10000;
+            offsetAddr = line.mid(index, 4).toInt(&ok, 16) * 0x10000;
             if (!ok)
             {
                 return false;
             }
             index += 4;
-            qDebug() << "offset" << QString::number(offsetAddr,16);
+            qDebug() << "offset" << QString::number(offsetAddr, 16);
         }
         else if (type == 1)
         {
@@ -113,7 +113,7 @@ bool HexFile::read()
     }
 
     _checksum = 0;
-    for (int i=0; i<_prog.size(); i++)
+    for (int i = 0; i < _prog.size(); i++)
     {
         _checksum += static_cast<unsigned char>(_prog[i]);
     }

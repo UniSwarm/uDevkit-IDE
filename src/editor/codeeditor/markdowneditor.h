@@ -7,10 +7,10 @@ class MarkdownEditor : public HtmlEditor
 {
     Q_OBJECT
 public:
-    MarkdownEditor(Project *project, QWidget *parent = 0);
+    MarkdownEditor(Project *project, QWidget *parent = nullptr);
 
 protected slots:
-    virtual void updatePreview() override;
+    void updatePreview() override;
 
 protected:
 };

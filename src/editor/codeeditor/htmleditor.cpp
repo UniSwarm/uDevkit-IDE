@@ -3,23 +3,23 @@
 #include <QDebug>
 
 #ifdef WEBENGINE
-    #include <QWebEngineView>
+#include <QWebEngineView>
 #endif
 #ifdef WEBKIT
-    #include <QWebView>
+#include <QWebView>
 #endif
 #ifdef NOWEBKIT
-    #include <QTextBrowser>
+#include <QTextBrowser>
 #endif
 
-#include <QBoxLayout>
-#include "edbee/texteditorwidget.h"
 #include "edbee/models/textdocument.h"
+#include "edbee/texteditorwidget.h"
+#include <QBoxLayout>
 
 #include <QDir>
 
 HtmlEditor::HtmlEditor(Project *project, QWidget *parent)
-    : CodeEditor (project, parent)
+    : CodeEditor(project, parent)
 {
     createPreview();
     connect(_editorWidget->textDocument(), &edbee::TextDocument::textChanged, this, &HtmlEditor::updatePreview);

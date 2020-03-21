@@ -1,9 +1,9 @@
 #include "codeeditorscrollbar.h"
 
-#include <QPainter>
-#include <QDebug>
-#include <QStyle>
 #include <QApplication>
+#include <QDebug>
+#include <QPainter>
+#include <QStyle>
 #include <QStyleOptionComplex>
 
 #include "edbee/models/textdocument.h"
@@ -12,17 +12,22 @@ CodeEditorScrollBar::CodeEditorScrollBar(QWidget *parent)
     : QScrollBar(parent)
 {
     _fileChange = Q_NULLPTR;
+    _textRender = Q_NULLPTR;
 }
 
 CodeEditorScrollBar::CodeEditorScrollBar(Qt::Orientation orientation, QWidget *parent)
     : QScrollBar(orientation, parent)
 {
+    _fileChange = Q_NULLPTR;
+    _textRender = Q_NULLPTR;
 }
 
 void CodeEditorScrollBar::paintEvent(QPaintEvent *event)
 {
     if (!_fileChange)
+    {
         return;
+    }
 
     QScrollBar::paintEvent(event);
 
@@ -44,16 +49,24 @@ void CodeEditorScrollBar::paintEvent(QPaintEvent *event)
         if (change->addedLines().count() < change->removedLines().count())
         {
             if (change->addedLines().count() == 0)
+            {
                 barColor.setRgb(255, 0, 0, 160);
+            }
             else
+            {
                 barColor.setRgb(0, 255, 0, 100);
+            }
         }
         else
         {
             if (change->addedLines().count() > change->removedLines().count())
+            {
                 barColor.setRgb(0, 255, 0, 100);
+            }
             else
-                barColor.setRgb(0, 0, 255, 100);
+            {
+                barColor.setRgb(0, 60, 255, 100);
+            }
         }
 
         painter.setBrush(barColor);

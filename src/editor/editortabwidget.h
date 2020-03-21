@@ -1,10 +1,10 @@
 #ifndef EDITORTABWIDGET_H
 #define EDITORTABWIDGET_H
 
-#include <QStack>
-#include <QMap>
-#include <QTabWidget>
 #include "editortabswitchwidget.h"
+#include <QMap>
+#include <QStack>
+#include <QTabWidget>
 
 #include <project/projecticonprovider.h>
 
@@ -26,7 +26,7 @@ public slots:
     void openFileEditor(const QString &url);
     void closeFileEditor(const QString &filePath);
 
-    int closeEditor(int id=-1);
+    int closeEditor(int id = -1);
     int closeAllEditors();
     void saveCurrentEditor();
     void saveAllEditors();
@@ -66,11 +66,11 @@ protected slots:
     void copyUpdate(bool available);
 
 protected:
-    bool eventFilter(QObject *o, QEvent *e);
+    bool eventFilter(QObject *o, QEvent *e) override;
     void registerAction();
 
     Project *_project;
-    QMap<QString, Editor* > _mapPathEditor;
+    QMap<QString, Editor *> _mapPathEditor;
     ProjectIconProvider *_iconProvider;
     int _idColor;
 
@@ -82,8 +82,8 @@ protected:
 
     // QWidget interface
 protected:
-    virtual void resizeEvent(QResizeEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // EDITORTABWIDGET_H

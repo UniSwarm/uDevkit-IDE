@@ -10,21 +10,24 @@ class ImageEditor : public Editor
 {
     Q_OBJECT
 public:
-    explicit ImageEditor(Project *project, QWidget *parent = 0);
+    explicit ImageEditor(Project *project, QWidget *parent = nullptr);
 
-    bool isModified() const;
+    bool isModified() const override;
 
-    Type type() const {return Image;}
+    Type type() const override
+    {
+        return Image;
+    }
 
-    virtual SearchCaps searchCap() const;
+    SearchCaps searchCap() const override;
 
 protected:
     QImage _imageData;
     QLabel *_imageView;
     bool _modified;
 
-    int openFileData(const QString &filePath);
-    int saveFileData(const QString &filePath=QString());
+    int openFileData(const QString &filePath) override;
+    int saveFileData(const QString &filePath = QString()) override;
 };
 
 #endif // IMAGEEDITOR_H

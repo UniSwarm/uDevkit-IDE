@@ -12,20 +12,21 @@ class Editor : public QWidget
     Q_OBJECT
 public:
     explicit Editor(Project *project, QWidget *parent = Q_NULLPTR);
-    virtual ~Editor();
+    ~Editor() override;
 
     QString fileName() const;
     QString filePath() const;
 
     int openFile(const QString &filePath);
-    int saveFile(const QString &filePath=QString());
+    int saveFile(const QString &filePath = QString());
 
-    virtual bool isModified() const =0;
+    virtual bool isModified() const = 0;
     bool isActiveEditor() const;
 
-    virtual void gotoLine(int x, int y=-1);
+    virtual void gotoLine(int x, int y = -1);
 
-    enum Type {
+    enum Type
+    {
         Code,
         HexFile,
         Hexa,
@@ -34,14 +35,15 @@ public:
         Image,
         ELF
     };
-    virtual Type type() const =0;
+    virtual Type type() const = 0;
 
     // search replace capabilities
-    enum SearchCap {
-        NoSearch   = 0x0000,
-        HasSearch  = 0x0001,
+    enum SearchCap
+    {
+        NoSearch = 0x0000,
+        HasSearch = 0x0001,
         HasReplace = 0x0002,
-        HasRegexp  = 0x0004
+        HasRegexp = 0x0004
     };
     Q_DECLARE_FLAGS(SearchCaps, SearchCap)
     virtual SearchCaps searchCap() const;
@@ -50,20 +52,21 @@ public:
     bool hasReplace() const;
 
     // search / replace interface
-    enum SearchFlag {
-        NoFlag        = 0x0000,
-        RegExpMode    = 0x0001,
+    enum SearchFlag
+    {
+        NoFlag = 0x0000,
+        RegExpMode = 0x0001,
         CaseSensitive = 0x0002,
-        HighlightAll  = 0x0004
+        HighlightAll = 0x0004
     };
     Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
-    virtual int search(const QVariant &searchTerm, SearchFlags flags=SearchFlag(NoFlag));
+    virtual int search(const QVariant &searchTerm, SearchFlags flags = SearchFlag(NoFlag));
     virtual void searchNext();
     virtual void searchPrev();
     virtual void searchSelectAll();
 
-    virtual void replace(const QVariant &replacePattern, SearchFlags flags=SearchFlag(NoFlag), bool next=true);
-    virtual void replaceAll(const QVariant &replacePattern, SearchFlags flags=SearchFlag(NoFlag));
+    virtual void replace(const QVariant &replacePattern, SearchFlags flags = SearchFlag(NoFlag), bool next = true);
+    virtual void replaceAll(const QVariant &replacePattern, SearchFlags flags = SearchFlag(NoFlag));
 
     // preview interface
     virtual QWidget *previewWidget() const;
@@ -120,8 +123,8 @@ protected:
     QFileSystemWatcher *_reloadWatcher;
     bool _extModifDetected;
 
-    virtual int openFileData(const QString &filePath) =0;
-    virtual int saveFileData(const QString &filePath=QString()) =0;
+    virtual int openFileData(const QString &filePath) = 0;
+    virtual int saveFileData(const QString &filePath = QString()) = 0;
 };
 
 #endif // EDITOR_H

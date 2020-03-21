@@ -26,7 +26,9 @@ void EditorTabSwitchWidget::setId(int id)
 void EditorTabSwitchWidget::updateId(int row)
 {
     if (_id != -1)
+    {
         _id = row;
+    }
 }
 
 void EditorTabSwitchWidget::clickItem(QListWidgetItem *item)
@@ -42,20 +44,24 @@ bool EditorTabSwitchWidget::event(QEvent *event)
 {
     if (event->type() == QEvent::KeyPress)
     {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab)
         {
             if (keyEvent->modifiers() & Qt::ShiftModifier)
             {
                 _id--;
                 if (_id < 0)
+                {
                     _id = count() - 1;
+                }
             }
             else
             {
                 _id++;
                 if (_id >= count())
+                {
                     _id = 0;
+                }
             }
             setCurrentRow(_id);
             keyEvent->ignore();

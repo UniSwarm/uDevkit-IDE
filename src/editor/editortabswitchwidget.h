@@ -18,7 +18,7 @@ protected slots:
 
     // QObject interface
 public:
-    virtual bool event(QEvent *event);
+    bool event(QEvent *event) override;
 
 protected:
     int _id;

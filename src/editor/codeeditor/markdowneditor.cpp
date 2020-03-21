@@ -10,8 +10,8 @@
 #include <QTextBrowser>
 #endif
 
-#include "edbee/texteditorwidget.h"
 #include "edbee/models/textdocument.h"
+#include "edbee/texteditorwidget.h"
 
 #include "markdown.h"
 //#include "mkdio.h"
@@ -19,7 +19,7 @@
 #include <QDebug>
 
 MarkdownEditor::MarkdownEditor(Project *project, QWidget *parent)
-    : HtmlEditor (project, parent)
+    : HtmlEditor(project, parent)
 {
     connect(_editorWidget->textDocument(), &edbee::TextDocument::textChanged, this, &MarkdownEditor::updatePreview);
 }
@@ -37,18 +37,18 @@ void MarkdownEditor::updatePreview()
     if (!mdDoc)
         return;
 
-    //mkd_with_html5_tags();
+    // mkd_with_html5_tags();
     mkd_compile(mdDoc, mdFlags);
-    //mkd_generatetoc();
+    // mkd_generatetoc();
     mkd_css(mdDoc, &ptCssData);
     QByteArray cssData(ptCssData);
     data.append(cssData);
-    //qDebug()<<cssData;
+    // qDebug()<<cssData;
 
     mkd_document(mdDoc, &ptData);
     QByteArray mdData(ptData);
     data.append(mdData);
-    //qDebug()<<mdData;
+    // qDebug()<<mdData;
 
     mkd_cleanup(mdDoc);
 

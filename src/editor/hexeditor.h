@@ -9,14 +9,17 @@ class HexEditor : public Editor
 {
     Q_OBJECT
 public:
-    explicit HexEditor(Project *project, QWidget *parent = 0);
-    ~HexEditor();
+    explicit HexEditor(Project *project, QWidget *parent = nullptr);
+    ~HexEditor() override;
 
-    bool isModified() const;
+    bool isModified() const override;
 
-    Type type() const {return Hexa;}
+    Type type() const override
+    {
+        return Hexa;
+    }
 
-    virtual SearchCaps searchCap() const;
+    SearchCaps searchCap() const override;
 
 protected slots:
     void modificationAppend();
@@ -27,16 +30,16 @@ protected:
     QFile _file;
     bool _modified;
 
-    int openFileData(const QString &filePath);
-    int saveFileData(const QString &filePath=QString());
+    int openFileData(const QString &filePath) override;
+    int saveFileData(const QString &filePath = QString()) override;
 
-    void giveFocus();
+    void giveFocus() override;
 
-    virtual void undoCommand();
-    virtual void redoCommand();
-    virtual void cutCommand();
-    virtual void copyCommand();
-    virtual void pasteCommand();
+    void undoCommand() override;
+    void redoCommand() override;
+    void cutCommand() override;
+    void copyCommand() override;
+    void pasteCommand() override;
 };
 
 #endif // HEXEDITOR_H
