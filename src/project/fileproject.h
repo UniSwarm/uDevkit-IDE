@@ -19,9 +19,9 @@ public:
     QList<Editor *> openedEditors();
 
     // version control interface
-    void valid(int line=-1);
-    void checkout(int line=-1);
-    void inValid(int line=-1);
+    void valid(int line = -1);
+    void checkout(int line = -1);
+    void inValid(int line = -1);
     void updateDiff();
 
 signals:
@@ -30,7 +30,6 @@ signals:
     void versionDiffChanged();
 
 protected:
-
 private:
     Q_DISABLE_COPY(FileProject)
     FileProjectInfo _info;

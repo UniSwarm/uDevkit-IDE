@@ -20,7 +20,7 @@ public slots:
 
     void setHiddenFilter(const QRegExp &regExp);
     void setHiddenFilter(const QString &pattern);
-    void enableHiddenFilter(bool enable=true);
+    void enableHiddenFilter(bool enable = true);
 
     void setShowFilter(const QRegExp &regExp);
     void setShowFilter(const QString &pattern);
@@ -41,10 +41,10 @@ protected:
 
     // QWidget interface
 protected:
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-    virtual void mouseDoubleClickEvent(QMouseEvent *event);
-    virtual void contextMenuEvent(QContextMenuEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // PROJECTTREEVIEW_H

@@ -9,8 +9,8 @@
 
 #include "project/projectwidget.h"
 
-#include "ui/searchreplacewidget.h"
 #include "ui/logwidget.h"
+#include "ui/searchreplacewidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -41,8 +41,8 @@ protected:
     void updateOldProjects();
 
 public slots:
-    bool openDir(const QString &paths=QString());
-    bool openFiles(const QStringList &paths=QStringList());
+    bool openDir(const QString &paths = QString());
+    bool openFiles(const QStringList &paths = QStringList());
 
 protected slots:
     void git();
@@ -53,8 +53,8 @@ protected slots:
 
     void launchFormat();
 
-    void updateTitle(Editor *editor=Q_NULLPTR);
-    void updateAction(Editor *editor=Q_NULLPTR);
+    void updateTitle(Editor *editor = Q_NULLPTR);
+    void updateAction(Editor *editor = Q_NULLPTR);
     void updateStatus(QString status);
 
     void showSettings();
@@ -70,7 +70,7 @@ public:
 private:
     static const int MaxOldProject;
     QList<QString> _oldProjects;
-    QList<QAction*> _oldProjectsActions;
+    QList<QAction *> _oldProjectsActions;
 
     QAction *_pasteAction;
     QAction *_searchAction;

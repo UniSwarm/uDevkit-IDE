@@ -19,8 +19,8 @@ protected slots:
 
     // SettingsPage interface
 protected:
-    virtual void execCommit();
-    virtual void createWidgets();
+    void execCommit() override;
+    void createWidgets() override;
 
     QFontComboBox *_fontComboBox;
     QSpinBox *_fontSizeSpinBox;

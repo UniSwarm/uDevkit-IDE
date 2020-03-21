@@ -2,9 +2,9 @@
 #define SETTINGSWINDOW_H
 
 #include <QDialog>
+#include <QDialogButtonBox>
 #include <QListWidget>
 #include <QStackedWidget>
-#include <QDialogButtonBox>
 
 #include "settingscateg.h"
 

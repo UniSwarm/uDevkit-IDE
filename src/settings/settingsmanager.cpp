@@ -13,7 +13,9 @@ SettingsManager::SettingsManager(QObject *parent)
 SettingsManager *SettingsManager::instance()
 {
     if (!settingsManager)
+    {
         settingsManager = new SettingsManager();
+    }
 
     return settingsManager;
 }
@@ -29,7 +31,7 @@ void SettingsManager::save()
 
 QString SettingsManager::language()
 {
-    return instance()->registerSetting("global/language", QLocale::system().name().mid(0,2))->value().toString();
+    return instance()->registerSetting("global/language", QLocale::system().name().mid(0, 2))->value().toString();
 }
 
 void SettingsManager::load(SettingsClass *settingsClass)

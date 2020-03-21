@@ -1,10 +1,10 @@
 #ifndef PROJECTITEM_H
 #define PROJECTITEM_H
 
-#include <QObject>
+#include <QFileSystemWatcher>
 #include <QHash>
 #include <QList>
-#include <QFileSystemWatcher>
+#include <QObject>
 
 class Project;
 class ProjectItemModel;
@@ -15,7 +15,8 @@ class ProjectItem : public QObject
 {
     Q_OBJECT
 public:
-    enum Type {
+    enum Type
+    {
         RealDir,
         DirFile,
         LogicDir,
@@ -23,7 +24,7 @@ public:
     };
 
     explicit ProjectItem(Project *project, const QString path, Type type, ProjectItemModel *model);
-    ~ProjectItem();
+    ~ProjectItem() override;
 
     int count() const;
     ProjectItem *child(int row) const;
@@ -43,8 +44,14 @@ public:
     QVariant data(int column, int role) const;
 
     const FileProjectInfo &info() const;
-    inline QString filePath() const {return _info.filePath();}
-    inline QString fileName() const {return _info.fileName();}
+    inline QString filePath() const
+    {
+        return _info.filePath();
+    }
+    inline QString fileName() const
+    {
+        return _info.fileName();
+    }
 
     /*bool haveChildren() const;
     bool canFetchMore() const;
@@ -55,13 +62,13 @@ signals:
 public slots:
 
 protected slots:
-    void updateModif(const QString &path=QString());
+    void updateModif(const QString &path = QString());
 
 protected:
     Type _type;
     FileProjectInfo _info;
-    QList<ProjectItem*> _childrens;
-    QHash<QString, ProjectItem*> _childrensMap;
+    QList<ProjectItem *> _childrens;
+    QHash<QString, ProjectItem *> _childrensMap;
     ProjectItem *_parentItem;
 
     QFileSystemWatcher *_watcher;

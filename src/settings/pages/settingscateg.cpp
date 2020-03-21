@@ -1,13 +1,14 @@
 #include "settingscateg.h"
 
 SettingsCateg::SettingsCateg(const QIcon &icon, const QString &label)
-    : _icon(icon), _label(label)
+    : _icon(icon)
+    , _label(label)
 {
 }
 
 SettingsPage *SettingsCateg::page(int i) const
 {
-    return static_cast<SettingsPage *>(widget(i));
+    return dynamic_cast<SettingsPage *>(widget(i));
 }
 
 void SettingsCateg::addPage(SettingsPage *page)
@@ -37,9 +38,9 @@ void SettingsCateg::setLabel(const QString &label)
 
 void SettingsCateg::commitChange()
 {
-    for (int i=0; i<count(); i++)
+    for (int i = 0; i < count(); i++)
     {
-        SettingsPage *page = static_cast<SettingsPage *>(widget(i));
+        SettingsPage *page = dynamic_cast<SettingsPage *>(widget(i));
         page->commit();
     }
 }

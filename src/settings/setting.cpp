@@ -1,13 +1,16 @@
 #include "setting.h"
 
 Setting::Setting(SettingsClass *parentClass, const QString &name, const QVariant &defaultValue)
-    : _parentClass(parentClass), _name(name), _value(defaultValue)
+    : _parentClass(parentClass)
+    , _name(name)
+    , _value(defaultValue)
 {
     _parentClass = Q_NULLPTR;
 }
 
 Setting::Setting(const QString &name, const QVariant &defaultValue)
-    : _name(name), _value(defaultValue)
+    : _name(name)
+    , _value(defaultValue)
 {
 }
 

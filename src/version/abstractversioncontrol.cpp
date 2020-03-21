@@ -3,7 +3,8 @@
 #include <QDebug>
 #include <QDir>
 
-AbstractVersionControl::AbstractVersionControl(QObject *parent) : QObject(parent)
+AbstractVersionControl::AbstractVersionControl(QObject *parent)
+    : QObject(parent)
 {
 }
 

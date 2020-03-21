@@ -12,7 +12,7 @@ class LogWidget : public QTextBrowser
     Q_OBJECT
 public:
     explicit LogWidget(Project *project, QWidget *parent = Q_NULLPTR);
-    virtual ~LogWidget();
+    ~LogWidget() override;
 
 signals:
     void openFileRequested(QString filePath);

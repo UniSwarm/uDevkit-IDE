@@ -1,11 +1,11 @@
 #ifndef MAKEPARSER_H
 #define MAKEPARSER_H
 
-#include <QObject>
-#include <QMultiMap>
-#include <QStringList>
-#include <QSet>
 #include <QFileSystemWatcher>
+#include <QMultiMap>
+#include <QObject>
+#include <QSet>
+#include <QStringList>
 
 #include "makerule.h"
 
@@ -17,8 +17,8 @@ class MakeParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit MakeParser(const QString &basePath=QString());
-    ~MakeParser();
+    explicit MakeParser(const QString &basePath = QString());
+    ~MakeParser() override;
 
     void setPath(const QString &basePath);
     QString resolveFilePath(const QString &filePath);
@@ -29,6 +29,7 @@ public:
     const QMap<QString, MakeRule> &rules() const;
     const MakeRule buildRule(const QString &filePath) const;
     const QList<MakeRule> includedInRules(const QString &filePath) const;
+    const QList<MakeRule> targets() const;
 
 signals:
     void sourceChanged();

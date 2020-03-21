@@ -50,11 +50,15 @@ QIcon ProjectIconProvider::icon(const QFileInfo &info) const
 {
     QString ext = info.suffix();
     if (ext.isEmpty())
+    {
         ext = info.fileName();
+    }
 
     QMap<QString, QIcon>::const_iterator find = _icons.find(ext);
     if (find != _icons.cend())
+    {
         return *find;
+    }
 
     return QFileIconProvider::icon(info);
 }

@@ -24,7 +24,9 @@ void GlobalSettings::createWidgets()
     _langComboBox->addItem("Français", "fr");
     int find = _langComboBox->findData(SettingsManager::language());
     if (find != -1)
+    {
         _langComboBox->setCurrentIndex(find);
+    }
     layout->addRow(tr("Language (restart needed to take effect)"), _langComboBox);
 
     setLayout(layout);

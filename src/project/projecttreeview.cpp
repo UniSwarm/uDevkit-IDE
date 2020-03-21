@@ -1,15 +1,15 @@
 #include "projecttreeview.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QHeaderView>
 #include <QHostInfo>
-#include <QItemSelectionModel>
 #include <QInputDialog>
+#include <QItemSelectionModel>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QProcess>
-#include <QApplication>
 #include <QProxyStyle>
 
 #include "fileprojectinfo.h"
@@ -18,7 +18,8 @@
 #include "projecttreeviewitemdelegate.h"
 
 ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
-    : QTreeView(parent), _project(project)
+    : QTreeView(parent)
+    , _project(project)
 {
     _proxy = new ProjectItemProxyModel(project);
     _proxy->setSourceModel(_project->projectItemModel());
@@ -61,11 +62,15 @@ void ProjectTreeView::selectFile(const QString &fileName)
 {
     QModelIndex fileIndex = _project->projectItemModel()->index(fileName);
     if (!fileIndex.isValid())
+    {
         return;
+    }
 
     QModelIndex proxyIndex = _proxy->mapFromSource(fileIndex);
     if (!proxyIndex.isValid())
+    {
         return;
+    }
 
     selectionModel()->setCurrentIndex(proxyIndex, QItemSelectionModel::ClearAndSelect);
 }
@@ -73,9 +78,13 @@ void ProjectTreeView::selectFile(const QString &fileName)
 void ProjectTreeView::setHiddenFilter(const QRegExp &regExp)
 {
     if (!regExp.isValid() || regExp.isEmpty())
+    {
         _proxy->setHiddenFilter(QRegExp("^$"));
+    }
     else
+    {
         _proxy->setHiddenFilter(regExp);
+    }
 }
 
 void ProjectTreeView::setHiddenFilter(const QString &pattern)
@@ -101,42 +110,53 @@ void ProjectTreeView::setShowFilter(const QString &pattern)
 void ProjectTreeView::remove()
 {
     if (!hasFocus())
+    {
         return;
+    }
 
     QModelIndexList selection = selectionModel()->selectedIndexes();
     if (selection.isEmpty())
+    {
         return;
+    }
 
     if (selection.size() == 1)
     {
         const QModelIndex &indexFile = _proxy->mapToSource(selection.first());
         if (!indexFile.isValid())
+        {
             return;
+        }
 
         if (_project->projectItemModel()->isDir(indexFile))
         {
-            if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove '%1'?")
-                                     .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+            if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove '%1'?").arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+            {
                 _project->projectItemModel()->rmdir(indexFile);
+            }
         }
         else if (_project->projectItemModel()->isFile(indexFile))
         {
-            if (QMessageBox::question(this, tr("Remove file?"), tr("Do you realy want to remove '%1'?")
-                                      .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+            if (QMessageBox::question(this, tr("Remove file?"), tr("Do you realy want to remove '%1'?").arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+            {
                 _project->projectItemModel()->remove(indexFile);
+            }
         }
     }
     else
     {
-        if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove theses %1 files?")
-                                 .arg(selection.size())) != QMessageBox::Yes)
+        if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove theses %1 files?").arg(selection.size())) != QMessageBox::Yes)
+        {
             return;
+        }
         QList<QPersistentModelIndex> pindex;
         foreach (QModelIndex selected, selection)
         {
             const QModelIndex &indexFile = _proxy->mapToSource(selected);
             if (!indexFile.isValid())
+            {
                 continue;
+            }
 
             pindex.append(indexFile);
         }
@@ -144,9 +164,13 @@ void ProjectTreeView::remove()
         foreach (QPersistentModelIndex index, pindex)
         {
             if (_project->projectItemModel()->isDir(index))
+            {
                 _project->projectItemModel()->rmdir(index);
+            }
             else if (_project->projectItemModel()->isFile(index))
+            {
                 _project->projectItemModel()->remove(index);
+            }
         }
     }
 }
@@ -155,10 +179,14 @@ void ProjectTreeView::rename()
 {
     QModelIndexList selection = selectionModel()->selectedIndexes();
     if (selection.isEmpty())
+    {
         return;
+    }
 
     if (selection.size() != 1)
+    {
         return;
+    }
 
     edit(selection.first());
 }
@@ -167,10 +195,14 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
     const QModelIndex &index = indexAt(event->pos());
     if (!index.isValid())
+    {
         return;
+    }
     const QModelIndex &indexFile = _proxy->mapToSource(index);
     if (!indexFile.isValid())
+    {
         return;
+    }
 
     QMenu menu;
 
@@ -179,7 +211,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     if (_project->projectItemModel()->isDir(indexFile))
     {
         fileCreateAction = menu.addAction(tr("Add new file here"));
-        //fileCreateAction->setShortcut(QKeySequence::New);
+        // fileCreateAction->setShortcut(QKeySequence::New);
     }
     menu.addAction(_fileRenameAction);
     QAction *openDirAction = Q_NULLPTR;
@@ -190,7 +222,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
         menu.addAction(_removeAction);
 
         openDirAction = menu.addAction(tr("Open directory as project"));
-        openTermDirAction= menu.addAction(tr("Open in terminal"));
+        openTermDirAction = menu.addAction(tr("Open in terminal"));
     }
     else
     {
@@ -205,17 +237,25 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     {
         menu.addSeparator();
         if (!info.isTracked() || info.isModified())
-            versionValidAction = menu.addAction(_project->versionControl()->versionControlName()+" add");
+        {
+            versionValidAction = menu.addAction(_project->versionControl()->versionControlName() + " add");
+        }
         if (info.isValidated())
-            versionInvalidAction = menu.addAction(_project->versionControl()->versionControlName()+" reset HEAD");
+        {
+            versionInvalidAction = menu.addAction(_project->versionControl()->versionControlName() + " reset HEAD");
+        }
         if (info.isModified())
-            versionCheckoutAction = menu.addAction(_project->versionControl()->versionControlName()+" checkout");
+        {
+            versionCheckoutAction = menu.addAction(_project->versionControl()->versionControlName() + " checkout");
+        }
     }
 
     // exec menu
     QAction *trigered = menu.exec(event->globalPos());
     if (trigered == Q_NULLPTR)
+    {
         return;
+    }
 
     // analyse clicked menu
     if (trigered == fileCreateAction)
@@ -226,34 +266,44 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
         if (!file.exists())
         {
             if (!file.open(QIODevice::WriteOnly))
+            {
                 return;
+            }
             file.close();
             emit openedFile(filePath);
         }
     }
     else if (trigered == openDirAction)
     {
-        QString path  =_project->projectItemModel()->filePath(indexFile);
-        QProcess::startDetached(qApp->arguments()[0], QStringList()<<path);
+        QString path = _project->projectItemModel()->filePath(indexFile);
+        QProcess::startDetached(qApp->arguments()[0], QStringList() << path);
     }
     else if (trigered == openTermDirAction)
     {
-        QString path  =_project->projectItemModel()->filePath(indexFile);
+        QString path = _project->projectItemModel()->filePath(indexFile);
 #if defined(Q_OS_LINUX)
-        QProcess::startDetached("gnome-terminal", QStringList()<<"--working-directory="+path); // TODO make it work on all platforms
+        QProcess::startDetached("gnome-terminal", QStringList() << "--working-directory=" + path); // TODO make it work on all platforms
 #elif defined(Q_OS_WIN)
-        QProcess::startDetached("mintty.exe", QStringList()<<"--dir"<<path);
+        QProcess::startDetached("mintty.exe", QStringList() << "--dir" << path);
 #endif
     }
     else if (trigered == versionValidAction)
-        _project->versionControl()->validFile(QSet<QString>()<<info.filePath());
+    {
+        _project->versionControl()->validFile(QSet<QString>() << info.filePath());
+    }
     else if (trigered == versionInvalidAction)
-        _project->versionControl()->inValidFile(QSet<QString>()<<info.filePath());
+    {
+        _project->versionControl()->inValidFile(QSet<QString>() << info.filePath());
+    }
     else if (trigered == versionCheckoutAction)
-        if (QMessageBox::question(this, tr("Checkout file?"),
-                                  QString(tr("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state."))
-                                  .arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
-            _project->versionControl()->checkoutFile(QSet<QString>()<<info.filePath());
+    {
+        if (QMessageBox::question(
+                this, tr("Checkout file?"), QString(tr("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.")).arg(_project->projectItemModel()->fileName(indexFile))) ==
+            QMessageBox::Yes)
+        {
+            _project->versionControl()->checkoutFile(QSet<QString>() << info.filePath());
+        }
+    }
 }
 
 void ProjectTreeView::mouseReleaseEvent(QMouseEvent *event)
@@ -264,7 +314,9 @@ void ProjectTreeView::mouseReleaseEvent(QMouseEvent *event)
     {
         const QPersistentModelIndex index = indexAt(event->pos());
         if (!index.isValid())
+        {
             return;
+        }
 
         const QModelIndex &indexFile = _proxy->mapToSource(index);
         emit closedFile(_project->projectItemModel()->filePath(indexFile));
@@ -276,15 +328,21 @@ void ProjectTreeView::mouseDoubleClickEvent(QMouseEvent *event)
     QTreeView::mouseDoubleClickEvent(event);
 
     if (!event->buttons().testFlag(Qt::LeftButton))
+    {
         return;
+    }
 
     const QPersistentModelIndex index = indexAt(event->pos());
     if (!index.isValid())
+    {
         return;
+    }
 
     const QModelIndex &indexFile = _proxy->mapToSource(index);
     if (!_project->projectItemModel()->isDir(indexFile))
+    {
         emit openedFile(_project->projectItemModel()->filePath(indexFile));
+    }
 }
 
 void ProjectTreeView::keyPressEvent(QKeyEvent *event)
@@ -294,7 +352,9 @@ void ProjectTreeView::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
     {
         if (!hasFocus())
+        {
             return;
+        }
 
         QStringList filesPathToOpen;
 
@@ -302,11 +362,15 @@ void ProjectTreeView::keyPressEvent(QKeyEvent *event)
         foreach (const QModelIndex &index, indexList)
         {
             if (!index.isValid())
+            {
                 return;
+            }
 
             const QModelIndex &indexFile = _proxy->mapToSource(index);
             if (!_project->projectItemModel()->isDir(indexFile))
+            {
                 filesPathToOpen.append(_project->projectItemModel()->filePath(indexFile));
+            }
         }
 
         foreach (const QString &path, filesPathToOpen)

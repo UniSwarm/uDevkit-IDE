@@ -4,8 +4,8 @@
 #include <QBoxLayout>
 
 #include "codeeditorsettings.h"
-#include "htmleditorsettings.h"
 #include "hexeditorsettings.h"
+#include "htmleditorsettings.h"
 #include "imageeditorsettings.h"
 
 #include "gitversionsettings.h"
@@ -15,7 +15,7 @@
 #include "globalsettings.h"
 
 SettingsWindow::SettingsWindow(QWidget *parent)
-    : QDialog (parent)
+    : QDialog(parent)
 {
     setMinimumSize(800, 600);
     createWidgets();
@@ -42,7 +42,7 @@ SettingsWindow::SettingsWindow(QWidget *parent)
 
 SettingsCateg *SettingsWindow::category(int i) const
 {
-    return static_cast<SettingsCateg *>(_sectionsStack->widget(i));
+    return dynamic_cast<SettingsCateg *>(_sectionsStack->widget(i));
 }
 
 SettingsCateg *SettingsWindow::addCategory(const QIcon &icon, const QString &label)
@@ -67,9 +67,9 @@ void SettingsWindow::addCategory(SettingsCateg *category)
 
 void SettingsWindow::commitChange()
 {
-    for (int i=0; i<_sectionsStack->count(); i++)
+    for (int i = 0; i < _sectionsStack->count(); i++)
     {
-        SettingsCateg *categ = static_cast<SettingsCateg *>(_sectionsStack->widget(i));
+        SettingsCateg *categ = dynamic_cast<SettingsCateg *>(_sectionsStack->widget(i));
         categ->commitChange();
     }
     SettingsManager::save();
@@ -78,7 +78,9 @@ void SettingsWindow::commitChange()
 void SettingsWindow::changePage(QListWidgetItem *current, QListWidgetItem *previous)
 {
     if (!current)
+    {
         current = previous;
+    }
 
     _sectionsStack->setCurrentIndex(_sectionsList->row(current));
 }

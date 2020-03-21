@@ -18,7 +18,7 @@ public:
     static void save();
     void load(SettingsClass *settingsClass);
 
-// helpers
+    // helpers
     static QString language();
 
 protected:

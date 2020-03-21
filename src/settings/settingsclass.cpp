@@ -5,7 +5,8 @@
 #include <QDebug>
 
 SettingsClass::SettingsClass(const QString &name, QObject *parent)
-    : QObject(parent), _name(name)
+    : QObject(parent)
+    , _name(name)
 {
 }
 
@@ -43,7 +44,7 @@ SettingsClass *SettingsClass::registerClass(const QString &className)
 {
     SettingsClass *settingClass;
 
-    QMap<QString, SettingsClass*>::const_iterator find = _classesMap.constFind(className);
+    QMap<QString, SettingsClass *>::const_iterator find = _classesMap.constFind(className);
     if (find != _classesMap.cend())
     {
         settingClass = *find;
@@ -72,7 +73,7 @@ Setting *SettingsClass::registerSetting(const QString &path, const QVariant &def
     if (pos == -1)
     {
         Setting *setting = Q_NULLPTR;
-        QMap<QString, Setting*>::const_iterator find = _settingsMap.constFind(path);
+        QMap<QString, Setting *>::const_iterator find = _settingsMap.constFind(path);
         if (find != _settingsMap.cend())
         {
             setting = *find;
@@ -86,7 +87,7 @@ Setting *SettingsClass::registerSetting(const QString &path, const QVariant &def
     }
     else
     {
-        QMap<QString, SettingsClass*>::const_iterator find = _classesMap.constFind(path.mid(0, pos));
+        QMap<QString, SettingsClass *>::const_iterator find = _classesMap.constFind(path.mid(0, pos));
         if (find != _classesMap.cend())
         {
             return (*find)->registerSetting(path.mid(pos + 1), defaultValue);
@@ -95,7 +96,7 @@ Setting *SettingsClass::registerSetting(const QString &path, const QVariant &def
         {
             QString className = path.mid(0, pos);
             SettingsClass *settingClass;
-            QMap<QString, SettingsClass*>::const_iterator find = _classesMap.constFind(className);
+            QMap<QString, SettingsClass *>::const_iterator find = _classesMap.constFind(className);
             if (find != _classesMap.cend())
             {
                 settingClass = *find;
@@ -118,15 +119,19 @@ Setting *SettingsClass::getSetting(const QString &path)
     int pos = path.indexOf('/');
     if (pos == -1)
     {
-        QMap<QString, Setting*>::const_iterator find = _settingsMap.constFind(path);
+        QMap<QString, Setting *>::const_iterator find = _settingsMap.constFind(path);
         if (find != _settingsMap.cend())
+        {
             return *find;
+        }
     }
     else
     {
-        QMap<QString, SettingsClass*>::const_iterator find = _classesMap.constFind(path.mid(0, pos));
+        QMap<QString, SettingsClass *>::const_iterator find = _classesMap.constFind(path.mid(0, pos));
         if (find != _classesMap.cend())
+        {
             return (*find)->getSetting(path.mid(pos + 1));
+        }
     }
 
     return Q_NULLPTR;
@@ -151,7 +156,7 @@ void SettingsClass::save(QSettings *settings)
     settings->beginGroup(_name);
     foreach (Setting *setting, _settingsMap)
     {
-        settings->setValue(setting->name() ,setting->value());
+        settings->setValue(setting->name(), setting->value());
     }
     foreach (SettingsClass *settingClass, _classesMap)
     {

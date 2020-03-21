@@ -9,10 +9,9 @@ class IconnedDockStyle : public QProxyStyle
 {
     Q_OBJECT
 public:
-    IconnedDockStyle(const QIcon& icon,  QStyle* style = 0);
+    IconnedDockStyle(const QIcon &icon, QStyle *style = nullptr);
 
-    virtual void drawControl(ControlElement element, const QStyleOption* option,
-        QPainter* painter, const QWidget* widget = 0) const;
+    void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const override;
 
 protected:
     QIcon _icon;

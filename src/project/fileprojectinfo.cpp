@@ -6,24 +6,33 @@
 #include <QDateTime>
 
 FileProjectInfo::FileProjectInfo(const QString &filePath, Project *project)
-    : QFileInfo(filePath), _project(project)
+    : QFileInfo(filePath)
+    , _project(project)
 {
 }
 
 bool FileProjectInfo::isTracked() const
 {
-    if(isDir())
+    if (isDir())
+    {
         return _project->versionControl()->isDirTracked(filePath());
+    }
     else
+    {
         return _project->versionControl()->isFileTracked(filePath());
+    }
 }
 
 bool FileProjectInfo::isModified() const
 {
-    if(isDir())
+    if (isDir())
+    {
         return _project->versionControl()->isDirModified(filePath());
+    }
     else
+    {
         return _project->versionControl()->isFileModified(filePath());
+    }
 }
 
 bool FileProjectInfo::isValidated() const
@@ -45,20 +54,18 @@ QString FileProjectInfo::humanSize() const
 {
     double num = size();
     QStringList list;
-    list << QCoreApplication::translate("FileProjectInfo", "kB")
-         << QCoreApplication::translate("FileProjectInfo", "MB")
-         << QCoreApplication::translate("FileProjectInfo", "GB")
+    list << QCoreApplication::translate("FileProjectInfo", "kB") << QCoreApplication::translate("FileProjectInfo", "MB") << QCoreApplication::translate("FileProjectInfo", "GB")
          << QCoreApplication::translate("FileProjectInfo", "TB");
 
     QStringListIterator i(list);
     QString unit(QCoreApplication::translate("FileProjectInfo", "bytes"));
 
-    while(num >= 1024.0 && i.hasNext())
+    while (num >= 1024.0 && i.hasNext())
     {
         unit = i.next();
         num /= 1024.0;
     }
-    return QString().setNum(num,'f',0)+" "+unit;
+    return QString().setNum(num, 'f', 0) + " " + unit;
 }
 
 QString FileProjectInfo::toolTips() const

@@ -1,7 +1,8 @@
 #include "settingspage.h"
 
 SettingsPage::SettingsPage(const QIcon &icon, const QString &label)
-    : _icon(icon), _label(label)
+    : _icon(icon)
+    , _label(label)
 {
 }
 

@@ -5,7 +5,8 @@
 #include <QProcess>
 #include <QTextStream>
 
-GitVersionControl::GitVersionControl() : AbstractVersionControl()
+GitVersionControl::GitVersionControl()
+    : AbstractVersionControl()
 {
     _indexWatcher = Q_NULLPTR;
     _statusState = StatusNone;
@@ -13,14 +14,10 @@ GitVersionControl::GitVersionControl() : AbstractVersionControl()
 
     _processGitState = new QProcess(this);
     // connect(_process, &QProcess::finished, this, &GitVersionControl::parseModifiedFiles); // does not work...
-    connect(_processGitState,
-            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus) { processEnd(); }); // but this crap is recomended
+    connect(_processGitState, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int, QProcess::ExitStatus) { processEnd(); }); // but this crap is recomended
 
     _processGitDiff = new QProcess(this);
-    connect(_processGitDiff,
-            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus) { processDiffEnd(); });
+    connect(_processGitDiff, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int, QProcess::ExitStatus) { processDiffEnd(); });
 
     _settingsClass = rtset()->registerClass("gitversion");
     connect(_settingsClass, &SettingsClass::classModified, this, &GitVersionControl::updateSettings);
@@ -59,9 +56,7 @@ void GitVersionControl::validFile(const QSet<QString> &filesPath)
 
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
-    connect(newProcess,
-            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus) { delete sender(); });
+    connect(newProcess, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int, QProcess::ExitStatus) { delete sender(); });
     newProcess->start(_programPath, args);
 }
 
@@ -83,9 +78,7 @@ void GitVersionControl::inValidFile(const QSet<QString> &filesPath)
 
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
-    connect(newProcess,
-            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus) { delete sender(); });
+    connect(newProcess, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int, QProcess::ExitStatus) { delete sender(); });
     newProcess->start(_programPath, args);
 }
 
@@ -106,9 +99,7 @@ void GitVersionControl::checkoutFile(const QSet<QString> &filesPath)
 
     QProcess *newProcess = new QProcess(this);
     newProcess->setWorkingDirectory(_basePath);
-    connect(newProcess,
-            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int, QProcess::ExitStatus) { delete sender(); });
+    connect(newProcess, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int, QProcess::ExitStatus) { delete sender(); });
     newProcess->start(_programPath, args);
 }
 
@@ -343,9 +334,7 @@ void GitVersionControl::processDiffEnd()
     }
 }
 
-void GitVersionControl::parseFilesList(QSet<QString> &oldSed,
-                                       QSet<QString> &outgoingFiles,
-                                       QSet<QString> &incomingFiles)
+void GitVersionControl::parseFilesList(QSet<QString> &oldSed, QSet<QString> &outgoingFiles, QSet<QString> &incomingFiles)
 {
     QSet<QString> modifiedFiles;
     if (_processGitState->exitStatus() == QProcess::NormalExit)

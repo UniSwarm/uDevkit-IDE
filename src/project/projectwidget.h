@@ -12,7 +12,7 @@ class ProjectWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ProjectWidget(Project *project, QWidget *parent = 0);
+    explicit ProjectWidget(Project *project, QWidget *parent = nullptr);
 
 signals:
     void openedFile(QString fileName);

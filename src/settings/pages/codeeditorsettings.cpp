@@ -1,7 +1,7 @@
 #include "codeeditorsettings.h"
 
-#include <QFormLayout>
 #include <QDebug>
+#include <QFormLayout>
 
 CodeEditorSettings::CodeEditorSettings()
     : SettingsPage(QIcon(":/icons/img/dark/icons8-code.png"), tr("Code editor"))
@@ -17,7 +17,6 @@ void CodeEditorSettings::updateTest()
     sclass.setSetting("fontSize", _fontSizeSpinBox->value());
     _editorTest->setSettingsClass(&sclass);
 }
-
 
 void CodeEditorSettings::execCommit()
 {
@@ -35,14 +34,13 @@ void CodeEditorSettings::createWidgets()
     font.setFamily(_settingsClass->setting("fontFamily", "monospace").toString());
     _fontComboBox->setFontFilters(QFontComboBox::MonospacedFonts);
     _fontComboBox->setCurrentFont(font);
-    connect(_fontComboBox, &QFontComboBox::currentFontChanged, this ,&CodeEditorSettings::updateTest);
+    connect(_fontComboBox, &QFontComboBox::currentFontChanged, this, &CodeEditorSettings::updateTest);
     layout->addRow(tr("Font family"), _fontComboBox);
 
     _fontSizeSpinBox = new QSpinBox();
     _fontSizeSpinBox->setRange(4, 50);
     _fontSizeSpinBox->setValue(_settingsClass->setting("fontSize", 10).toInt());
-    connect(_fontSizeSpinBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-          [=](){ updateTest(); });
+    connect(_fontSizeSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [=]() { updateTest(); });
     layout->addRow(tr("Font size"), _fontSizeSpinBox);
 
     _editorTest = new CodeEditor(Q_NULLPTR);

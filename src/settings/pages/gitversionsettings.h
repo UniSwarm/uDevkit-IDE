@@ -13,8 +13,8 @@ public:
 
     // SettingsPage interface
 protected:
-    virtual void execCommit();
-    virtual void createWidgets();
+    void execCommit() override;
+    void createWidgets() override;
 
     PathEditWidget *_pathEditWidget;
 };

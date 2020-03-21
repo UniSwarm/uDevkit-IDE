@@ -3,9 +3,9 @@
 
 #include <QFileIconProvider>
 
+#include <QIcon>
 #include <QMap>
 #include <QStringList>
-#include <QIcon>
 
 class ProjectIconProvider : public QFileIconProvider
 {
@@ -14,7 +14,7 @@ public:
 
     // QFileIconProvider interface
 public:
-    virtual QIcon icon(const QFileInfo &info) const;
+    QIcon icon(const QFileInfo &info) const override;
 
 protected:
     QMap<QString, QIcon> _icons;

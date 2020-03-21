@@ -4,8 +4,8 @@
 #include <QDir>
 #include <QObject>
 
-#include "version/abstractversioncontrol.h"
 #include "make/makeparser.h"
+#include "version/abstractversioncontrol.h"
 
 #include "projectitemmodel.h"
 
@@ -13,8 +13,8 @@ class Project : public QObject
 {
     Q_OBJECT
 public:
-    explicit Project(const QString &path=QString());
-    ~Project();
+    explicit Project(const QString &path = QString());
+    ~Project() override;
 
     const QDir &rootDir() const;
     QString rootPath() const;

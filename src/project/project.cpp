@@ -1,26 +1,27 @@
 #include "project.h"
 
-#include "version/gitversioncontrol.h"
 #include "make/makeparser.h"
+#include "version/gitversioncontrol.h"
 
 #include <QDebug>
 
-Project::Project(const QString &path) : QObject()
+Project::Project(const QString &path)
+    : QObject()
 {
     _projectItemModel = new ProjectItemModel(this);
     //_projectItemModel->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
     _versionControl = new GitVersionControl();
-    connect(_versionControl, &GitVersionControl::newModifiedFiles,
-            _projectItemModel, &ProjectItemModel::filesUpdated);
-    connect(_versionControl, &GitVersionControl::newValidatedFiles,
-            _projectItemModel, &ProjectItemModel::filesUpdated);
+    connect(_versionControl, &GitVersionControl::newModifiedFiles, _projectItemModel, &ProjectItemModel::filesUpdated);
+    connect(_versionControl, &GitVersionControl::newValidatedFiles, _projectItemModel, &ProjectItemModel::filesUpdated);
 
     _make = new MakeParser();
     connect(_make, &MakeParser::sourceFilesAdded, this, &Project::newSource);
     connect(_make, &MakeParser::sourceFilesRemoved, this, &Project::oldSource);
 
     if (!path.isEmpty())
+    {
         setRootPath(path);
+    }
 }
 
 Project::~Project()

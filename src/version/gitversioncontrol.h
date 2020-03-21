@@ -15,18 +15,18 @@ class GitVersionControl : public AbstractVersionControl
     Q_OBJECT
 public:
     GitVersionControl();
-    virtual ~GitVersionControl();
+    ~GitVersionControl() override;
 
-    virtual QString versionControlName() const;
-    QString basePath() const;
+    QString versionControlName() const override;
+    QString basePath() const override;
 
-    virtual void validFile(const QSet<QString> &filesPath);
-    virtual void inValidFile(const QSet<QString> &filesPath);
-    virtual void checkoutFile(const QSet<QString> &filesPath);
+    void validFile(const QSet<QString> &filesPath) override;
+    void inValidFile(const QSet<QString> &filesPath) override;
+    void checkoutFile(const QSet<QString> &filesPath) override;
 
-    virtual bool isValid() const;
+    bool isValid() const override;
 
-    virtual void requestFileModifications(const QString &filePath);
+    void requestFileModifications(const QString &filePath) override;
 
 protected slots:
     void reqFetch();
@@ -46,7 +46,7 @@ protected:
 
 protected:
     void findGitDir();
-    virtual void analysePath();
+    void analysePath() override;
 
     enum StatusState
     {

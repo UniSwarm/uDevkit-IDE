@@ -1,14 +1,15 @@
 
 #include "patheditwidget.h"
 
-#include <QLayout>
 #include <QCompleter>
-#include <QFileDialog>
-#include <QDir>
 #include <QDebug>
+#include <QDir>
+#include <QFileDialog>
+#include <QLayout>
 #include <QStandardPaths>
 
-PathEditWidget::PathEditWidget(QWidget *parent) : QWidget(parent)
+PathEditWidget::PathEditWidget(QWidget *parent)
+    : QWidget(parent)
 {
     _filesModel = new QFileSystemModel();
     _filesModel->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot);
@@ -48,7 +49,9 @@ void PathEditWidget::setPath(const QString &path)
 bool PathEditWidget::isValid() const
 {
     if (_pathLineEdit->text().isEmpty())
+    {
         return true;
+    }
     return false;
 }
 
@@ -60,9 +63,11 @@ void PathEditWidget::setEnv(QProcessEnvironment env)
 
 void PathEditWidget::buttonClicked()
 {
-    QString dir =QFileDialog::getExistingDirectory(this, tr("Choose existing directory"), _pathLineEdit->text());
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Choose existing directory"), _pathLineEdit->text());
     if (!dir.isEmpty())
+    {
         setPath(dir);
+    }
 }
 
 void PathEditWidget::checkProgramm()
@@ -75,13 +80,19 @@ void PathEditWidget::checkProgramm()
     QString programm = _programm;
     QProcess *process = new QProcess();
     if (_programm.isEmpty())
+    {
         return;
+    }
     QProcessEnvironment env = _env;
     if (!_path.isEmpty())
+    {
         env.insert("PATH", _path + listSep + env.value("PATH"));
+    }
     QString path = QStandardPaths::findExecutable(_programm, env.value("PATH").split(listSep));
     if (!path.isEmpty())
+    {
         programm = path;
+    }
     process->setProcessEnvironment(env);
     QStringList args;
     args.append(_versionArg);

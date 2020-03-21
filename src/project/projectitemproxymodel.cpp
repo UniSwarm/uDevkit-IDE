@@ -1,8 +1,8 @@
 #include "projectitemproxymodel.h"
 
-#include <QDebug>
-#include <QApplication>
 #include "projectitemmodel.h"
+#include <QApplication>
+#include <QDebug>
 
 #include "project.h"
 
@@ -48,7 +48,7 @@ void ProjectItemProxyModel::setShowFilter(const QString &pattern)
 
 bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    ProjectItemModel *fsm = static_cast<ProjectItemModel*>(sourceModel());
+    ProjectItemModel *fsm = dynamic_cast<ProjectItemModel *>(sourceModel());
     const QModelIndex index = fsm->index(source_row, 0, source_parent);
     const QString &path = fsm->data(index, ProjectItemModel::FileNameRole).toString();
 
@@ -60,25 +60,31 @@ bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
     if (_enabledHiddenFilter)
     {
         if (_hiddenFilter.indexIn(path) != -1)
+        {
             return false;
+        }
     }
 
     // show filter: show only if match
-    if (_showFilter.pattern().size()>=2)
+    if (_showFilter.pattern().size() >= 2)
     {
         if (fsm->isDir(index))
         {
-            //QApplication::processEvents();
-            for (int i=0; i<fsm->rowCount(index); i++)
+            // QApplication::processEvents();
+            for (int i = 0; i < fsm->rowCount(index); i++)
             {
                 bool filtered = filterAcceptsRow(i, index);
                 if (filtered)
+                {
                     return true;
+                }
             }
             return false;
         }
         if (_showFilter.indexIn(path) == -1)
+        {
             return false;
+        }
     }
 
     return true;
@@ -93,15 +99,19 @@ bool ProjectItemProxyModel::filterAcceptsColumn(int source_column, const QModelI
 
 bool ProjectItemProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
-    ProjectItemModel *fsm = static_cast<ProjectItemModel*>(sourceModel());
+    ProjectItemModel *fsm = dynamic_cast<ProjectItemModel *>(sourceModel());
     QString leftPath = sourceModel()->data(source_left, ProjectItemModel::FileNameRole).toString();
     QString rightPath = sourceModel()->data(source_right, ProjectItemModel::FileNameRole).toString();
     bool isLeftDir = fsm->isDir(source_left);
     bool isRightDir = fsm->isDir(source_right);
 
     if (isLeftDir == isRightDir)
+    {
         return (leftPath.compare(rightPath, Qt::CaseInsensitive) < 0);
+    }
     if (isLeftDir)
+    {
         return true;
+    }
     return false;
 }

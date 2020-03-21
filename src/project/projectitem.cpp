@@ -9,7 +9,10 @@
 #include <QTimer>
 
 ProjectItem::ProjectItem(Project *project, const QString path, Type type, ProjectItemModel *model)
-    : QObject(Q_NULLPTR), _type(type), _info(path, project), _model(model)
+    : QObject(Q_NULLPTR)
+    , _type(type)
+    , _info(path, project)
+    , _model(model)
 {
     _parentItem = Q_NULLPTR;
 
@@ -17,12 +20,12 @@ ProjectItem::ProjectItem(Project *project, const QString path, Type type, Projec
     if (type == RealDir)
     {
         _watcher = new QFileSystemWatcher();
-        _watcher->addPath(QDir::cleanPath(path)+"/");
+        _watcher->addPath(QDir::cleanPath(path) + "/");
         connect(_watcher, &QFileSystemWatcher::directoryChanged, this, &ProjectItem::updateModif);
         connect(_watcher, &QFileSystemWatcher::fileChanged, this, &ProjectItem::updateModif);
 
         QTimer::singleShot(0, this, SLOT(updateModif()));
-        //updateModif();
+        // updateModif();
     }
 
     if (type == IndividualFile)
@@ -51,16 +54,20 @@ ProjectItem *ProjectItem::child(int row) const
 
 ProjectItem *ProjectItem::child(const QString &name) const
 {
-    QHash<QString, ProjectItem*>::const_iterator i = _childrensMap.find(name);
+    QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(name);
     if (i != _childrensMap.end())
+    {
         return *i;
+    }
     return Q_NULLPTR;
 }
 
 int ProjectItem::row() const
 {
     if (_parentItem)
-        return _parentItem->_childrens.indexOf(const_cast<ProjectItem*>(this));
+    {
+        return _parentItem->_childrens.indexOf(const_cast<ProjectItem *>(this));
+    }
 
     return 0;
 }
@@ -82,7 +89,9 @@ void ProjectItem::removeChild(ProjectItem *child)
 void ProjectItem::remove()
 {
     if (!_parentItem)
+    {
         return;
+    }
     _parentItem->removeChild(this);
 }
 
@@ -112,15 +121,23 @@ QVariant ProjectItem::data(int column, int role) const
 {
     Q_UNUSED(column)
     if (role == Qt::DisplayRole || role == Qt::EditRole)
+    {
         return _info.fileName();
+    }
     if (role == ProjectItemModel::FilePathRole)
+    {
         return _info.filePath();
+    }
     if (role == ProjectItemModel::FileNameRole)
+    {
         return _info.fileName();
+    }
     if (role == Qt::FontRole || role == Qt::TextColorRole || role == Qt::ToolTipRole)
     {
         if (_type == LogicDir)
+        {
             return QVariant();
+        }
 
         // font role
         if (role == Qt::FontRole)
@@ -130,7 +147,9 @@ QVariant ProjectItem::data(int column, int role) const
                 QFont font;
                 font.setBold(true);
                 if (_info.isOpened())
+                {
                     font.setUnderline(true);
+                }
                 return font;
             }
             if (!_info.isTracked())
@@ -138,7 +157,9 @@ QVariant ProjectItem::data(int column, int role) const
                 QFont font;
                 font.setItalic(true);
                 if (_info.isOpened())
+                {
                     font.setUnderline(true);
+                }
                 return font;
             }
             if (_info.isOpened())
@@ -156,12 +177,18 @@ QVariant ProjectItem::data(int column, int role) const
             if (_info.isValidated())
             {
                 if (_info.isModified())
+                {
                     return QVariant(QColor(255, 127, 0));
+                }
                 else
+                {
                     return QVariant(QColor(0, 255, 0));
+                }
             }
             if (!_info.isTracked())
+            {
                 return QColor(127, 127, 127);
+            }
             return QVariant();
         }
 
@@ -222,9 +249,13 @@ void ProjectItem::updateModif(const QString &path)
             if (!_childrensMap.contains(info.fileName()))
             {
                 if (info.isDir())
+                {
                     addChild(new ProjectItem(_info.project(), info.filePath(), RealDir, _model));
+                }
                 else
+                {
                     addChild(new ProjectItem(_info.project(), info.filePath(), DirFile, _model));
+                }
             }
         }
 
@@ -232,9 +263,11 @@ void ProjectItem::updateModif(const QString &path)
         oldFiles.subtract(files);
         foreach (QString removedFile, oldFiles)
         {
-            QHash<QString, ProjectItem*>::const_iterator i = _childrensMap.find(removedFile);
+            QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(removedFile);
             if (i != _childrensMap.end())
+            {
                 removeChild(*i);
+            }
         }
 
         _model->endModif();

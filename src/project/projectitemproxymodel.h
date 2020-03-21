@@ -14,15 +14,15 @@ public:
 public slots:
     void setHiddenFilter(const QRegExp &regExp);
     void setHiddenFilter(const QString &pattern);
-    void enableHiddenFilter(bool enable=true);
+    void enableHiddenFilter(bool enable = true);
 
     void setShowFilter(const QRegExp &regExp);
     void setShowFilter(const QString &pattern);
 
     // QSortFilterProxyModel interface
 protected:
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
-    virtual bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const;
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
 
 protected:
     Project *_project;
@@ -32,7 +32,7 @@ protected:
 
     // QSortFilterProxyModel interface
 protected:
-    virtual bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const;
+    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 };
 
 #endif // PROJECTITEMPROXYMODEL_H

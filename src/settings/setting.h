@@ -10,8 +10,8 @@ class Setting : public QObject
 {
     Q_OBJECT
 protected:
-    Setting(SettingsClass *_parentClass, const QString &name, const QVariant &defaultValue=QVariant());
-    Setting(const QString &name, const QVariant &defaultValue=QVariant());
+    Setting(SettingsClass *_parentClass, const QString &name, const QVariant &defaultValue = QVariant());
+    Setting(const QString &name, const QVariant &defaultValue = QVariant());
 
 public:
     const QString &name() const;

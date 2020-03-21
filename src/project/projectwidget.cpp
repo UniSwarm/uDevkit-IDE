@@ -1,12 +1,13 @@
 #include "projectwidget.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QBoxLayout>
 #include <QDebug>
-#include <QApplication>
 #include <QMenu>
 
-ProjectWidget::ProjectWidget(Project *project, QWidget *parent) : QWidget(parent)
+ProjectWidget::ProjectWidget(Project *project, QWidget *parent)
+    : QWidget(parent)
 {
     _project = project;
 

@@ -1,18 +1,18 @@
 #ifndef PATHEDITWIDGET_H
 #define PATHEDITWIDGET_H
 
+#include <QFileSystemModel>
 #include <QLabel>
 #include <QLineEdit>
 #include <QProcess>
 #include <QToolButton>
 #include <QWidget>
-#include <QFileSystemModel>
 
 class PathEditWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PathEditWidget(QWidget *parent = 0);
+    explicit PathEditWidget(QWidget *parent = nullptr);
 
     QString programm() const;
     void setProgramm(const QString &programm);

@@ -4,13 +4,14 @@
 #include "settings/settingsmanager.h"
 
 #include <QDebug>
-#include <QTextStream>
-#include <QStandardPaths>
 #include <QDir>
 #include <QRegularExpression>
+#include <QStandardPaths>
+#include <QTextStream>
 
 LogWidget::LogWidget(Project *project, QWidget *parent)
-    : QTextBrowser(parent), _project(project)
+    : QTextBrowser(parent)
+    , _project(project)
 {
     setTabChangesFocus(true);
     setReadOnly(true);
@@ -27,7 +28,7 @@ LogWidget::LogWidget(Project *project, QWidget *parent)
     font.setStyleHint(QFont::Monospace);
     setFont(font);
 
-    connect(_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(readProcess()));
+    connect(_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(readProcess()));
     connect(_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(errorProcess()));
     connect(_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readProcess()));
     connect(_process, SIGNAL(readyReadStandardError()), this, SLOT(readProcess()));
@@ -100,12 +101,12 @@ void LogWidget::parseOutput(QByteArray data, bool error)
         QString stringRead = stream.readLine();
         QString errorFormat = error ? " class=\"color31\"" : "";
         stringRead = "<br/><span" + errorFormat + ">" + stringRead.toHtmlEscaped() + "</span>";
-        stringRead.replace(" ","&nbsp;");
-        stringRead.replace(colorReg,"</span><span class=\"color\\2\">");
-        stringRead.replace(colorRstReg,"</span><span>"); // reset color
-        stringRead.replace("<span></span>","");
+        stringRead.replace(" ", "&nbsp;");
+        stringRead.replace(colorReg, "</span><span class=\"color\\2\">");
+        stringRead.replace(colorRstReg, "</span><span>"); // reset color
+        stringRead.replace("<span></span>", "");
 
-        stringRead.replace(linkReg,"<a href=\"\\1\\2\\3\">\\1\\2\\3</a>");
+        stringRead.replace(linkReg, "<a href=\"\\1\\2\\3\">\\1\\2\\3</a>");
 
         html.append(stringRead);
     }

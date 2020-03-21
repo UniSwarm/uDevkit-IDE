@@ -9,7 +9,7 @@ class SettingsCateg : public QTabWidget
 {
     Q_OBJECT
 public:
-    SettingsCateg(const QIcon &icon=QIcon(), const QString &label=QString());
+    SettingsCateg(const QIcon &icon = QIcon(), const QString &label = QString());
 
     SettingsPage *page(int i) const;
     void addPage(SettingsPage *page);

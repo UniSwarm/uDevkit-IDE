@@ -6,20 +6,21 @@
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QFileDialog>
+#include <QMenuBar>
+#include <QMessageBox>
 #include <QSettings>
 #include <QSplitter>
-#include <QMenuBar>
-#include <QThread>
-#include <QMessageBox>
 #include <QStatusBar>
+#include <QThread>
 
-#include "ui/iconneddockstyle.h"
 #include "settings/pages/settingswindow.h"
+#include "ui/iconneddockstyle.h"
 
 const int MainWindow::MaxOldProject = 8;
 
-MainWindow::MainWindow(Project *project, QWidget *parent) :
-    QMainWindow(parent), _project(project)
+MainWindow::MainWindow(Project *project, QWidget *parent)
+    : QMainWindow(parent)
+    , _project(project)
 {
     setWindowIcon(QIcon(":/icons/UNIdevkit.ico"));
     QString path;
@@ -110,7 +111,7 @@ void MainWindow::createDocks()
 void MainWindow::createMenus()
 {
     setMenuBar(new QMenuBar(this));
-    //addToolBar(new QToolBar(this));
+    // addToolBar(new QToolBar(this));
 
     // ============= file =============
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
@@ -138,7 +139,7 @@ void MainWindow::createMenus()
     connect(switchHeaderAction, SIGNAL(triggered()), _editorTabWidget, SLOT(switchHeader()));
 
     fileMenu->addSeparator();
-    for (int i=0; i<MaxOldProject; i++)
+    for (int i = 0; i < MaxOldProject; i++)
     {
         QAction *recentAction = new QAction(this);
         fileMenu->addAction(recentAction);
@@ -355,36 +356,44 @@ bool MainWindow::openFiles(const QStringList &paths)
 
 void MainWindow::git()
 {
-    _logWidget->start("git", QStringList()<<"diff"<<_project->rootDir().relativeFilePath(_editorTabWidget->currentFilePath()));
+    _logWidget->start("git", QStringList() << "diff" << _project->rootDir().relativeFilePath(_editorTabWidget->currentFilePath()));
 }
 
 void MainWindow::makeall()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("make", QStringList()<<"hex"<<"--no-print-directory"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
+    _logWidget->start("make",
+                      QStringList() << "hex"
+                                    << "--no-print-directory"
+                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O");
 }
 
 void MainWindow::makeprog()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("make", QStringList()<<"prog"<<"--no-print-directory"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
+    _logWidget->start("make",
+                      QStringList() << "prog"
+                                    << "--no-print-directory"
+                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O");
 }
 
 void MainWindow::makesim()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("make", QStringList()<<"sim"<<"-j"<<QString::number(QThread::idealThreadCount()+1)<<"-O");
+    _logWidget->start("make",
+                      QStringList() << "sim"
+                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O");
 }
 
 void MainWindow::makeclean()
 {
-    _logWidget->start("make", QStringList()<<"clean");
+    _logWidget->start("make", QStringList() << "clean");
 }
 
 void MainWindow::launchFormat()
 {
     _editorTabWidget->saveAllEditors();
-    _logWidget->start("clang-format", QStringList()<<"-i"<<_editorTabWidget->currentFilePath());
+    _logWidget->start("clang-format", QStringList() << "-i" << _editorTabWidget->currentFilePath());
 }
 
 void MainWindow::updateTitle(Editor *editor)
@@ -425,7 +434,7 @@ void MainWindow::showSettings()
 
 bool MainWindow::event(QEvent *event)
 {
-    if (event->type()==QEvent::Close)
+    if (event->type() == QEvent::Close)
     {
         if (_editorTabWidget->closeAllEditors() < 0)
         {
@@ -439,13 +448,13 @@ bool MainWindow::event(QEvent *event)
 
 void MainWindow::updateOldProjects()
 {
-    for (int i=0; i<_oldProjects.size() && i < MaxOldProject; i++)
+    for (int i = 0; i < _oldProjects.size() && i < MaxOldProject; i++)
     {
         QString path = _oldProjects[i];
         _oldProjectsActions[i]->setVisible(true);
         _oldProjectsActions[i]->setData(path);
-        _oldProjectsActions[i]->setText(QString("&%1. %2").arg(i+1).arg(path));
-        _oldProjectsActions[i]->setStatusTip(tr("Open recent project '")+path+"'");
+        _oldProjectsActions[i]->setText(QString("&%1. %2").arg(i + 1).arg(path));
+        _oldProjectsActions[i]->setStatusTip(tr("Open recent project '") + path + "'");
     }
 }
 
@@ -507,7 +516,9 @@ void MainWindow::readSettings()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, "uDevkit-IDE v0", QString("Copyright (C) 2017-2020 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
+    QMessageBox::about(this,
+                       "uDevkit-IDE v0",
+                       QString("Copyright (C) 2017-2020 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
 <br>\
 This sofware is part of uDevkit distribution. To check for new version, please visit <a href=\"https://github.com/UniSwarm/uDevkit-IDE\">github.com/UniSwarm/uDevkit-IDE</a><br>\
 <br>\
@@ -526,7 +537,8 @@ GNU General Public License for more details.<br>\
 You should have received a copy of the GNU General Public License \
 along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\">www.gnu.org/licenses</a><br>\
 <br>\
-Build date: ") + __DATE__ + QString(" time: ") + __TIME__ + QString("<br>\
+Build date: ") + __DATE__ + QString(" time: ") +
+                           __TIME__ + QString("<br>\
 <br>\
 uDevkit-IDE use others open libraries :<br>\
 - edbee-lib, a code editor widget (code editor) <a href=\"https://github.com/edbee/edbee-lib\">github.com/edbee/edbee-lib</a> [MIT]<br>\

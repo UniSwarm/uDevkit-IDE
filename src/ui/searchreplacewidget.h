@@ -55,7 +55,7 @@ protected:
 
     // QObject interface
 public:
-    virtual bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) override;
 };
 
 #endif // SEARCHREPLACEWIDGET_H

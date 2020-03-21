@@ -1,8 +1,8 @@
 #include "toolsversionsettings.h"
 
 #include <QFormLayout>
-#include <QLayout>
 #include <QGroupBox>
+#include <QLayout>
 
 ToolsVersionSettings::ToolsVersionSettings()
     : SettingsPage(QIcon(":/icons/img/dark/icons8-toolbox.png"), tr("Tools version"))

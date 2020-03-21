@@ -5,7 +5,8 @@
 #include <QFocusEvent>
 #include <QRegularExpression>
 
-SearchReplaceWidget::SearchReplaceWidget(QWidget *parent) : QWidget(parent)
+SearchReplaceWidget::SearchReplaceWidget(QWidget *parent)
+    : QWidget(parent)
 {
     _editor = Q_NULLPTR;
 
@@ -45,7 +46,9 @@ void SearchReplaceWidget::activateResearch()
 void SearchReplaceWidget::activateReplace()
 {
     if (parentWidget() && parentWidget()->parentWidget())
+    {
         parentWidget()->parentWidget()->show();
+    }
     show();
     _replaceLineEdit->setFocus();
     _replaceLineEdit->selectAll();
@@ -55,16 +58,22 @@ Editor::SearchFlags SearchReplaceWidget::flags()
 {
     Editor::SearchFlags mflags;
     if (_regexpCheckbox->isEnabled() && _regexpCheckbox->isChecked())
+    {
         mflags |= Editor::RegExpMode;
+    }
     if (_caseSensitivityCheckbox->isEnabled() && _caseSensitivityCheckbox->isChecked())
+    {
         mflags |= Editor::CaseSensitive;
+    }
     return mflags;
 }
 
 void SearchReplaceWidget::upadteSearch()
 {
     if (!_editor)
+    {
         return;
+    }
 
     int found = _editor->search(_searchLineEdit->text(), flags());
     if (found == 0 && _regexpCheckbox->isEnabled() && _regexpCheckbox->isChecked())
@@ -82,42 +91,54 @@ void SearchReplaceWidget::upadteSearch()
 void SearchReplaceWidget::searchNext()
 {
     if (!_editor)
+    {
         return;
+    }
     _editor->searchNext();
 }
 
 void SearchReplaceWidget::searchPrev()
 {
     if (!_editor)
+    {
         return;
+    }
     _editor->searchPrev();
 }
 
 void SearchReplaceWidget::searchAll()
 {
     if (!_editor)
+    {
         return;
+    }
     _editor->searchSelectAll();
 }
 
 void SearchReplaceWidget::replaceNext()
 {
     if (!_editor)
+    {
         return;
+    }
     _editor->replace(_replaceLineEdit->text(), flags());
 }
 
 void SearchReplaceWidget::replacePrev()
 {
     if (!_editor)
+    {
         return;
+    }
     _editor->replace(_replaceLineEdit->text(), flags(), false);
 }
 
 void SearchReplaceWidget::replaceAll()
 {
     if (!_editor)
+    {
         return;
+    }
 
     _editor->replaceAll(_replaceLineEdit->text(), flags());
 }
@@ -225,8 +246,12 @@ void SearchReplaceWidget::createWidgets()
 bool SearchReplaceWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == _searchLineEdit && event->type() == QEvent::FocusIn && !_searchLineEdit->text().isEmpty())
+    {
         upadteSearch();
+    }
     if (watched == _replaceLineEdit && event->type() == QEvent::FocusIn && !_searchLineEdit->text().isEmpty())
+    {
         upadteSearch();
+    }
     return QObject::eventFilter(watched, event);
 }

@@ -11,7 +11,7 @@ class ProjectItemModel : public QAbstractItemModel
     Q_OBJECT
 public:
     ProjectItemModel(Project *project);
-    ~ProjectItemModel();
+    ~ProjectItemModel() override;
 
     void addFileItem(const QString &path);
     void addRealDirItem(const QString &path);
@@ -20,13 +20,14 @@ public:
 
     void clear();
 
-    enum Role {
+    enum Role
+    {
         FileIconRole = Qt::DecorationRole,
         FilePathRole = Qt::UserRole + 1,
         FileNameRole = Qt::UserRole + 2
     };
     const ProjectItem *item(const QModelIndex &index) const;
-    //QModelIndex index(const ProjectItem *item) const;
+    // QModelIndex index(const ProjectItem *item) const;
     QModelIndex index(const QString path) const;
     bool isDir(const QModelIndex &index) const;
     bool isFile(const QModelIndex &index) const;
@@ -50,13 +51,13 @@ public slots:
 
     // QAbstractItemModel interface
 public:
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent=QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex &child) const;
-    virtual int rowCount(const QModelIndex &parent=QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex &child) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
     /*virtual bool hasChildren(const QModelIndex &parent) const;
     virtual void fetchMore(const QModelIndex &parent);
@@ -66,7 +67,7 @@ protected:
     ProjectItem *_root;
     Project *_project;
     QFileIconProvider *_iconProvider;
-    QMap<QString, ProjectItem*> _pathCache;
+    QMap<QString, ProjectItem *> _pathCache;
 
     // high level interface
     ProjectItem *_externalFiles;

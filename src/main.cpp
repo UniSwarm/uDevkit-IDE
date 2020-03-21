@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QDebug>
-#include <QTranslator>
 #include <QLibraryInfo>
+#include <QTranslator>
 
 #include "project/project.h"
 #include "settings/settingsmanager.h"
