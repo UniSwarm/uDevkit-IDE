@@ -46,7 +46,7 @@ LogWidget::LogWidget(Project *project, QWidget *parent)
     font.setStyleHint(QFont::Monospace);
     setFont(font);
 
-    connect(_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(readProcess()));
+    connect(_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &LogWidget::finishProcess);
     connect(_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(errorProcess()));
     connect(_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readProcess()));
     connect(_process, SIGNAL(readyReadStandardError()), this, SLOT(readProcess()));
@@ -144,6 +144,21 @@ void LogWidget::errorProcess()
     QByteArray data;
     data.append(_process->errorString());
     parseOutput(data, true);
+}
+
+void LogWidget::finishProcess(int errorCode, QProcess::ExitStatus exitStatus)
+{
+    readProcess();
+    moveCursor(QTextCursor::End);
+    if (exitStatus == QProcess::NormalExit && errorCode == 0)
+    {
+        insertHtml(QString("<br/><i style=\"color: green\">%1 finished with code %2</i>").arg(_process->program()).arg(errorCode));
+    }
+    else
+    {
+        insertHtml(QString("<br/><i style=\"color: red\">%1 crashed with code %2</i>").arg(_process->program()).arg(errorCode));
+    }
+    moveCursor(QTextCursor::End);
 }
 
 void LogWidget::anchorClick(const QUrl &link)

@@ -47,6 +47,7 @@ protected:
 protected slots:
     void readProcess();
     void errorProcess();
+    void finishProcess(int errorCode, QProcess::ExitStatus exitStatus);
     void anchorClick(const QUrl &link);
 };
 
