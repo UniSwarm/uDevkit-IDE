@@ -59,21 +59,21 @@ bool HexFile::read()
         }
         index++;
 
-        dataCount = line.mid(index, 2).toInt(&ok, 16);
+        dataCount = line.midRef(index, 2).toInt(&ok, 16);
         if (!ok)
         {
             return false;
         }
         index += 2;
 
-        addr = line.mid(index, 4).toInt(&ok, 16);
+        addr = line.midRef(index, 4).toInt(&ok, 16);
         if (!ok)
         {
             return false;
         }
         index += 4;
 
-        type = line.mid(index, 2).toInt(&ok, 16);
+        type = line.midRef(index, 2).toInt(&ok, 16);
         if (!ok)
         {
             return false;
@@ -85,13 +85,13 @@ bool HexFile::read()
             if (offsetAddr + addr > _prog.size())
             {
                 _prog.append(QByteArray(_prog.size() - (offsetAddr + addr + dataCount), static_cast<char>(0xFF)));
-                // qDebug() << "outData" << QString::number(offsetAddr + addr, 16) << line.mid(index, 2 * dataCount);
+                // qDebug() << "outData" << QString::number(offsetAddr + addr, 16) << line.midRef(index, 2 * dataCount);
             }
             // else
             {
                 for (int i = 0; i < dataCount; i++)
                 {
-                    int data = line.mid(index, 2).toInt(&ok, 16);
+                    int data = line.midRef(index, 2).toInt(&ok, 16);
                     if (!ok)
                     {
                         return false;
@@ -103,7 +103,7 @@ bool HexFile::read()
         }
         else if (type == 4)
         {
-            offsetAddr = line.mid(index, 4).toInt(&ok, 16) * 0x10000;
+            offsetAddr = line.midRef(index, 4).toInt(&ok, 16) * 0x10000;
             if (!ok)
             {
                 return false;
@@ -120,7 +120,7 @@ bool HexFile::read()
             // qDebug() << "unknow type" << type << "at line" << lineCount;
         }
 
-        checkSum = line.mid(index, 2).toInt(&ok, 16);
+        checkSum = line.midRef(index, 2).toInt(&ok, 16);
         if (!ok)
         {
             return false;

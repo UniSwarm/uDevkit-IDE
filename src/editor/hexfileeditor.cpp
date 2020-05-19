@@ -19,6 +19,7 @@
 #include "hexfileeditor.h"
 
 #include <QApplication>
+#include <QInputDialog>
 
 #include "hexfile.h"
 #include "qhexedit.h"
@@ -48,25 +49,16 @@ int HexFileEditor::openFileData(const QString &filePath)
 
 int HexFileEditor::saveFileData(const QString &filePath)
 {
-    /*QString path = filePath.isEmpty() ? _filePath : filePath;
-    QString tmpFileName = path + ".~tmp";
-
+    QFile file(filePath + ".bin");
+    file.open(QIODevice::WriteOnly);
+    class HexFile hexFile(this->filePath());
+    hexFile.read();
+    int startMem = QInputDialog::getInt(this, tr("startMem"), tr("startMemAddr"), 0, 0, 0x80000);
+    int lenghtMem = QInputDialog::getInt(this, tr("lenghtMem"), tr("lenghtMem"), 0x400, 0, 0x80000);
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    QFile file(tmpFileName);
-    bool ok = _hexEditor->write(file);
-    if (QFile::exists(path))
-        ok = QFile::remove(path);
-    if (ok)
-    {
-        file.setFileName(tmpFileName);
-        ok = file.copy(path);
-        if (ok)
-            ok = QFile::remove(tmpFileName);
-    }
+    file.write(hexFile.prog().mid(startMem, lenghtMem));
     QApplication::restoreOverrideCursor();
     _modified = false;
     emit modified(false);
-
-    return ok ? 0 : -1;*/
     return 0;
 }
