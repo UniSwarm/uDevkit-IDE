@@ -43,7 +43,7 @@ bool HexFile::read()
 
     QTextStream stream(&file);
     _prog.clear();
-    _prog.fill(static_cast<char>(0xFF), 0x10000);
+    _prog.fill(static_cast<char>(0xFF), 0x100);
     while (!stream.atEnd())
     {
         int index = 0;
@@ -82,9 +82,9 @@ bool HexFile::read()
 
         if (type == 0)
         {
-            if (offsetAddr + addr > _prog.size())
+            if (offsetAddr + addr + dataCount > _prog.size())
             {
-                _prog.append(QByteArray(_prog.size() - (offsetAddr + addr + dataCount), static_cast<char>(0xFF)));
+                _prog.append(QByteArray((offsetAddr + addr + dataCount) - _prog.size(), static_cast<char>(0xFF)));
                 // qDebug() << "outData" << QString::number(offsetAddr + addr, 16) << line.midRef(index, 2 * dataCount);
             }
             // else
@@ -97,7 +97,7 @@ bool HexFile::read()
                         return false;
                     }
                     index += 2;
-                    _prog[addr + i + offsetAddr] = static_cast<char>(data);
+                    _prog[offsetAddr + addr + i] = static_cast<char>(data);
                 }
             }
         }
