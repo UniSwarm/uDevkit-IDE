@@ -4,17 +4,17 @@
 <context>
     <name>CodeEditorSettings</name>
     <message>
-        <location filename="../settings/pages/codeeditorsettings.cpp" line="7"/>
+        <location filename="../settings/pages/codeeditorsettings.cpp" line="25"/>
         <source>Code editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/pages/codeeditorsettings.cpp" line="39"/>
+        <location filename="../settings/pages/codeeditorsettings.cpp" line="56"/>
         <source>Font family</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/pages/codeeditorsettings.cpp" line="46"/>
+        <location filename="../settings/pages/codeeditorsettings.cpp" line="62"/>
         <source>Font size</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,22 +22,22 @@
 <context>
     <name>Editor</name>
     <message>
-        <location filename="../editor/editor.cpp" line="31"/>
+        <location filename="../editor/editor.cpp" line="51"/>
         <source>new file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editor.cpp" line="52"/>
+        <location filename="../editor/editor.cpp" line="73"/>
         <source>Save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editor.cpp" line="167"/>
+        <location filename="../editor/editor.cpp" line="199"/>
         <source>File externally modified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editor.cpp" line="168"/>
+        <location filename="../editor/editor.cpp" line="200"/>
         <source>File &apos;%1&apos; has been externally modified, do you want to reload it and lost your modifications?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -45,42 +45,42 @@
 <context>
     <name>EditorTabWidget</name>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="224"/>
+        <location filename="../editor/editortabwidget.cpp" line="273"/>
         <source>File modified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="225"/>
+        <location filename="../editor/editortabwidget.cpp" line="273"/>
         <source>File &apos;%1&apos; has been modified, do you want to save it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="454"/>
+        <location filename="../editor/editortabwidget.cpp" line="552"/>
         <source>Open in hex editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="459"/>
+        <location filename="../editor/editortabwidget.cpp" line="557"/>
         <source>Open in default editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="461"/>
+        <location filename="../editor/editortabwidget.cpp" line="559"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="535"/>
+        <location filename="../editor/editortabwidget.cpp" line="639"/>
         <source>save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="540"/>
+        <location filename="../editor/editortabwidget.cpp" line="644"/>
         <source>save all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="545"/>
+        <location filename="../editor/editortabwidget.cpp" line="649"/>
         <source>close tab</source>
         <translation type="unfinished"></translation>
     </message>
@@ -88,37 +88,37 @@
 <context>
     <name>FileProjectInfo</name>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="48"/>
+        <location filename="../project/fileprojectinfo.cpp" line="75"/>
         <source>kB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="49"/>
+        <location filename="../project/fileprojectinfo.cpp" line="75"/>
         <source>MB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="50"/>
+        <location filename="../project/fileprojectinfo.cpp" line="75"/>
         <source>GB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="51"/>
+        <location filename="../project/fileprojectinfo.cpp" line="76"/>
         <source>TB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="54"/>
+        <location filename="../project/fileprojectinfo.cpp" line="79"/>
         <source>bytes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="67"/>
+        <location filename="../project/fileprojectinfo.cpp" line="92"/>
         <source>Size: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="71"/>
+        <location filename="../project/fileprojectinfo.cpp" line="96"/>
         <source>Modified: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -126,12 +126,12 @@
 <context>
     <name>GitVersionSettings</name>
     <message>
-        <location filename="../settings/pages/gitversionsettings.cpp" line="6"/>
+        <location filename="../settings/pages/gitversionsettings.cpp" line="24"/>
         <source>Git version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/pages/gitversionsettings.cpp" line="28"/>
+        <location filename="../settings/pages/gitversionsettings.cpp" line="46"/>
         <source>Git path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -139,12 +139,12 @@
 <context>
     <name>GlobalSettings</name>
     <message>
-        <location filename="../settings/pages/globalsettings.cpp" line="6"/>
+        <location filename="../settings/pages/globalsettings.cpp" line="24"/>
         <source>Global</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/pages/globalsettings.cpp" line="28"/>
+        <location filename="../settings/pages/globalsettings.cpp" line="48"/>
         <source>Language (restart needed to take effect)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -152,7 +152,7 @@
 <context>
     <name>HexEditor</name>
     <message>
-        <location filename="../editor/hexeditor.cpp" line="69"/>
+        <location filename="../editor/hexeditor.cpp" line="87"/>
         <source>addr: 0x%1 size: %2 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -160,15 +160,33 @@
 <context>
     <name>HexEditorSettings</name>
     <message>
-        <location filename="../settings/pages/hexeditorsettings.cpp" line="4"/>
+        <location filename="../settings/pages/hexeditorsettings.cpp" line="22"/>
         <source>Hexa editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HexFileEditor</name>
+    <message>
+        <location filename="../editor/hexfileeditor.cpp" line="56"/>
+        <source>startMem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/hexfileeditor.cpp" line="56"/>
+        <source>startMemAddr</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/hexfileeditor.cpp" line="57"/>
+        <source>lenghtMem</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HtmlEditorSettings</name>
     <message>
-        <location filename="../settings/pages/htmleditorsettings.cpp" line="4"/>
+        <location filename="../settings/pages/htmleditorsettings.cpp" line="22"/>
         <source>HTML editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -176,7 +194,7 @@
 <context>
     <name>ImageEditorSettings</name>
     <message>
-        <location filename="../settings/pages/imageeditorsettings.cpp" line="4"/>
+        <location filename="../settings/pages/imageeditorsettings.cpp" line="22"/>
         <source>Image editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -184,7 +202,7 @@
 <context>
     <name>LogWidget</name>
     <message>
-        <location filename="../ui/logwidget.cpp" line="69"/>
+        <location filename="../ui/logwidget.cpp" line="89"/>
         <source>Cannot find command &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -230,188 +248,198 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="66"/>
+        <location filename="../mainwindow.cpp" line="89"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="80"/>
+        <location filename="../mainwindow.cpp" line="103"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="93"/>
+        <location filename="../mainwindow.cpp" line="116"/>
         <source>Search / replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="112"/>
+        <location filename="../mainwindow.cpp" line="135"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="114"/>
+        <location filename="../mainwindow.cpp" line="137"/>
         <source>Open &amp;project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="116"/>
+        <location filename="../mainwindow.cpp" line="139"/>
         <source>Opens a project</source>
         <oldsource>Opens a project as directory</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="120"/>
+        <location filename="../mainwindow.cpp" line="143"/>
         <source>&amp;Open files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="122"/>
+        <location filename="../mainwindow.cpp" line="145"/>
         <source>Opens files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="129"/>
+        <location filename="../mainwindow.cpp" line="152"/>
         <source>&amp;Switch header</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="131"/>
+        <location filename="../mainwindow.cpp" line="154"/>
         <source>Switch between header and source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="147"/>
+        <location filename="../mainwindow.cpp" line="170"/>
         <source>E&amp;xit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="149"/>
+        <location filename="../mainwindow.cpp" line="172"/>
         <source>Exits uDevkit-IDE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="155"/>
+        <location filename="../mainwindow.cpp" line="178"/>
         <source>git</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="161"/>
+        <location filename="../mainwindow.cpp" line="184"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="163"/>
+        <location filename="../mainwindow.cpp" line="186"/>
         <source>&amp;Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="170"/>
+        <location filename="../mainwindow.cpp" line="193"/>
         <source>&amp;Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="179"/>
+        <location filename="../mainwindow.cpp" line="202"/>
         <source>Cu&amp;t</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="186"/>
+        <location filename="../mainwindow.cpp" line="209"/>
         <source>&amp;Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="193"/>
+        <location filename="../mainwindow.cpp" line="216"/>
         <source>&amp;Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="201"/>
+        <location filename="../mainwindow.cpp" line="224"/>
         <source>&amp;Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="207"/>
+        <location filename="../mainwindow.cpp" line="230"/>
         <source>&amp;Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="215"/>
+        <location filename="../mainwindow.cpp" line="238"/>
         <source>&amp;Format text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="216"/>
+        <location filename="../mainwindow.cpp" line="239"/>
         <source>Removes end spaces, replaces tabs by spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="222"/>
+        <location filename="../mainwindow.cpp" line="243"/>
+        <source>&amp;clang-format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="244"/>
+        <source>Call clang-format inplace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="250"/>
         <source>P&amp;references</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="229"/>
+        <location filename="../mainwindow.cpp" line="257"/>
         <source>&amp;Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="231"/>
+        <location filename="../mainwindow.cpp" line="259"/>
         <source>Clea&amp;n</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="236"/>
+        <location filename="../mainwindow.cpp" line="264"/>
         <source>&amp;Compile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="241"/>
+        <location filename="../mainwindow.cpp" line="269"/>
         <source>&amp;Program</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="246"/>
+        <location filename="../mainwindow.cpp" line="274"/>
         <source>Compile &amp;sim</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="252"/>
+        <location filename="../mainwindow.cpp" line="280"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="255"/>
-        <source>View / Hide &amp;log</source>
+        <location filename="../mainwindow.cpp" line="283"/>
+        <source>        &amp;Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="260"/>
-        <source>View / Hide &amp;project file</source>
+        <location filename="../mainwindow.cpp" line="288"/>
+        <source>        &amp;Project file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="265"/>
-        <source>View / Hide &amp;search/replace</source>
+        <location filename="../mainwindow.cpp" line="293"/>
+        <source>        &amp;Search/replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="270"/>
+        <location filename="../mainwindow.cpp" line="298"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="272"/>
+        <location filename="../mainwindow.cpp" line="300"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="277"/>
+        <location filename="../mainwindow.cpp" line="305"/>
         <source>About &amp;Qt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="419"/>
+        <location filename="../mainwindow.cpp" line="474"/>
         <source>Open recent project &apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -419,22 +447,22 @@
 <context>
     <name>PathEditWidget</name>
     <message>
-        <location filename="../settings/widgets/patheditwidget.cpp" line="63"/>
+        <location filename="../settings/widgets/patheditwidget.cpp" line="84"/>
         <source>Choose existing directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/widgets/patheditwidget.cpp" line="92"/>
+        <location filename="../settings/widgets/patheditwidget.cpp" line="122"/>
         <source>&lt;span style=&quot;color: red;&quot;&gt;%1 not found: %2&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/widgets/patheditwidget.cpp" line="97"/>
+        <location filename="../settings/widgets/patheditwidget.cpp" line="127"/>
         <source>%1 in path &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/widgets/patheditwidget.cpp" line="124"/>
+        <location filename="../settings/widgets/patheditwidget.cpp" line="154"/>
         <source>Leave empty to use system PATH</source>
         <translation type="unfinished"></translation>
     </message>
@@ -442,83 +470,88 @@
 <context>
     <name>ProjectItemModel</name>
     <message>
-        <location filename="../project/projectitemmodel.cpp" line="106"/>
+        <location filename="../project/projectitemmodel.cpp" line="158"/>
         <source>ext src</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../project/projectitemmodel.cpp" line="248"/>
+        <source>opened files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ProjectTreeView</name>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="40"/>
-        <location filename="../project/projecttreeview.cpp" line="197"/>
+        <location filename="../project/projecttreeview.cpp" line="59"/>
+        <location filename="../project/projecttreeview.cpp" line="247"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="47"/>
+        <location filename="../project/projecttreeview.cpp" line="66"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="118"/>
-        <location filename="../project/projecttreeview.cpp" line="131"/>
+        <location filename="../project/projecttreeview.cpp" line="151"/>
+        <location filename="../project/projecttreeview.cpp" line="166"/>
         <source>Remove directory?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="118"/>
-        <location filename="../project/projecttreeview.cpp" line="124"/>
+        <location filename="../project/projecttreeview.cpp" line="151"/>
+        <location filename="../project/projecttreeview.cpp" line="158"/>
         <source>Do you realy want to remove &apos;%1&apos;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="124"/>
+        <location filename="../project/projecttreeview.cpp" line="158"/>
         <source>Remove file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="131"/>
+        <location filename="../project/projecttreeview.cpp" line="166"/>
         <source>Do you realy want to remove theses %1 files?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="181"/>
+        <location filename="../project/projecttreeview.cpp" line="231"/>
         <source>Add new file here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="189"/>
+        <location filename="../project/projecttreeview.cpp" line="239"/>
         <source>Remove directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="192"/>
+        <location filename="../project/projecttreeview.cpp" line="242"/>
         <source>Open directory as project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="193"/>
+        <location filename="../project/projecttreeview.cpp" line="243"/>
         <source>Open in terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="223"/>
+        <location filename="../project/projecttreeview.cpp" line="281"/>
         <source>New file name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="223"/>
+        <location filename="../project/projecttreeview.cpp" line="281"/>
         <source>Enter a name for this new file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="253"/>
+        <location filename="../project/projecttreeview.cpp" line="319"/>
         <source>Checkout file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="254"/>
+        <location filename="../project/projecttreeview.cpp" line="319"/>
         <source>Do you realy want to checkout &apos;%1&apos;?
 It will be restored to the last valid state.</source>
         <translation type="unfinished"></translation>
@@ -527,12 +560,12 @@ It will be restored to the last valid state.</source>
 <context>
     <name>ProjectWidget</name>
     <message>
-        <location filename="../project/projectwidget.cpp" line="21"/>
+        <location filename="../project/projectwidget.cpp" line="40"/>
         <source>Search files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../project/projectwidget.cpp" line="64"/>
+        <location filename="../project/projectwidget.cpp" line="83"/>
         <source>enable filter</source>
         <translation type="unfinished"></translation>
     </message>
@@ -582,7 +615,7 @@ It will be restored to the last valid state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/models/textgrammar.cpp" line="305"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/models/textgrammar.cpp" line="306"/>
         <source>Error reading file %1:%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -701,7 +734,7 @@ It will be restored to the last valid state.</source>
 <context>
     <name>SearchReplaceWidget</name>
     <message numerus="yes">
-        <location filename="../ui/searchreplacewidget.cpp" line="79"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="106"/>
         <source>%n occurence(s) found</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -709,52 +742,52 @@ It will be restored to the last valid state.</source>
         </translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="134"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="173"/>
         <source>search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="142"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="181"/>
         <source>Search backward and select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="149"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="188"/>
         <source>Search forward and select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="156"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="195"/>
         <source>Search and select all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="167"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="206"/>
         <source>replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="174"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="213"/>
         <source>Replace previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="181"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="220"/>
         <source>Replace next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="188"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="227"/>
         <source>Replace all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="199"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="238"/>
         <source>regexp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/searchreplacewidget.cpp" line="204"/>
+        <location filename="../ui/searchreplacewidget.cpp" line="243"/>
         <source>case sensitive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -762,22 +795,22 @@ It will be restored to the last valid state.</source>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../settings/pages/settingswindow.cpp" line="24"/>
+        <location filename="../settings/pages/settingswindow.cpp" line="42"/>
         <source>Editors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/pages/settingswindow.cpp" line="30"/>
+        <location filename="../settings/pages/settingswindow.cpp" line="48"/>
         <source>Version management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/pages/settingswindow.cpp" line="33"/>
+        <location filename="../settings/pages/settingswindow.cpp" line="51"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/pages/settingswindow.cpp" line="36"/>
+        <location filename="../settings/pages/settingswindow.cpp" line="54"/>
         <source>Global</source>
         <translation type="unfinished"></translation>
     </message>
@@ -785,17 +818,17 @@ It will be restored to the last valid state.</source>
 <context>
     <name>ToolsVersionSettings</name>
     <message>
-        <location filename="../settings/pages/toolsversionsettings.cpp" line="8"/>
+        <location filename="../settings/pages/toolsversionsettings.cpp" line="26"/>
         <source>Tools version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/pages/toolsversionsettings.cpp" line="25"/>
+        <location filename="../settings/pages/toolsversionsettings.cpp" line="43"/>
         <source>GNU Make</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings/pages/toolsversionsettings.cpp" line="34"/>
+        <location filename="../settings/pages/toolsversionsettings.cpp" line="52"/>
         <source>path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -821,22 +854,22 @@ It will be restored to the last valid state.</source>
 <context>
     <name>edbee::TextEditorComponent</name>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="496"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="507"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="497"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="508"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="498"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="509"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="500"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="511"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
