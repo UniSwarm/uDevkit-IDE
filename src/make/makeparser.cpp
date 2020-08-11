@@ -27,6 +27,7 @@
 #include <QStack>
 #include <QStandardPaths>
 #include <QTextStream>
+#include <QRegularExpression>
 
 #include "settings/settingsmanager.h"
 
@@ -98,14 +99,14 @@ void MakeParser::processEnd()
     QDir dir(_basePath);
 
     QRegExp regVar(" *([A-Za-z0-9\\\\\\/.\\_\\-]+) *:*= *");
-    QRegExp regVarValue("([A-Za-z0-9\\\\\\/.\\_\\-]+) *");
+    QRegExp regVarValue("([^ ]+) *");
     QRegExp regVpath("vpath \\%\\.([a-zA-Z0-9]+) ");
     QRegExp regPath("([A-Za-z0-9\\\\\\/.\\_\\-]+):*");
     QRegExp regRule("^([A-Za-z0-9\\\\\\/.\\_\\-]+):");
     QRegExp regEnterDir("^# make\\[1\\]: (Entering|Leaving) directory \\'(.+)\\'");
     bool notATarget = false;
 
-    qint64 start = QDateTime::currentMSecsSinceEpoch();
+    // qint64 start = QDateTime::currentMSecsSinceEpoch();
     if (_processMake->exitStatus() != QProcess::NormalExit)
     {
         return;
@@ -157,7 +158,11 @@ void MakeParser::processEnd()
             while ((pos = regVarValue.indexIn(line, pos)) != -1)
             {
                 QString value = regVarValue.cap(1);
-                _variables.insert(regVar.cap(1), value);
+                if (dir.path() == _basePath)
+                {
+                    _variables.insert(regVar.cap(1), value);
+                }
+                // qDebug() << regVar.cap(1) << value << dir.path();
                 pos += regVarValue.matchedLength();
             }
             notATarget = false;
@@ -218,11 +223,11 @@ void MakeParser::processEnd()
 
     // TODO complete with generic name of src variable name or
     //   improve with an auto detection of source
-    addSource(sourceFiles, _variables.values("SRC"));
-    addSource(sourceFiles, _variables.values("ARCHI_SRC"));
-    addSource(sourceFiles, _variables.values("SOURCEFILES"));
-    addSource(sourceFiles, _variables.values("HEADER"));
-    addSource(sourceFiles, _variables.values("MAKEFILE_LIST"));
+    addSource(sourceFiles, evalVariable("SRC"));
+    addSource(sourceFiles, evalVariable("ARCHI_SRC"));
+    addSource(sourceFiles, evalVariable("SOURCEFILES"));
+    addSource(sourceFiles, evalVariable("HEADER"));
+    addSource(sourceFiles, evalVariable("MAKEFILE_LIST"));
     // qDebug()<<_variables;
 
     outgoingFiles = _sourceFiles;
@@ -252,6 +257,7 @@ void MakeParser::analyseMakefile(const QString path)
     _makeWatcher->removePath(_basePath);
     if (QFile(_makefileFilePath).exists()) // TODO add a Makefile detection an -f name option in case of different file name
     {
+        // qDebug()<<"MakeParser::analyseMakefile" << _programPath;
         _processMake->start(_programPath, QStringList() << "-pnR");
         _makeWatcher->addPath(_makefileFilePath);
     }
@@ -349,6 +355,36 @@ const QList<MakeRule> MakeParser::targets() const
         targetRules.append(rule);
     }
     return targetRules;
+}
+
+QStringList MakeParser::evalVariable(const QString &varName) const
+{
+    QStringList allValues;
+    QRegularExpression regVarValue("\\$\\(([^\\)]+)\\)");
+    const QStringList &values = _variables.values(varName);
+    for (const QString &value : values)
+    {
+        int start = 0;
+        QString newValue;
+        QRegularExpressionMatch localMatch = regVarValue.match(value, start);
+
+        if (!localMatch.hasMatch())
+        {
+            allValues.append(value);
+            continue;
+        }
+        while (localMatch.hasMatch())
+        {
+            newValue.append(value.mid(start, localMatch.capturedStart(0)));
+            newValue.append(evalVariable(localMatch.captured(1)).join(' '));
+            start = localMatch.capturedEnd(0);
+
+            localMatch = regVarValue.match(value, start);
+        }
+        newValue.append(value.mid(start));
+        allValues.append(newValue.split(' '));
+    }
+    return allValues;
 }
 
 QStringList MakeParser::sourceFiles() const

@@ -49,6 +49,8 @@ public:
     const QList<MakeRule> includedInRules(const QString &filePath) const;
     const QList<MakeRule> targets() const;
 
+    QStringList evalVariable(const QString &varName) const;
+
 signals:
     void sourceChanged();
     void sourceFilesAdded(QSet<QString> newSourcesFiles);
