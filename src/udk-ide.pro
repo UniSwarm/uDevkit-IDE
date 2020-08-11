@@ -130,7 +130,10 @@ RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
 RESOURCES += $$PWD/img.qrc
 
-win32 : RC_FILE = udk-ide.rc
+win32|win64
+{
+    RC_FILE = udk-ide.rc
+}
 
 include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)
 include (../contrib/hexedit2.pri)

@@ -40,7 +40,7 @@ MainWindow::MainWindow(Project *project, QWidget *parent)
     : QMainWindow(parent)
     , _project(project)
 {
-    setWindowIcon(QIcon(":/icons/UNIdevkit.ico"));
+    setWindowIcon(QIcon(":/icons/udk-ide.ico"));
     QString path;
     if (!_project)
     {

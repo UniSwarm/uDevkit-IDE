@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>UNIdevkit.ico</file>
+        <file>udk-ide.ico</file>
         <file>img/dark/icons8-about.png</file>
         <file>img/dark/icons8-back-to.png</file>
         <file>img/dark/icons8-binder.png</file>
