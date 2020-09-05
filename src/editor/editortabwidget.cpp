@@ -335,15 +335,22 @@ void EditorTabWidget::switchHeader()
     QString filePath = editor->filePath();
     if (filePath.endsWith(".h"))
     {
-        filePathPair = filePath.replace(QRegExp("\\.h$"), ".c");
+        filePathPair = filePath;
+        filePathPair.replace(QRegExp("\\.h$"), ".c");
+        if (QFile::exists(filePathPair))
+        {
+            openFileEditor(filePathPair);
+        }
+        filePathPair = filePath;
+        filePathPair.replace(QRegExp("\\.h$"), ".cpp");
         if (QFile::exists(filePathPair))
         {
             openFileEditor(filePathPair);
         }
     }
-    else if (filePath.endsWith(".c"))
+    else if (filePath.endsWith(".c") || filePath.endsWith(".cpp"))
     {
-        filePathPair = filePath.replace(QRegExp("\\.c$"), ".h");
+        filePathPair = filePath.replace(QRegExp("\\.c(pp)?$"), ".h");
         if (QFile::exists(filePathPair))
         {
             openFileEditor(filePathPair);
