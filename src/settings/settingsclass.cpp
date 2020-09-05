@@ -29,6 +29,7 @@ SettingsClass::SettingsClass(const QString &name, QObject *parent)
 }
 
 SettingsClass::SettingsClass(const SettingsClass &other)
+    : QObject()
 {
     _name = other.name();
     _modified = false;

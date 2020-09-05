@@ -19,6 +19,7 @@
 #include "gitversionsettings.h"
 
 #include <QFormLayout>
+#include <QGroupBox>
 
 GitVersionSettings::GitVersionSettings()
     : SettingsPage(QIcon(":/icons/img/dark/icons8-git.png"), tr("Git version"))
@@ -35,16 +36,24 @@ void GitVersionSettings::execCommit()
 
 void GitVersionSettings::createWidgets()
 {
-    QFormLayout *layout = new QFormLayout();
-    layout->setLabelAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->setContentsMargins(5, 0, 5, 0);
+
+    QGroupBox *gitPathBox = new QGroupBox(tr("Git"));
+    QFormLayout *gitPathLayout = new QFormLayout();
+    gitPathLayout->setLabelAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 
     _pathEditWidget = new PathEditWidget();
     _pathEditWidget->setProgramm("git");
     _pathEditWidget->setPath(_settingsClass->setting("path").toString());
     _pathEditWidget->setVersionArg("--version");
     _pathEditWidget->checkProgramm();
-    layout->addRow(tr("Git path"), _pathEditWidget);
-    layout->labelForField(_pathEditWidget)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    gitPathLayout->addRow(tr("Git path"), _pathEditWidget);
+    gitPathLayout->labelForField(_pathEditWidget)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
+    gitPathBox->setLayout(gitPathLayout);
+    layout->addWidget(gitPathBox);
+
+    layout->addSpacerItem(new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Expanding));
     setLayout(layout);
 }

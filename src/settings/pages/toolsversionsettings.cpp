@@ -20,7 +20,6 @@
 
 #include <QFormLayout>
 #include <QGroupBox>
-#include <QLayout>
 
 ToolsVersionSettings::ToolsVersionSettings()
     : SettingsPage(QIcon(":/icons/img/dark/icons8-toolbox.png"), tr("Tools version"))
@@ -49,7 +48,7 @@ void ToolsVersionSettings::createWidgets()
     _pathEditWidget->setPath(_settingsClass->setting("make/path").toString());
     _pathEditWidget->setVersionArg("--version");
     _pathEditWidget->checkProgramm();
-    makeLayout->addRow(tr("path"), _pathEditWidget);
+    makeLayout->addRow(tr("Make path"), _pathEditWidget);
     makeLayout->labelForField(_pathEditWidget)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     makeBox->setLayout(makeLayout);
