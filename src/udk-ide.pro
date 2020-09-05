@@ -137,7 +137,7 @@ win32|win64
 
 include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)
 include (../contrib/hexedit2.pri)
-include (../contrib/discount/discount.pri)
+include (../contrib/maddy/maddy.pri)
 
 TRANSLATIONS = $$PWD/translations/udk-ide_fr.ts \
                $$PWD/translations/udk-ide_en.ts
