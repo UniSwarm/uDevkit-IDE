@@ -28,6 +28,8 @@
 #include <QTextBrowser>
 #endif
 
+#include <QtConcurrent/QtConcurrent>
+
 #include "edbee/models/textdocument.h"
 #include "edbee/texteditorwidget.h"
 
@@ -36,20 +38,36 @@
 MarkdownEditor::MarkdownEditor(Project *project, QWidget *parent)
     : HtmlEditor(project, parent)
 {
+    connect(&watcher, &QFutureWatcher<QByteArray>::finished, this, &MarkdownEditor::showHtml);
 }
 
 void MarkdownEditor::updatePreview()
 {
-    QByteArray dataOut;
-    QByteArray textIn = _editorWidget->textDocument()->text().toLocal8Bit();
+    launchRender();
+}
 
+QByteArray MarkdownEditor::renderProcess(const QByteArray &textIn)
+{
     maddy::QMaddy markdownParser;
-    dataOut = markdownParser.toHtml(textIn);
+    markdownParser.setCss("https://sindresorhus.com/github-markdown-css/github-markdown.css");
+    const QByteArray &dataOut = markdownParser.toHtml(textIn);
+    return dataOut;
+}
 
+void MarkdownEditor::launchRender()
+{
+    QByteArray textIn = _editorWidget->textDocument()->text().toLocal8Bit();
+    QFuture<QByteArray> future = QtConcurrent::run(this, &MarkdownEditor::renderProcess, textIn);
+    watcher.setFuture(future);
+}
+
+void MarkdownEditor::showHtml()
+{
+    const QByteArray dataOut = watcher.future().result();
 #ifndef NOWEBKIT
     _htmlPreview->setContent(dataOut, "text/html", QUrl::fromLocalFile(_filePath));
     _editorWidget->setFocus();
 #else
-    _htmlPreview->setHtml(QString::fromUtf8(data));
+    _htmlPreview->setHtml(QString::fromUtf8(dataOut));
 #endif
 }

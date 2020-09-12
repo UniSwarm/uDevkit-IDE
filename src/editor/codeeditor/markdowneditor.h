@@ -21,6 +21,8 @@
 
 #include "htmleditor.h"
 
+#include <QFutureWatcher>
+
 class MarkdownEditor : public HtmlEditor
 {
     Q_OBJECT
@@ -30,7 +32,12 @@ public:
 protected slots:
     void updatePreview() override;
 
+    void launchRender();
+    void showHtml();
+
 protected:
+    QFutureWatcher<QByteArray> watcher;
+    QByteArray renderProcess(const QByteArray &textIn);
 };
 
 #endif // MARKDOWNEDITOR_H

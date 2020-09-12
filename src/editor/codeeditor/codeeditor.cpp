@@ -386,6 +386,7 @@ void CodeEditor::initialiseWidget()
             QSplitter *splitter = new QSplitter();
             splitter->addWidget(_editorWidget);
             splitter->addWidget(previewWidget());
+            splitter->setSizes({100, 100});
             layout->addWidget(splitter);
         }
         else
