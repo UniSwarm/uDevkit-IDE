@@ -35,15 +35,18 @@ HexFileEditor::~HexFileEditor()
 
 int HexFileEditor::openFileData(const QString &filePath)
 {
-    qint64 localCursorPosition = _hexEditor->cursorPosition();
     _file.setFileName(filePath);
     class HexFile hexFile(filePath);
     hexFile.read();
+
+    qint64 localCursorPosition = _hexEditor->cursorPosition();
     _hexEditor->setData(hexFile.prog());
+    _hexEditor->setCursorPosition(localCursorPosition);
+    _hexEditor->ensureVisible();
+
     _modified = false;
     emit modified(isModified());
     setFilePath(filePath);
-    _hexEditor->setCursorPosition(localCursorPosition);
     return 0;
 }
 
