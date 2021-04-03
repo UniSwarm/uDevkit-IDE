@@ -90,6 +90,7 @@ void MainWindow::createDocks()
     _fileProjectDock->setObjectName("fileProjectDock");
     QWidget *fileProjectContent = new QWidget(_fileProjectDock);
     QLayout *fileProjectLayout = new QVBoxLayout();
+    fileProjectLayout->setContentsMargins(2, 4, 2, 4);
     _fileProjectWidget = new ProjectWidget(_project);
     fileProjectLayout->addWidget(_fileProjectWidget);
     connect(_fileProjectWidget, &ProjectWidget::openedFile, _editorTabWidget, &EditorTabWidget::openFileEditor);
@@ -104,6 +105,7 @@ void MainWindow::createDocks()
     _logDock->setObjectName("logDock");
     QWidget *logContent = new QWidget(_logDock);
     QLayout *logLayout = new QVBoxLayout();
+    logLayout->setContentsMargins(2, 4, 2, 4);
     _logWidget = new LogWidget(_project);
     _logWidget->document()->setDefaultStyleSheet("p{margin: 0;}");
     logLayout->addWidget(_logWidget);
@@ -117,6 +119,7 @@ void MainWindow::createDocks()
     _searchReplaceDock->setObjectName("searchReplaceDock");
     QWidget *searchReplaceContent = new QWidget(_searchReplaceDock);
     QLayout *searchReplaceLayout = new QVBoxLayout();
+    searchReplaceLayout->setContentsMargins(2, 4, 2, 4);
     _searchReplaceWidget = new SearchReplaceWidget();
     searchReplaceLayout->addWidget(_searchReplaceWidget);
     _searchReplaceDock->setStyle(new IconnedDockStyle(QIcon(":/icons/img/dark/icons8-search-button.png"), _searchReplaceDock->style()));
@@ -280,17 +283,14 @@ void MainWindow::createMenus()
     QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
 
     action = _logDock->toggleViewAction();
-    action->setText(tr("        &Log"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-console.png"));
     viewMenu->addAction(action);
 
     action = _fileProjectDock->toggleViewAction();
-    action->setText(tr("        &Project file"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-binder.png"));
     viewMenu->addAction(action);
 
     action = _searchReplaceDock->toggleViewAction();
-    action->setText(tr("        &Search/replace"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-search-button.png"));
     viewMenu->addAction(action);
 

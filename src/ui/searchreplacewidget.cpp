@@ -164,11 +164,11 @@ void SearchReplaceWidget::replaceAll()
 void SearchReplaceWidget::createWidgets()
 {
     QVBoxLayout *layout = new QVBoxLayout();
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     // search and next prev buttons
     QHBoxLayout *searchLineLayout = new QHBoxLayout();
-    searchLineLayout->setMargin(0);
+    searchLineLayout->setContentsMargins(0, 0, 0, 0);
     _searchLineEdit = new QLineEdit();
     _searchLineEdit->setPlaceholderText(tr("search"));
     _searchLineEdit->installEventFilter(this);

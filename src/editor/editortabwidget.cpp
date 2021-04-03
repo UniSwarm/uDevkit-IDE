@@ -32,7 +32,6 @@ EditorTabWidget::EditorTabWidget(Project *project)
     : _project(project)
 {
     setTabsClosable(true);
-    setTabShape(QTabWidget::Triangular);
     setDocumentMode(true);
     setMovable(true);
     setUsesScrollButtons(true);
@@ -43,23 +42,22 @@ EditorTabWidget::EditorTabWidget(Project *project)
     setStyleSheet("\
       EditorTabWidget::pane {\
           border: 0 solid #76797C;\
-          padding: 0 5px 5px 5px;\
+          padding: -3px 0px 0px 0px;\
       }\
       EditorTabWidget > QTabBar::tab:top {\
           color: palette(foreground);\
-          border: 1px solid #76797C;\
-          border-bottom: 0px transparent black;\
+          border-top: 1px solid #76797C;\
+          border-left: 1px solid #76797C;\
+          border-right: 1px solid #76797C;\
           background-color: #232629;\
       }\
       EditorTabWidget > QTabBar::tab:top:!selected\
       {\
           color: palette(foreground);\
           background-color: #54575B;\
-          border: 1px solid #76797C;\
-          border-bottom: 0px transparent black;\
-      }\
-      EditorTabWidget > QTabBar::tab:top:!selected:hover {\
-          background-color: #3daee9;\
+          border-top: 1px solid #76797C;\
+          border-left: 1px solid #76797C;\
+          border-right: 1px solid #76797C;\
       }\
     ");
 

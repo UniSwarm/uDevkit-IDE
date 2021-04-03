@@ -28,9 +28,26 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setOrganizationName("UniSwarm");
-    app.setOrganizationDomain("UniSwarm");
-    app.setApplicationName("udk-ide");
+    QApplication::setOrganizationName("UniSwarm");
+    QApplication::setOrganizationDomain("UniSwarm");
+    QApplication::setApplicationName("udk-ide");
+
+    // translate app
+    QTranslator qtTranslator;
+    QString lang = SettingsManager::language();
+    qtTranslator.load("qt_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    QApplication::installTranslator(&qtTranslator);
+    QTranslator udkideTranslator;
+    udkideTranslator.load("udk-ide_" + lang, ":/translations");
+    QApplication::installTranslator(&udkideTranslator);
+
+    Project *project = Q_NULLPTR;
+    if (argc > 1)
+    {
+        project = new Project(argv[1]);
+    }
+
+    MainWindow w(project);
 
     // apply dark style
     QFile f(":qdarkstyle/style.qss");
@@ -38,26 +55,20 @@ int main(int argc, char *argv[])
     {
         f.open(QFile::ReadOnly | QFile::Text);
         QTextStream ts(&f);
-        qApp->setStyleSheet(ts.readAll());
+        app.setStyleSheet(ts.readAll());
+        w.setStyleSheet("\
+            QComboBox::item:checked {height: 24px;} \
+            QMenu::icon {margin: 1px;} \
+            QMenu::icon:checked {margin: 0; background: #505F69; border: 1px inset #505F69; position: absolute; top: 1px; right: 1px; bottom: 1px; left: 1px;} \
+            QMenu::item {padding: 4px 24px 4px 8px;} \
+            QToolBar {border-bottom: none;} \
+            QSplitter::handle:horizontal {width: 2px;} \
+            QSplitter::handle:vertical {height: 2px;} \
+        ");
     }
-
-    // translate app
-    QTranslator qtTranslator;
-    QString lang = SettingsManager::language();
-    qtTranslator.load("qt_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    app.installTranslator(&qtTranslator);
-    QTranslator udkideTranslator;
-    udkideTranslator.load("udk-ide_" + lang, ":/translations");
-    app.installTranslator(&udkideTranslator);
-
-    Project *project = Q_NULLPTR;
-    if (argc > 1)
-        project = new Project(argv[1]);
-
-    MainWindow w(project);
     w.show();
 
-    int ret = app.exec();
+    int ret = QApplication::exec();
     SettingsManager::save();
     return ret;
 }

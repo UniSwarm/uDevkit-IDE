@@ -25,6 +25,7 @@
 EditorTabSwitchWidget::EditorTabSwitchWidget(QWidget *parent)
     : QListWidget(parent)
 {
+    _id = -1;
     setSelectionMode(SingleSelection);
     connect(this, &QListWidget::currentRowChanged, this, &EditorTabSwitchWidget::updateId);
     connect(this, &QListWidget::itemClicked, this, &EditorTabSwitchWidget::clickItem);
