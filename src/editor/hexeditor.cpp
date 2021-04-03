@@ -152,8 +152,8 @@ void HexEditor::cutCommand()
     QKeyEvent *eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_X, Qt::ControlModifier);
     QKeyEvent *eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_X, Qt::ControlModifier);
 
-    qApp->postEvent(_hexEditor, dynamic_cast<QEvent *>(eve1));
-    qApp->postEvent(_hexEditor, dynamic_cast<QEvent *>(eve2));
+    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve1));
+    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve2));
 }
 
 void HexEditor::copyCommand()
@@ -161,8 +161,8 @@ void HexEditor::copyCommand()
     QKeyEvent *eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_C, Qt::ControlModifier);
     QKeyEvent *eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_C, Qt::ControlModifier);
 
-    qApp->postEvent(_hexEditor, dynamic_cast<QEvent *>(eve1));
-    qApp->postEvent(_hexEditor, dynamic_cast<QEvent *>(eve2));
+    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve1));
+    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve2));
 }
 
 void HexEditor::pasteCommand()
@@ -170,6 +170,6 @@ void HexEditor::pasteCommand()
     QKeyEvent *eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_V, Qt::ControlModifier);
     QKeyEvent *eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_V, Qt::ControlModifier);
 
-    qApp->postEvent(_hexEditor, dynamic_cast<QEvent *>(eve1));
-    qApp->postEvent(_hexEditor, dynamic_cast<QEvent *>(eve2));
+    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve1));
+    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve2));
 }
