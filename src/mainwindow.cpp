@@ -535,7 +535,7 @@ void MainWindow::about()
 {
     QMessageBox::about(this,
                        "uDevkit-IDE v0",
-                       QString("Copyright (C) 2017-2020 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
+                       QString("Copyright (C) 2017-2021 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
 <br>\
 This sofware is part of uDevkit distribution. To check for new version, please visit <a href=\"https://github.com/UniSwarm/uDevkit-IDE\">github.com/UniSwarm/uDevkit-IDE</a><br>\
 <br>\
