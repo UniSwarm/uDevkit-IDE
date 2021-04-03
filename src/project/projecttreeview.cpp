@@ -21,7 +21,6 @@
 #include <QApplication>
 #include <QDebug>
 #include <QHeaderView>
-#include <QHostInfo>
 #include <QInputDialog>
 #include <QItemSelectionModel>
 #include <QMenu>

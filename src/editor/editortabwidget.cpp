@@ -166,14 +166,18 @@ void EditorTabWidget::openFileEditor(const QString &url)
     }
 
     // find build
-    // MakeRule rule = _project->make()->buildRule(filePath);
-    // qDebug() << rule.target << rule.dependencies;
+    /*MakeRule rule = _project->make()->buildRule(filePath);
+    qDebug() << rule.target << rule.dependencies;
 
-    /*QList<MakeRule> targets = _project->make()->targets();
+    qDebug() << "";
+    qDebug() << "targets";
+    QList<MakeRule> targets = _project->make()->targets();
     foreach(const MakeRule &arule, targets)
-        qDebug() << arule.target << arule.dependencies;*/
+        qDebug() << arule.target << arule.dependencies;
 
-    /*QList<MakeRule> rules = _project->make()->includedInRules(filePath);
+    qDebug() << "";
+    qDebug() << "includedInRules";
+    QList<MakeRule> rules = _project->make()->includedInRules(filePath);
     foreach(const MakeRule &arule, rules)
         qDebug() << arule.target << arule.dependencies;*/
 

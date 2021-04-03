@@ -207,7 +207,7 @@ int CodeEditor::openFileData(const QString &filePath)
     emit modified(false);
 
     // TODO replace this section with .editorconfig
-    if (info.suffix() == "mk" || info.fileName() == "Makefile")
+    if (info.suffix() == "mk" || info.suffix() == "md" || info.fileName() == "Makefile")
     {
         _editorWidget->config()->setUseTabChar(true);
     }

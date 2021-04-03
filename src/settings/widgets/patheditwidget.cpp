@@ -96,11 +96,11 @@ void PathEditWidget::checkProgramm()
     QChar listSep = ':';
 #endif
     QString programm = _programm;
-    QProcess *process = new QProcess();
     if (_programm.isEmpty())
     {
         return;
     }
+    QProcess *process = new QProcess();
     QProcessEnvironment env = _env;
     if (!_path.isEmpty())
     {

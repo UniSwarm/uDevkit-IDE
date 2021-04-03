@@ -63,6 +63,7 @@ LogWidget::~LogWidget()
 
 void LogWidget::start(const QString &program, const QStringList &arguments)
 {
+    _process->terminate();
     clear();
     QString command = "> " + program + " " + arguments.join(' ');
     insertHtml("<i style=\"color: green\">" + command.toHtmlEscaped() + "</i>");
@@ -152,11 +153,11 @@ void LogWidget::finishProcess(int errorCode, QProcess::ExitStatus exitStatus)
     moveCursor(QTextCursor::End);
     if (exitStatus == QProcess::NormalExit && errorCode == 0)
     {
-        insertHtml(QString("<br/><i style=\"color: green\">%1 finished with code %2</i>").arg(_process->program()).arg(errorCode));
+        insertHtml(QString("<br/><i style=\"color: green\">&gt; %1 finished with code %2</i>").arg(_process->program()).arg(errorCode));
     }
     else
     {
-        insertHtml(QString("<br/><i style=\"color: red\">%1 crashed with code %2</i>").arg(_process->program()).arg(errorCode));
+        insertHtml(QString("<br/><i style=\"color: red\">&gt; %1 crashed with code %2</i>").arg(_process->program()).arg(errorCode));
     }
     moveCursor(QTextCursor::End);
 }

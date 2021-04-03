@@ -368,7 +368,7 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
     // qDebug()<<mime;
 
     Type type;
-    if (mime.name() == "text/x-hex")
+    if (mime.name() == "text/x-hex" || filePath.endsWith(".hex"))
     {
         type = Editor::HexFile;
     }
@@ -381,7 +381,7 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
         type = Editor::Markdown;
     }
     else if (mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml" || mime.name() == "application/x-shellscript" ||
-             mime.name() == "application/javascript" || mime.name() == "application/json" || file.size() == 0)
+             mime.name() == "application/javascript" || mime.name() == "application/json" || mime.name() == "application/x-php" || file.size() == 0)
     {
         type = Editor::Code;
     }

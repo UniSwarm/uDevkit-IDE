@@ -224,11 +224,11 @@ void MakeParser::processEnd()
     // TODO complete with generic name of src variable name or
     //   improve with an auto detection of source
     addSource(sourceFiles, evalVariable("SRC"));
+    addSource(sourceFiles, evalVariable("SIM_SRC"));
     addSource(sourceFiles, evalVariable("ARCHI_SRC"));
     addSource(sourceFiles, evalVariable("SOURCEFILES"));
     addSource(sourceFiles, evalVariable("HEADER"));
     addSource(sourceFiles, evalVariable("MAKEFILE_LIST"));
-    // qDebug()<<_variables;
 
     outgoingFiles = _sourceFiles;
     outgoingFiles.subtract(sourceFiles);
