@@ -381,9 +381,8 @@ void MainWindow::makeall()
 {
     _editorTabWidget->saveAllEditors();
     _logWidget->start("make",
-                      QStringList() << "hex"
-                                    << "--no-print-directory"
-                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O");
+                      QStringList() << "--no-print-directory"
+                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O" << "-k");
 }
 
 void MainWindow::makeprog()
@@ -392,7 +391,7 @@ void MainWindow::makeprog()
     _logWidget->start("make",
                       QStringList() << "prog"
                                     << "--no-print-directory"
-                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O");
+                                    << "-j" << QString::number(QThread::idealThreadCount() + 1));
 }
 
 void MainWindow::makesim()
@@ -400,7 +399,7 @@ void MainWindow::makesim()
     _editorTabWidget->saveAllEditors();
     _logWidget->start("make",
                       QStringList() << "sim"
-                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O");
+                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O" << "-k");
 }
 
 void MainWindow::makeclean()
