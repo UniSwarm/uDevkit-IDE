@@ -65,3 +65,11 @@ int HexFileEditor::saveFileData(const QString &filePath)
     emit modified(false);
     return 0;
 }
+
+void HexFileEditor::updatePos()
+{
+    QString status;
+    QString addr = QString::number(_hexEditor->cursorPosition() / 4, 16).rightJustified(_hexEditor->addressWidth(), '0');
+    status.append(tr("word addr: 0x%1 size: %2 ").arg(addr).arg(_hexEditor->data().size()));
+    emit statusChanged(status);
+}

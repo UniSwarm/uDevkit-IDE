@@ -36,6 +36,10 @@ public:
 protected:
     int openFileData(const QString &filePath) override;
     int saveFileData(const QString &filePath = QString()) override;
+
+    // HexEditor interface
+protected slots:
+    void updatePos() override;
 };
 
 #endif // HEXFILEEDITOR_H

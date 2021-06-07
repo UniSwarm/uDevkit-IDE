@@ -41,7 +41,7 @@ public:
 
 protected slots:
     void modificationAppend();
-    void updatePos();
+    virtual void updatePos();
 
 protected:
     QHexEdit *_hexEditor;
