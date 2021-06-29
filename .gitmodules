@@ -7,9 +7,9 @@
 [submodule "contrib/QDarkStyleSheet"]
 	path = contrib/QDarkStyleSheet
 	url = https://github.com/ColinDuquesnoy/QDarkStyleSheet.git
-[submodule "contrib/hexedit2"]
-	path = contrib/hexedit2
-	url = https://github.com/Simsys/qhexedit2.git
 [submodule "contrib/maddy"]
 	path = contrib/maddy
 	url = https://github.com/UniSwarm/maddy.git
+[submodule "contrib/QHexView"]
+	path = contrib/QHexView
+	url = https://github.com/Dax89/QHexView.git

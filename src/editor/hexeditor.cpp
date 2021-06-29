@@ -24,7 +24,10 @@
 #include <QKeyEvent>
 #include <QSaveFile>
 
-#include "qhexedit.h"
+#include <cmath>
+
+#include "qhexview.h"
+#include "document/buffer/qmemorybuffer.h"
 
 HexEditor::HexEditor(Project *project, QWidget *parent)
     : Editor(project, parent)
@@ -32,13 +35,11 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setMargin(0);
 
-    _hexEditor = new QHexEdit();
+    _hexEditor = new QHexView();
     _modified = false;
-    connect(_hexEditor, &QHexEdit::dataChanged, this, &HexEditor::modificationAppend);
-    connect(_hexEditor, &QHexEdit::currentAddressChanged, this, &HexEditor::updatePos);
 
     // style
-    QString style = "\
+    /*QString style = "\
     QFrame\
     {\
             background-color: #19232D;\
@@ -47,12 +48,11 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
             border: 1px solid #76797C;\
             border-radius: 2px;\
             color: #eff0f1;\
-            border: none;\
     }";
-    _hexEditor->setStyleSheet(style);
-    _hexEditor->setAddressAreaColor(0x31363B);
-    _hexEditor->setSelectionColor(0x9D550F);
-    _hexEditor->setHighlightingColor(0xFFE792);
+    _hexEditor->setStyleSheet(style);*/
+    //_hexEditor->setAddressAreaColor(0x31363B);
+    //_hexEditor->setSelectionColor(0x9D550F);
+    //_hexEditor->setHighlightingColor(0xFFE792);
 
     layout->addWidget(_hexEditor);
     setLayout(layout);
@@ -60,7 +60,6 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
 
 HexEditor::~HexEditor()
 {
-    _file.close();
 }
 
 bool HexEditor::isModified() const
@@ -83,19 +82,23 @@ void HexEditor::modificationAppend()
 void HexEditor::updatePos()
 {
     QString status;
-    QString addr = QString::number(_hexEditor->cursorPosition(), 16).rightJustified(_hexEditor->addressWidth(), '0');
-    status.append(tr("addr: 0x%1 size: %2 ").arg(addr).arg(_hexEditor->data().size()));
+    int64_t maxAdress = _hexEditor->document()->baseAddress() + _hexEditor->document()->length();
+    int addrWidth = ceil(log2(maxAdress) / 4.0);
+    QString addr = QString::number(_hexEditor->document()->cursor()->position().offset(), 16).rightJustified(addrWidth, '0').toUpper();
+    status.append(tr("addr: 0x%1 size: %2 ").arg(addr).arg(_hexEditor->document()->length()));
     emit statusChanged(status);
 }
 
 int HexEditor::openFileData(const QString &filePath)
 {
-    _file.setFileName(filePath);
+    qint64 localCursorPosition = _hexEditor->document()->cursor()->position().offset();
 
-    qint64 localCursorPosition = _hexEditor->cursorPosition();
-    _hexEditor->setData(_file);
-    _hexEditor->setCursorPosition(localCursorPosition);
-    _hexEditor->ensureVisible();
+    QHexDocument *document = QHexDocument::fromFile<QMemoryBuffer>(filePath);
+    _hexEditor->setDocument(document);
+    connect(_hexEditor->document(), &QHexDocument::documentChanged, this, &HexEditor::modificationAppend);
+    connect(_hexEditor->document()->cursor(), &QHexCursor::positionChanged, this, &HexEditor::updatePos);
+
+    _hexEditor->document()->cursor()->moveTo(localCursorPosition);
 
     _modified = false;
     emit modified(isModified());
@@ -110,7 +113,7 @@ int HexEditor::saveFileData(const QString &filePath)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QFile file(tmpFileName);
-    bool ok = _hexEditor->write(file);
+    bool ok = _hexEditor->document()->saveTo(&file);
     if (QFile::exists(path))
     {
         ok = QFile::remove(path);
@@ -139,37 +142,25 @@ void HexEditor::giveFocus()
 
 void HexEditor::undoCommand()
 {
-    _hexEditor->undo();
+    _hexEditor->document()->undo();
 }
 
 void HexEditor::redoCommand()
 {
-    _hexEditor->redo();
+    _hexEditor->document()->redo();
 }
 
 void HexEditor::cutCommand()
 {
-    QKeyEvent *eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_X, Qt::ControlModifier);
-    QKeyEvent *eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_X, Qt::ControlModifier);
-
-    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve1));
-    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve2));
+    _hexEditor->document()->cut();
 }
 
 void HexEditor::copyCommand()
 {
-    QKeyEvent *eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_C, Qt::ControlModifier);
-    QKeyEvent *eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_C, Qt::ControlModifier);
-
-    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve1));
-    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve2));
+    _hexEditor->document()->copy();
 }
 
 void HexEditor::pasteCommand()
 {
-    QKeyEvent *eve1 = new QKeyEvent(QEvent::KeyPress, Qt::Key_V, Qt::ControlModifier);
-    QKeyEvent *eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_V, Qt::ControlModifier);
-
-    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve1));
-    QApplication::postEvent(_hexEditor, dynamic_cast<QEvent *>(eve2));
+    _hexEditor->document()->paste();
 }

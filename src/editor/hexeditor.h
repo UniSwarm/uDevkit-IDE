@@ -21,7 +21,7 @@
 
 #include "editor.h"
 
-class QHexEdit;
+class QHexView;
 
 class HexEditor : public Editor
 {
@@ -44,8 +44,7 @@ protected slots:
     virtual void updatePos();
 
 protected:
-    QHexEdit *_hexEditor;
-    QFile _file;
+    QHexView *_hexEditor;
     bool _modified;
 
     int openFileData(const QString &filePath) override;
