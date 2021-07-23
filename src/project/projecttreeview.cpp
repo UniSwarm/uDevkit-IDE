@@ -28,11 +28,14 @@
 #include <QMouseEvent>
 #include <QProcess>
 #include <QProxyStyle>
+#include <QDateTime>
 
 #include "fileprojectinfo.h"
 #include "mainwindow.h"
 
 #include "projecttreeviewitemdelegate.h"
+
+#include <settings/settingsmanager.h>
 
 ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
     : QTreeView(parent)
@@ -286,6 +289,32 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
             {
                 return;
             }
+
+            if (fileName.endsWith(".h") || fileName.endsWith(".c"))
+            {
+                QTextStream stream(&file);
+                stream << "/**\n * @file "
+                       << fileName
+                       << "\n * @author " << SettingsManager::userName() << " (" << SettingsManager::userPseudo() << ")"
+                       << "\n * @copyright UniSwarm " << QDateTime::currentDateTime().date().year()
+                       << "\n *\n * @date "
+                       << QLocale::c().toString(QDateTime::currentDateTime(), "MMMM d, yyyy, hh:mm AP")
+                       << "\n *\n * @brief .....\n */\n\n";
+
+                if (fileName.endsWith(".h"))
+                {
+                    QString define = fileName.replace(".", "_").toUpper();
+                    stream << "#ifndef " << define << "\n"
+                           << "#define " << define << "\n"
+                           << "\n\n\n"
+                           << "#endif  // " << define << "\n";
+                }
+                if (fileName.endsWith(".c"))
+                {
+                    stream << "#include \"" << fileName.replace(".c", ".h") << "\"\n\n";
+                }
+            }
+
             file.close();
             emit openedFile(filePath);
         }
