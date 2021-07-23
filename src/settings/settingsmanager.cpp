@@ -52,6 +52,16 @@ QString SettingsManager::language()
     return instance()->registerSetting("global/language", QLocale::system().name().mid(0, 2))->value().toString();
 }
 
+QString SettingsManager::userName()
+{
+    return instance()->registerSetting("global/username", "username")->value().toString();
+}
+
+QString SettingsManager::userPseudo()
+{
+    return instance()->registerSetting("global/userpseudo", "userpseudo")->value().toString();
+}
+
 void SettingsManager::load(SettingsClass *settingsClass)
 {
     QSettings settings(QApplication::organizationName(), QApplication::applicationName());

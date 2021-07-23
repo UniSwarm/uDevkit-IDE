@@ -38,6 +38,8 @@ public:
 
     // helpers
     static QString language();
+    static QString userName();
+    static QString userPseudo();
 
 protected:
     static SettingsManager *settingsManager;

@@ -30,6 +30,8 @@ GlobalSettings::GlobalSettings()
 void GlobalSettings::execCommit()
 {
     _settingsClass->setSetting("language", _langComboBox->currentData());
+    _settingsClass->setSetting("username", _usernameEdit->text());
+    _settingsClass->setSetting("userpseudo", _userpseudoEdit->text());
     _settingsClass->commit();
 }
 
@@ -46,6 +48,14 @@ void GlobalSettings::createWidgets()
         _langComboBox->setCurrentIndex(find);
     }
     layout->addRow(tr("Language (restart needed to take effect)"), _langComboBox);
+
+    _usernameEdit = new QLineEdit();
+    _usernameEdit->setText(SettingsManager::userName());
+    layout->addRow(tr("User name (Firstname Name)"), _usernameEdit);
+
+    _userpseudoEdit = new QLineEdit();
+    _userpseudoEdit->setText(SettingsManager::userPseudo());
+    layout->addRow(tr("User github pseudo (pseudo)"), _userpseudoEdit);
 
     setLayout(layout);
 }

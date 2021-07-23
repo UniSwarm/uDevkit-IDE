@@ -22,6 +22,7 @@
 #include "settingspage.h"
 
 #include <QComboBox>
+#include <QLineEdit>
 
 class GlobalSettings : public SettingsPage
 {
@@ -35,6 +36,8 @@ protected:
     void createWidgets() override;
 
     QComboBox *_langComboBox;
+    QLineEdit *_usernameEdit;
+    QLineEdit *_userpseudoEdit;
 };
 
 #endif // GLOBALSETTINGS_H
