@@ -409,8 +409,16 @@ void MainWindow::makeclean()
 
 void MainWindow::launchFormat()
 {
-    _editorTabWidget->saveAllEditors();
-    _logWidget->start("clang-format", QStringList() << "-i" << _editorTabWidget->currentFilePath());
+    QString filePath = _editorTabWidget->currentFilePath();
+    _editorTabWidget->saveCurrentEditor();
+    if (filePath.endsWith(".c") || filePath.endsWith(".h") || filePath.endsWith(".cpp"))
+    {
+        _logWidget->start("clang-format", QStringList() << "-i" << filePath);
+    }
+    if (filePath.endsWith(".eds"))
+    {
+        _logWidget->start("cood", QStringList() << filePath << "-o" << filePath);
+    }
 }
 
 void MainWindow::updateTitle(Editor *editor)
