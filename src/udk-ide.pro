@@ -29,102 +29,102 @@ qtHaveModule(webenginewidgets) {
 }
 
 SOURCES += \
-    editor/codeeditor/markdowneditor.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    make/makerule.cpp \
-    version/abstractversioncontrol.cpp \
-    version/gitversioncontrol.cpp \
-    version/versionchange.cpp \
-    version/fileversionchange.cpp \
-    editor/editor.cpp \
-    editor/editortabwidget.cpp \
-    editor/editortabswitchwidget.cpp \
-    editor/codeeditor/codeeditor.cpp \
-    editor/codeeditor/codeeditorscrollbar.cpp \
-    editor/codeeditor/codeeditormargindelegate.cpp \
-    editor/codeeditor/htmleditor.cpp \
-    editor/hexeditor.cpp \
-    editor/hexfile.cpp \
-    editor/hexfileeditor.cpp \
-    editor/imageeditor.cpp \
-    make/makeparser.cpp \
-    project/fileproject.cpp \
-    project/fileprojectinfo.cpp \
-    project/project.cpp \
-    project/projectitemmodel.cpp \
-    project/projectitem.cpp \
-    project/projectitemproxymodel.cpp \
-    project/projecttreeview.cpp \
-    project/projecttreeviewitemdelegate.cpp \
-    project/projectwidget.cpp \
-    project/projecticonprovider.cpp \
-    ui/searchreplacewidget.cpp \
-    ui/logwidget.cpp \
-    ui/iconneddockstyle.cpp \
-    settings/setting.cpp \
-    settings/settingsmanager.cpp \
-    settings/settingsclass.cpp \
-    settings/widgets/patheditwidget.cpp \
-    settings/pages/settingswindow.cpp \
-    settings/pages/settingspage.cpp \
-    settings/pages/settingscateg.cpp \
-    settings/pages/codeeditorsettings.cpp \
-    settings/pages/hexeditorsettings.cpp \
-    settings/pages/imageeditorsettings.cpp \
-    settings/pages/htmleditorsettings.cpp \
-    settings/pages/gitversionsettings.cpp \
-    settings/pages/globalsettings.cpp \
-    settings/pages/toolsversionsettings.cpp
+    $$PWD/editor/codeeditor/codeeditor.cpp \
+    $$PWD/editor/codeeditor/codeeditormargindelegate.cpp \
+    $$PWD/editor/codeeditor/codeeditorscrollbar.cpp \
+    $$PWD/editor/codeeditor/htmleditor.cpp \
+    $$PWD/editor/codeeditor/markdowneditor.cpp \
+    $$PWD/editor/editor.cpp \
+    $$PWD/editor/editortabswitchwidget.cpp \
+    $$PWD/editor/editortabwidget.cpp \
+    $$PWD/editor/hexeditor.cpp \
+    $$PWD/editor/hexfile.cpp \
+    $$PWD/editor/hexfileeditor.cpp \
+    $$PWD/editor/imageeditor.cpp \
+    $$PWD/main.cpp \
+    $$PWD/mainwindow.cpp \
+    $$PWD/make/makeparser.cpp \
+    $$PWD/make/makerule.cpp \
+    $$PWD/project/fileproject.cpp \
+    $$PWD/project/fileprojectinfo.cpp \
+    $$PWD/project/project.cpp \
+    $$PWD/project/projecticonprovider.cpp \
+    $$PWD/project/projectitem.cpp \
+    $$PWD/project/projectitemmodel.cpp \
+    $$PWD/project/projectitemproxymodel.cpp \
+    $$PWD/project/projecttreeview.cpp \
+    $$PWD/project/projecttreeviewitemdelegate.cpp \
+    $$PWD/project/projectwidget.cpp \
+    $$PWD/settings/pages/codeeditorsettings.cpp \
+    $$PWD/settings/pages/gitversionsettings.cpp \
+    $$PWD/settings/pages/globalsettings.cpp \
+    $$PWD/settings/pages/hexeditorsettings.cpp \
+    $$PWD/settings/pages/htmleditorsettings.cpp \
+    $$PWD/settings/pages/imageeditorsettings.cpp \
+    $$PWD/settings/pages/settingscateg.cpp \
+    $$PWD/settings/pages/settingspage.cpp \
+    $$PWD/settings/pages/settingswindow.cpp \
+    $$PWD/settings/pages/toolsversionsettings.cpp \
+    $$PWD/settings/setting.cpp \
+    $$PWD/settings/settingsclass.cpp \
+    $$PWD/settings/settingsmanager.cpp \
+    $$PWD/settings/widgets/patheditwidget.cpp \
+    $$PWD/ui/iconneddockstyle.cpp \
+    $$PWD/ui/logwidget.cpp \
+    $$PWD/ui/searchreplacewidget.cpp \
+    $$PWD/version/abstractversioncontrol.cpp \
+    $$PWD/version/fileversionchange.cpp \
+    $$PWD/version/gitversioncontrol.cpp \
+    $$PWD/version/versionchange.cpp
 
 HEADERS += \
-    editor/codeeditor/markdowneditor.h \
-    mainwindow.h \
-    make/makerule.h \
-    version/abstractversioncontrol.h \
-    version/gitversioncontrol.h \
-    version/versionchange.h \
-    version/fileversionchange.h \
-    editor/editor.h \
-    editor/editors.h \
-    editor/editortabwidget.h \
-    editor/editortabswitchwidget.h \
-    editor/codeeditor/codeeditor.h \
-    editor/codeeditor/codeeditorscrollbar.h \
-    editor/codeeditor/codeeditormargindelegate.h \
-    editor/codeeditor/htmleditor.h \
-    editor/hexeditor.h \
-    editor/hexfile.h \
-    editor/hexfileeditor.h \
-    editor/imageeditor.h \
-    make/makeparser.h \
-    project/fileproject.h \
-    project/fileprojectinfo.h \
-    project/project.h \
-    project/projectitemmodel.h \
-    project/projectitem.h \
-    project/projectitemproxymodel.h \
-    project/projecttreeview.h \
-    project/projecttreeviewitemdelegate.h \
-    project/projectwidget.h \
-    project/projecticonprovider.h \
-    ui/searchreplacewidget.h \
-    ui/logwidget.h \
-    ui/iconneddockstyle.h \
-    settings/setting.h \
-    settings/settingsmanager.h \
-    settings/settingsclass.h \
-    settings/widgets/patheditwidget.h \
-    settings/pages/settingswindow.h \
-    settings/pages/settingspage.h \
-    settings/pages/settingscateg.h \
-    settings/pages/codeeditorsettings.h \
-    settings/pages/hexeditorsettings.h \
-    settings/pages/imageeditorsettings.h \
-    settings/pages/htmleditorsettings.h \
-    settings/pages/gitversionsettings.h \
-    settings/pages/globalsettings.h \
-    settings/pages/toolsversionsettings.h
+    $$PWD/editor/codeeditor/codeeditor.h \
+    $$PWD/editor/codeeditor/codeeditormargindelegate.h \
+    $$PWD/editor/codeeditor/codeeditorscrollbar.h \
+    $$PWD/editor/codeeditor/htmleditor.h \
+    $$PWD/editor/codeeditor/markdowneditor.h \
+    $$PWD/editor/editor.h \
+    $$PWD/editor/editors.h \
+    $$PWD/editor/editortabswitchwidget.h \
+    $$PWD/editor/editortabwidget.h \
+    $$PWD/editor/hexeditor.h \
+    $$PWD/editor/hexfileeditor.h \
+    $$PWD/editor/hexfile.h \
+    $$PWD/editor/imageeditor.h \
+    $$PWD/mainwindow.h \
+    $$PWD/make/makeparser.h \
+    $$PWD/make/makerule.h \
+    $$PWD/project/fileproject.h \
+    $$PWD/project/fileprojectinfo.h \
+    $$PWD/project/project.h \
+    $$PWD/project/projecticonprovider.h \
+    $$PWD/project/projectitem.h \
+    $$PWD/project/projectitemmodel.h \
+    $$PWD/project/projectitemproxymodel.h \
+    $$PWD/project/projecttreeview.h \
+    $$PWD/project/projecttreeviewitemdelegate.h \
+    $$PWD/project/projectwidget.h \
+    $$PWD/settings/pages/codeeditorsettings.h \
+    $$PWD/settings/pages/gitversionsettings.h \
+    $$PWD/settings/pages/globalsettings.h \
+    $$PWD/settings/pages/hexeditorsettings.h \
+    $$PWD/settings/pages/htmleditorsettings.h \
+    $$PWD/settings/pages/imageeditorsettings.h \
+    $$PWD/settings/pages/settingscateg.h \
+    $$PWD/settings/pages/settingspage.h \
+    $$PWD/settings/pages/settingswindow.h \
+    $$PWD/settings/pages/toolsversionsettings.h \
+    $$PWD/settings/setting.h \
+    $$PWD/settings/settingsclass.h \
+    $$PWD/settings/settingsmanager.h \
+    $$PWD/settings/widgets/patheditwidget.h \
+    $$PWD/ui/iconneddockstyle.h \
+    $$PWD/ui/logwidget.h \
+    $$PWD/ui/searchreplacewidget.h \
+    $$PWD/version/abstractversioncontrol.h \
+    $$PWD/version/fileversionchange.h \
+    $$PWD/version/gitversioncontrol.h \
+    $$PWD/version/versionchange.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 
@@ -134,6 +134,29 @@ win32|win64
 {
     RC_FILE = udk-ide.rc
 }
+
+isEmpty(PREFIX)
+{
+    PREFIX=/usr/local
+}
+target.path=$$PREFIX/bin
+unix
+{
+    QMAKE_SUBSTITUTES += udk-ide.desktop.in
+    desktop.path  = $$PREFIX/share/applications
+    desktop.files = udk-ide.desktop
+    INSTALLS += desktop
+    icons.path  = $$PREFIX/share/icons
+    icons.files = udk-ide.ico
+    INSTALLS += icons
+    data.path  = $$PREFIX/data
+    data.files = ../data/*
+    INSTALLS += data
+    syntaxes.path  = $$PREFIX/data/syntaxfiles
+    syntaxes.files = ../contrib/edbee-data/syntaxfiles/*
+    INSTALLS += syntaxes
+}
+!isEmpty(target.path): INSTALLS += target
 
 include (../contrib/edbee-lib/edbee-lib/edbee-lib.pri)
 include (../contrib/QHexView/QHexView.pri)

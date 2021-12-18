@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=uDevkit-IDE
+Comment=UniSwarm IDE
+Exec=$$target.path/udk-ide
+Icon=$$icons.path/udk-ide.ico
+Categories=IDE;
