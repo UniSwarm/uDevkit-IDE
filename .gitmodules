@@ -3,7 +3,7 @@
 	url = https://github.com/UniSwarm/edbee-lib.git
 [submodule "contrib/edbee-data"]
 	path = contrib/edbee-data
-	url = https://github.com/edbee/edbee-data.git
+	url = https://github.com/UniSwarm/edbee-data.git
 [submodule "contrib/QDarkStyleSheet"]
 	path = contrib/QDarkStyleSheet
 	url = https://github.com/ColinDuquesnoy/QDarkStyleSheet.git
