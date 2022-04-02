@@ -29,15 +29,15 @@
 CodeEditorScrollBar::CodeEditorScrollBar(QWidget *parent)
     : QScrollBar(parent)
 {
-    _fileChange = Q_NULLPTR;
-    _textRender = Q_NULLPTR;
+    _fileChange = nullptr;
+    _textRender = nullptr;
 }
 
 CodeEditorScrollBar::CodeEditorScrollBar(Qt::Orientation orientation, QWidget *parent)
     : QScrollBar(orientation, parent)
 {
-    _fileChange = Q_NULLPTR;
-    _textRender = Q_NULLPTR;
+    _fileChange = nullptr;
+    _textRender = nullptr;
 }
 
 void CodeEditorScrollBar::paintEvent(QPaintEvent *event)

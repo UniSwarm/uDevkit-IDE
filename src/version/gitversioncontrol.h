@@ -100,4 +100,4 @@ protected:
     void launch(const QString &program, const QStringList &arguments);
 };
 
-#endif  // GITVERSIONCONTROL_H
+#endif // GITVERSIONCONTROL_H

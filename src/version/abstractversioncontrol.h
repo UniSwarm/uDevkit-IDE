@@ -29,7 +29,7 @@ class AbstractVersionControl : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractVersionControl(QObject *parent = Q_NULLPTR);
+    explicit AbstractVersionControl(QObject *parent = nullptr);
 
     virtual QString versionControlName() const;
     void setPath(const QString &path);
@@ -71,4 +71,4 @@ protected:
     QMap<QString, FileVersionChange> _changeForFile;
 };
 
-#endif  // ABSTRACTVERSIONCONTROL_H
+#endif // ABSTRACTVERSIONCONTROL_H

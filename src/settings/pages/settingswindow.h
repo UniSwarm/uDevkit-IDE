@@ -30,7 +30,7 @@ class SettingsWindow : public QDialog
 {
     Q_OBJECT
 public:
-    SettingsWindow(QWidget *parent = Q_NULLPTR);
+    SettingsWindow(QWidget *parent = nullptr);
 
     SettingsCateg *category(int i) const;
     SettingsCateg *addCategory(const QIcon &icon, const QString &label);
@@ -51,4 +51,4 @@ protected:
     QDialogButtonBox *_dialogButtonBox;
 };
 
-#endif  // SETTINGSWINDOW_H
+#endif // SETTINGSWINDOW_H

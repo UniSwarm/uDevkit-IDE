@@ -26,4 +26,4 @@
 #include "hexfileeditor.h"
 #include "imageeditor.h"
 
-#endif  // EDITORS_H
+#endif // EDITORS_H

@@ -19,13 +19,13 @@
 #include "markdowneditor.h"
 
 #ifdef WEBENGINE
-#    include <QWebEngineView>
+#include <QWebEngineView>
 #endif
 #ifdef WEBKIT
-#    include <QWebView>
+#include <QWebView>
 #endif
 #ifdef NOWEBKIT
-#    include <QTextBrowser>
+#include <QTextBrowser>
 #endif
 
 #include <QtConcurrent/QtConcurrent>

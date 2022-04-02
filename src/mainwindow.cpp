@@ -141,14 +141,14 @@ void MainWindow::createMenus()
     openDirAction->setIcon(QIcon(":/icons/img/dark/icons8-open-box.png"));
     openDirAction->setStatusTip(tr("Opens a project"));
     fileMenu->addAction(openDirAction);
-    connect(openDirAction, SIGNAL(triggered()), this, SLOT(openDir()));
+    connect(openDirAction, &QAction::triggered, [=]() { openDir(); });
 
     QAction *openFilesAction = new QAction(tr("&Open files"), this);
     openFilesAction->setIcon(QIcon(":/icons/img/dark/icons8-open.png"));
     openFilesAction->setStatusTip(tr("Opens files"));
     openFilesAction->setShortcut(QKeySequence::Open);
     fileMenu->addAction(openFilesAction);
-    connect(openFilesAction, SIGNAL(triggered()), this, SLOT(openFiles()));
+    connect(openFilesAction, &QAction::triggered, [=]() { openFiles(); });
 
     fileMenu->addSeparator();
 
@@ -157,7 +157,7 @@ void MainWindow::createMenus()
     switchHeaderAction->setStatusTip(tr("Switch between header and source"));
     switchHeaderAction->setShortcut(QKeySequence("F4"));
     fileMenu->addAction(switchHeaderAction);
-    connect(switchHeaderAction, SIGNAL(triggered()), _editorTabWidget, SLOT(switchHeader()));
+    connect(switchHeaderAction, &QAction::triggered, _editorTabWidget, &EditorTabWidget::switchHeader);
 
     fileMenu->addSeparator();
     for (int i = 0; i < MaxOldProject; i++)
@@ -165,7 +165,7 @@ void MainWindow::createMenus()
         QAction *recentAction = new QAction(this);
         fileMenu->addAction(recentAction);
         recentAction->setVisible(false);
-        connect(recentAction, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+        connect(recentAction, &QAction::triggered, this, &MainWindow::openRecentFile);
         _oldProjectsActions.append(recentAction);
     }
 
@@ -175,7 +175,7 @@ void MainWindow::createMenus()
     exitAction->setStatusTip(tr("Exits uDevkit-IDE"));
     exitAction->setShortcut(QKeySequence::Quit);
     fileMenu->addAction(exitAction);
-    connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+    connect(exitAction, &QAction::triggered, this, &MainWindow::close);
 
     QAction *action;
     action = new QAction(tr("git"), this);
@@ -299,12 +299,12 @@ void MainWindow::createMenus()
 
     QAction *aboutAction = new QAction(tr("&About"), this);
     aboutAction->setIcon(QIcon(":/icons/img/dark/icons8-about.png"));
-    connect(aboutAction, SIGNAL(triggered(bool)), this, SLOT(about()));
+    connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
     helpMenu->addAction(aboutAction);
 
     QAction *aboutQtAction = new QAction(tr("About &Qt"), this);
     aboutQtAction->setIcon(QIcon(":/icons/img/dark/icons8-system-information.png"));
-    connect(aboutQtAction, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
+    connect(aboutQtAction, &QAction::triggered, [=]() { QApplication::aboutQt(); });
     helpMenu->addAction(aboutQtAction);
 }
 
@@ -443,9 +443,9 @@ void MainWindow::updateTitle(Editor *editor)
 
 void MainWindow::updateAction(Editor *editor)
 {
-    _pasteAction->setEnabled(editor != Q_NULLPTR);
-    _searchAction->setEnabled(editor != Q_NULLPTR);
-    _replaceAction->setEnabled(editor != Q_NULLPTR);
+    _pasteAction->setEnabled(editor != nullptr);
+    _searchAction->setEnabled(editor != nullptr);
+    _replaceAction->setEnabled(editor != nullptr);
 }
 
 void MainWindow::updateStatus(const QString &status)
@@ -564,8 +564,8 @@ GNU General Public License for more details.<br>\
 You should have received a copy of the GNU General Public License \
 along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\">www.gnu.org/licenses</a><br>\
 <br>\
-Build date: ") + __DATE__ + QString(" time: ")
-                           + __TIME__ + QString("<br>\
+Build date: ") + __DATE__ + QString(" time: ") +
+                           __TIME__ + QString("<br>\
 <br>\
 uDevkit-IDE use others open libraries :<br>\
 - edbee-lib, a code editor widget (code editor) <a href=\"https://github.com/edbee/edbee-lib\">github.com/edbee/edbee-lib</a> [MIT]<br>\

@@ -27,14 +27,14 @@
 #include <QTimer>
 
 ProjectItem::ProjectItem(Project *project, const QString &path, Type type, ProjectItemModel *model)
-    : QObject(Q_NULLPTR)
+    : QObject(nullptr)
     , _type(type)
     , _info(path, project)
     , _model(model)
 {
-    _parentItem = Q_NULLPTR;
+    _parentItem = nullptr;
 
-    _watcher = Q_NULLPTR;
+    _watcher = nullptr;
     if (type == RealDir)
     {
         _watcher = new QFileSystemWatcher();
@@ -77,7 +77,7 @@ ProjectItem *ProjectItem::child(const QString &name) const
     {
         return *i;
     }
-    return Q_NULLPTR;
+    return nullptr;
 }
 
 int ProjectItem::row() const
@@ -252,52 +252,52 @@ void ProjectItem::updateModif(const QString &path)
     Q_UNUSED(path)
     switch (_type)
     {
-        case ProjectItem::RealDir:
+    case ProjectItem::RealDir:
+    {
+        _model->prepareModif();
+        QSet<QString> files;
+        QDirIterator it(filePath(), QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
+        while (it.hasNext())
         {
-            _model->prepareModif();
-            QSet<QString> files;
-            QDirIterator it(filePath(), QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
-            while (it.hasNext())
+            QString mfilePath = it.next();
+            QFileInfo info(mfilePath);
+            files.insert(info.fileName());
+            if (!_childrensMap.contains(info.fileName()))
             {
-                QString mfilePath = it.next();
-                QFileInfo info(mfilePath);
-                files.insert(info.fileName());
-                if (!_childrensMap.contains(info.fileName()))
+                if (info.isDir())
                 {
-                    if (info.isDir())
-                    {
-                        addChild(new ProjectItem(_info.project(), info.filePath(), RealDir, _model));
-                    }
-                    else
-                    {
-                        addChild(new ProjectItem(_info.project(), info.filePath(), DirFile, _model));
-                    }
+                    addChild(new ProjectItem(_info.project(), info.filePath(), RealDir, _model));
+                }
+                else
+                {
+                    addChild(new ProjectItem(_info.project(), info.filePath(), DirFile, _model));
                 }
             }
-
-            QSet<QString> oldFiles = _childrensMap.keys().toSet();
-            oldFiles.subtract(files);
-            foreach (QString removedFile, oldFiles)
-            {
-                QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(removedFile);
-                if (i != _childrensMap.end())
-                {
-                    removeChild(*i);
-                }
-            }
-
-            _model->endModif();
-            break;
         }
-        case ProjectItem::DirFile:
-            // no watch
-            break;
-        case ProjectItem::LogicDir:
-            // no watch
-            break;
-        case ProjectItem::IndividualFile:
-            // TODO
-            break;
+
+        QSet<QString> oldFiles = _childrensMap.keys().toSet();
+        oldFiles.subtract(files);
+        foreach (QString removedFile, oldFiles)
+        {
+            QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(removedFile);
+            if (i != _childrensMap.end())
+            {
+                removeChild(*i);
+            }
+        }
+
+        _model->endModif();
+        break;
+    }
+    case ProjectItem::DirFile:
+        // no watch
+        break;
+    case ProjectItem::LogicDir:
+        // no watch
+        break;
+    case ProjectItem::IndividualFile:
+        // TODO
+        break;
     }
 }
 

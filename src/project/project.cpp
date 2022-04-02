@@ -22,12 +22,10 @@
 #include "version/gitversioncontrol.h"
 
 #include <QDebug>
-#include <utility>
 
 Project::Project(const QString &path)
 {
     _projectItemModel = new ProjectItemModel(this);
-    //_projectItemModel->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
     _versionControl = new GitVersionControl();
     connect(_versionControl, &GitVersionControl::newModifiedFiles, _projectItemModel, &ProjectItemModel::filesUpdated);
     connect(_versionControl, &GitVersionControl::newValidatedFiles, _projectItemModel, &ProjectItemModel::filesUpdated);
@@ -92,16 +90,14 @@ const QSet<QString> &Project::openedFiles() const
 
 void Project::addOpenedFiles(const QSet<QString> &openedFiles)
 {
-    foreach (QString file, openedFiles)
-        _openedFiles.insert(file);
+    foreach (QString file, openedFiles) _openedFiles.insert(file);
     _projectItemModel->filesUpdated(openedFiles);
     _projectItemModel->addOtherSource(openedFiles);
 }
 
 void Project::removeOpenedFiles(const QSet<QString> &openedFiles)
 {
-    foreach (QString file, openedFiles)
-        _openedFiles.remove(file);
+    foreach (QString file, openedFiles) _openedFiles.remove(file);
     _projectItemModel->filesUpdated(openedFiles);
     _projectItemModel->removeOtherSource(openedFiles);
 }
@@ -111,15 +107,12 @@ MakeParser *Project::make() const
     return _make;
 }
 
-void Project::newSource(QSet<QString> sources)
+void Project::newSource(const QSet<QString> &sources)
 {
-    _projectItemModel->addExternalSource(std::move(sources));
-    /*qWarning()<<"\n\n";
-    foreach (QString str, sources)
-        qWarning()<<str;*/
+    _projectItemModel->addExternalSource(sources);
 }
 
-void Project::oldSource(QSet<QString> sources)
+void Project::oldSource(const QSet<QString> &sources)
 {
-    _projectItemModel->removeExternalSource(std::move(sources));
+    _projectItemModel->removeExternalSource(sources);
 }

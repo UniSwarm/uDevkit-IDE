@@ -37,4 +37,4 @@ protected:
     PathEditWidget *_pathEditWidget;
 };
 
-#endif  // GITVERSIONSETTINGS_H
+#endif // GITVERSIONSETTINGS_H

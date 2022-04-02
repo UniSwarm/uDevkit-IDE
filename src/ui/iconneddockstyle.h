@@ -35,4 +35,4 @@ protected:
     QIcon _icon;
 };
 
-#endif  // ICONNEDDOCKSTYLE_H
+#endif // ICONNEDDOCKSTYLE_H

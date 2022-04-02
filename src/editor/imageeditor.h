@@ -48,4 +48,4 @@ protected:
     int saveFileData(const QString &filePath = QString()) override;
 };
 
-#endif  // IMAGEEDITOR_H
+#endif // IMAGEEDITOR_H

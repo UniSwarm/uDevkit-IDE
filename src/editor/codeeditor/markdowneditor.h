@@ -40,4 +40,4 @@ protected:
     QByteArray renderProcess(const QByteArray &textIn);
 };
 
-#endif  // MARKDOWNEDITOR_H
+#endif // MARKDOWNEDITOR_H

@@ -25,7 +25,7 @@ Setting::Setting(SettingsClass *parentClass, QString name, QVariant defaultValue
     , _name(std::move(name))
     , _value(std::move(defaultValue))
 {
-    _parentClass = Q_NULLPTR;
+    _parentClass = nullptr;
 }
 
 Setting::Setting(QString name, QVariant defaultValue)

@@ -150,8 +150,7 @@ void ProjectTreeView::remove()
 
         if (_project->projectItemModel()->isDir(indexFile))
         {
-            if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove '%1'?").arg(_project->projectItemModel()->fileName(indexFile)))
-                == QMessageBox::Yes)
+            if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove '%1'?").arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
             {
                 _project->projectItemModel()->rmdir(indexFile);
             }
@@ -228,15 +227,15 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     QMenu menu;
 
     // file commands
-    QAction *fileCreateAction = Q_NULLPTR;
+    QAction *fileCreateAction = nullptr;
     if (_project->projectItemModel()->isDir(indexFile))
     {
         fileCreateAction = menu.addAction(tr("Add new file here"));
         // fileCreateAction->setShortcut(QKeySequence::New);
     }
     menu.addAction(_fileRenameAction);
-    QAction *openDirAction = Q_NULLPTR;
-    QAction *openTermDirAction = Q_NULLPTR;
+    QAction *openDirAction = nullptr;
+    QAction *openTermDirAction = nullptr;
     if (_project->projectItemModel()->isDir(indexFile))
     {
         _removeAction->setText(tr("Remove directory"));
@@ -252,9 +251,9 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     }
 
     // git commands
-    QAction *versionValidAction = Q_NULLPTR;
-    QAction *versionInvalidAction = Q_NULLPTR;
-    QAction *versionCheckoutAction = Q_NULLPTR;
+    QAction *versionValidAction = nullptr;
+    QAction *versionInvalidAction = nullptr;
+    QAction *versionCheckoutAction = nullptr;
     FileProjectInfo info(_project->projectItemModel()->filePath(indexFile), _project);
     if (_project->versionControl()->isValid())
     {
@@ -275,7 +274,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 
     // exec menu
     QAction *trigered = menu.exec(event->globalPos());
-    if (trigered == Q_NULLPTR)
+    if (trigered == nullptr)
     {
         return;
     }
@@ -327,7 +326,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     {
         QString path = _project->projectItemModel()->filePath(indexFile);
 #if defined(Q_OS_LINUX)
-        QProcess::startDetached("gnome-terminal", QStringList() << "--working-directory=" + path);  // TODO make it work on all platforms
+        QProcess::startDetached("gnome-terminal", QStringList() << "--working-directory=" + path); // TODO make it work on all platforms
 #elif defined(Q_OS_WIN)
         QProcess::startDetached("mintty.exe", QStringList() << "--dir" << path);
 #endif
@@ -343,10 +342,8 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     else if (trigered == versionCheckoutAction)
     {
         if (QMessageBox::question(
-                this,
-                tr("Checkout file?"),
-                QString(tr("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.")).arg(_project->projectItemModel()->fileName(indexFile)))
-            == QMessageBox::Yes)
+                this, tr("Checkout file?"), QString(tr("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.")).arg(_project->projectItemModel()->fileName(indexFile))) ==
+            QMessageBox::Yes)
         {
             _project->versionControl()->checkoutFile(QSet<QString>() << info.filePath());
         }
@@ -420,7 +417,6 @@ void ProjectTreeView::keyPressEvent(QKeyEvent *event)
             }
         }
 
-        foreach (const QString &path, filesPathToOpen)
-            emit openedFile(path);
+        foreach (const QString &path, filesPathToOpen) emit openedFile(path);
     }
 }

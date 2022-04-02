@@ -52,4 +52,4 @@ protected:
     QLineEdit *_filterEdit;
 };
 
-#endif  // PROJECTWIDGET_H
+#endif // PROJECTWIDGET_H

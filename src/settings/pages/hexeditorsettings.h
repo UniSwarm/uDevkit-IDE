@@ -33,4 +33,4 @@ protected:
     void createWidgets() override;
 };
 
-#endif  // HEXEDITORSETTINGS_H
+#endif // HEXEDITORSETTINGS_H

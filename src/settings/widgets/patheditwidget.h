@@ -66,4 +66,4 @@ protected:
     QProcessEnvironment _env;
 };
 
-#endif  // PATHEDITWIDGET_H
+#endif // PATHEDITWIDGET_H

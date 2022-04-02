@@ -22,8 +22,8 @@ FileProject::FileProject(const QString &filePath, Project *project)
     : _info(filePath, project)
     , _project(project)
 {
-    _versionControl = Q_NULLPTR;
-    _fileChange = Q_NULLPTR;
+    _versionControl = nullptr;
+    _fileChange = nullptr;
 }
 
 const FileProjectInfo &FileProject::info() const

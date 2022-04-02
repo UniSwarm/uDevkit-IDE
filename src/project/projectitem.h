@@ -71,14 +71,6 @@ public:
         return _info.fileName();
     }
 
-    /*bool haveChildren() const;
-    bool canFetchMore() const;
-    void fetchMore();*/
-
-signals:
-
-public slots:
-
 protected slots:
     void updateModif(const QString &path = QString());
 
@@ -94,4 +86,4 @@ protected:
     bool _loaded;
 };
 
-#endif  // PROJECTITEM_H
+#endif // PROJECTITEM_H

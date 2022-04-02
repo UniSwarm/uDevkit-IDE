@@ -77,7 +77,7 @@ protected slots:
     void updateTab();
     void activeTab(int id);
     void tabContextMenu(const QPoint &pos);
-    void changeStatus(QString status);
+    void changeStatus(const QString &status);
 
     void undoUpdate(bool available);
     void redoUpdate(bool available);
@@ -104,4 +104,4 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 };
 
-#endif  // EDITORTABWIDGET_H
+#endif // EDITORTABWIDGET_H

@@ -122,7 +122,7 @@ void LogWidget::parseOutput(QByteArray data, bool error)
         stringRead = "<br/><span" + errorFormat + ">" + stringRead.toHtmlEscaped() + "</span>";
         stringRead.replace(" ", "&nbsp;");
         stringRead.replace(colorReg, R"(</span><span class="color\2">)");
-        stringRead.replace(colorRstReg, "</span><span>");  // reset color
+        stringRead.replace(colorRstReg, "</span><span>"); // reset color
         stringRead.replace("<span></span>", "");
 
         stringRead.replace(linkReg, R"(<a href="\1\2\3">\1\2\3</a>)");

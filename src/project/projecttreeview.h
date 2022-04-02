@@ -29,7 +29,7 @@ class ProjectTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    ProjectTreeView(Project *project, QWidget *parent = Q_NULLPTR);
+    ProjectTreeView(Project *project, QWidget *parent = nullptr);
 
     ProjectItemProxyModel *proxy() const;
 
@@ -65,4 +65,4 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 };
 
-#endif  // PROJECTTREEVIEW_H
+#endif // PROJECTTREEVIEW_H

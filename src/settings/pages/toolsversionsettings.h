@@ -37,4 +37,4 @@ protected:
     PathEditWidget *_pathEditWidget;
 };
 
-#endif  // TOOLSVERSIONSETTINGS_H
+#endif // TOOLSVERSIONSETTINGS_H

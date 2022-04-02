@@ -59,4 +59,4 @@ protected:
     void pasteCommand() override;
 };
 
-#endif  // HEXEDITOR_H
+#endif // HEXEDITOR_H

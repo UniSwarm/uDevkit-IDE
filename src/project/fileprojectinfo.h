@@ -44,4 +44,4 @@ protected:
     Project *_project;
 };
 
-#endif  // FILEPROJECTINFO_H
+#endif // FILEPROJECTINFO_H

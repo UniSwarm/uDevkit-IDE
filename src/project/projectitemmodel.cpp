@@ -26,8 +26,8 @@
 ProjectItemModel::ProjectItemModel(Project *project)
     : _project(project)
 {
-    _externalFiles = Q_NULLPTR;
-    _otherFiles = Q_NULLPTR;
+    _externalFiles = nullptr;
+    _otherFiles = nullptr;
     _root = new ProjectItem(_project, "", ProjectItem::LogicDir, this);
     _iconProvider = new ProjectIconProvider();
 }
@@ -93,7 +93,7 @@ bool ProjectItemModel::rmdir(const QModelIndex &index)
         return false;
     }
     ProjectItem *mitem = static_cast<ProjectItem *>(index.internalPointer());
-    if (mitem == Q_NULLPTR)
+    if (mitem == nullptr)
     {
         return false;
     }
@@ -115,7 +115,7 @@ bool ProjectItemModel::remove(const QModelIndex &index)
         return false;
     }
     ProjectItem *mitem = static_cast<ProjectItem *>(index.internalPointer());
-    if (mitem == Q_NULLPTR)
+    if (mitem == nullptr)
     {
         return false;
     }
@@ -136,7 +136,7 @@ void ProjectItemModel::addExternalSource(const QSet<QString> &sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
-            continue;  // not an external source
+            continue; // not an external source
         }
 
         // qDebug() << "addExternalSource" << filePath;
@@ -175,7 +175,7 @@ void ProjectItemModel::removeExternalSource(const QSet<QString> &sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
-            continue;  // not external source
+            continue; // not external source
         }
 
         QFileInfo info(filePath);
@@ -210,7 +210,7 @@ void ProjectItemModel::addOtherSource(const QSet<QString> &sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
-            continue;  // not an external source
+            continue; // not an external source
         }
         if (_pathCache.contains(filePath))
         {
@@ -290,7 +290,7 @@ void ProjectItemModel::clear()
 {
     emit layoutAboutToBeChanged();
     _root->clear();
-    _externalFiles = Q_NULLPTR;
+    _externalFiles = nullptr;
     emit layoutChanged();
 }
 
@@ -298,7 +298,7 @@ const ProjectItem *ProjectItemModel::item(const QModelIndex &index) const
 {
     if (!index.isValid())
     {
-        return Q_NULLPTR;
+        return nullptr;
     }
     return static_cast<ProjectItem *>(index.internalPointer());
 }
@@ -354,7 +354,7 @@ QModelIndex ProjectItemModel::index(int row, int column, const QModelIndex &pare
 
 QModelIndex ProjectItemModel::parent(const QModelIndex &child) const
 {
-    if (!child.isValid() || child.internalPointer() == Q_NULLPTR)
+    if (!child.isValid() || child.internalPointer() == nullptr)
     {
         return QModelIndex();
     }
@@ -420,7 +420,7 @@ Qt::ItemFlags ProjectItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
     {
-        return nullptr;
+        return Qt::NoItemFlags;
     }
     Qt::ItemFlags baseFlags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 

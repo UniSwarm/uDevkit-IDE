@@ -42,4 +42,4 @@ protected:
     QList<VersionChange *> _changes;
 };
 
-#endif  // FILEVERSIONCHANGE_H
+#endif // FILEVERSIONCHANGE_H

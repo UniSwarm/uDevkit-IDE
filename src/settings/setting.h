@@ -51,4 +51,4 @@ protected:
     friend class SettingsClass;
 };
 
-#endif  // SETTING_H
+#endif // SETTING_H

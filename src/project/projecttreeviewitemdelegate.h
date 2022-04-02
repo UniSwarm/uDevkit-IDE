@@ -25,7 +25,7 @@ class ProjectTreeViewItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit ProjectTreeViewItemDelegate(QObject *parent = Q_NULLPTR);
+    explicit ProjectTreeViewItemDelegate(QObject *parent = nullptr);
 
     // QStyledItemDelegate interface
 protected:
@@ -33,4 +33,4 @@ protected:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
-#endif  // PROJECTTREEVIEWITEMDELEGATE_H
+#endif // PROJECTTREEVIEWITEMDELEGATE_H

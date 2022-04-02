@@ -31,7 +31,7 @@ class SearchReplaceWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SearchReplaceWidget(QWidget *parent = Q_NULLPTR);
+    explicit SearchReplaceWidget(QWidget *parent = nullptr);
 
 signals:
 
@@ -76,4 +76,4 @@ public:
     bool eventFilter(QObject *watched, QEvent *event) override;
 };
 
-#endif  // SEARCHREPLACEWIDGET_H
+#endif // SEARCHREPLACEWIDGET_H

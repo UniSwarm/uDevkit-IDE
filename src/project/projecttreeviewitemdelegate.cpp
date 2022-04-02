@@ -29,8 +29,6 @@ ProjectTreeViewItemDelegate::ProjectTreeViewItemDelegate(QObject *parent)
 
 void ProjectTreeViewItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    /*QStyledItemDelegate::paint(painter, option, index);
-    return;*/
     Q_ASSERT(index.isValid());
 
     QStyleOptionViewItem opt = option;
@@ -44,9 +42,9 @@ void ProjectTreeViewItemDelegate::paint(QPainter *painter, const QStyleOptionVie
     {
         textColor = index.data(Qt::TextColorRole).value<QColor>();
     }
-    if ((opt.state & QStyle::State_Selected != 0u) || (opt.state & QStyle::State_MouseOver != 0u))
+    if (((opt.state & QStyle::State_Selected) != 0u) || ((opt.state & QStyle::State_MouseOver) != 0u))
     {
-        if (opt.state & QStyle::State_Selected != 0u)
+        if ((opt.state & QStyle::State_Selected) != 0u)
         {
             painter->fillRect(opt.rect, QColor(0x287399));
         }

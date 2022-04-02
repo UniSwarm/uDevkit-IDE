@@ -29,7 +29,7 @@ class LogWidget : public QTextBrowser
 {
     Q_OBJECT
 public:
-    explicit LogWidget(Project *project, QWidget *parent = Q_NULLPTR);
+    explicit LogWidget(Project *project, QWidget *parent = nullptr);
     ~LogWidget() override;
 
 signals:
@@ -51,4 +51,4 @@ protected slots:
     void anchorClick(const QUrl &link);
 };
 
-#endif  // LOGWIDGET_H
+#endif // LOGWIDGET_H

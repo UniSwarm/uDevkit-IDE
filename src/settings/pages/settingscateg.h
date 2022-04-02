@@ -46,4 +46,4 @@ protected:
     QString _label;
 };
 
-#endif  // SETTINGSCATEG_H
+#endif // SETTINGSCATEG_H

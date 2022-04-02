@@ -28,7 +28,7 @@ class SettingsManager : public SettingsClass
 {
     Q_OBJECT
 protected:
-    SettingsManager(QObject *parent = Q_NULLPTR);
+    SettingsManager(QObject *parent = nullptr);
 
 public:
     static SettingsManager *instance();
@@ -47,4 +47,4 @@ protected:
 
 #define rtset() SettingsManager::instance()
 
-#endif  // SETTINGSMANAGER_H
+#endif // SETTINGSMANAGER_H

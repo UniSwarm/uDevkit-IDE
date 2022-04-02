@@ -38,4 +38,4 @@ private:
     unsigned short _checksum;
 };
 
-#endif  // HEXFILE_H
+#endif // HEXFILE_H

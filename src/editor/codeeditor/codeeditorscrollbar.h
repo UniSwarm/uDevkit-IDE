@@ -28,8 +28,8 @@ class CodeEditorScrollBar : public QScrollBar
 {
     Q_OBJECT
 public:
-    explicit CodeEditorScrollBar(QWidget *parent = Q_NULLPTR);
-    explicit CodeEditorScrollBar(Qt::Orientation orientation, QWidget *parent = Q_NULLPTR);
+    explicit CodeEditorScrollBar(QWidget *parent = nullptr);
+    explicit CodeEditorScrollBar(Qt::Orientation orientation, QWidget *parent = nullptr);
 
     FileVersionChange *fileChange() const;
     void setFileChange(FileVersionChange *fileChange);
@@ -46,4 +46,4 @@ protected:
     edbee::TextRenderer *_textRender;
 };
 
-#endif  // CODEEDITORSCROLLBAR_H
+#endif // CODEEDITORSCROLLBAR_H

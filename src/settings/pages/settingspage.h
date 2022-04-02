@@ -49,4 +49,4 @@ protected:
     SettingsClass *_settingsClass;
 };
 
-#endif  // SETTINGSPAGE_H
+#endif // SETTINGSPAGE_H

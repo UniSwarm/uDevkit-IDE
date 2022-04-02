@@ -107,18 +107,18 @@ void SettingsWindow::buttonClick(QAbstractButton *button)
 {
     switch (_dialogButtonBox->buttonRole(button))
     {
-        case QDialogButtonBox::AcceptRole:
-            commitChange();
-            accept();
-            break;
-        case QDialogButtonBox::RejectRole:
-            reject();
-            break;
-        case QDialogButtonBox::ApplyRole:
-            commitChange();
-            break;
-        default:
-            break;
+    case QDialogButtonBox::AcceptRole:
+        commitChange();
+        accept();
+        break;
+    case QDialogButtonBox::RejectRole:
+        reject();
+        break;
+    case QDialogButtonBox::ApplyRole:
+        commitChange();
+        break;
+    default:
+        break;
     }
 }
 

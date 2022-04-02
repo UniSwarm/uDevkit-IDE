@@ -22,9 +22,9 @@
 #include "codeeditor.h"
 
 #ifndef NOWEBKIT
-#    if !defined(WEBENGINE) && !defined(WEBKIT)
-#        define NOWEBKIT
-#    endif
+#if !defined(WEBENGINE) && !defined(WEBKIT)
+#define NOWEBKIT
+#endif
 #endif
 
 #ifdef WEBENGINE
@@ -66,4 +66,4 @@ protected:
 #endif
 };
 
-#endif  // HTMLEDITOR_H
+#endif // HTMLEDITOR_H

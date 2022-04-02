@@ -66,7 +66,7 @@ bool EditorTabSwitchWidget::event(QEvent *event)
         QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab)
         {
-            if (keyEvent->modifiers() & Qt::ShiftModifier != 0u)
+            if ((keyEvent->modifiers() & Qt::ShiftModifier) != 0u)
             {
                 _id--;
                 if (_id < 0)

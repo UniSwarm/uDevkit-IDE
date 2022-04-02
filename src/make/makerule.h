@@ -33,4 +33,4 @@ public:
     bool isTarget;
 };
 
-#endif  // MAKERULE_H
+#endif // MAKERULE_H

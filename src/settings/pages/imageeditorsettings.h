@@ -33,4 +33,4 @@ protected:
     void createWidgets() override;
 };
 
-#endif  // IMAGEEDITORSETTINGS_H
+#endif // IMAGEEDITORSETTINGS_H

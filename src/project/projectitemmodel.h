@@ -77,10 +77,6 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
-    /*virtual bool hasChildren(const QModelIndex &parent) const;
-    virtual void fetchMore(const QModelIndex &parent);
-    virtual bool canFetchMore(const QModelIndex &parent) const;*/
-
 protected:
     ProjectItem *_root;
     Project *_project;
@@ -92,4 +88,4 @@ protected:
     ProjectItem *_otherFiles;
 };
 
-#endif  // PROJECTMODEL_H
+#endif // PROJECTMODEL_H

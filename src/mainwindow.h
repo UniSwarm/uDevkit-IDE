@@ -71,8 +71,8 @@ protected slots:
 
     void launchFormat();
 
-    void updateTitle(Editor *editor = Q_NULLPTR);
-    void updateAction(Editor *editor = Q_NULLPTR);
+    void updateTitle(Editor *editor = nullptr);
+    void updateAction(Editor *editor = nullptr);
     void updateStatus(const QString &status);
 
     void showSettings();
@@ -95,4 +95,4 @@ private:
     QAction *_replaceAction;
 };
 
-#endif  // MAINWINDOW_H
+#endif // MAINWINDOW_H

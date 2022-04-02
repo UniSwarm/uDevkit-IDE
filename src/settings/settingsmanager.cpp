@@ -21,7 +21,7 @@
 #include <QApplication>
 #include <QDebug>
 
-SettingsManager *SettingsManager::settingsManager = Q_NULLPTR;
+SettingsManager *SettingsManager::settingsManager = nullptr;
 
 SettingsManager::SettingsManager(QObject *parent)
     : SettingsClass("", parent)

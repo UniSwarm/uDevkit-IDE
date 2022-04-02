@@ -33,8 +33,7 @@ SettingsClass::SettingsClass(const SettingsClass &other)
 {
     _name = other.name();
     _modified = false;
-    foreach (Setting *setting, other._settingsMap)
-        registerSetting(setting->name(), setting->value());
+    foreach (Setting *setting, other._settingsMap) registerSetting(setting->name(), setting->value());
     foreach (SettingsClass *settingClass, other._classesMap)
     {
         SettingsClass *newSettingClass = new SettingsClass(settingClass->name());
@@ -91,7 +90,7 @@ Setting *SettingsClass::registerSetting(const QString &path, const QVariant &def
     int pos = path.indexOf('/');
     if (pos == -1)
     {
-        Setting *setting = Q_NULLPTR;
+        Setting *setting = nullptr;
         QMap<QString, Setting *>::const_iterator find = _settingsMap.constFind(path);
         if (find != _settingsMap.cend())
         {
@@ -151,7 +150,7 @@ Setting *SettingsClass::getSetting(const QString &path)
         }
     }
 
-    return Q_NULLPTR;
+    return nullptr;
 }
 
 void SettingsClass::commit()

@@ -26,10 +26,10 @@
 SearchReplaceWidget::SearchReplaceWidget(QWidget *parent)
     : QWidget(parent)
 {
-    _editor = Q_NULLPTR;
+    _editor = nullptr;
 
     createWidgets();
-    setEditor(Q_NULLPTR);
+    setEditor(nullptr);
     setFocusPolicy(Qt::StrongFocus);
 }
 

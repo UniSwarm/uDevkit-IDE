@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     udkideTranslator.load("udk-ide_" + lang, ":/translations");
     QApplication::installTranslator(&udkideTranslator);
 
-    Project *project = Q_NULLPTR;
+    Project *project = nullptr;
     if (argc > 1)
     {
         project = new Project(argv[1]);

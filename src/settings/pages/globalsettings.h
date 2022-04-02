@@ -40,4 +40,4 @@ protected:
     QLineEdit *_userpseudoEdit;
 };
 
-#endif  // GLOBALSETTINGS_H
+#endif // GLOBALSETTINGS_H

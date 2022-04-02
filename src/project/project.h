@@ -55,8 +55,8 @@ signals:
 public slots:
 
 protected slots:
-    void newSource(QSet<QString> sources);
-    void oldSource(QSet<QString> sources);
+    void newSource(const QSet<QString> &sources);
+    void oldSource(const QSet<QString> &sources);
 
 protected:
     QDir _rootDir;
@@ -67,4 +67,4 @@ protected:
     ProjectItemModel *_projectItemModel;
 };
 
-#endif  // PROJECT_H
+#endif // PROJECT_H
