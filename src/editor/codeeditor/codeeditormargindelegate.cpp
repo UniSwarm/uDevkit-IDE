@@ -29,7 +29,6 @@
 const int widthBar = 10;
 
 CodeEditorMarginDelegate::CodeEditorMarginDelegate()
-    : edbee::TextMarginComponentDelegate()
 {
     _fileChange = Q_NULLPTR;
 }
@@ -55,7 +54,7 @@ int CodeEditorMarginDelegate::widthBeforeLineNumber()
 
 void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int endLine, int width)
 {
-    if (!_fileChange)
+    if (_fileChange == nullptr)
     {
         return;
     }
@@ -78,11 +77,11 @@ void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int
             else
             {
                 linearGrad.setFinalStop(QPointF(widthBar, 0));
-                linearGrad.setColorAt(0, QColor(0, 60, 180, 255)); // blue
+                linearGrad.setColorAt(0, QColor(0, 60, 180, 255));  // blue
                 painter->fillRect(QRect(0, start, widthBar, end - start), QBrush(linearGrad));
             }
             linearGrad.setFinalStop(QPointF(width - 8, 0));
-            linearGrad.setColorAt(0, QColor(255, 0, 0, 255)); // red
+            linearGrad.setColorAt(0, QColor(255, 0, 0, 255));  // red
             painter->fillRect(QRect(0, l - 1, width - 8, 2), QBrush(linearGrad));
         }
         else
@@ -99,13 +98,13 @@ void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int
                     l = start;
                 }
                 linearGrad.setFinalStop(QPointF(widthBar, 0));
-                linearGrad.setColorAt(0, QColor(0, 128, 0, 255)); // green
+                linearGrad.setColorAt(0, QColor(0, 128, 0, 255));  // green
                 painter->fillRect(QRect(0, l, widthBar, end - l), QBrush(linearGrad));
             }
             if (l != start)
             {
                 linearGrad.setFinalStop(QPointF(widthBar, 0));
-                linearGrad.setColorAt(0, QColor(0, 60, 180, 255)); // blue
+                linearGrad.setColorAt(0, QColor(0, 60, 180, 255));  // blue
                 painter->fillRect(QRect(0, start, widthBar, l - start), QBrush(linearGrad));
             }
         }

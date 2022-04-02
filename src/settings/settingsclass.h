@@ -30,7 +30,7 @@ class SettingsClass : public QObject
 {
     Q_OBJECT
 public:
-    SettingsClass(const QString &name, QObject *parent = Q_NULLPTR);
+    SettingsClass(QString name, QObject *parent = Q_NULLPTR);
     SettingsClass(const SettingsClass &other);
     ~SettingsClass() override;
 
@@ -61,4 +61,4 @@ protected:
     bool _modified;
 };
 
-#endif // SETTINGSCLASS_H
+#endif  // SETTINGSCLASS_H

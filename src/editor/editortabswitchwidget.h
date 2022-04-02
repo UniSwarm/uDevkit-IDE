@@ -42,4 +42,4 @@ protected:
     int _id;
 };
 
-#endif // EDITORTABSWITCHWIDGET_H
+#endif  // EDITORTABSWITCHWIDGET_H

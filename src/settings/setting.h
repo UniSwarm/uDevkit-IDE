@@ -28,8 +28,8 @@ class Setting : public QObject
 {
     Q_OBJECT
 protected:
-    Setting(SettingsClass *_parentClass, const QString &name, const QVariant &defaultValue = QVariant());
-    Setting(const QString &name, const QVariant &defaultValue = QVariant());
+    Setting(SettingsClass *_parentClass, QString name, QVariant defaultValue = QVariant());
+    Setting(QString name, QVariant defaultValue = QVariant());
 
 public:
     const QString &name() const;
@@ -51,4 +51,4 @@ protected:
     friend class SettingsClass;
 };
 
-#endif // SETTING_H
+#endif  // SETTING_H

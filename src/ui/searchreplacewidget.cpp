@@ -37,7 +37,7 @@ void SearchReplaceWidget::setEditor(Editor *editor)
 {
     _editor = editor;
 
-    if (!_editor || !_editor->hasResearch())
+    if ((_editor == nullptr) || !_editor->hasResearch())
     {
         setEnabled(false);
         return;
@@ -49,7 +49,7 @@ void SearchReplaceWidget::setEditor(Editor *editor)
 
 void SearchReplaceWidget::activateResearch()
 {
-    if (parentWidget() && parentWidget()->parentWidget())
+    if ((parentWidget() != nullptr) && (parentWidget()->parentWidget() != nullptr))
     {
         parentWidget()->show();
         parentWidget()->raise();
@@ -63,7 +63,7 @@ void SearchReplaceWidget::activateResearch()
 
 void SearchReplaceWidget::activateReplace()
 {
-    if (parentWidget() && parentWidget()->parentWidget())
+    if ((parentWidget() != nullptr) && (parentWidget()->parentWidget() != nullptr))
     {
         parentWidget()->parentWidget()->show();
     }
@@ -88,7 +88,7 @@ Editor::SearchFlags SearchReplaceWidget::flags()
 
 void SearchReplaceWidget::upadteSearch()
 {
-    if (!_editor)
+    if (_editor == nullptr)
     {
         return;
     }
@@ -108,7 +108,7 @@ void SearchReplaceWidget::upadteSearch()
 
 void SearchReplaceWidget::searchNext()
 {
-    if (!_editor)
+    if (_editor == nullptr)
     {
         return;
     }
@@ -117,7 +117,7 @@ void SearchReplaceWidget::searchNext()
 
 void SearchReplaceWidget::searchPrev()
 {
-    if (!_editor)
+    if (_editor == nullptr)
     {
         return;
     }
@@ -126,7 +126,7 @@ void SearchReplaceWidget::searchPrev()
 
 void SearchReplaceWidget::searchAll()
 {
-    if (!_editor)
+    if (_editor == nullptr)
     {
         return;
     }
@@ -135,7 +135,7 @@ void SearchReplaceWidget::searchAll()
 
 void SearchReplaceWidget::replaceNext()
 {
-    if (!_editor)
+    if (_editor == nullptr)
     {
         return;
     }
@@ -144,7 +144,7 @@ void SearchReplaceWidget::replaceNext()
 
 void SearchReplaceWidget::replacePrev()
 {
-    if (!_editor)
+    if (_editor == nullptr)
     {
         return;
     }
@@ -153,7 +153,7 @@ void SearchReplaceWidget::replacePrev()
 
 void SearchReplaceWidget::replaceAll()
 {
-    if (!_editor)
+    if (_editor == nullptr)
     {
         return;
     }

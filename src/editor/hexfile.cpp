@@ -31,7 +31,10 @@ bool HexFile::read()
 {
     int lineCount = 1;
     int offsetAddr = 0;
-    int dataCount, addr, type, checkSum;
+    int dataCount;
+    int addr;
+    int type;
+    int checkSum;
     bool ok;
 
     QFile file(_fileName);
@@ -131,9 +134,9 @@ bool HexFile::read()
     }
 
     _checksum = 0;
-    for (int i = 0; i < _prog.size(); i++)
+    for (auto &&i : _prog)
     {
-        _checksum += static_cast<unsigned char>(_prog[i]);
+        _checksum += static_cast<unsigned char>(i);
     }
 
     return true;

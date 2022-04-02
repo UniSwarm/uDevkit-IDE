@@ -24,6 +24,7 @@
 #include <QFileDialog>
 #include <QLayout>
 #include <QStandardPaths>
+#include <utility>
 
 PathEditWidget::PathEditWidget(QWidget *parent)
     : QWidget(parent)
@@ -65,16 +66,12 @@ void PathEditWidget::setPath(const QString &path)
 
 bool PathEditWidget::isValid() const
 {
-    if (_pathLineEdit->text().isEmpty())
-    {
-        return true;
-    }
-    return false;
+    return _pathLineEdit->text().isEmpty();
 }
 
 void PathEditWidget::setEnv(QProcessEnvironment env)
 {
-    _env = env;
+    _env = std::move(env);
     checkProgramm();
 }
 
@@ -124,7 +121,6 @@ void PathEditWidget::checkProgramm()
     QString version = process->readLine();
     _labelVersion->setText(tr("%1 in path '%2'").arg(version).arg(QDir::toNativeSeparators(path)));
     delete process;
-    return;
 }
 
 void PathEditWidget::checkLineEdit()

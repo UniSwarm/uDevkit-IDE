@@ -30,7 +30,7 @@ SettingsManager::SettingsManager(QObject *parent)
 
 SettingsManager *SettingsManager::instance()
 {
-    if (!settingsManager)
+    if (settingsManager == nullptr)
     {
         settingsManager = new SettingsManager();
     }

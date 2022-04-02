@@ -140,7 +140,7 @@ void CodeEditor::setGrammar(const QString &grammarName)
 {
     edbee::TextGrammarManager *grammarManager = edbee::Edbee::instance()->grammarManager();
     edbee::TextGrammar *grammar = grammarManager->detectGrammarWithFilename("source." + grammarName.toLower());
-    if (grammar)
+    if (grammar != nullptr)
     {
         _editorWidget->textDocument()->setLanguageGrammar(grammar);
     }
@@ -323,7 +323,7 @@ void CodeEditor::notifyModificationChanged()
     _codeEditorScrollBar->setFileChange(&_localFileChange);
 }
 
-void CodeEditor::insertedText(edbee::TextBufferChange change)
+void CodeEditor::insertedText(const edbee::TextBufferChange &change)
 {
     int startLine = _editorWidget->textDocument()->lineFromOffset(change.offset());
     int startCol = _editorWidget->textDocument()->columnFromOffsetAndLine(change.offset(), startLine) + 1;
@@ -377,7 +377,7 @@ void CodeEditor::insertedText(edbee::TextBufferChange change)
 
 void CodeEditor::initialiseWidget()
 {
-    if (!layout())
+    if (layout() == nullptr)
     {
         QHBoxLayout *layout = new QHBoxLayout();
         layout->setMargin(0);
@@ -490,7 +490,7 @@ int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
 
     controller->update();
 
-    return controller->borderedTextRanges()->rangeCount(); // return the number of occurences found
+    return controller->borderedTextRanges()->rangeCount();  // return the number of occurences found
 }
 
 void CodeEditor::searchNext()

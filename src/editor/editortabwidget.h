@@ -46,7 +46,7 @@ public slots:
 
     int closeEditor(int id = -1);
     int closeAllEditors();
-    void saveCurrentEditor();
+    void saveCurrentEditor() const;
     void saveAllEditors();
 
     void switchHeader();
@@ -56,12 +56,12 @@ public slots:
     void previousTab();
     void endSwitchTab();
 
-    void undo();
-    void redo();
-    void cut();
-    void copy();
-    void paste();
-    void format();
+    void undo() const;
+    void redo() const;
+    void cut() const;
+    void copy() const;
+    void paste() const;
+    void format() const;
 
 signals:
     void editorChange(Editor *editor);
@@ -104,4 +104,4 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 };
 
-#endif // EDITORTABWIDGET_H
+#endif  // EDITORTABWIDGET_H

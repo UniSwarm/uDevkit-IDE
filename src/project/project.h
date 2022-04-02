@@ -44,8 +44,8 @@ public:
 
     bool isOpenedFile(const QString &path) const;
     const QSet<QString> &openedFiles() const;
-    void addOpenedFiles(QSet<QString> openedFiles);
-    void removeOpenedFiles(QSet<QString> openedFiles);
+    void addOpenedFiles(const QSet<QString> &openedFiles);
+    void removeOpenedFiles(const QSet<QString> &openedFiles);
 
     MakeParser *make() const;
 
@@ -67,4 +67,4 @@ protected:
     ProjectItemModel *_projectItemModel;
 };
 
-#endif // PROJECT_H
+#endif  // PROJECT_H

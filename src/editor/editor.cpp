@@ -86,17 +86,17 @@ int Editor::saveFile(const QString &filePath)
 
 bool Editor::isActiveEditor() const
 {
-    if (!parent())
+    if (parent() == nullptr)
     {
         return false;
     }
-    if (!parent()->parent())
+    if (parent()->parent() == nullptr)
     {
         return false;
     }
 
     EditorTabWidget *tabWidget = dynamic_cast<EditorTabWidget *>(parent()->parent());
-    if (!tabWidget)
+    if (tabWidget == nullptr)
     {
         return false;
     }
@@ -312,26 +312,26 @@ Editor *Editor::createEditor(Editor::Type type, Project *project, QWidget *paren
 {
     switch (type)
     {
-    case Editor::Code:
-        return new CodeEditor(project, parent);
+        case Editor::Code:
+            return new CodeEditor(project, parent);
 
-    case Editor::HexFile:
-        return new HexFileEditor(project, parent);
+        case Editor::HexFile:
+            return new HexFileEditor(project, parent);
 
-    case Editor::Hexa:
-        return new HexEditor(project, parent);
+        case Editor::Hexa:
+            return new HexEditor(project, parent);
 
-    case Editor::HTML:
-        return new HtmlEditor(project, parent);
+        case Editor::HTML:
+            return new HtmlEditor(project, parent);
 
-    case Editor::Markdown:
-        return new MarkdownEditor(project, parent);
+        case Editor::Markdown:
+            return new MarkdownEditor(project, parent);
 
-    case Editor::Image:
-        return new ImageEditor(project, parent);
+        case Editor::Image:
+            return new ImageEditor(project, parent);
 
-    case Editor::ELF:
-        break;
+        case Editor::ELF:
+            break;
     }
     return Q_NULLPTR;
 }
@@ -342,7 +342,7 @@ Editor *Editor::createEditor(const QString &filePath, Project *project, QWidget 
 
     Editor *editor;
     editor = createEditor(type, project, parent);
-    if (editor)
+    if (editor != nullptr)
     {
         editor->openFileData(filePath);
     }
@@ -380,8 +380,8 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
     {
         type = Editor::Markdown;
     }
-    else if (mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml" || mime.name() == "application/x-shellscript" ||
-             mime.name() == "application/javascript" || mime.name() == "application/json" || mime.name() == "application/x-php" || filePath.endsWith(".eds") || file.size() == 0)
+    else if (mime.name().startsWith("text") || mime.name() == "application/xml" || mime.name() == "application/x-yaml" || mime.name() == "application/x-shellscript"
+             || mime.name() == "application/javascript" || mime.name() == "application/json" || mime.name() == "application/x-php" || filePath.endsWith(".eds") || file.size() == 0)
     {
         type = Editor::Code;
     }

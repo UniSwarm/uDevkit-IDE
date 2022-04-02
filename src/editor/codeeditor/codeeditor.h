@@ -85,7 +85,7 @@ protected slots:
     void updatePos();
     void updateModifications(const QString &filePath);
 
-    void insertedText(edbee::TextBufferChange change);
+    void insertedText(const edbee::TextBufferChange &change);
 
 private:
     static bool initialized;
@@ -96,4 +96,4 @@ private:
     void notifyModificationChanged();
 };
 
-#endif // CODEEDITOR_H
+#endif  // CODEEDITOR_H

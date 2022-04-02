@@ -26,8 +26,8 @@
 
 #include <cmath>
 
-#include "qhexview.h"
 #include "document/buffer/qmemorybuffer.h"
+#include "qhexview.h"
 
 HexEditor::HexEditor(Project *project, QWidget *parent)
     : Editor(project, parent)

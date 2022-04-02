@@ -18,9 +18,11 @@
 
 #include "settingscateg.h"
 
-SettingsCateg::SettingsCateg(const QIcon &icon, const QString &label)
-    : _icon(icon)
-    , _label(label)
+#include <utility>
+
+SettingsCateg::SettingsCateg(QIcon icon, QString label)
+    : _icon(std::move(icon))
+    , _label(std::move(label))
 {
 }
 

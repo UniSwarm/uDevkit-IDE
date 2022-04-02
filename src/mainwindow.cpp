@@ -42,7 +42,7 @@ MainWindow::MainWindow(Project *project, QWidget *parent)
 {
     setWindowIcon(QIcon(":/icons/udk-ide.ico"));
     QString path;
-    if (!_project)
+    if (_project == nullptr)
     {
         _project = new Project();
     }
@@ -316,7 +316,7 @@ bool MainWindow::openDir(const QString &path)
         QFileDialog dialog(this);
         dialog.setOption(QFileDialog::DontUseNativeDialog);
         dialog.setFileMode(QFileDialog::Directory);
-        if (_editorTabWidget->currentEditor())
+        if (_editorTabWidget->currentEditor() != nullptr)
         {
             QFileInfo file(_editorTabWidget->currentEditor()->filePath());
             dialog.setDirectory(file.absolutePath());
@@ -325,7 +325,7 @@ bool MainWindow::openDir(const QString &path)
         {
             dialog.setDirectory(_project->rootPath());
         }
-        if (!dialog.exec())
+        if (dialog.exec() == 0)
         {
             return false;
         }
@@ -350,7 +350,7 @@ bool MainWindow::openFiles(const QStringList &paths)
         QFileDialog dialog(this);
         dialog.setOption(QFileDialog::DontUseNativeDialog);
         dialog.setFileMode(QFileDialog::ExistingFiles);
-        if (_editorTabWidget->currentEditor())
+        if (_editorTabWidget->currentEditor() != nullptr)
         {
             QFileInfo file(_editorTabWidget->currentEditor()->filePath());
             dialog.setDirectory(file.absolutePath());
@@ -359,7 +359,7 @@ bool MainWindow::openFiles(const QStringList &paths)
         {
             dialog.setDirectory(_project->rootPath());
         }
-        if (!dialog.exec())
+        if (dialog.exec() == 0)
         {
             return false;
         }
@@ -382,7 +382,8 @@ void MainWindow::makeall()
     _editorTabWidget->saveAllEditors();
     _logWidget->start("make",
                       QStringList() << "--no-print-directory"
-                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O" << "-k");
+                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O"
+                                    << "-k");
 }
 
 void MainWindow::makeprog()
@@ -399,7 +400,8 @@ void MainWindow::makesim()
     _editorTabWidget->saveAllEditors();
     _logWidget->start("make",
                       QStringList() << "sim"
-                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O" << "-k");
+                                    << "-j" << QString::number(QThread::idealThreadCount() + 1) << "-O"
+                                    << "-k");
 }
 
 void MainWindow::makeclean()
@@ -424,7 +426,7 @@ void MainWindow::launchFormat()
 void MainWindow::updateTitle(Editor *editor)
 {
     QString title;
-    if (editor)
+    if (editor != nullptr)
     {
         title = _project->rootDir().relativeFilePath(editor->filePath());
         if (editor->isModified())
@@ -446,7 +448,7 @@ void MainWindow::updateAction(Editor *editor)
     _replaceAction->setEnabled(editor != Q_NULLPTR);
 }
 
-void MainWindow::updateStatus(QString status)
+void MainWindow::updateStatus(const QString &status)
 {
     statusBar()->showMessage(status);
 }
@@ -486,7 +488,7 @@ void MainWindow::updateOldProjects()
 void MainWindow::openRecentFile()
 {
     QAction *action = qobject_cast<QAction *>(sender());
-    if (action)
+    if (action != nullptr)
     {
         openDir(action->data().toString());
     }
@@ -562,8 +564,8 @@ GNU General Public License for more details.<br>\
 You should have received a copy of the GNU General Public License \
 along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\">www.gnu.org/licenses</a><br>\
 <br>\
-Build date: ") + __DATE__ + QString(" time: ") +
-                           __TIME__ + QString("<br>\
+Build date: ") + __DATE__ + QString(" time: ")
+                           + __TIME__ + QString("<br>\
 <br>\
 uDevkit-IDE use others open libraries :<br>\
 - edbee-lib, a code editor widget (code editor) <a href=\"https://github.com/edbee/edbee-lib\">github.com/edbee/edbee-lib</a> [MIT]<br>\

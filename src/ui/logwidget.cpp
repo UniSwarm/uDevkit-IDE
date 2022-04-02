@@ -113,7 +113,7 @@ void LogWidget::parseOutput(QByteArray data, bool error)
 
     QRegularExpression colorReg("(\u001b)\\[([0-9]+)m");
     QRegularExpression colorRstReg("(\u001b\\(B\u001b\\[m|\u001b\\[0;10m)");
-    QRegularExpression linkReg("([\\-\\._a-zA-Z/\\\\0-9]+\\.[a-zA-Z]+)(:[0-9]+)(:[0-9]+)*");
+    QRegularExpression linkReg(R"(([\-\._a-zA-Z/\\0-9]+\.[a-zA-Z]+)(:[0-9]+)(:[0-9]+)*)");
 
     while (!stream.atEnd())
     {
@@ -121,11 +121,11 @@ void LogWidget::parseOutput(QByteArray data, bool error)
         QString errorFormat = error ? " class=\"color31\"" : "";
         stringRead = "<br/><span" + errorFormat + ">" + stringRead.toHtmlEscaped() + "</span>";
         stringRead.replace(" ", "&nbsp;");
-        stringRead.replace(colorReg, "</span><span class=\"color\\2\">");
-        stringRead.replace(colorRstReg, "</span><span>"); // reset color
+        stringRead.replace(colorReg, R"(</span><span class="color\2">)");
+        stringRead.replace(colorRstReg, "</span><span>");  // reset color
         stringRead.replace("<span></span>", "");
 
-        stringRead.replace(linkReg, "<a href=\"\\1\\2\\3\">\\1\\2\\3</a>");
+        stringRead.replace(linkReg, R"(<a href="\1\2\3">\1\2\3</a>)");
 
         html.append(stringRead);
     }

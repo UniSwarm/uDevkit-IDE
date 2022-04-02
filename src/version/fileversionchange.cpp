@@ -81,12 +81,12 @@ void FileVersionChange::insertChange(const VersionChange &change)
 
     QList<VersionChange *> actualChanges = changesForRange(change.lineNew(), change.lineNew());
     VersionChange *nchange;
-    if (actualChanges.isEmpty()) // add a new change here
+    if (actualChanges.isEmpty())  // add a new change here
     {
         nchange = new VersionChange(change);
         _changes.append(nchange);
     }
-    else // merge with already existing changes
+    else  // merge with already existing changes
     {
         nchange = actualChanges.first();
         /*for (int i=nchange->lineNew(); i<nchange->addedLines().count()-1; i++)

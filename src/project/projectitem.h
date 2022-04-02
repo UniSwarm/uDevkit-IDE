@@ -41,7 +41,7 @@ public:
         IndividualFile
     };
 
-    explicit ProjectItem(Project *project, const QString path, Type type, ProjectItemModel *model);
+    explicit ProjectItem(Project *project, const QString &path, Type type, ProjectItemModel *model);
     ~ProjectItem() override;
 
     int count() const;
@@ -94,4 +94,4 @@ protected:
     bool _loaded;
 };
 
-#endif // PROJECTITEM_H
+#endif  // PROJECTITEM_H

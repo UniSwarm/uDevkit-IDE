@@ -25,8 +25,8 @@
 
 #include "hexfile.h"
 
-#include "qhexview.h"
 #include "document/buffer/qmemorybuffer.h"
+#include "qhexview.h"
 
 HexFileEditor::HexFileEditor(Project *project, QWidget *parent)
     : HexEditor(project, parent)

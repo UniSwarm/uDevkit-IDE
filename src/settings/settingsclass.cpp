@@ -21,15 +21,15 @@
 #include "settingsmanager.h"
 
 #include <QDebug>
+#include <utility>
 
-SettingsClass::SettingsClass(const QString &name, QObject *parent)
+SettingsClass::SettingsClass(QString name, QObject *parent)
     : QObject(parent)
-    , _name(name)
+    , _name(std::move(name))
 {
 }
 
 SettingsClass::SettingsClass(const SettingsClass &other)
-    : QObject()
 {
     _name = other.name();
     _modified = false;
@@ -104,32 +104,30 @@ Setting *SettingsClass::registerSetting(const QString &path, const QVariant &def
         }
         return setting;
     }
+
+    QMap<QString, SettingsClass *>::const_iterator find = _classesMap.constFind(path.mid(0, pos));
+    if (find != _classesMap.cend())
+    {
+        return (*find)->registerSetting(path.mid(pos + 1), defaultValue);
+    }
     else
     {
-        QMap<QString, SettingsClass *>::const_iterator find = _classesMap.constFind(path.mid(0, pos));
+        QString className = path.mid(0, pos);
+        SettingsClass *settingClass;
+        QMap<QString, SettingsClass *>::const_iterator find = _classesMap.constFind(className);
         if (find != _classesMap.cend())
         {
-            return (*find)->registerSetting(path.mid(pos + 1), defaultValue);
+            settingClass = *find;
         }
         else
         {
-            QString className = path.mid(0, pos);
-            SettingsClass *settingClass;
-            QMap<QString, SettingsClass *>::const_iterator find = _classesMap.constFind(className);
-            if (find != _classesMap.cend())
-            {
-                settingClass = *find;
-            }
-            else
-            {
-                settingClass = new SettingsClass(className);
-                _classesMap.insert(className, settingClass);
+            settingClass = new SettingsClass(className);
+            _classesMap.insert(className, settingClass);
 
-                // load
-                SettingsManager::instance()->load(settingClass);
-            }
-            return settingClass->registerSetting(path.mid(pos + 1), defaultValue);
+            // load
+            SettingsManager::instance()->load(settingClass);
         }
+        return settingClass->registerSetting(path.mid(pos + 1), defaultValue);
     }
 }
 

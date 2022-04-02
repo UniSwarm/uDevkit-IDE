@@ -40,7 +40,7 @@ QList<Editor *> FileProject::openedEditors()
 void FileProject::valid(int line)
 {
     Q_UNUSED(line)
-    if (!_versionControl)
+    if (_versionControl == nullptr)
     {
         return;
     }
@@ -50,7 +50,7 @@ void FileProject::valid(int line)
 void FileProject::checkout(int line)
 {
     Q_UNUSED(line)
-    if (!_versionControl)
+    if (_versionControl == nullptr)
     {
         return;
     }
@@ -60,7 +60,7 @@ void FileProject::checkout(int line)
 void FileProject::inValid(int line)
 {
     Q_UNUSED(line)
-    if (!_versionControl)
+    if (_versionControl == nullptr)
     {
         return;
     }
@@ -69,7 +69,7 @@ void FileProject::inValid(int line)
 
 void FileProject::updateDiff()
 {
-    if (!_versionControl)
+    if (_versionControl == nullptr)
     {
         return;
     }

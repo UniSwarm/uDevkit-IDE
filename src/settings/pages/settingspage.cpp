@@ -18,9 +18,11 @@
 
 #include "settingspage.h"
 
-SettingsPage::SettingsPage(const QIcon &icon, const QString &label)
-    : _icon(icon)
-    , _label(label)
+#include <utility>
+
+SettingsPage::SettingsPage(QIcon icon, QString label)
+    : _icon(std::move(icon))
+    , _label(std::move(label))
 {
 }
 

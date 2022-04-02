@@ -25,7 +25,6 @@
 #include "project.h"
 
 ProjectItemProxyModel::ProjectItemProxyModel(Project *project)
-    : QSortFilterProxyModel()
 {
     _project = project;
     setDynamicSortFilter(true);
@@ -127,9 +126,5 @@ bool ProjectItemProxyModel::lessThan(const QModelIndex &source_left, const QMode
     {
         return (leftPath.compare(rightPath, Qt::CaseInsensitive) < 0);
     }
-    if (isLeftDir)
-    {
-        return true;
-    }
-    return false;
+    return isLeftDir;
 }

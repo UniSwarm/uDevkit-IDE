@@ -18,17 +18,19 @@
 
 #include "setting.h"
 
-Setting::Setting(SettingsClass *parentClass, const QString &name, const QVariant &defaultValue)
+#include <utility>
+
+Setting::Setting(SettingsClass *parentClass, QString name, QVariant defaultValue)
     : _parentClass(parentClass)
-    , _name(name)
-    , _value(defaultValue)
+    , _name(std::move(name))
+    , _value(std::move(defaultValue))
 {
     _parentClass = Q_NULLPTR;
 }
 
-Setting::Setting(const QString &name, const QVariant &defaultValue)
-    : _name(name)
-    , _value(defaultValue)
+Setting::Setting(QString name, QVariant defaultValue)
+    : _name(std::move(name))
+    , _value(std::move(defaultValue))
 {
 }
 

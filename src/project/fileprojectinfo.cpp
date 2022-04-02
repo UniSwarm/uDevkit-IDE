@@ -35,10 +35,8 @@ bool FileProjectInfo::isTracked() const
     {
         return _project->versionControl()->isDirTracked(filePath());
     }
-    else
-    {
-        return _project->versionControl()->isFileTracked(filePath());
-    }
+
+    return _project->versionControl()->isFileTracked(filePath());
 }
 
 bool FileProjectInfo::isModified() const
@@ -47,10 +45,8 @@ bool FileProjectInfo::isModified() const
     {
         return _project->versionControl()->isDirModified(filePath());
     }
-    else
-    {
-        return _project->versionControl()->isFileModified(filePath());
-    }
+
+    return _project->versionControl()->isFileModified(filePath());
 }
 
 bool FileProjectInfo::isValidated() const

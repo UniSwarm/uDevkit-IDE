@@ -42,7 +42,7 @@ CodeEditorScrollBar::CodeEditorScrollBar(Qt::Orientation orientation, QWidget *p
 
 void CodeEditorScrollBar::paintEvent(QPaintEvent *event)
 {
-    if (!_fileChange)
+    if (_fileChange == nullptr)
     {
         return;
     }

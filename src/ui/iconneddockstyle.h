@@ -27,7 +27,7 @@ class IconnedDockStyle : public QProxyStyle
 {
     Q_OBJECT
 public:
-    IconnedDockStyle(const QIcon &icon, QStyle *style = nullptr);
+    IconnedDockStyle(QIcon icon, QStyle *style = nullptr);
 
     void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const override;
 
@@ -35,4 +35,4 @@ protected:
     QIcon _icon;
 };
 
-#endif // ICONNEDDOCKSTYLE_H
+#endif  // ICONNEDDOCKSTYLE_H

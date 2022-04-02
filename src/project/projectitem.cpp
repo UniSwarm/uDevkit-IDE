@@ -26,7 +26,7 @@
 #include <QFont>
 #include <QTimer>
 
-ProjectItem::ProjectItem(Project *project, const QString path, Type type, ProjectItemModel *model)
+ProjectItem::ProjectItem(Project *project, const QString &path, Type type, ProjectItemModel *model)
     : QObject(Q_NULLPTR)
     , _type(type)
     , _info(path, project)
@@ -82,7 +82,7 @@ ProjectItem *ProjectItem::child(const QString &name) const
 
 int ProjectItem::row() const
 {
-    if (_parentItem)
+    if (_parentItem != nullptr)
     {
         return _parentItem->_childrens.indexOf(const_cast<ProjectItem *>(this));
     }
@@ -106,7 +106,7 @@ void ProjectItem::removeChild(ProjectItem *child)
 
 void ProjectItem::remove()
 {
-    if (!_parentItem)
+    if (_parentItem == nullptr)
     {
         return;
     }
@@ -198,10 +198,8 @@ QVariant ProjectItem::data(int column, int role) const
                 {
                     return QVariant(QColor(255, 127, 0));
                 }
-                else
-                {
-                    return QVariant(QColor(0, 255, 0));
-                }
+
+                return QVariant(QColor(0, 255, 0));
             }
             if (!_info.isTracked())
             {
@@ -254,52 +252,52 @@ void ProjectItem::updateModif(const QString &path)
     Q_UNUSED(path)
     switch (_type)
     {
-    case ProjectItem::RealDir:
-    {
-        _model->prepareModif();
-        QSet<QString> files;
-        QDirIterator it(filePath(), QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
-        while (it.hasNext())
+        case ProjectItem::RealDir:
         {
-            QString mfilePath = it.next();
-            QFileInfo info(mfilePath);
-            files.insert(info.fileName());
-            if (!_childrensMap.contains(info.fileName()))
+            _model->prepareModif();
+            QSet<QString> files;
+            QDirIterator it(filePath(), QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
+            while (it.hasNext())
             {
-                if (info.isDir())
+                QString mfilePath = it.next();
+                QFileInfo info(mfilePath);
+                files.insert(info.fileName());
+                if (!_childrensMap.contains(info.fileName()))
                 {
-                    addChild(new ProjectItem(_info.project(), info.filePath(), RealDir, _model));
-                }
-                else
-                {
-                    addChild(new ProjectItem(_info.project(), info.filePath(), DirFile, _model));
+                    if (info.isDir())
+                    {
+                        addChild(new ProjectItem(_info.project(), info.filePath(), RealDir, _model));
+                    }
+                    else
+                    {
+                        addChild(new ProjectItem(_info.project(), info.filePath(), DirFile, _model));
+                    }
                 }
             }
-        }
 
-        QSet<QString> oldFiles = _childrensMap.keys().toSet();
-        oldFiles.subtract(files);
-        foreach (QString removedFile, oldFiles)
-        {
-            QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(removedFile);
-            if (i != _childrensMap.end())
+            QSet<QString> oldFiles = _childrensMap.keys().toSet();
+            oldFiles.subtract(files);
+            foreach (QString removedFile, oldFiles)
             {
-                removeChild(*i);
+                QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(removedFile);
+                if (i != _childrensMap.end())
+                {
+                    removeChild(*i);
+                }
             }
-        }
 
-        _model->endModif();
-        break;
-    }
-    case ProjectItem::DirFile:
-        // no watch
-        break;
-    case ProjectItem::LogicDir:
-        // no watch
-        break;
-    case ProjectItem::IndividualFile:
-        // TODO
-        break;
+            _model->endModif();
+            break;
+        }
+        case ProjectItem::DirFile:
+            // no watch
+            break;
+        case ProjectItem::LogicDir:
+            // no watch
+            break;
+        case ProjectItem::IndividualFile:
+            // TODO
+            break;
     }
 }
 

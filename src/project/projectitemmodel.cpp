@@ -20,8 +20,6 @@
 
 #include <QDebug>
 
-#include "projectitemmodel.h"
-
 #include "project.h"
 #include "projecticonprovider.h"
 
@@ -50,7 +48,7 @@ void ProjectItemModel::addRealDirItem(const QString &path)
 bool ProjectItemModel::isDir(const QModelIndex &index) const
 {
     const ProjectItem *itemPtr = item(index);
-    if (itemPtr)
+    if (itemPtr != nullptr)
     {
         return itemPtr->info().isDir() || (itemPtr->type() == ProjectItem::LogicDir);
     }
@@ -60,7 +58,7 @@ bool ProjectItemModel::isDir(const QModelIndex &index) const
 bool ProjectItemModel::isFile(const QModelIndex &index) const
 {
     const ProjectItem *itemPtr = item(index);
-    if (itemPtr)
+    if (itemPtr != nullptr)
     {
         return itemPtr->info().isFile() || (itemPtr->type() == ProjectItem::LogicDir);
     }
@@ -70,7 +68,7 @@ bool ProjectItemModel::isFile(const QModelIndex &index) const
 QString ProjectItemModel::filePath(const QModelIndex &index) const
 {
     const ProjectItem *itemPtr = item(index);
-    if (itemPtr)
+    if (itemPtr != nullptr)
     {
         return itemPtr->info().filePath();
     }
@@ -80,7 +78,7 @@ QString ProjectItemModel::filePath(const QModelIndex &index) const
 QString ProjectItemModel::fileName(const QModelIndex &index) const
 {
     const ProjectItem *itemPtr = item(index);
-    if (itemPtr)
+    if (itemPtr != nullptr)
     {
         return itemPtr->info().fileName();
     }
@@ -131,19 +129,19 @@ bool ProjectItemModel::remove(const QModelIndex &index)
     return valid;
 }
 
-void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
+void ProjectItemModel::addExternalSource(const QSet<QString> &sourceFiles)
 {
     emit layoutAboutToBeChanged();
     foreach (QString filePath, sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
-            continue; // not an external source
+            continue;  // not an external source
         }
 
         // qDebug() << "addExternalSource" << filePath;
 
-        if (!_externalFiles)
+        if (_externalFiles == nullptr)
         {
             _externalFiles = new ProjectItem(_project, tr("ext src"), ProjectItem::LogicDir, this);
             _root->addChild(_externalFiles);
@@ -153,7 +151,7 @@ void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
         QDir dir = info.absoluteDir();
 
         ProjectItem *parent = _externalFiles->child(dir.dirName());
-        if (!parent)
+        if (parent == nullptr)
         {
             parent = new ProjectItem(_project, dir.absolutePath(), ProjectItem::LogicDir, this);
             _externalFiles->addChild(parent);
@@ -166,9 +164,9 @@ void ProjectItemModel::addExternalSource(QSet<QString> sourceFiles)
     emit layoutChanged();
 }
 
-void ProjectItemModel::removeExternalSource(QSet<QString> sourceFiles)
+void ProjectItemModel::removeExternalSource(const QSet<QString> &sourceFiles)
 {
-    if (!_externalFiles)
+    if (_externalFiles == nullptr)
     {
         return;
     }
@@ -177,20 +175,20 @@ void ProjectItemModel::removeExternalSource(QSet<QString> sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
-            continue; // not external source
+            continue;  // not external source
         }
 
         QFileInfo info(filePath);
         QDir dir = info.absoluteDir();
 
         ProjectItem *parent = _externalFiles->child(dir.dirName());
-        if (!parent)
+        if (parent == nullptr)
         {
             continue;
         }
 
         ProjectItem *item = _pathCache[filePath];
-        if (!item)
+        if (item == nullptr)
         {
             continue;
         }
@@ -205,21 +203,21 @@ void ProjectItemModel::removeExternalSource(QSet<QString> sourceFiles)
     emit layoutChanged();
 }
 
-void ProjectItemModel::addOtherSource(QSet<QString> sourceFiles)
+void ProjectItemModel::addOtherSource(const QSet<QString> &sourceFiles)
 {
     emit layoutAboutToBeChanged();
     foreach (QString filePath, sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
-            continue; // not an external source
+            continue;  // not an external source
         }
         if (_pathCache.contains(filePath))
         {
             return;
         }
 
-        if (!_otherFiles)
+        if (_otherFiles == nullptr)
         {
             _otherFiles = new ProjectItem(_project, "opened files", ProjectItem::LogicDir, this);
             _root->addChild(_otherFiles);
@@ -232,9 +230,9 @@ void ProjectItemModel::addOtherSource(QSet<QString> sourceFiles)
     emit layoutChanged();
 }
 
-void ProjectItemModel::removeOtherSource(QSet<QString> sourceFiles)
+void ProjectItemModel::removeOtherSource(const QSet<QString> &sourceFiles)
 {
-    if (!_otherFiles)
+    if (_otherFiles == nullptr)
     {
         return;
     }
@@ -242,7 +240,7 @@ void ProjectItemModel::removeOtherSource(QSet<QString> sourceFiles)
     foreach (QString filePath, sourceFiles)
     {
         ProjectItem *item = _pathCache[filePath];
-        if (!item)
+        if (item == nullptr)
         {
             continue;
         }
@@ -262,7 +260,7 @@ void ProjectItemModel::endModif()
     emit layoutChanged();
 }
 
-void ProjectItemModel::filesUpdated(QSet<QString> filesPath)
+void ProjectItemModel::filesUpdated(const QSet<QString> &filesPath)
 {
     foreach (QString path, filesPath)
     {
@@ -305,7 +303,7 @@ const ProjectItem *ProjectItemModel::item(const QModelIndex &index) const
     return static_cast<ProjectItem *>(index.internalPointer());
 }
 
-QModelIndex ProjectItemModel::index(const QString path) const
+QModelIndex ProjectItemModel::index(const QString &path) const
 {
     QModelIndexList list = match(index(0, 0), ProjectItemModel::FilePathRole, path, -1, Qt::MatchRecursive);
     if (list.isEmpty())
@@ -346,14 +344,12 @@ QModelIndex ProjectItemModel::index(int row, int column, const QModelIndex &pare
     }
 
     ProjectItem *childItem = parentItem->child(row);
-    if (childItem)
+    if (childItem != nullptr)
     {
         return createIndex(row, column, childItem);
     }
-    else
-    {
-        return QModelIndex();
-    }
+
+    return QModelIndex();
 }
 
 QModelIndex ProjectItemModel::parent(const QModelIndex &child) const

@@ -28,7 +28,7 @@ class SettingsPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SettingsPage(const QIcon &icon = QIcon(), const QString &label = QString());
+    explicit SettingsPage(QIcon icon = QIcon(), QString label = QString());
 
     const QIcon &icon() const;
     void setIcon(const QIcon &icon);
@@ -49,4 +49,4 @@ protected:
     SettingsClass *_settingsClass;
 };
 
-#endif // SETTINGSPAGE_H
+#endif  // SETTINGSPAGE_H

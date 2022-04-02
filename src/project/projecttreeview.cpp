@@ -19,6 +19,7 @@
 #include "projecttreeview.h"
 
 #include <QApplication>
+#include <QDateTime>
 #include <QDebug>
 #include <QHeaderView>
 #include <QInputDialog>
@@ -28,7 +29,6 @@
 #include <QMouseEvent>
 #include <QProcess>
 #include <QProxyStyle>
-#include <QDateTime>
 
 #include "fileprojectinfo.h"
 #include "mainwindow.h"
@@ -150,7 +150,8 @@ void ProjectTreeView::remove()
 
         if (_project->projectItemModel()->isDir(indexFile))
         {
-            if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove '%1'?").arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+            if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove '%1'?").arg(_project->projectItemModel()->fileName(indexFile)))
+                == QMessageBox::Yes)
             {
                 _project->projectItemModel()->rmdir(indexFile);
             }
@@ -251,7 +252,9 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     }
 
     // git commands
-    QAction *versionValidAction = Q_NULLPTR, *versionInvalidAction = Q_NULLPTR, *versionCheckoutAction = Q_NULLPTR;
+    QAction *versionValidAction = Q_NULLPTR;
+    QAction *versionInvalidAction = Q_NULLPTR;
+    QAction *versionCheckoutAction = Q_NULLPTR;
     FileProjectInfo info(_project->projectItemModel()->filePath(indexFile), _project);
     if (_project->versionControl()->isValid())
     {
@@ -293,13 +296,9 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
             if (fileName.endsWith(".h") || fileName.endsWith(".c"))
             {
                 QTextStream stream(&file);
-                stream << "/**\n * @file "
-                       << fileName
-                       << "\n * @author " << SettingsManager::userName() << " (" << SettingsManager::userPseudo() << ")"
-                       << "\n * @copyright UniSwarm " << QDateTime::currentDateTime().date().year()
-                       << "\n *\n * @date "
-                       << QLocale::c().toString(QDateTime::currentDateTime(), "MMMM d, yyyy, hh:mm AP")
-                       << "\n *\n * @brief .....\n */\n\n";
+                stream << "/**\n * @file " << fileName << "\n * @author " << SettingsManager::userName() << " (" << SettingsManager::userPseudo() << ")"
+                       << "\n * @copyright UniSwarm " << QDateTime::currentDateTime().date().year() << "\n *\n * @date "
+                       << QLocale::c().toString(QDateTime::currentDateTime(), "MMMM d, yyyy, hh:mm AP") << "\n *\n * @brief .....\n */\n\n";
 
                 if (fileName.endsWith(".h"))
                 {
@@ -328,7 +327,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     {
         QString path = _project->projectItemModel()->filePath(indexFile);
 #if defined(Q_OS_LINUX)
-        QProcess::startDetached("gnome-terminal", QStringList() << "--working-directory=" + path); // TODO make it work on all platforms
+        QProcess::startDetached("gnome-terminal", QStringList() << "--working-directory=" + path);  // TODO make it work on all platforms
 #elif defined(Q_OS_WIN)
         QProcess::startDetached("mintty.exe", QStringList() << "--dir" << path);
 #endif
@@ -344,8 +343,10 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     else if (trigered == versionCheckoutAction)
     {
         if (QMessageBox::question(
-                this, tr("Checkout file?"), QString(tr("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.")).arg(_project->projectItemModel()->fileName(indexFile))) ==
-            QMessageBox::Yes)
+                this,
+                tr("Checkout file?"),
+                QString(tr("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.")).arg(_project->projectItemModel()->fileName(indexFile)))
+            == QMessageBox::Yes)
         {
             _project->versionControl()->checkoutFile(QSet<QString>() << info.filePath());
         }

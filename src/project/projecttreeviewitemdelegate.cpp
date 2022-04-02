@@ -44,9 +44,9 @@ void ProjectTreeViewItemDelegate::paint(QPainter *painter, const QStyleOptionVie
     {
         textColor = index.data(Qt::TextColorRole).value<QColor>();
     }
-    if (opt.state & QStyle::State_Selected || opt.state & QStyle::State_MouseOver)
+    if ((opt.state & QStyle::State_Selected != 0u) || (opt.state & QStyle::State_MouseOver != 0u))
     {
-        if (opt.state & QStyle::State_Selected)
+        if (opt.state & QStyle::State_Selected != 0u)
         {
             painter->fillRect(opt.rect, QColor(0x287399));
         }

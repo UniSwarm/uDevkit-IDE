@@ -52,7 +52,7 @@ void EditorTabSwitchWidget::updateId(int row)
 
 void EditorTabSwitchWidget::clickItem(QListWidgetItem *item)
 {
-    if (item)
+    if (item != nullptr)
     {
         _id = indexFromItem(item).row();
         hide();
@@ -66,7 +66,7 @@ bool EditorTabSwitchWidget::event(QEvent *event)
         QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab)
         {
-            if (keyEvent->modifiers() & Qt::ShiftModifier)
+            if (keyEvent->modifiers() & Qt::ShiftModifier != 0u)
             {
                 _id--;
                 if (_id < 0)
@@ -86,7 +86,7 @@ bool EditorTabSwitchWidget::event(QEvent *event)
             keyEvent->ignore();
             return false;
         }
-        else if (keyEvent->key() == Qt::Key_Escape)
+        if (keyEvent->key() == Qt::Key_Escape)
         {
             _id = 0;
             setCurrentRow(_id);

@@ -54,4 +54,4 @@ protected:
     bool _staged;
 };
 
-#endif // VERSIONCHANGE_H
+#endif  // VERSIONCHANGE_H

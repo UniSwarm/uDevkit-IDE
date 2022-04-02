@@ -46,7 +46,7 @@ public:
     };
     const ProjectItem *item(const QModelIndex &index) const;
     // QModelIndex index(const ProjectItem *item) const;
-    QModelIndex index(const QString path) const;
+    QModelIndex index(const QString &path) const;
     bool isDir(const QModelIndex &index) const;
     bool isFile(const QModelIndex &index) const;
     QString filePath(const QModelIndex &index) const;
@@ -55,17 +55,17 @@ public:
     bool remove(const QModelIndex &index);
 
     // high level interface
-    void addExternalSource(QSet<QString> sourceFiles);
-    void removeExternalSource(QSet<QString> sourceFiles);
+    void addExternalSource(const QSet<QString> &sourceFiles);
+    void removeExternalSource(const QSet<QString> &sourceFiles);
 
-    void addOtherSource(QSet<QString> sourceFiles);
-    void removeOtherSource(QSet<QString> sourceFiles);
+    void addOtherSource(const QSet<QString> &sourceFiles);
+    void removeOtherSource(const QSet<QString> &sourceFiles);
 
     void prepareModif();
     void endModif();
 
 public slots:
-    void filesUpdated(QSet<QString> filesPath);
+    void filesUpdated(const QSet<QString> &filesPath);
 
     // QAbstractItemModel interface
 public:
@@ -92,4 +92,4 @@ protected:
     ProjectItem *_otherFiles;
 };
 
-#endif // PROJECTMODEL_H
+#endif  // PROJECTMODEL_H

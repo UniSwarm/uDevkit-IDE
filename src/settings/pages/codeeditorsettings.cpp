@@ -58,7 +58,12 @@ void CodeEditorSettings::createWidgets()
     _fontSizeSpinBox = new QSpinBox();
     _fontSizeSpinBox->setRange(4, 50);
     _fontSizeSpinBox->setValue(_settingsClass->setting("fontSize", 10).toInt());
-    connect(_fontSizeSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [=]() { updateTest(); });
+    connect(_fontSizeSpinBox,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            [=]()
+            {
+                updateTest();
+            });
     layout->addRow(tr("Font size"), _fontSizeSpinBox);
 
     _editorTest = new CodeEditor(Q_NULLPTR);

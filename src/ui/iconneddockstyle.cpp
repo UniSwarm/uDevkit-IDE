@@ -18,9 +18,11 @@
 
 #include "iconneddockstyle.h"
 
-IconnedDockStyle::IconnedDockStyle(const QIcon &icon, QStyle *style)
+#include <utility>
+
+IconnedDockStyle::IconnedDockStyle(QIcon icon, QStyle *style)
     : QProxyStyle(style)
-    , _icon(icon)
+    , _icon(std::move(icon))
 {
 }
 

@@ -27,6 +27,7 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QTabBar>
+#include <utility>
 
 EditorTabWidget::EditorTabWidget(Project *project)
     : _project(project)
@@ -124,7 +125,7 @@ Editor *EditorTabWidget::currentEditor() const
 
 QString EditorTabWidget::currentFilePath() const
 {
-    if (currentEditor())
+    if (currentEditor() != nullptr)
     {
         return currentEditor()->filePath();
     }
@@ -138,7 +139,9 @@ Editor *EditorTabWidget::editor(int i) const
 
 void EditorTabWidget::openFileEditor(const QString &url)
 {
-    QString filePath, line, column;
+    QString filePath;
+    QString line;
+    QString column;
     QRegExp urlFilePath("(..[^:]*)(:[0-9]+)*(:[0-9]+)*");
 
     if (urlFilePath.indexIn(url) == -1)
@@ -185,7 +188,7 @@ void EditorTabWidget::openFileEditor(const QString &url)
     if (!_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
     {
         editor = Editor::createEditor(filePath, _project);
-        if (!editor)
+        if (editor == nullptr)
         {
             return;
         }
@@ -225,7 +228,8 @@ void EditorTabWidget::closeFileEditor(const QString &filePath)
     if (infoPath.isDir())
     {
         QDir dir(infoPath.absoluteFilePath());
-        QMap<QString, Editor *>::const_iterator it, end;
+        QMap<QString, Editor *>::const_iterator it;
+        QMap<QString, Editor *>::const_iterator end;
         for (it = _mapPathEditor.cbegin(), end = _mapPathEditor.cend(); it != end; ++it)
         {
             QFileInfo editorInfo(it.key());
@@ -263,7 +267,7 @@ int EditorTabWidget::closeEditor(int id)
     {
         editor = dynamic_cast<Editor *>(widget(id));
     }
-    if (!editor)
+    if (editor == nullptr)
     {
         return -1;
     }
@@ -271,8 +275,11 @@ int EditorTabWidget::closeEditor(int id)
     const QString &path = QFileInfo(editor->filePath()).absoluteFilePath();
     if (editor->isModified())
     {
-        int response = QMessageBox::question(
-            this, tr("File modified"), tr("File '%1' has been modified, do you want to save it?").arg(editor->fileName()), QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort, QMessageBox::Yes);
+        int response = QMessageBox::question(this,
+                                             tr("File modified"),
+                                             tr("File '%1' has been modified, do you want to save it?").arg(editor->fileName()),
+                                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort,
+                                             QMessageBox::Yes);
         if (response == QMessageBox::Abort)
         {
             return -2;
@@ -302,10 +309,10 @@ int EditorTabWidget::closeAllEditors()
     return 0;
 }
 
-void EditorTabWidget::saveCurrentEditor()
+void EditorTabWidget::saveCurrentEditor() const
 {
     Editor *editor = currentEditor();
-    if (editor)
+    if (editor != nullptr)
     {
         editor->saveFile();
     }
@@ -328,7 +335,7 @@ void EditorTabWidget::saveAllEditors()
 void EditorTabWidget::switchHeader()
 {
     Editor *editor = currentEditor();
-    if (!editor)
+    if (editor == nullptr)
     {
         return;
     }
@@ -372,7 +379,7 @@ void EditorTabWidget::initiateSwitchTab(bool next)
     foreach (int id, _activedTab)
     {
         Editor *editor = this->editor(id);
-        if (!editor)
+        if (editor == nullptr)
         {
             continue;
         }
@@ -433,60 +440,60 @@ void EditorTabWidget::endSwitchTab()
     }
 }
 
-void EditorTabWidget::undo()
+void EditorTabWidget::undo() const
 {
     Editor *editor = currentEditor();
-    if (!editor)
+    if (editor == nullptr)
     {
         return;
     }
     editor->undo();
 }
 
-void EditorTabWidget::redo()
+void EditorTabWidget::redo() const
 {
     Editor *editor = currentEditor();
-    if (!editor)
+    if (editor == nullptr)
     {
         return;
     }
     editor->redo();
 }
 
-void EditorTabWidget::cut()
+void EditorTabWidget::cut() const
 {
     Editor *editor = currentEditor();
-    if (!editor)
+    if (editor == nullptr)
     {
         return;
     }
     editor->cut();
 }
 
-void EditorTabWidget::copy()
+void EditorTabWidget::copy() const
 {
     Editor *editor = currentEditor();
-    if (!editor)
+    if (editor == nullptr)
     {
         return;
     }
     editor->copy();
 }
 
-void EditorTabWidget::paste()
+void EditorTabWidget::paste() const
 {
     Editor *editor = currentEditor();
-    if (!editor)
+    if (editor == nullptr)
     {
         return;
     }
     editor->paste();
 }
 
-void EditorTabWidget::format()
+void EditorTabWidget::format() const
 {
     Editor *editor = currentEditor();
-    if (!editor)
+    if (editor == nullptr)
     {
         return;
     }
@@ -534,7 +541,7 @@ void EditorTabWidget::activeTab(int id)
 
     Editor *editor = this->editor(id);
     emit editorChange(editor);
-    if (editor)
+    if (editor != nullptr)
     {
         currentFileChanged(editor->filePath());
         editor->active();
@@ -587,7 +594,7 @@ void EditorTabWidget::tabContextMenu(const QPoint &pos)
 
 void EditorTabWidget::changeStatus(QString status)
 {
-    emit statusChanged(status);
+    emit statusChanged(std::move(status));
 }
 
 void EditorTabWidget::undoUpdate(bool available)
@@ -610,7 +617,8 @@ bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
     if (e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease)
     {
         QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(e);
-        if (!_switchTabActive && e->type() == QEvent::KeyPress && keyEvent->modifiers() & Qt::ControlModifier && (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab))
+        if (!_switchTabActive && e->type() == QEvent::KeyPress && (keyEvent->modifiers() & Qt::ControlModifier != 0u)
+            && (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab))
         {
             initiateSwitchTab(!(keyEvent->modifiers() & Qt::ShiftModifier));
         }
@@ -620,7 +628,7 @@ bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
         }
         return QObject::eventFilter(o, e);
     }
-    else if (o == tabBar() && e->type() == QEvent::MouseButtonPress)
+    if (o == tabBar() && e->type() == QEvent::MouseButtonPress)
     {
         QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(e);
         if (mouseEvent->button() == Qt::MiddleButton)
@@ -682,5 +690,5 @@ void EditorTabWidget::resizeEvent(QResizeEvent *event)
 
 void EditorTabWidget::keyPressEvent(QKeyEvent *event)
 {
-    QWidget::keyPressEvent(event); // disable QTabWidget Ctrl + tab
+    QWidget::keyPressEvent(event);  // disable QTabWidget Ctrl + tab
 }

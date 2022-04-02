@@ -27,7 +27,7 @@ class SettingsCateg : public QTabWidget
 {
     Q_OBJECT
 public:
-    SettingsCateg(const QIcon &icon = QIcon(), const QString &label = QString());
+    SettingsCateg(QIcon icon = QIcon(), QString label = QString());
 
     SettingsPage *page(int i) const;
     void addPage(SettingsPage *page);
@@ -46,4 +46,4 @@ protected:
     QString _label;
 };
 
-#endif // SETTINGSCATEG_H
+#endif  // SETTINGSCATEG_H

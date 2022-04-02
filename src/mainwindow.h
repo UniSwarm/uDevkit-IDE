@@ -35,8 +35,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(Project *project = 0, QWidget *parent = 0);
-    ~MainWindow();
+    explicit MainWindow(Project *project = nullptr, QWidget *parent = nullptr);
+    ~MainWindow() override;
 
 protected:
     Project *_project;
@@ -73,7 +73,7 @@ protected slots:
 
     void updateTitle(Editor *editor = Q_NULLPTR);
     void updateAction(Editor *editor = Q_NULLPTR);
-    void updateStatus(QString status);
+    void updateStatus(const QString &status);
 
     void showSettings();
 
@@ -83,7 +83,7 @@ protected slots:
 
     // QObject interface
 public:
-    virtual bool event(QEvent *event);
+    bool event(QEvent *event) override;
 
 private:
     static const int MaxOldProject;
@@ -95,4 +95,4 @@ private:
     QAction *_replaceAction;
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

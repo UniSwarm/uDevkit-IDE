@@ -45,9 +45,9 @@ public:
     QStringList sourceFiles() const;
 
     const QMap<QString, MakeRule> &rules() const;
-    const MakeRule buildRule(const QString &filePath) const;
-    const QList<MakeRule> includedInRules(const QString &filePath) const;
-    const QList<MakeRule> targets() const;
+    MakeRule buildRule(const QString &filePath) const;
+    QList<MakeRule> includedInRules(const QString &filePath) const;
+    QList<MakeRule> targets() const;
 
     QStringList evalVariable(const QString &varName) const;
 
@@ -60,7 +60,7 @@ public slots:
 
 protected slots:
     void processEnd();
-    void analyseMakefile(const QString path);
+    void analyseMakefile(const QString &path);
     void updateSettings();
 
 protected:
@@ -79,4 +79,4 @@ protected:
     Setting *_settingPath;
 };
 
-#endif // MAKEPARSER_H
+#endif  // MAKEPARSER_H

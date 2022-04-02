@@ -158,10 +158,8 @@ FileVersionChange AbstractVersionControl::fileModifications(const QString &fileP
     {
         return *localFind;
     }
-    else
-    {
-        return FileVersionChange();
-    }
+
+    return FileVersionChange();
 }
 
 void AbstractVersionControl::analysePath()

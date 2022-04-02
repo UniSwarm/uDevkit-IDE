@@ -22,9 +22,9 @@
 #include "version/gitversioncontrol.h"
 
 #include <QDebug>
+#include <utility>
 
 Project::Project(const QString &path)
-    : QObject()
 {
     _projectItemModel = new ProjectItemModel(this);
     //_projectItemModel->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
@@ -90,7 +90,7 @@ const QSet<QString> &Project::openedFiles() const
     return _openedFiles;
 }
 
-void Project::addOpenedFiles(QSet<QString> openedFiles)
+void Project::addOpenedFiles(const QSet<QString> &openedFiles)
 {
     foreach (QString file, openedFiles)
         _openedFiles.insert(file);
@@ -98,7 +98,7 @@ void Project::addOpenedFiles(QSet<QString> openedFiles)
     _projectItemModel->addOtherSource(openedFiles);
 }
 
-void Project::removeOpenedFiles(QSet<QString> openedFiles)
+void Project::removeOpenedFiles(const QSet<QString> &openedFiles)
 {
     foreach (QString file, openedFiles)
         _openedFiles.remove(file);
@@ -113,7 +113,7 @@ MakeParser *Project::make() const
 
 void Project::newSource(QSet<QString> sources)
 {
-    _projectItemModel->addExternalSource(sources);
+    _projectItemModel->addExternalSource(std::move(sources));
     /*qWarning()<<"\n\n";
     foreach (QString str, sources)
         qWarning()<<str;*/
@@ -121,5 +121,5 @@ void Project::newSource(QSet<QString> sources)
 
 void Project::oldSource(QSet<QString> sources)
 {
-    _projectItemModel->removeExternalSource(sources);
+    _projectItemModel->removeExternalSource(std::move(sources));
 }
