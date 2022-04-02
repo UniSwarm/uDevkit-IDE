@@ -33,4 +33,4 @@ protected:
     void createWidgets() override;
 };
 
-#endif // HTMLSETTINGS_H
+#endif  // HTMLSETTINGS_H

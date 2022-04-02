@@ -47,4 +47,4 @@ protected:
 
 #define rtset() SettingsManager::instance()
 
-#endif // SETTINGSMANAGER_H
+#endif  // SETTINGSMANAGER_H

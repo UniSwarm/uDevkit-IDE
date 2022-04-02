@@ -88,4 +88,4 @@ protected:
     ProjectItem *_otherFiles;
 };
 
-#endif // PROJECTMODEL_H
+#endif  // PROJECTMODEL_H

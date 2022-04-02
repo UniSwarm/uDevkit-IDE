@@ -490,7 +490,7 @@ int CodeEditor::search(const QVariant &searchTerm, SearchFlags flags)
 
     controller->update();
 
-    return controller->borderedTextRanges()->rangeCount(); // return the number of occurences found
+    return controller->borderedTextRanges()->rangeCount();  // return the number of occurences found
 }
 
 void CodeEditor::searchNext()

@@ -61,4 +61,4 @@ protected:
     bool _modified;
 };
 
-#endif // SETTINGSCLASS_H
+#endif  // SETTINGSCLASS_H

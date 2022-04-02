@@ -71,4 +71,4 @@ protected:
     QMap<QString, FileVersionChange> _changeForFile;
 };
 
-#endif // ABSTRACTVERSIONCONTROL_H
+#endif  // ABSTRACTVERSIONCONTROL_H

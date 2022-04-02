@@ -51,4 +51,4 @@ protected slots:
     void anchorClick(const QUrl &link);
 };
 
-#endif // LOGWIDGET_H
+#endif  // LOGWIDGET_H

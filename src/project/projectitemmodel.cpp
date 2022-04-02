@@ -136,7 +136,7 @@ void ProjectItemModel::addExternalSource(const QSet<QString> &sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
-            continue; // not an external source
+            continue;  // not an external source
         }
 
         // qDebug() << "addExternalSource" << filePath;
@@ -175,7 +175,7 @@ void ProjectItemModel::removeExternalSource(const QSet<QString> &sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
-            continue; // not external source
+            continue;  // not external source
         }
 
         QFileInfo info(filePath);
@@ -210,7 +210,7 @@ void ProjectItemModel::addOtherSource(const QSet<QString> &sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
-            continue; // not an external source
+            continue;  // not an external source
         }
         if (_pathCache.contains(filePath))
         {

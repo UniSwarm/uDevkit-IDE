@@ -96,4 +96,4 @@ private:
     void notifyModificationChanged();
 };
 
-#endif // CODEEDITOR_H
+#endif  // CODEEDITOR_H

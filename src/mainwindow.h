@@ -95,4 +95,4 @@ private:
     QAction *_replaceAction;
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

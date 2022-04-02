@@ -45,4 +45,4 @@ protected:
     CodeEditor *_editorTest;
 };
 
-#endif // CODEEDITORSETTINGS_H
+#endif  // CODEEDITORSETTINGS_H

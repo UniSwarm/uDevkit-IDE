@@ -150,7 +150,8 @@ void ProjectTreeView::remove()
 
         if (_project->projectItemModel()->isDir(indexFile))
         {
-            if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove '%1'?").arg(_project->projectItemModel()->fileName(indexFile))) == QMessageBox::Yes)
+            if (QMessageBox::question(this, tr("Remove directory?"), tr("Do you realy want to remove '%1'?").arg(_project->projectItemModel()->fileName(indexFile)))
+                == QMessageBox::Yes)
             {
                 _project->projectItemModel()->rmdir(indexFile);
             }
@@ -326,7 +327,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     {
         QString path = _project->projectItemModel()->filePath(indexFile);
 #if defined(Q_OS_LINUX)
-        QProcess::startDetached("gnome-terminal", QStringList() << "--working-directory=" + path); // TODO make it work on all platforms
+        QProcess::startDetached("gnome-terminal", QStringList() << "--working-directory=" + path);  // TODO make it work on all platforms
 #elif defined(Q_OS_WIN)
         QProcess::startDetached("mintty.exe", QStringList() << "--dir" << path);
 #endif
@@ -342,8 +343,10 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     else if (trigered == versionCheckoutAction)
     {
         if (QMessageBox::question(
-                this, tr("Checkout file?"), QString(tr("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.")).arg(_project->projectItemModel()->fileName(indexFile))) ==
-            QMessageBox::Yes)
+                this,
+                tr("Checkout file?"),
+                QString(tr("Do you realy want to checkout '%1'?\nIt will be restored to the last valid state.")).arg(_project->projectItemModel()->fileName(indexFile)))
+            == QMessageBox::Yes)
         {
             _project->versionControl()->checkoutFile(QSet<QString>() << info.filePath());
         }
@@ -417,6 +420,7 @@ void ProjectTreeView::keyPressEvent(QKeyEvent *event)
             }
         }
 
-        foreach (const QString &path, filesPathToOpen) emit openedFile(path);
+        foreach (const QString &path, filesPathToOpen)
+            emit openedFile(path);
     }
 }

@@ -65,4 +65,4 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 };
 
-#endif // PROJECTTREEVIEW_H
+#endif  // PROJECTTREEVIEW_H

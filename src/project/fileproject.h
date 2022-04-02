@@ -57,4 +57,4 @@ private:
     FileVersionChange *_fileChange;
 };
 
-#endif // FILEPROJECT_H
+#endif  // FILEPROJECT_H

@@ -79,4 +79,4 @@ protected:
     Setting *_settingPath;
 };
 
-#endif // MAKEPARSER_H
+#endif  // MAKEPARSER_H

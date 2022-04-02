@@ -141,14 +141,24 @@ void MainWindow::createMenus()
     openDirAction->setIcon(QIcon(":/icons/img/dark/icons8-open-box.png"));
     openDirAction->setStatusTip(tr("Opens a project"));
     fileMenu->addAction(openDirAction);
-    connect(openDirAction, &QAction::triggered, [=]() { openDir(); });
+    connect(openDirAction,
+            &QAction::triggered,
+            [=]()
+            {
+                openDir();
+            });
 
     QAction *openFilesAction = new QAction(tr("&Open files"), this);
     openFilesAction->setIcon(QIcon(":/icons/img/dark/icons8-open.png"));
     openFilesAction->setStatusTip(tr("Opens files"));
     openFilesAction->setShortcut(QKeySequence::Open);
     fileMenu->addAction(openFilesAction);
-    connect(openFilesAction, &QAction::triggered, [=]() { openFiles(); });
+    connect(openFilesAction,
+            &QAction::triggered,
+            [=]()
+            {
+                openFiles();
+            });
 
     fileMenu->addSeparator();
 
@@ -304,7 +314,12 @@ void MainWindow::createMenus()
 
     QAction *aboutQtAction = new QAction(tr("About &Qt"), this);
     aboutQtAction->setIcon(QIcon(":/icons/img/dark/icons8-system-information.png"));
-    connect(aboutQtAction, &QAction::triggered, [=]() { QApplication::aboutQt(); });
+    connect(aboutQtAction,
+            &QAction::triggered,
+            [=]()
+            {
+                QApplication::aboutQt();
+            });
     helpMenu->addAction(aboutQtAction);
 }
 
@@ -564,8 +579,8 @@ GNU General Public License for more details.<br>\
 You should have received a copy of the GNU General Public License \
 along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\">www.gnu.org/licenses</a><br>\
 <br>\
-Build date: ") + __DATE__ + QString(" time: ") +
-                           __TIME__ + QString("<br>\
+Build date: ") + __DATE__ + QString(" time: ")
+                           + __TIME__ + QString("<br>\
 <br>\
 uDevkit-IDE use others open libraries :<br>\
 - edbee-lib, a code editor widget (code editor) <a href=\"https://github.com/edbee/edbee-lib\">github.com/edbee/edbee-lib</a> [MIT]<br>\

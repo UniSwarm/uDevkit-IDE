@@ -275,8 +275,11 @@ int EditorTabWidget::closeEditor(int id)
     const QString &path = QFileInfo(editor->filePath()).absoluteFilePath();
     if (editor->isModified())
     {
-        int response = QMessageBox::question(
-            this, tr("File modified"), tr("File '%1' has been modified, do you want to save it?").arg(editor->fileName()), QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort, QMessageBox::Yes);
+        int response = QMessageBox::question(this,
+                                             tr("File modified"),
+                                             tr("File '%1' has been modified, do you want to save it?").arg(editor->fileName()),
+                                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort,
+                                             QMessageBox::Yes);
         if (response == QMessageBox::Abort)
         {
             return -2;
@@ -614,7 +617,8 @@ bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
     if (e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease)
     {
         QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(e);
-        if (!_switchTabActive && e->type() == QEvent::KeyPress && ((keyEvent->modifiers() & Qt::ControlModifier) != 0u) && (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab))
+        if (!_switchTabActive && e->type() == QEvent::KeyPress && ((keyEvent->modifiers() & Qt::ControlModifier) != 0u)
+            && (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab))
         {
             initiateSwitchTab(!(keyEvent->modifiers() & Qt::ShiftModifier));
         }
@@ -686,5 +690,5 @@ void EditorTabWidget::resizeEvent(QResizeEvent *event)
 
 void EditorTabWidget::keyPressEvent(QKeyEvent *event)
 {
-    QWidget::keyPressEvent(event); // disable QTabWidget Ctrl + tab
+    QWidget::keyPressEvent(event);  // disable QTabWidget Ctrl + tab
 }

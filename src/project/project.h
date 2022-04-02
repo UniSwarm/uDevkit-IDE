@@ -67,4 +67,4 @@ protected:
     ProjectItemModel *_projectItemModel;
 };
 
-#endif // PROJECT_H
+#endif  // PROJECT_H

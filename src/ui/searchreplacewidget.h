@@ -76,4 +76,4 @@ public:
     bool eventFilter(QObject *watched, QEvent *event) override;
 };
 
-#endif // SEARCHREPLACEWIDGET_H
+#endif  // SEARCHREPLACEWIDGET_H

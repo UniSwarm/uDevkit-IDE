@@ -42,4 +42,4 @@ protected slots:
     void updatePos() override;
 };
 
-#endif // HEXFILEEDITOR_H
+#endif  // HEXFILEEDITOR_H

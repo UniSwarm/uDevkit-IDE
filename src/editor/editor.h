@@ -145,4 +145,4 @@ protected:
     virtual int saveFileData(const QString &filePath = QString()) = 0;
 };
 
-#endif // EDITOR_H
+#endif  // EDITOR_H

@@ -86,4 +86,4 @@ protected:
     bool _loaded;
 };
 
-#endif // PROJECTITEM_H
+#endif  // PROJECTITEM_H

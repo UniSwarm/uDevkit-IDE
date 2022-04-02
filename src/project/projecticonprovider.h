@@ -38,4 +38,4 @@ protected:
     QMap<QString, QIcon> _icons;
 };
 
-#endif // PROJECTICONPROVIDER_H
+#endif  // PROJECTICONPROVIDER_H

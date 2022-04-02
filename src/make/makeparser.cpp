@@ -35,7 +35,12 @@ MakeParser::MakeParser(const QString &basePath)
     : QObject(nullptr)
 {
     _processMake = new QProcess(this);
-    connect(_processMake, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int, QProcess::ExitStatus) { processEnd(); });
+    connect(_processMake,
+            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            [=](int, QProcess::ExitStatus)
+            {
+                processEnd();
+            });
     // connect(_processMake, &QProcess::readyReadStandardOutput, this, &MakeParser::processEnd);
     setPath(basePath);
 
@@ -127,7 +132,7 @@ void MakeParser::processEnd()
             notATarget = true;
             continue;
         }
-        if (regEnterDir.indexIn(line) == 0) // (Entering|Leaving) directory
+        if (regEnterDir.indexIn(line) == 0)  // (Entering|Leaving) directory
         {
             if (regEnterDir.cap(1) == "Entering")
             {
@@ -143,13 +148,13 @@ void MakeParser::processEnd()
             continue;
         }
 
-        if (line.startsWith('#') || line.size() == 0) // comments
+        if (line.startsWith('#') || line.size() == 0)  // comments
         {
             notATarget = false;
             continue;
         }
 
-        if (regVar.indexIn(line) == 0) // variable
+        if (regVar.indexIn(line) == 0)  // variable
         {
             int pos = regVar.matchedLength();
 
@@ -169,7 +174,7 @@ void MakeParser::processEnd()
             continue;
         }
 
-        if (line.startsWith("vpath")) // vpath
+        if (line.startsWith("vpath"))  // vpath
         {
             int pos = regVpath.indexIn(line);
             if (pos == 0)
@@ -191,7 +196,7 @@ void MakeParser::processEnd()
             continue;
         }
 
-        if (regRule.indexIn(line) == 0) // variable
+        if (regRule.indexIn(line) == 0)  // variable
         {
             MakeRule rule;
             rule.target = makeDir.relativeFilePath(dir.path() + "/" + regRule.cap(1));
@@ -256,7 +261,7 @@ void MakeParser::analyseMakefile(const QString &path)
         return;
     }
     _makeWatcher->removePath(_basePath);
-    if (QFile(_makefileFilePath).exists()) // TODO add a Makefile detection an -f name option in case of different file name
+    if (QFile(_makefileFilePath).exists())  // TODO add a Makefile detection an -f name option in case of different file name
     {
         // qDebug()<<"MakeParser::analyseMakefile" << _programPath;
         _processMake->start(_programPath, QStringList() << "-pnR");

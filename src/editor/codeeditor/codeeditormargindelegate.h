@@ -45,4 +45,4 @@ public:
     void mousePressEvent(int line, QMouseEvent *event) override;
 };
 
-#endif // CODEEDITORMARGINDELEGATE_H
+#endif  // CODEEDITORMARGINDELEGATE_H

@@ -33,7 +33,8 @@ SettingsClass::SettingsClass(const SettingsClass &other)
 {
     _name = other.name();
     _modified = false;
-    foreach (Setting *setting, other._settingsMap) registerSetting(setting->name(), setting->value());
+    foreach (Setting *setting, other._settingsMap)
+        registerSetting(setting->name(), setting->value());
     foreach (SettingsClass *settingClass, other._classesMap)
     {
         SettingsClass *newSettingClass = new SettingsClass(settingClass->name());

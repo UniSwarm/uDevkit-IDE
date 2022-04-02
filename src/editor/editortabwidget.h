@@ -104,4 +104,4 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 };
 
-#endif // EDITORTABWIDGET_H
+#endif  // EDITORTABWIDGET_H

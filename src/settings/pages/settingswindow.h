@@ -51,4 +51,4 @@ protected:
     QDialogButtonBox *_dialogButtonBox;
 };
 
-#endif // SETTINGSWINDOW_H
+#endif  // SETTINGSWINDOW_H

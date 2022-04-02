@@ -33,4 +33,4 @@ protected:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
-#endif // PROJECTTREEVIEWITEMDELEGATE_H
+#endif  // PROJECTTREEVIEWITEMDELEGATE_H

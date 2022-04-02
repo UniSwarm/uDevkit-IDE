@@ -46,4 +46,4 @@ protected:
     edbee::TextRenderer *_textRender;
 };
 
-#endif // CODEEDITORSCROLLBAR_H
+#endif  // CODEEDITORSCROLLBAR_H

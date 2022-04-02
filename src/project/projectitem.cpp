@@ -252,52 +252,52 @@ void ProjectItem::updateModif(const QString &path)
     Q_UNUSED(path)
     switch (_type)
     {
-    case ProjectItem::RealDir:
-    {
-        _model->prepareModif();
-        QSet<QString> files;
-        QDirIterator it(filePath(), QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
-        while (it.hasNext())
+        case ProjectItem::RealDir:
         {
-            QString mfilePath = it.next();
-            QFileInfo info(mfilePath);
-            files.insert(info.fileName());
-            if (!_childrensMap.contains(info.fileName()))
+            _model->prepareModif();
+            QSet<QString> files;
+            QDirIterator it(filePath(), QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
+            while (it.hasNext())
             {
-                if (info.isDir())
+                QString mfilePath = it.next();
+                QFileInfo info(mfilePath);
+                files.insert(info.fileName());
+                if (!_childrensMap.contains(info.fileName()))
                 {
-                    addChild(new ProjectItem(_info.project(), info.filePath(), RealDir, _model));
-                }
-                else
-                {
-                    addChild(new ProjectItem(_info.project(), info.filePath(), DirFile, _model));
+                    if (info.isDir())
+                    {
+                        addChild(new ProjectItem(_info.project(), info.filePath(), RealDir, _model));
+                    }
+                    else
+                    {
+                        addChild(new ProjectItem(_info.project(), info.filePath(), DirFile, _model));
+                    }
                 }
             }
-        }
 
-        QSet<QString> oldFiles = _childrensMap.keys().toSet();
-        oldFiles.subtract(files);
-        foreach (QString removedFile, oldFiles)
-        {
-            QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(removedFile);
-            if (i != _childrensMap.end())
+            QSet<QString> oldFiles = _childrensMap.keys().toSet();
+            oldFiles.subtract(files);
+            foreach (QString removedFile, oldFiles)
             {
-                removeChild(*i);
+                QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(removedFile);
+                if (i != _childrensMap.end())
+                {
+                    removeChild(*i);
+                }
             }
-        }
 
-        _model->endModif();
-        break;
-    }
-    case ProjectItem::DirFile:
-        // no watch
-        break;
-    case ProjectItem::LogicDir:
-        // no watch
-        break;
-    case ProjectItem::IndividualFile:
-        // TODO
-        break;
+            _model->endModif();
+            break;
+        }
+        case ProjectItem::DirFile:
+            // no watch
+            break;
+        case ProjectItem::LogicDir:
+            // no watch
+            break;
+        case ProjectItem::IndividualFile:
+            // TODO
+            break;
     }
 }
 
