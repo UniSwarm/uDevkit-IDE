@@ -70,6 +70,7 @@ protected slots:
     void makesim();
 
     void launchFormat();
+    void launchTidy();
 
     void updateTitle(Editor *editor = nullptr);
     void updateAction(Editor *editor = nullptr);

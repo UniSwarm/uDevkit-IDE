@@ -247,15 +247,20 @@ void MainWindow::createMenus()
 
     editMenu->addSeparator();
 
-    action = editMenu->addAction(tr("&Format text"));
+    action = editMenu->addAction(tr("Format &text"));
     action->setStatusTip(tr("Removes end spaces, replaces tabs by spaces"));
     action->setShortcut(QKeySequence("Ctrl+D"));
     connect(action, &QAction::triggered, _editorTabWidget, &EditorTabWidget::format);
 
-    action = editMenu->addAction(tr("&clang-format"));
+    action = editMenu->addAction(tr("clang-&format"));
     action->setStatusTip(tr("Call clang-format inplace"));
     action->setShortcut(QKeySequence("F6"));
     connect(action, &QAction::triggered, this, &MainWindow::launchFormat);
+
+    action = editMenu->addAction(tr("clang-&tidy"));
+    action->setStatusTip(tr("Call clang-tidy fix inplace"));
+    action->setShortcut(QKeySequence("F7"));
+    connect(action, &QAction::triggered, this, &MainWindow::launchTidy);
 
     editMenu->addSeparator();
 
@@ -434,6 +439,16 @@ void MainWindow::launchFormat()
     if (filePath.endsWith(".eds"))
     {
         _logWidget->start("cood", QStringList() << filePath << "-o" << filePath);
+    }
+}
+
+void MainWindow::launchTidy()
+{
+    QString filePath = _editorTabWidget->currentFilePath();
+    _editorTabWidget->saveCurrentEditor();
+    if (filePath.endsWith(".c") || filePath.endsWith(".h") || filePath.endsWith(".cpp"))
+    {
+        _logWidget->start("clang-tidy", QStringList() << "--fix" << filePath);
     }
 }
 
