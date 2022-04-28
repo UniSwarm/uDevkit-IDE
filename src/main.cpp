@@ -65,6 +65,9 @@ int main(int argc, char *argv[])
             QSplitter::handle:horizontal {width: 2px;} \
             QSplitter::handle:vertical {height: 2px;} \
         ");
+        QPalette pal = QApplication::palette();
+        pal.setColor(QPalette::Highlight, Qt::blue);
+        QApplication::setPalette(pal);
     }
     w.show();
 

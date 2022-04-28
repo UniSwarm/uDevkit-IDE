@@ -48,7 +48,7 @@ ProjectWidget::ProjectWidget(Project *project, QWidget *parent)
 
     _projectView = new ProjectTreeView(_project, this);
     _projectView->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
-    _projectView->proxy()->enableHiddenFilter();
+    _projectView->proxy()->enableHiddenFilter(false);
 
     layout->addWidget(_projectView);
     setLayout(layout);
@@ -82,7 +82,7 @@ void ProjectWidget::createMenu()
 
     QAction *enFilter = menu->addAction(tr("enable filter"));
     enFilter->setCheckable(true);
-    enFilter->setChecked(true);
+    enFilter->setChecked(false);
     connect(enFilter, &QAction::toggled, _projectView->proxy(), &ProjectItemProxyModel::enableHiddenFilter);
 
     _menuBtn->setMenu(menu);

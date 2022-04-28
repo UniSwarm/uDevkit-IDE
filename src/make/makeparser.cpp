@@ -263,8 +263,9 @@ void MakeParser::analyseMakefile(const QString &path)
     _makeWatcher->removePath(_basePath);
     if (QFile(_makefileFilePath).exists())  // TODO add a Makefile detection an -f name option in case of different file name
     {
-        // qDebug()<<"MakeParser::analyseMakefile" << _programPath;
-        _processMake->start(_programPath, QStringList() << "-pnR");
+        _processMake->start(_programPath,
+                            QStringList() << "sim"
+                                          << "-pnR");
         _makeWatcher->addPath(_makefileFilePath);
     }
     else
@@ -395,7 +396,7 @@ QStringList MakeParser::evalVariable(const QString &varName) const
 
 QStringList MakeParser::sourceFiles() const
 {
-    return _sourceFiles.toList();
+    return _sourceFiles.values();
 }
 
 const QMultiMap<QString, QString> &MakeParser::variables() const

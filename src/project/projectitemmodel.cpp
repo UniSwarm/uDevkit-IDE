@@ -219,7 +219,7 @@ void ProjectItemModel::addOtherSource(const QSet<QString> &sourceFiles)
 
         if (_otherFiles == nullptr)
         {
-            _otherFiles = new ProjectItem(_project, "opened files", ProjectItem::LogicDir, this);
+            _otherFiles = new ProjectItem(_project, tr("opened files"), ProjectItem::LogicDir, this);
             _root->addChild(_otherFiles);
         }
 

@@ -105,8 +105,8 @@ bool Editor::isActiveEditor() const
 
 void Editor::gotoLine(int x, int y)
 {
-    Q_UNUSED(x)
-    Q_UNUSED(y)
+    Q_UNUSED(x);
+    Q_UNUSED(y);
 }
 
 Editor::SearchCaps Editor::searchCap() const
@@ -131,8 +131,8 @@ bool Editor::hasReplace() const
 
 int Editor::search(const QVariant &search, SearchFlags flags)
 {
-    Q_UNUSED(search)
-    Q_UNUSED(flags)
+    Q_UNUSED(search);
+    Q_UNUSED(flags);
     return 0;
 }
 
@@ -371,6 +371,10 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
     if (mime.name() == "text/x-hex" || filePath.endsWith(".hex"))
     {
         type = Editor::HexFile;
+    }
+    else if (filePath.endsWith(".bin"))
+    {
+        type = Editor::Hexa;
     }
     else if (mime.name() == "text/html")
     {

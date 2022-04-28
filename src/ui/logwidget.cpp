@@ -143,7 +143,7 @@ void LogWidget::readProcess()
 void LogWidget::errorProcess()
 {
     QByteArray data;
-    data.append(_process->errorString());
+    data.append(_process->errorString().toUtf8());
     parseOutput(data, true);
 }
 

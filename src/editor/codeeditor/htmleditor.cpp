@@ -57,7 +57,7 @@ void HtmlEditor::updatePreview()
 {
 #ifndef NOWEBKIT
     QByteArray data;
-    data.append(_editorWidget->textDocument()->text());
+    data.append(_editorWidget->textDocument()->text().toUtf8());
     _htmlPreview->setContent(data, "text/html", QUrl::fromLocalFile(_filePath));
     _editorWidget->setFocus();
 #else

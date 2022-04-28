@@ -41,11 +41,13 @@ EditorTabWidget::EditorTabWidget(Project *project)
 
     // remove bottom border, fixed tabTextColor overriden
     setStyleSheet("\
-      EditorTabWidget::pane {\
+      EditorTabWidget::pane\
+      {\
           border: 0 solid #76797C;\
           padding: -3px 0px 0px 0px;\
       }\
-      EditorTabWidget > QTabBar::tab:top {\
+      EditorTabWidget > QTabBar::tab:top\
+      {\
           color: palette(foreground);\
           border-top: 1px solid #76797C;\
           border-left: 1px solid #76797C;\
@@ -59,6 +61,10 @@ EditorTabWidget::EditorTabWidget(Project *project)
           border-top: 1px solid #76797C;\
           border-left: 1px solid #76797C;\
           border-right: 1px solid #76797C;\
+      }\
+      EditorTabWidget::tab-bar\
+      {\
+          left: 8px;\
       }\
     ");
 

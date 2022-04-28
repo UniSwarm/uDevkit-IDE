@@ -22,7 +22,6 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QDebug>
-#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -34,7 +33,7 @@
 #include "settings/pages/settingswindow.h"
 #include "ui/iconneddockstyle.h"
 
-const int MainWindow::MaxOldProject = 8;
+const int MainWindow::MaxOldProject = 12;
 
 MainWindow::MainWindow(Project *project, QWidget *parent)
     : QMainWindow(parent)
@@ -105,7 +104,7 @@ void MainWindow::createDocks()
     _logDock->setObjectName("logDock");
     QWidget *logContent = new QWidget(_logDock);
     QLayout *logLayout = new QVBoxLayout();
-    logLayout->setContentsMargins(2, 4, 2, 4);
+    logLayout->setContentsMargins(4, 4, 4, 4);
     _logWidget = new LogWidget(_project);
     _logWidget->document()->setDefaultStyleSheet("p{margin: 0;}");
     logLayout->addWidget(_logWidget);

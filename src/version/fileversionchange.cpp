@@ -43,7 +43,7 @@ FileVersionChange &FileVersionChange::operator=(const FileVersionChange &other)
     {
         qDeleteAll(_changes);
         _changes.clear();
-        foreach (VersionChange *change, other._changes)
+        for (VersionChange *change : other._changes)
         {
             _changes.append(new VersionChange(*change));
         }
@@ -59,7 +59,7 @@ QList<VersionChange *> &FileVersionChange::changes()
 QList<VersionChange *> FileVersionChange::changesForRange(int lineStart, int lineEnd) const
 {
     QList<VersionChange *> changes;
-    foreach (VersionChange *change, _changes)
+    for (VersionChange *change : _changes)
     {
         if (change->lineNew() <= lineEnd && (change->lineNew() + change->addedLines().count()) > lineStart)
         {
@@ -105,7 +105,7 @@ void FileVersionChange::clear()
 
 void FileVersionChange::insertLines(int fromLine, int lineCount)
 {
-    foreach (VersionChange *change, _changes)
+    for (VersionChange *change : _changes)
     {
         if (change->lineNew() > fromLine)
         {

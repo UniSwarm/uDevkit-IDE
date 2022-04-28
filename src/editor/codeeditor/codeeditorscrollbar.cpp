@@ -59,7 +59,7 @@ void CodeEditorScrollBar::paintEvent(QPaintEvent *event)
     int lineCount = qMax(_textRender->textDocument()->lineCount() - 1, 1);
     int barWidth = width() / 2;
     int offset = (width() - barWidth) / 2;
-    foreach (VersionChange *change, _fileChange->changes())
+    for (VersionChange *change : _fileChange->changes())
     {
         int top = (change->lineNew() - 2) * (height() - scrollBarExtent * 2) / lineCount + scrollBarExtent;
         int barHeight = change->addedLines().count() * (height() - scrollBarExtent * 2) / lineCount + 2;

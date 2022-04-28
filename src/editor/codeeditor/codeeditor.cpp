@@ -363,7 +363,7 @@ void CodeEditor::insertedText(const edbee::TextBufferChange &change)
     }
     if (!vchange.removedLines().isEmpty())
     {
-        newLine.append(vchange.removedLines().last().midRef(endCol));
+        newLine.append(vchange.removedLines().last().mid(endCol));
     }
     vchange.addAddedLine(newLine);
 
