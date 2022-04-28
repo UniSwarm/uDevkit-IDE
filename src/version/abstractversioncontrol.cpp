@@ -132,7 +132,7 @@ bool AbstractVersionControl::isValid() const
 void AbstractVersionControl::modifFile(const QSet<QString> &filesPath)
 {
     QSet<QString> mnewModifiedFiles;
-    foreach (QString filePath, filesPath)
+    for (const QString &filePath : filesPath)
     {
         if (!_modifiedFiles.contains(filePath))
         {

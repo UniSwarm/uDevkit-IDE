@@ -56,7 +56,10 @@ ProjectWidget::ProjectWidget(Project *project, QWidget *parent)
     connect(_projectView, &ProjectTreeView::openedFile, this, &ProjectWidget::openFile);
     connect(_projectView, &ProjectTreeView::closedFile, this, &ProjectWidget::closeFile);
 
-    connect(_filterEdit, SIGNAL(textChanged(QString)), _projectView->proxy(), SLOT(setShowFilter(QString)));
+    connect(_filterEdit, &QLineEdit::textChanged, [=](const QString &text)
+    {
+        _projectView->proxy()->setShowFilter(text);
+    });
 
     createMenu();
 }

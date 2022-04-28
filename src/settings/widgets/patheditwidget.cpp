@@ -147,12 +147,12 @@ void PathEditWidget::setupWidgets()
     _pathLineEdit = new QLineEdit();
     _pathLineEdit->setPlaceholderText(tr("Leave empty to use system PATH"));
     _pathLineEdit->setCompleter(new QCompleter(_filesModel));
-    connect(_pathLineEdit, SIGNAL(editingFinished()), this, SLOT(checkLineEdit()));
+    connect(_pathLineEdit, &QLineEdit::editingFinished, this, &PathEditWidget::checkLineEdit);
     layout2->addWidget(_pathLineEdit);
 
     _button = new QToolButton();
     _button->setText("...");
-    connect(_button, SIGNAL(clicked(bool)), this, SLOT(buttonClicked()));
+    connect(_button, &QToolButton::clicked, this, &PathEditWidget::buttonClicked);
     layout2->addWidget(_button);
 
     layout->addItem(layout2);

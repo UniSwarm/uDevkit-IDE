@@ -42,8 +42,7 @@ ProjectItem::ProjectItem(Project *project, const QString &path, Type type, Proje
         connect(_watcher, &QFileSystemWatcher::directoryChanged, this, &ProjectItem::updateModif);
         connect(_watcher, &QFileSystemWatcher::fileChanged, this, &ProjectItem::updateModif);
 
-        QTimer::singleShot(0, this, SLOT(updateModif()));
-        // updateModif();
+        QTimer::singleShot(0, this, &ProjectItem::updateModif);
     }
 
     if (type == IndividualFile)
@@ -247,9 +246,8 @@ void ProjectItem::fetchMore()
     _loaded = true;
 }*/
 
-void ProjectItem::updateModif(const QString &path)
+void ProjectItem::updateModif()
 {
-    Q_UNUSED(path)
     switch (_type)
     {
         case ProjectItem::RealDir:

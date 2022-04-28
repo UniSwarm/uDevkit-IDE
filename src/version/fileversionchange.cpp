@@ -26,7 +26,7 @@ FileVersionChange::FileVersionChange()
 
 FileVersionChange::FileVersionChange(const FileVersionChange &other)
 {
-    foreach (VersionChange *change, other._changes)
+    for (VersionChange *change : other._changes)
     {
         _changes.append(new VersionChange(*change));
     }

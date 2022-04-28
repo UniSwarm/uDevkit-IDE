@@ -47,12 +47,12 @@ LogWidget::LogWidget(Project *project, QWidget *parent)
     setFont(font);
 
     connect(_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &LogWidget::finishProcess);
-    connect(_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(errorProcess()));
-    connect(_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readProcess()));
-    connect(_process, SIGNAL(readyReadStandardError()), this, SLOT(readProcess()));
+    connect(_process, &QProcess::errorOccurred, this, &LogWidget::errorProcess);
+    connect(_process, &QProcess::readyReadStandardOutput, this, &LogWidget::readProcess);
+    connect(_process, &QProcess::readyReadStandardError, this, &LogWidget::readProcess);
     _process->setWorkingDirectory(_project->rootPath());
 
-    connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(anchorClick(QUrl)));
+    connect(this, &LogWidget::anchorClicked, this, &LogWidget::anchorClick);
 }
 
 LogWidget::~LogWidget()

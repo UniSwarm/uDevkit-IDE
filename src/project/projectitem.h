@@ -72,7 +72,7 @@ public:
     }
 
 protected slots:
-    void updateModif(const QString &path = QString());
+    void updateModif();
 
 protected:
     Type _type;
