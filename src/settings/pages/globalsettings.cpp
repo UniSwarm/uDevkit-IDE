@@ -51,11 +51,11 @@ void GlobalSettings::createWidgets()
 
     _usernameEdit = new QLineEdit();
     _usernameEdit->setText(SettingsManager::userName());
-    layout->addRow(tr("User name (Firstname Name)"), _usernameEdit);
+    layout->addRow(tr("Username (First name, Last name)"), _usernameEdit);
 
     _userpseudoEdit = new QLineEdit();
     _userpseudoEdit->setText(SettingsManager::userPseudo());
-    layout->addRow(tr("User github pseudo (pseudo)"), _userpseudoEdit);
+    layout->addRow(tr("Github pseudo (pseudo)"), _userpseudoEdit);
 
     setLayout(layout);
 }

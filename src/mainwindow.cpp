@@ -258,7 +258,7 @@ void MainWindow::createMenus()
     connect(action, &QAction::triggered, this, &MainWindow::launchFormat);
 
     action = editMenu->addAction(tr("clang-&tidy"));
-    action->setStatusTip(tr("Call clang-tidy fix inplace"));
+    action->setStatusTip(tr("Call clang-tidy fix in-place"));
     action->setShortcut(QKeySequence("F7"));
     connect(action, &QAction::triggered, this, &MainWindow::launchTidy);
 
