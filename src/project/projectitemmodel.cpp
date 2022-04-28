@@ -55,6 +55,16 @@ bool ProjectItemModel::isDir(const QModelIndex &index) const
     return false;
 }
 
+bool ProjectItemModel::isLogical(const QModelIndex &index) const
+{
+    const ProjectItem *itemPtr = item(index);
+    if (itemPtr)
+    {
+        return (itemPtr->type() == ProjectItem::LogicDir);
+    }
+    return false;
+}
+
 bool ProjectItemModel::isFile(const QModelIndex &index) const
 {
     const ProjectItem *itemPtr = item(index);

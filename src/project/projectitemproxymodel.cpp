@@ -119,11 +119,15 @@ bool ProjectItemProxyModel::lessThan(const QModelIndex &source_left, const QMode
     ProjectItemModel *fsm = dynamic_cast<ProjectItemModel *>(sourceModel());
     QString leftPath = sourceModel()->data(source_left, ProjectItemModel::FileNameRole).toString();
     QString rightPath = sourceModel()->data(source_right, ProjectItemModel::FileNameRole).toString();
+
     bool isLeftDir = fsm->isDir(source_left);
     bool isRightDir = fsm->isDir(source_right);
-
     if (isLeftDir == isRightDir)
     {
+        if (fsm->isLogical(source_left) && !source_left.parent().isValid())
+        {
+            return false;
+        }
         return (leftPath.compare(rightPath, Qt::CaseInsensitive) < 0);
     }
     return isLeftDir;

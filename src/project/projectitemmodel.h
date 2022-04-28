@@ -48,6 +48,7 @@ public:
     // QModelIndex index(const ProjectItem *item) const;
     QModelIndex index(const QString &path) const;
     bool isDir(const QModelIndex &index) const;
+    bool isLogical(const QModelIndex &index) const;
     bool isFile(const QModelIndex &index) const;
     QString filePath(const QModelIndex &index) const;
     QString fileName(const QModelIndex &index) const;
