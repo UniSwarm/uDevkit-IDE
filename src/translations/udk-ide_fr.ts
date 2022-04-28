@@ -14,7 +14,7 @@
         <translation>Police</translation>
     </message>
     <message>
-        <location filename="../settings/pages/codeeditorsettings.cpp" line="62"/>
+        <location filename="../settings/pages/codeeditorsettings.cpp" line="67"/>
         <source>Font size</source>
         <translation>Taille de police</translation>
     </message>
@@ -45,42 +45,42 @@
 <context>
     <name>EditorTabWidget</name>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="273"/>
+        <location filename="../editor/editortabwidget.cpp" line="285"/>
         <source>File modified</source>
         <translation>Fichier modifié</translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="273"/>
+        <location filename="../editor/editortabwidget.cpp" line="286"/>
         <source>File &apos;%1&apos; has been modified, do you want to save it?</source>
         <translation>Le fichier %1 a été modifié, voulez-vous le sauvegarder ?</translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="552"/>
+        <location filename="../editor/editortabwidget.cpp" line="574"/>
         <source>Open in hex editor</source>
         <translation>Ouvrir dans l&apos;éditeur hexadécimal</translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="557"/>
+        <location filename="../editor/editortabwidget.cpp" line="579"/>
         <source>Open in default editor</source>
         <translation>Ouvrir dans l&apos;éditeur par défaut</translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="559"/>
+        <location filename="../editor/editortabwidget.cpp" line="581"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="639"/>
+        <location filename="../editor/editortabwidget.cpp" line="662"/>
         <source>save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="644"/>
+        <location filename="../editor/editortabwidget.cpp" line="667"/>
         <source>save all</source>
         <translation>Enregistrer tout</translation>
     </message>
     <message>
-        <location filename="../editor/editortabwidget.cpp" line="649"/>
+        <location filename="../editor/editortabwidget.cpp" line="672"/>
         <source>close tab</source>
         <translation>Fermer l&apos;onglet</translation>
     </message>
@@ -88,37 +88,37 @@
 <context>
     <name>FileProjectInfo</name>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="75"/>
+        <location filename="../project/fileprojectinfo.cpp" line="71"/>
         <source>kB</source>
         <translation>ko</translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="75"/>
+        <location filename="../project/fileprojectinfo.cpp" line="71"/>
         <source>MB</source>
         <translation>Mo</translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="75"/>
+        <location filename="../project/fileprojectinfo.cpp" line="71"/>
         <source>GB</source>
         <translation>Go</translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="76"/>
+        <location filename="../project/fileprojectinfo.cpp" line="72"/>
         <source>TB</source>
         <translation>To</translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="79"/>
+        <location filename="../project/fileprojectinfo.cpp" line="75"/>
         <source>bytes</source>
         <translation>octets</translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="92"/>
+        <location filename="../project/fileprojectinfo.cpp" line="88"/>
         <source>Size: </source>
         <translation>Taille : </translation>
     </message>
     <message>
-        <location filename="../project/fileprojectinfo.cpp" line="96"/>
+        <location filename="../project/fileprojectinfo.cpp" line="92"/>
         <source>Modified: </source>
         <translation>Modifié le : </translation>
     </message>
@@ -126,12 +126,17 @@
 <context>
     <name>GitVersionSettings</name>
     <message>
-        <location filename="../settings/pages/gitversionsettings.cpp" line="24"/>
+        <location filename="../settings/pages/gitversionsettings.cpp" line="25"/>
         <source>Git version</source>
         <translation>Git</translation>
     </message>
     <message>
-        <location filename="../settings/pages/gitversionsettings.cpp" line="46"/>
+        <location filename="../settings/pages/gitversionsettings.cpp" line="42"/>
+        <source>Git</source>
+        <translation>Git</translation>
+    </message>
+    <message>
+        <location filename="../settings/pages/gitversionsettings.cpp" line="51"/>
         <source>Git path</source>
         <translation>Chemin de l&apos;éxécutable git</translation>
     </message>
@@ -144,15 +149,29 @@
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../settings/pages/globalsettings.cpp" line="48"/>
+        <location filename="../settings/pages/globalsettings.cpp" line="50"/>
         <source>Language (restart needed to take effect)</source>
         <translation>Langue (requiert un redémarrage pour prendre effet)</translation>
+    </message>
+    <message>
+        <location filename="../settings/pages/globalsettings.cpp" line="54"/>
+        <source>Username (First name, Last name)</source>
+        <translation>Nom d&apos;utilisateur (prénom, nom de famille)</translation>
+    </message>
+    <message>
+        <location filename="../settings/pages/globalsettings.cpp" line="58"/>
+        <source>Github pseudo (pseudo)</source>
+        <translation>Pseudo Github (pseudo)</translation>
+    </message>
+    <message>
+        <source>Username (Firstname Name)</source>
+        <translation type="obsolete">Nom d&apos;utilisateur (Prénom Nom)</translation>
     </message>
 </context>
 <context>
     <name>HexEditor</name>
     <message>
-        <location filename="../editor/hexeditor.cpp" line="87"/>
+        <location filename="../editor/hexeditor.cpp" line="88"/>
         <source>addr: 0x%1 size: %2 </source>
         <translation>addr : 0x%1 taille : %2 </translation>
     </message>
@@ -168,19 +187,24 @@
 <context>
     <name>HexFileEditor</name>
     <message>
-        <location filename="../editor/hexfileeditor.cpp" line="56"/>
+        <location filename="../editor/hexfileeditor.cpp" line="66"/>
         <source>startMem</source>
         <translation>Début mémoire</translation>
     </message>
     <message>
-        <location filename="../editor/hexfileeditor.cpp" line="56"/>
+        <location filename="../editor/hexfileeditor.cpp" line="66"/>
         <source>startMemAddr</source>
         <translation>Adresse début mémoire</translation>
     </message>
     <message>
-        <location filename="../editor/hexfileeditor.cpp" line="57"/>
+        <location filename="../editor/hexfileeditor.cpp" line="67"/>
         <source>lenghtMem</source>
         <translation>Longueur mémoire</translation>
+    </message>
+    <message>
+        <location filename="../editor/hexfileeditor.cpp" line="82"/>
+        <source>word addr: 0x%1 size: %2 </source>
+        <translation>Adresse mot : %1 taille : %2 </translation>
     </message>
 </context>
 <context>
@@ -248,7 +272,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="89"/>
+        <location filename="../mainwindow.cpp" line="88"/>
         <source>Project</source>
         <translation>Projet</translation>
     </message>
@@ -258,174 +282,189 @@
         <translation>Log</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="116"/>
+        <location filename="../mainwindow.cpp" line="117"/>
         <source>Search / replace</source>
         <translation>Chercher / remplacer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="135"/>
+        <location filename="../mainwindow.cpp" line="137"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="137"/>
+        <location filename="../mainwindow.cpp" line="139"/>
         <source>Open &amp;project</source>
         <translation>Ouvrir &amp;projet</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="139"/>
+        <location filename="../mainwindow.cpp" line="141"/>
         <source>Opens a project</source>
         <oldsource>Opens a project as directory</oldsource>
         <translation>Ouvre un projet</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="143"/>
+        <location filename="../mainwindow.cpp" line="150"/>
         <source>&amp;Open files</source>
         <translation>&amp;Ouvrir fichiers</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="145"/>
+        <location filename="../mainwindow.cpp" line="152"/>
         <source>Opens files</source>
         <translation>Ouvre des fichiers</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="152"/>
+        <location filename="../mainwindow.cpp" line="164"/>
         <source>&amp;Switch header</source>
         <translation>&amp;Bascule entête</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="154"/>
+        <location filename="../mainwindow.cpp" line="166"/>
         <source>Switch between header and source</source>
         <translation>Bascule entre le fichier source et le fichier d&apos;entête</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="170"/>
+        <location filename="../mainwindow.cpp" line="182"/>
         <source>E&amp;xit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="172"/>
+        <location filename="../mainwindow.cpp" line="184"/>
         <source>Exits uDevkit-IDE</source>
         <translation>Quitte uDevkit-IDE</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="178"/>
+        <location filename="../mainwindow.cpp" line="190"/>
         <source>git</source>
         <translation>git</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="250"/>
+        <source>Format &amp;text</source>
+        <translation>Formater &amp;texte</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="255"/>
+        <source>clang-&amp;format</source>
+        <translation>clang-&amp;format</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="261"/>
+        <source>Call clang-tidy fix in-place</source>
+        <translation>Appelez le correctif sur place</translation>
     </message>
     <message>
         <source>next tab</source>
         <translation type="vanished">Onglet suivant</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="184"/>
+        <location filename="../mainwindow.cpp" line="196"/>
         <source>&amp;Edit</source>
         <translation>&amp;Édition</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="186"/>
+        <location filename="../mainwindow.cpp" line="198"/>
         <source>&amp;Undo</source>
         <translation>Annu&amp;ler</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="193"/>
+        <location filename="../mainwindow.cpp" line="205"/>
         <source>&amp;Redo</source>
         <translation>&amp;Rétablir</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="202"/>
+        <location filename="../mainwindow.cpp" line="214"/>
         <source>Cu&amp;t</source>
         <translation>Co&amp;uper</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="209"/>
+        <location filename="../mainwindow.cpp" line="221"/>
         <source>&amp;Copy</source>
         <translation>&amp;Copier</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="216"/>
+        <location filename="../mainwindow.cpp" line="228"/>
         <source>&amp;Paste</source>
         <translation>C&amp;oller</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="224"/>
+        <location filename="../mainwindow.cpp" line="236"/>
         <source>&amp;Search</source>
         <translation>&amp;Rechercher</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="230"/>
+        <location filename="../mainwindow.cpp" line="242"/>
         <source>&amp;Replace</source>
         <translation>Rem&amp;placer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="238"/>
         <source>&amp;Format text</source>
-        <translation>&amp;Formater texte</translation>
+        <translation type="vanished">&amp;Formater texte</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="239"/>
+        <location filename="../mainwindow.cpp" line="251"/>
         <source>Removes end spaces, replaces tabs by spaces</source>
         <translation>Supprime les espaces finaux, remplace les tabulations par des espaces</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="243"/>
         <source>&amp;clang-format</source>
-        <translation>&amp;clang-format</translation>
+        <translation type="vanished">&amp;clang-format</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="244"/>
+        <location filename="../mainwindow.cpp" line="256"/>
         <source>Call clang-format inplace</source>
         <translation>Appeler clang-format sur le fichier courant</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="250"/>
+        <location filename="../mainwindow.cpp" line="260"/>
+        <source>clang-&amp;tidy</source>
+        <translation>clang-&amp;tidy</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="267"/>
         <source>P&amp;references</source>
         <translation>&amp;Préférences</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="257"/>
+        <location filename="../mainwindow.cpp" line="274"/>
         <source>&amp;Project</source>
         <translation>&amp;Projet</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="259"/>
+        <location filename="../mainwindow.cpp" line="276"/>
         <source>Clea&amp;n</source>
         <translation>&amp;Nettoyer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="264"/>
+        <location filename="../mainwindow.cpp" line="281"/>
         <source>&amp;Compile</source>
         <translation>&amp;Compiler</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="269"/>
+        <location filename="../mainwindow.cpp" line="286"/>
         <source>&amp;Program</source>
         <translation>&amp;Programmer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="274"/>
+        <location filename="../mainwindow.cpp" line="291"/>
         <source>Compile &amp;sim</source>
         <translation>Compiller et &amp;Simuler</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="280"/>
+        <location filename="../mainwindow.cpp" line="297"/>
         <source>&amp;View</source>
         <translation>A&amp;ffichage</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="283"/>
         <source>        &amp;Log</source>
-        <translation>        &amp;Journal</translation>
+        <translation type="vanished">        &amp;Journal</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="288"/>
         <source>        &amp;Project file</source>
-        <translation>        &amp;Fichier projet</translation>
+        <translation type="vanished">        &amp;Fichier projet</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="293"/>
         <source>        &amp;Search/replace</source>
-        <translation>        &amp;Rechercher / remplacer</translation>
+        <translation type="vanished">        &amp;Rechercher / remplacer</translation>
     </message>
     <message>
         <source>View / Hide &amp;log</source>
@@ -440,22 +479,22 @@
         <translation type="vanished">Afficher / Masquer &amp;rechercher / remplacer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="298"/>
+        <location filename="../mainwindow.cpp" line="312"/>
         <source>&amp;Help</source>
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="300"/>
+        <location filename="../mainwindow.cpp" line="314"/>
         <source>&amp;About</source>
         <translation>A &amp;propos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="305"/>
+        <location filename="../mainwindow.cpp" line="319"/>
         <source>About &amp;Qt</source>
         <translation>A propos de &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="474"/>
+        <location filename="../mainwindow.cpp" line="513"/>
         <source>Open recent project &apos;</source>
         <translation>Ouvre le projet récent &apos;</translation>
     </message>
@@ -467,22 +506,22 @@
         <translation type="vanished"> dans le dossier &apos;</translation>
     </message>
     <message>
-        <location filename="../settings/widgets/patheditwidget.cpp" line="84"/>
+        <location filename="../settings/widgets/patheditwidget.cpp" line="80"/>
         <source>Choose existing directory</source>
         <translation>Choisir un répertoire existant</translation>
     </message>
     <message>
-        <location filename="../settings/widgets/patheditwidget.cpp" line="122"/>
+        <location filename="../settings/widgets/patheditwidget.cpp" line="117"/>
         <source>&lt;span style=&quot;color: red;&quot;&gt;%1 not found: %2&lt;/span&gt;</source>
         <translation>&lt;span style=&quot;color: red;&quot;&gt;%1 non trouvé: %2&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../settings/widgets/patheditwidget.cpp" line="127"/>
+        <location filename="../settings/widgets/patheditwidget.cpp" line="122"/>
         <source>%1 in path &apos;%2&apos;</source>
         <translation>%1 dans le dossier &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../settings/widgets/patheditwidget.cpp" line="154"/>
+        <location filename="../settings/widgets/patheditwidget.cpp" line="148"/>
         <source>Leave empty to use system PATH</source>
         <translation>Laisser vide pour utiliser le système PATH</translation>
     </message>
@@ -490,12 +529,12 @@
 <context>
     <name>ProjectItemModel</name>
     <message>
-        <location filename="../project/projectitemmodel.cpp" line="158"/>
+        <location filename="../project/projectitemmodel.cpp" line="156"/>
         <source>ext src</source>
         <translation>sources externes</translation>
     </message>
     <message>
-        <location filename="../project/projectitemmodel.cpp" line="248"/>
+        <location filename="../project/projectitemmodel.cpp" line="246"/>
         <source>opened files</source>
         <translation>fichiers ouverts</translation>
     </message>
@@ -503,75 +542,75 @@
 <context>
     <name>ProjectTreeView</name>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="59"/>
-        <location filename="../project/projecttreeview.cpp" line="247"/>
+        <location filename="../project/projecttreeview.cpp" line="61"/>
+        <location filename="../project/projecttreeview.cpp" line="250"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="66"/>
+        <location filename="../project/projecttreeview.cpp" line="68"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="151"/>
-        <location filename="../project/projecttreeview.cpp" line="166"/>
+        <location filename="../project/projecttreeview.cpp" line="153"/>
+        <location filename="../project/projecttreeview.cpp" line="169"/>
         <source>Remove directory?</source>
         <translation>Supprimer le répertoire?</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="151"/>
-        <location filename="../project/projecttreeview.cpp" line="158"/>
+        <location filename="../project/projecttreeview.cpp" line="153"/>
+        <location filename="../project/projecttreeview.cpp" line="161"/>
         <source>Do you realy want to remove &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer &apos;%1&apos;?</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="158"/>
+        <location filename="../project/projecttreeview.cpp" line="161"/>
         <source>Remove file?</source>
         <translation>Effacer le fichier?</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="166"/>
+        <location filename="../project/projecttreeview.cpp" line="169"/>
         <source>Do you realy want to remove theses %1 files?</source>
         <translation>Voulez-vous vraiment supprimer ces fichiers &apos;%1&apos;?</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="231"/>
+        <location filename="../project/projecttreeview.cpp" line="234"/>
         <source>Add new file here</source>
         <translation>Ajouter un nouveau fichier ici</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="239"/>
+        <location filename="../project/projecttreeview.cpp" line="242"/>
         <source>Remove directory</source>
         <translation>Supprimer le répertoire</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="242"/>
+        <location filename="../project/projecttreeview.cpp" line="245"/>
         <source>Open directory as project</source>
         <translation>Ouvrir le répertoire en tant que projet</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="243"/>
+        <location filename="../project/projecttreeview.cpp" line="246"/>
         <source>Open in terminal</source>
         <translation>Ouvrir dans le terminal</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="281"/>
+        <location filename="../project/projecttreeview.cpp" line="286"/>
         <source>New file name</source>
         <translation>Nouveau nom de fichier</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="281"/>
+        <location filename="../project/projecttreeview.cpp" line="286"/>
         <source>Enter a name for this new file</source>
         <translation>Entrez un nom pour ce nouveau fichier</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="319"/>
+        <location filename="../project/projecttreeview.cpp" line="347"/>
         <source>Checkout file?</source>
         <translation>Checkout le fichier ?</translation>
     </message>
     <message>
-        <location filename="../project/projecttreeview.cpp" line="319"/>
+        <location filename="../project/projecttreeview.cpp" line="348"/>
         <source>Do you realy want to checkout &apos;%1&apos;?
 It will be restored to the last valid state.</source>
         <translation>Voulez-vous vraiment checkout le fichier &apos;%1&apos;?
@@ -631,7 +670,7 @@ Il sera restauré au dernier état valide.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/models/texteditorkeymap.cpp" line="369"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/models/texteditorkeymap.cpp" line="379"/>
         <source>Error parsing %1: %2 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -839,60 +878,46 @@ Il sera restauré au dernier état valide.</translation>
 <context>
     <name>ToolsVersionSettings</name>
     <message>
-        <location filename="../settings/pages/toolsversionsettings.cpp" line="26"/>
+        <location filename="../settings/pages/toolsversionsettings.cpp" line="25"/>
         <source>Tools version</source>
         <translation>Gestion de version</translation>
     </message>
     <message>
-        <location filename="../settings/pages/toolsversionsettings.cpp" line="43"/>
+        <location filename="../settings/pages/toolsversionsettings.cpp" line="42"/>
         <source>GNU Make</source>
         <translation>GNU Make</translation>
     </message>
     <message>
-        <location filename="../settings/pages/toolsversionsettings.cpp" line="52"/>
+        <location filename="../settings/pages/toolsversionsettings.cpp" line="51"/>
+        <source>Make path</source>
+        <translation>Chemin de make</translation>
+    </message>
+    <message>
         <source>path</source>
-        <translation>chemin</translation>
-    </message>
-</context>
-<context>
-    <name>UndoStack</name>
-    <message>
-        <location filename="../../contrib/hexedit2/src/commands.cpp" line="112"/>
-        <source>Inserting %1 bytes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../contrib/hexedit2/src/commands.cpp" line="134"/>
-        <source>Delete %1 chars</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../contrib/hexedit2/src/commands.cpp" line="159"/>
-        <source>Overwrite %1 chars</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">chemin</translation>
     </message>
 </context>
 <context>
     <name>edbee::TextEditorComponent</name>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="507"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="574"/>
         <source>Cut</source>
-        <translation type="unfinished">Couper</translation>
+        <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="508"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="575"/>
         <source>Copy</source>
-        <translation type="unfinished">Copier</translation>
+        <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="509"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="576"/>
         <source>Paste</source>
-        <translation type="unfinished">Coller</translation>
+        <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="511"/>
+        <location filename="../../contrib/edbee-lib/edbee-lib/edbee/views/components/texteditorcomponent.cpp" line="578"/>
         <source>Select All</source>
-        <translation type="unfinished">Tout sélectionner</translation>
+        <translation>Tout sélectionner</translation>
     </message>
 </context>
 </TS>
