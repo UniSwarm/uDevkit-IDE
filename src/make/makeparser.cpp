@@ -87,7 +87,7 @@ QString MakeParser::resolveFilePath(const QString &filePath)
     }
 
     QString suffixe = info.suffix();
-    foreach (QString path, _vpath.values(suffixe))
+    for (const QString &path : _vpath.values(suffixe))
     {
         if (QFile(path + "/" + filePath).exists())
         {
@@ -298,7 +298,7 @@ void MakeParser::updateSettings()
 
 void MakeParser::addSource(QSet<QString> &sourcesList, const QStringList &varList)
 {
-    foreach (QString file, varList)
+    for (const QString &file : varList)
     {
         QString path = resolveFilePath(file);
         if (!path.isEmpty())
@@ -317,7 +317,7 @@ MakeRule MakeParser::buildRule(const QString &filePath) const
 {
     QDir makeDir(_basePath);
     QString makeFilePath = makeDir.relativeFilePath(filePath);
-    foreach (const MakeRule &rule, _rules)
+    for (const MakeRule &rule : _rules)
     {
         if (rule.dependencies.isEmpty())
         {
@@ -336,7 +336,7 @@ QList<MakeRule> MakeParser::includedInRules(const QString &filePath) const
     QList<MakeRule> includedInRules;
     QDir makeDir(_basePath);
     QString makeFilePath = makeDir.relativeFilePath(filePath);
-    foreach (const MakeRule &rule, _rules)
+    for (const MakeRule &rule : _rules)
     {
         if (rule.dependencies.isEmpty())
         {
@@ -353,7 +353,7 @@ QList<MakeRule> MakeParser::includedInRules(const QString &filePath) const
 QList<MakeRule> MakeParser::targets() const
 {
     QList<MakeRule> targetRules;
-    foreach (const MakeRule &rule, _rules)
+    for (const MakeRule &rule : _rules)
     {
         if (!rule.isTarget)
         {

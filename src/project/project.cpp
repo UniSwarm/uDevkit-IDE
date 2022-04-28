@@ -90,16 +90,20 @@ const QSet<QString> &Project::openedFiles() const
 
 void Project::addOpenedFiles(const QSet<QString> &openedFiles)
 {
-    foreach (QString file, openedFiles)
+    for (const QString &file : openedFiles)
+    {
         _openedFiles.insert(file);
+    }
     _projectItemModel->filesUpdated(openedFiles);
     _projectItemModel->addOtherSource(openedFiles);
 }
 
 void Project::removeOpenedFiles(const QSet<QString> &openedFiles)
 {
-    foreach (QString file, openedFiles)
+    for (const QString &file : openedFiles)
+    {
         _openedFiles.remove(file);
+    }
     _projectItemModel->filesUpdated(openedFiles);
     _projectItemModel->removeOtherSource(openedFiles);
 }

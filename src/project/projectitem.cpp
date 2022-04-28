@@ -277,10 +277,10 @@ void ProjectItem::updateModif(const QString &path)
 
             QSet<QString> oldFiles = _childrensMap.keys().toSet();
             oldFiles.subtract(files);
-            foreach (QString removedFile, oldFiles)
+            for (const QString &removedFile : oldFiles)
             {
                 QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(removedFile);
-                if (i != _childrensMap.end())
+                if (i != _childrensMap.cend())
                 {
                     removeChild(*i);
                 }
@@ -289,12 +289,12 @@ void ProjectItem::updateModif(const QString &path)
             _model->endModif();
             break;
         }
+
         case ProjectItem::DirFile:
-            // no watch
-            break;
         case ProjectItem::LogicDir:
             // no watch
             break;
+
         case ProjectItem::IndividualFile:
             // TODO
             break;

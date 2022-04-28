@@ -171,7 +171,7 @@ void ProjectTreeView::remove()
             return;
         }
         QList<QPersistentModelIndex> pindex;
-        foreach (QModelIndex selected, selection)
+        for (const QModelIndex &selected : selection)
         {
             const QModelIndex &indexFile = _proxy->mapToSource(selected);
             if (!indexFile.isValid())
@@ -182,7 +182,7 @@ void ProjectTreeView::remove()
             pindex.append(indexFile);
         }
         selectionModel()->clearSelection();
-        foreach (QPersistentModelIndex index, pindex)
+        for (const QPersistentModelIndex &index : pindex)
         {
             if (_project->projectItemModel()->isDir(index))
             {
@@ -406,7 +406,7 @@ void ProjectTreeView::keyPressEvent(QKeyEvent *event)
         QStringList filesPathToOpen;
 
         const QModelIndexList indexList = selectionModel()->selectedIndexes();
-        foreach (const QModelIndex &index, indexList)
+        for (const QModelIndex &index : indexList)
         {
             if (!index.isValid())
             {
@@ -420,7 +420,9 @@ void ProjectTreeView::keyPressEvent(QKeyEvent *event)
             }
         }
 
-        foreach (const QString &path, filesPathToOpen)
+        for (const QString &path : filesPathToOpen)
+        {
             emit openedFile(path);
+        }
     }
 }

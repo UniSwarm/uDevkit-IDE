@@ -24,9 +24,8 @@
 #include <QFileSystemWatcher>
 #include <QQueue>
 
-#include "settings/settingsmanager.h"
-
 class QProcess;
+class SettingsClass;
 
 class GitVersionControl : public AbstractVersionControl
 {

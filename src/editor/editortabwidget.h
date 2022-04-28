@@ -94,7 +94,7 @@ protected:
 
     // tab switching
     EditorTabSwitchWidget *_switchTabListWidget;
-    QStack<int> _activedTab;
+    QStack<int> _activedTabs;
     bool _switchTabActive;
     void updateSwitchTab();
 

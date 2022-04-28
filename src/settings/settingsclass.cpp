@@ -33,9 +33,11 @@ SettingsClass::SettingsClass(const SettingsClass &other)
 {
     _name = other.name();
     _modified = false;
-    foreach (Setting *setting, other._settingsMap)
+    for (Setting *setting : other._settingsMap)
+    {
         registerSetting(setting->name(), setting->value());
-    foreach (SettingsClass *settingClass, other._classesMap)
+    }
+    for (SettingsClass *settingClass : other._classesMap)
     {
         SettingsClass *newSettingClass = new SettingsClass(settingClass->name());
         _classesMap.insert(newSettingClass->name(), newSettingClass);
@@ -171,11 +173,11 @@ bool SettingsClass::isModified() const
 void SettingsClass::save(QSettings *settings)
 {
     settings->beginGroup(_name);
-    foreach (Setting *setting, _settingsMap)
+    for (Setting *setting : _settingsMap)
     {
         settings->setValue(setting->name(), setting->value());
     }
-    foreach (SettingsClass *settingClass, _classesMap)
+    for (SettingsClass *settingClass : _classesMap)
     {
         settingClass->save(settings);
     }

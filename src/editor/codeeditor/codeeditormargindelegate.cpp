@@ -63,7 +63,7 @@ void CodeEditorMarginDelegate::renderAfter(QPainter *painter, int startLine, int
     linearGrad.setColorAt(1, QColor(0, 0, 0, 0));
 
     QList<VersionChange *> changesForRange = _fileChange->changesForRange(startLine + 1, endLine + 1);
-    foreach (VersionChange *change, changesForRange)
+    for (VersionChange *change : changesForRange)
     {
         int start = marginComponent()->renderer()->yPosForLine(change->lineNew() - 1);
         int end = marginComponent()->renderer()->yPosForLine(change->lineNew() - 1 + change->addedLines().count());
@@ -128,8 +128,10 @@ void CodeEditorMarginDelegate::mousePressEvent(int line, QMouseEvent *event)
                 return;
             }
             QMenu menu;
-            foreach (QString line, changesForRange.at(0)->removedLines())
+            for (QString line : changesForRange.at(0)->removedLines())
+            {
                 menu.addAction(line);
+            }
             menu.exec(event->screenPos().toPoint());
         }
     }

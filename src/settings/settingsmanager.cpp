@@ -41,7 +41,7 @@ SettingsManager *SettingsManager::instance()
 void SettingsManager::save()
 {
     QSettings settings(QApplication::organizationName(), QApplication::applicationName());
-    foreach (SettingsClass *settingClass, instance()->_classesMap)
+    for (SettingsClass *settingClass : instance()->_classesMap)
     {
         settingClass->save(&settings);
     }
@@ -66,7 +66,7 @@ void SettingsManager::load(SettingsClass *settingsClass)
 {
     QSettings settings(QApplication::organizationName(), QApplication::applicationName());
     settings.beginGroup(settingsClass->name());
-    foreach (QString key, settings.allKeys())
+    for (const QString &key : settings.allKeys())
     {
         settingsClass->registerSetting(key, settings.value(key));
     }

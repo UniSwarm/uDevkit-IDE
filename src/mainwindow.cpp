@@ -384,7 +384,8 @@ bool MainWindow::openFiles(const QStringList &paths)
         }
         mpaths = dialog.selectedFiles();
     }
-    foreach (QString apath, mpaths)
+
+    for (const QString &apath : mpaths)
     {
         _editorTabWidget->openFileEditor(apath);
     }

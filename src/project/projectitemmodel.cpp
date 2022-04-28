@@ -142,14 +142,12 @@ bool ProjectItemModel::remove(const QModelIndex &index)
 void ProjectItemModel::addExternalSource(const QSet<QString> &sourceFiles)
 {
     emit layoutAboutToBeChanged();
-    foreach (QString filePath, sourceFiles)
+    for (const QString &filePath : sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
             continue;  // not an external source
         }
-
-        // qDebug() << "addExternalSource" << filePath;
 
         if (_externalFiles == nullptr)
         {
@@ -181,7 +179,7 @@ void ProjectItemModel::removeExternalSource(const QSet<QString> &sourceFiles)
         return;
     }
     emit layoutAboutToBeChanged();
-    foreach (QString filePath, sourceFiles)
+    for (const QString &filePath : sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
@@ -216,7 +214,7 @@ void ProjectItemModel::removeExternalSource(const QSet<QString> &sourceFiles)
 void ProjectItemModel::addOtherSource(const QSet<QString> &sourceFiles)
 {
     emit layoutAboutToBeChanged();
-    foreach (QString filePath, sourceFiles)
+    for (const QString &filePath : sourceFiles)
     {
         if (filePath.startsWith(_project->rootPath()))
         {
@@ -247,7 +245,7 @@ void ProjectItemModel::removeOtherSource(const QSet<QString> &sourceFiles)
         return;
     }
     emit layoutAboutToBeChanged();
-    foreach (QString filePath, sourceFiles)
+    for (const QString &filePath : sourceFiles)
     {
         ProjectItem *item = _pathCache[filePath];
         if (item == nullptr)
@@ -272,7 +270,7 @@ void ProjectItemModel::endModif()
 
 void ProjectItemModel::filesUpdated(const QSet<QString> &filesPath)
 {
-    foreach (QString path, filesPath)
+    for (const QString &path : filesPath)
     {
         QModelIndex id = index(path);
         if (id.isValid())

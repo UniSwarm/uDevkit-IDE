@@ -181,14 +181,18 @@ void EditorTabWidget::openFileEditor(const QString &url)
     qDebug() << "";
     qDebug() << "targets";
     QList<MakeRule> targets = _project->make()->targets();
-    foreach(const MakeRule &arule, targets)
+    for (const MakeRule &arule : targets)
+    {
         qDebug() << arule.target << arule.dependencies;
+    }
 
     qDebug() << "";
     qDebug() << "includedInRules";
     QList<MakeRule> rules = _project->make()->includedInRules(filePath);
-    foreach(const MakeRule &arule, rules)
-        qDebug() << arule.target << arule.dependencies;*/
+    for (const MakeRule &arule : rules)
+    {
+        qDebug() << arule.target << arule.dependencies;
+    }*/
 
     Editor *editor = nullptr;
     if (!_mapPathEditor.contains(QFileInfo(filePath).absoluteFilePath()))
@@ -244,7 +248,7 @@ void EditorTabWidget::closeFileEditor(const QString &filePath)
                 editors.append(it.value());
             }
         }
-        foreach (Editor *editor, editors)
+        for (Editor *editor : editors)
         {
             int id = indexOf(editor);
             closeEditor(id);
@@ -382,13 +386,14 @@ void EditorTabWidget::initiateSwitchTab(bool next)
 
     // fill list
     _switchTabListWidget->clear();
-    foreach (int id, _activedTab)
+    for (int id : _activedTabs)
     {
         Editor *editor = this->editor(id);
         if (editor == nullptr)
         {
             continue;
         }
+
         QFileInfo info(editor->filePath());
         QListWidgetItem *item = new QListWidgetItem(_iconProvider->icon(info), editor->fileName());
         item->setData(Qt::UserRole, id);
@@ -412,11 +417,11 @@ void EditorTabWidget::initiateSwitchTab(bool next)
 
 void EditorTabWidget::nextTab()
 {
-    if (_activedTab.count() < 2)
+    if (_activedTabs.count() < 2)
     {
         return;
     }
-    setCurrentIndex(_activedTab[1]);
+    setCurrentIndex(_activedTabs[1]);
     // TODO improve me
 }
 
@@ -537,13 +542,12 @@ void EditorTabWidget::updateTab()
 void EditorTabWidget::activeTab(int id)
 {
     // update stack of active tab (ctrl + tab)
-    int pos = _activedTab.indexOf(id);
+    int pos = _activedTabs.indexOf(id);
     if (pos != -1)
     {
-        _activedTab.removeAt(pos);
+        _activedTabs.removeAt(pos);
     }
-    _activedTab.prepend(id);
-    // qDebug()<<_activedTab;
+    _activedTabs.prepend(id);
 
     Editor *editor = this->editor(id);
     emit editorChange(editor);
