@@ -109,8 +109,12 @@ void LogWidget::parseOutput(QByteArray data, bool error)
 {
     QString html;
     QTextStream stream(&data);
-    stream.setCodec("UTF-8");
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    stream.setEncoding(QStringConverter::Utf8);
+#else
+    stream.setCodec("UTF-8");
+#endif
     QRegularExpression colorReg("(\u001b)\\[([0-9]+)m");
     QRegularExpression colorRstReg("(\u001b\\(B\u001b\\[m|\u001b\\[0;10m)");
     QRegularExpression linkReg(R"(([\-\._a-zA-Z/\\0-9]+\.[a-zA-Z]+)(:[0-9]+)(:[0-9]+)*)");

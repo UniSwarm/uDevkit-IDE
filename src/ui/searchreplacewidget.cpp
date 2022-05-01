@@ -201,7 +201,7 @@ void SearchReplaceWidget::createWidgets()
 
     // search and next prev buttons
     QHBoxLayout *replaceLineLayout = new QHBoxLayout();
-    replaceLineLayout->setMargin(0);
+    replaceLineLayout->setContentsMargins(0, 0, 0, 0);
     _replaceLineEdit = new QLineEdit();
     _replaceLineEdit->setPlaceholderText(tr("replace"));
     _replaceLineEdit->installEventFilter(this);
@@ -233,7 +233,7 @@ void SearchReplaceWidget::createWidgets()
 
     // options
     QHBoxLayout *optionsLineLayout = new QHBoxLayout();
-    optionsLineLayout->setMargin(0);
+    optionsLineLayout->setContentsMargins(0, 0, 0, 0);
 
     _regexpCheckbox = new QCheckBox(tr("regexp"));
     _regexpCheckbox->setChecked(true);

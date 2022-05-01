@@ -19,15 +19,16 @@
 #ifndef EDITORTABWIDGET_H
 #define EDITORTABWIDGET_H
 
-#include "editortabswitchwidget.h"
+#include <QTabWidget>
+
 #include <QMap>
 #include <QStack>
-#include <QTabWidget>
 
 #include <project/projecticonprovider.h>
 
 #include "editor.h"
 #include "project/project.h"
+#include "editortabswitchwidget.h"
 
 class EditorTabWidget : public QTabWidget
 {

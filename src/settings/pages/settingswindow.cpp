@@ -125,10 +125,10 @@ void SettingsWindow::buttonClick(QAbstractButton *button)
 void SettingsWindow::createWidgets()
 {
     QVBoxLayout *layout = new QVBoxLayout();
-    layout->setMargin(8);
+    layout->setContentsMargins(8, 8, 8, 8);
 
     QHBoxLayout *layoutV = new QHBoxLayout();
-    layoutV->setMargin(0);
+    layoutV->setContentsMargins(0, 0, 0, 0);
 
     _sectionsList = new QListWidget();
     _sectionsList->setViewMode(QListView::ListMode);

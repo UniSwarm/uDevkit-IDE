@@ -57,7 +57,7 @@ QByteArray MarkdownEditor::renderProcess(const QByteArray &textIn)
 void MarkdownEditor::launchRender()
 {
     QByteArray textIn = _editorWidget->textDocument()->text().toLocal8Bit();
-    QFuture<QByteArray> future = QtConcurrent::run(this, &MarkdownEditor::renderProcess, textIn);
+    QFuture<QByteArray> future = QtConcurrent::run([&]() {return this->renderProcess(textIn);});
     watcher.setFuture(future);
 }
 

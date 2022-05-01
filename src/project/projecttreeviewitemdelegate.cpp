@@ -37,10 +37,10 @@ void ProjectTreeViewItemDelegate::paint(QPainter *painter, const QStyleOptionVie
     painter->save();
     painter->setRenderHint(QPainter::TextAntialiasing);
     QRect rect = option.rect;
-    QColor textColor(opt.palette.color(QPalette::Foreground));
-    if (index.data(Qt::TextColorRole).canConvert(QMetaType::QColor))
+    QColor textColor(opt.palette.color(QPalette::Active, QPalette::WindowText));
+    if (index.data(Qt::ForegroundRole).canConvert(QMetaType::QColor))
     {
-        textColor = index.data(Qt::TextColorRole).value<QColor>();
+        textColor = index.data(Qt::ForegroundRole).value<QColor>();
     }
     if (((opt.state & QStyle::State_Selected) != 0u) || ((opt.state & QStyle::State_MouseOver) != 0u))
     {

@@ -30,10 +30,10 @@ ProjectWidget::ProjectWidget(Project *project, QWidget *parent)
     _project = project;
 
     QVBoxLayout *layout = new QVBoxLayout();
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     QHBoxLayout *filterLayout = new QHBoxLayout();
-    filterLayout->setMargin(0);
+    filterLayout->setContentsMargins(0, 0, 0, 0);
 
     _filterEdit = new QLineEdit();
     _filterEdit->setClearButtonEnabled(true);
@@ -47,7 +47,7 @@ ProjectWidget::ProjectWidget(Project *project, QWidget *parent)
     layout->addItem(filterLayout);
 
     _projectView = new ProjectTreeView(_project, this);
-    _projectView->setHiddenFilter(QRegExp("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", Qt::CaseInsensitive, QRegExp::RegExp));
+    _projectView->setHiddenFilter(QRegularExpression("(nbproject|bin|.*build.*|.*\\.git$|rtsim)", QRegularExpression::CaseInsensitiveOption));
     _projectView->proxy()->enableHiddenFilter(false);
 
     layout->addWidget(_projectView);

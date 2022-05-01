@@ -103,12 +103,12 @@ void MakeParser::processEnd()
     directoryStack.push(_basePath);
     QDir dir(_basePath);
 
-    QRegExp regVar(R"( *([A-Za-z0-9\\\/.\_\-]+) *:*= *)");
-    QRegExp regVarValue("([^ ]+) *");
-    QRegExp regVpath("vpath \\%\\.([a-zA-Z0-9]+) ");
-    QRegExp regPath(R"(([A-Za-z0-9\\\/.\_\-]+):*)");
-    QRegExp regRule(R"(^([A-Za-z0-9\\\/.\_\-]+):)");
-    QRegExp regEnterDir(R"(^# make\[1\]: (Entering|Leaving) directory \'(.+)\')");
+    QRegularExpression regVar(R"(^ *([A-Za-z0-9\\\/.\_\-]+) *:*= *)");
+    QRegularExpression regVarValue("([^ ]+) *");
+    QRegularExpression regVpath("vpath \\%\\.([a-zA-Z0-9]+) ");
+    QRegularExpression regPath(R"(([A-Za-z0-9\\\/.\_\-]+):*)");
+    QRegularExpression regRule(R"(^([A-Za-z0-9\\\/.\_\-]+):)");
+    QRegularExpression regEnterDir(R"(^# make\[1\]: (Entering|Leaving) directory \'(.+)\')");
     bool notATarget = false;
 
     // qint64 start = QDateTime::currentMSecsSinceEpoch();
@@ -125,18 +125,19 @@ void MakeParser::processEnd()
     while (!stream.atEnd())
     {
         QString line = stream.readLine(10000);
-        // qDebug()<<line;
 
         if (line == "# Not a target:")
         {
             notATarget = true;
             continue;
         }
-        if (regEnterDir.indexIn(line) == 0)  // (Entering|Leaving) directory
+
+        QRegularExpressionMatch regMatchEnterDir = regEnterDir.match(line);
+        if (regMatchEnterDir.hasMatch())  // (Entering|Leaving) directory
         {
-            if (regEnterDir.cap(1) == "Entering")
+            if (regMatchEnterDir.captured(1) == "Entering")
             {
-                directoryStack.push(regEnterDir.cap(2));
+                directoryStack.push(regMatchEnterDir.captured(2));
             }
             else
             {
@@ -154,64 +155,70 @@ void MakeParser::processEnd()
             continue;
         }
 
-        if (regVar.indexIn(line) == 0)  // variable
+        QRegularExpressionMatch regMatchVar = regVar.match(line);
+        if (regMatchVar.hasMatch())  // variable
         {
-            int pos = regVar.matchedLength();
-
+            //qDebug()<<line;
+            QString variableName = regMatchVar.captured(1);
             // TODO add a state machine parser for parenthesys matching
-            // QRegExp regVarValue("([A-Za-z0-9\\\\\\/.\\_\\-]+|\\$\\([A-Za-z0-9\\\\\\\\(\\)/.\\_\\-]+\\)) *");
-            while ((pos = regVarValue.indexIn(line, pos)) != -1)
+            // QRegularExpression regVarValue("([A-Za-z0-9\\\\\\/.\\_\\-]+|\\$\\([A-Za-z0-9\\\\\\\\(\\)/.\\_\\-]+\\)) *");
+            QRegularExpressionMatchIterator valueIt = regVarValue.globalMatch(line, regMatchVar.capturedLength());
+            while (valueIt.hasNext())
             {
-                QString value = regVarValue.cap(1);
+                QRegularExpressionMatch valueMatch = valueIt.next();
+                QString value = valueMatch.captured(1);
                 if (dir.path() == _basePath)
                 {
-                    _variables.insert(regVar.cap(1), value);
+                    _variables.insert(variableName, value);
                 }
-                // qDebug() << regVar.cap(1) << value << dir.path();
-                pos += regVarValue.matchedLength();
+                //qDebug() << variableName << value << dir.path();
             }
             notATarget = false;
+            // exit(0);
             continue;
         }
 
         if (line.startsWith("vpath"))  // vpath
         {
-            int pos = regVpath.indexIn(line);
-            if (pos == 0)
+            QRegularExpressionMatch regVpathMatch = regVpath.match(line);
+            if (regVpathMatch.hasMatch())
             {
-                pos += regVpath.matchedLength();
-                QString suffixe = regVpath.cap(1);
-                while ((pos = regPath.indexIn(line, pos)) != -1)
+                QString suffixe = regVpathMatch.captured(1);
+
+                QRegularExpressionMatchIterator pathIt = regPath.globalMatch(line, regVpathMatch.capturedLength());
+                while (pathIt.hasNext())
                 {
-                    QString path = QDir::cleanPath(regPath.cap(1));
+                    QRegularExpressionMatch pathMatch = pathIt.next();
+                    QString path = QDir::cleanPath(pathMatch.captured(1));
                     if (!QDir(path).isAbsolute())
                     {
-                        path = QDir::cleanPath(makeDir.path() + "/" + regPath.cap(1));
+                        path = QDir::cleanPath(makeDir.path() + "/" + pathMatch.captured(1));
                     }
                     _vpath.insert(suffixe, path);
-                    pos += regPath.matchedLength();
                 }
             }
             notATarget = false;
             continue;
         }
 
-        if (regRule.indexIn(line) == 0)  // variable
+        QRegularExpressionMatch regRuleMatch = regVar.match(line);
+        if (regRuleMatch.hasMatch())  // rule
         {
             MakeRule rule;
-            rule.target = makeDir.relativeFilePath(dir.path() + "/" + regRule.cap(1));
+            rule.target = makeDir.relativeFilePath(dir.path() + "/" + regRuleMatch.captured(1));
             rule.isTarget = !notATarget;
 
-            int pos = regRule.matchedLength() + 1;
-            while ((pos = regVarValue.indexIn(line, pos)) != -1)
+            QRegularExpressionMatchIterator valueIt = regVarValue.globalMatch(line, regRuleMatch.capturedLength() + 1);
+            while (valueIt.hasNext())
             {
-                QString value = regVarValue.cap(1);
-                if (!QFileInfo(regVarValue.cap(1)).isAbsolute())
+                QRegularExpressionMatch valueMatch = valueIt.next();
+
+                QString value = valueMatch.captured(1);
+                if (!QFileInfo(value).isAbsolute())
                 {
-                    value = makeDir.relativeFilePath(dir.path() + "/" + regVarValue.cap(1));
+                    value = makeDir.relativeFilePath(dir.path() + "/" + value);
                 }
                 rule.dependencies.append(value);
-                pos += regVarValue.matchedLength();
             }
             rule.dependencies.removeDuplicates();
 

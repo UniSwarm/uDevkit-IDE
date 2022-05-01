@@ -148,21 +148,22 @@ void EditorTabWidget::openFileEditor(const QString &url)
     QString filePath;
     QString line;
     QString column;
-    QRegExp urlFilePath("(..[^:]*)(:[0-9]+)*(:[0-9]+)*");
+    QRegularExpression refUrlFilePath("([^:]+)(?>(:[0-9]+)(:[0-9]+)*)*$");
 
-    if (urlFilePath.indexIn(url) == -1)
+    QRegularExpressionMatch refUrlFilePathMatch = refUrlFilePath.match(url);
+    if (!refUrlFilePathMatch.hasMatch())
     {
         return;
     }
-    filePath = urlFilePath.cap(1);
+    filePath = refUrlFilePathMatch.captured(1);
 
-    if (urlFilePath.captureCount() > 1)
+    if (refUrlFilePathMatch.lastCapturedIndex() > 1)
     {
-        line = urlFilePath.cap(2).mid(1);
+        line = refUrlFilePathMatch.captured(2).mid(1);
     }
-    if (urlFilePath.captureCount() > 2)
+    if (refUrlFilePathMatch.lastCapturedIndex() > 2)
     {
-        column = urlFilePath.cap(3).mid(1);
+        column = refUrlFilePathMatch.captured(3).mid(1);
     }
 
     if (!QFile(filePath).exists())
@@ -355,13 +356,13 @@ void EditorTabWidget::switchHeader()
     if (filePath.endsWith(".h"))
     {
         filePathPair = filePath;
-        filePathPair.replace(QRegExp("\\.h$"), ".c");
+        filePathPair.replace(QRegularExpression("\\.h$"), ".c");
         if (QFile::exists(filePathPair))
         {
             openFileEditor(filePathPair);
         }
         filePathPair = filePath;
-        filePathPair.replace(QRegExp("\\.h$"), ".cpp");
+        filePathPair.replace(QRegularExpression("\\.h$"), ".cpp");
         if (QFile::exists(filePathPair))
         {
             openFileEditor(filePathPair);
@@ -369,7 +370,7 @@ void EditorTabWidget::switchHeader()
     }
     else if (filePath.endsWith(".c") || filePath.endsWith(".cpp"))
     {
-        filePathPair = filePath.replace(QRegExp("\\.c(pp)?$"), ".h");
+        filePathPair = filePath.replace(QRegularExpression("\\.c(pp)?$"), ".h");
         if (QFile::exists(filePathPair))
         {
             openFileEditor(filePathPair);
@@ -386,7 +387,7 @@ void EditorTabWidget::initiateSwitchTab(bool next)
 
     // fill list
     _switchTabListWidget->clear();
-    for (int id : _activedTabs)
+    for (int id : qAsConst(_activedTabs))
     {
         Editor *editor = this->editor(id);
         if (editor == nullptr)
@@ -400,7 +401,7 @@ void EditorTabWidget::initiateSwitchTab(bool next)
         QColor textColor = tabBar()->tabTextColor(id);
         if (!textColor.isValid())
         {
-            textColor = palette().color(QPalette::Foreground);
+            textColor = palette().color(QPalette::Active, QPalette::WindowText);
         }
         item->setData(Qt::ForegroundRole, textColor);
         _switchTabListWidget->addItem(item);
@@ -553,7 +554,7 @@ void EditorTabWidget::activeTab(int id)
     emit editorChange(editor);
     if (editor != nullptr)
     {
-        currentFileChanged(editor->filePath());
+        emit currentFileChanged(editor->filePath());
         editor->active();
     }
 }

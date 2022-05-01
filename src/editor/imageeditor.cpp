@@ -27,7 +27,7 @@ ImageEditor::ImageEditor(Project *project, QWidget *parent)
     : Editor(project, parent)
 {
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     _imageView = new QLabel(this);
     _imageView->setAlignment(Qt::AlignCenter);

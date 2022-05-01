@@ -156,18 +156,32 @@ void ProjectItemModel::addExternalSource(const QSet<QString> &sourceFiles)
         }
 
         QFileInfo info(filePath);
-        QDir dir = info.absoluteDir();
+        const QDir &parentDir = info.absoluteDir();
 
-        ProjectItem *parent = _externalFiles->child(dir.dirName());
-        if (parent == nullptr)
+        QDir parentParentDir(parentDir);
+        parentParentDir.cdUp();
+
+        ProjectItem *parentParent = _externalFiles->child(parentParentDir.dirName());
+        if (!parentParent)
         {
-            parent = new ProjectItem(_project, dir.absolutePath(), ProjectItem::LogicDir, this);
-            _externalFiles->addChild(parent);
+            parentParent = new ProjectItem(_project, parentParentDir.absolutePath(), ProjectItem::LogicDir, this);
+            _externalFiles->addChild(parentParent);
         }
 
-        ProjectItem *item = new ProjectItem(_project, filePath, ProjectItem::IndividualFile, this);
-        parent->addChild(item);
-        _pathCache.insert(filePath, item);
+        ProjectItem *parent = parentParent->child(parentDir.dirName());
+        if (parent == nullptr)
+        {
+            parent = new ProjectItem(_project, parentDir.absolutePath(), ProjectItem::LogicDir, this);
+            parentParent->addChild(parent);
+        }
+
+        ProjectItem *item = parent->child(info.fileName());
+        if (!item)
+        {
+            item = new ProjectItem(_project, filePath, ProjectItem::IndividualFile, this);
+            parent->addChild(item);
+            _pathCache.insert(filePath, item);
+        }
     }
     emit layoutChanged();
 }

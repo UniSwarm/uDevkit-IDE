@@ -43,7 +43,7 @@ ProjectTreeView::ProjectTreeView(Project *project, QWidget *parent)
 {
     _proxy = new ProjectItemProxyModel(project);
     _proxy->setSourceModel(_project->projectItemModel());
-    setHiddenFilter(QRegExp(""));
+    setHiddenFilter(QRegularExpression(""));
     setIconSize(QSize(20, 20));
     _proxy->sort(0, Qt::AscendingOrder);
 
@@ -95,11 +95,11 @@ void ProjectTreeView::selectFile(const QString &fileName)
     selectionModel()->setCurrentIndex(proxyIndex, QItemSelectionModel::ClearAndSelect);
 }
 
-void ProjectTreeView::setHiddenFilter(const QRegExp &regExp)
+void ProjectTreeView::setHiddenFilter(const QRegularExpression &regExp)
 {
-    if (!regExp.isValid() || regExp.isEmpty())
+    if (!regExp.isValid() || regExp.pattern().isEmpty())
     {
-        _proxy->setHiddenFilter(QRegExp("^$"));
+        _proxy->setHiddenFilter(QRegularExpression("^$"));
     }
     else
     {
@@ -109,7 +109,7 @@ void ProjectTreeView::setHiddenFilter(const QRegExp &regExp)
 
 void ProjectTreeView::setHiddenFilter(const QString &pattern)
 {
-    setHiddenFilter(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
+    setHiddenFilter(QRegularExpression(QRegularExpression::wildcardToRegularExpression(pattern), QRegularExpression::CaseInsensitiveOption));
 }
 
 void ProjectTreeView::enableHiddenFilter(bool enable)
@@ -117,14 +117,14 @@ void ProjectTreeView::enableHiddenFilter(bool enable)
     _proxy->enableHiddenFilter(enable);
 }
 
-void ProjectTreeView::setShowFilter(const QRegExp &regExp)
+void ProjectTreeView::setShowFilter(const QRegularExpression &regExp)
 {
     _proxy->setShowFilter(regExp);
 }
 
 void ProjectTreeView::setShowFilter(const QString &pattern)
 {
-    setShowFilter(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
+    setShowFilter(QRegularExpression(QRegularExpression::wildcardToRegularExpression(pattern), QRegularExpression::CaseInsensitiveOption));
 }
 
 void ProjectTreeView::remove()
@@ -357,7 +357,7 @@ void ProjectTreeView::mouseReleaseEvent(QMouseEvent *event)
 {
     QTreeView::mouseReleaseEvent(event);
 
-    if (event->button() == Qt::MidButton)
+    if (event->button() == Qt::MiddleButton)
     {
         const QPersistentModelIndex index = indexAt(event->pos());
         if (!index.isValid())

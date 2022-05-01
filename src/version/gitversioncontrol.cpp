@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QTextStream>
 
 #include "settings/settingsmanager.h"
@@ -294,7 +295,7 @@ void GitVersionControl::reqFileModifNormal(const QString &filePath)
 void GitVersionControl::processDiffEnd()
 {
     QTextStream stream(_processGitDiff);
-    QRegExp regContext("@@ -([0-9]+)(,([0-9]+))* \\+([0-9]+)(,([0-9]+))* @@");
+    QRegularExpression regContext("@@ -([0-9]+)(,([0-9]+))* \\+([0-9]+)(,([0-9]+))* @@");
     bool valid = false;
 
     switch (_diffState)
@@ -316,9 +317,9 @@ void GitVersionControl::processDiffEnd()
                         change = new VersionChange();
                     }
 
-                    regContext.indexIn(line);
-                    int lineOld = regContext.cap(1).toInt();
-                    int lineNew = regContext.cap(4).toInt();
+                    QRegularExpressionMatch contextMatch = regContext.match(line);
+                    int lineOld = contextMatch.captured(1).toInt();
+                    int lineNew = contextMatch.captured(4).toInt();
                     change->setLineOld(lineOld);
                     change->setLineNew(lineNew);
                     change->setStaged(true);
@@ -356,8 +357,8 @@ void GitVersionControl::processDiffEnd()
 
                 if (line.startsWith("@@"))  // new modif
                 {
-                    regContext.indexIn(line);
-                    int lineNew = regContext.cap(4).toInt();
+                    QRegularExpressionMatch contextMatch = regContext.match(line);
+                    int lineNew = contextMatch.captured(4).toInt();
                     QList<VersionChange *> changesForRange = _fileChanges.changesForRange(lineNew, lineNew);
                     if (!changesForRange.isEmpty())
                     {

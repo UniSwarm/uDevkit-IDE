@@ -33,7 +33,7 @@ ProjectItemProxyModel::ProjectItemProxyModel(Project *project)
     _enabledHiddenFilter = false;
 }
 
-void ProjectItemProxyModel::setHiddenFilter(const QRegExp &regExp)
+void ProjectItemProxyModel::setHiddenFilter(const QRegularExpression &regExp)
 {
     _hiddenFilter = regExp;
     invalidateFilter();
@@ -41,7 +41,7 @@ void ProjectItemProxyModel::setHiddenFilter(const QRegExp &regExp)
 
 void ProjectItemProxyModel::setHiddenFilter(const QString &pattern)
 {
-    _hiddenFilter = QRegExp(pattern, Qt::CaseInsensitive, QRegExp::RegExp);
+    _hiddenFilter = QRegularExpression(pattern, QRegularExpression::CaseInsensitiveOption);
     invalidateFilter();
 }
 
@@ -51,7 +51,7 @@ void ProjectItemProxyModel::enableHiddenFilter(bool enable)
     invalidateFilter();
 }
 
-void ProjectItemProxyModel::setShowFilter(const QRegExp &regExp)
+void ProjectItemProxyModel::setShowFilter(const QRegularExpression &regExp)
 {
     _showFilter = regExp;
     invalidateFilter();
@@ -59,7 +59,7 @@ void ProjectItemProxyModel::setShowFilter(const QRegExp &regExp)
 
 void ProjectItemProxyModel::setShowFilter(const QString &pattern)
 {
-    _showFilter = QRegExp(pattern, Qt::CaseInsensitive, QRegExp::RegExp);
+    _showFilter = QRegularExpression(pattern, QRegularExpression::CaseInsensitiveOption);
     invalidateFilter();
 }
 
@@ -76,7 +76,8 @@ bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
     // hidden filter: if path match, do not show
     if (_enabledHiddenFilter)
     {
-        if (_hiddenFilter.indexIn(path) != -1)
+        QRegularExpressionMatch hiddenMatch = _hiddenFilter.match(path);
+        if (hiddenMatch.hasMatch())
         {
             return false;
         }
@@ -98,7 +99,8 @@ bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
             }
             return false;
         }
-        if (_showFilter.indexIn(path) == -1)
+        QRegularExpressionMatch showMatch = _showFilter.match(path);
+        if (!showMatch.hasMatch())
         {
             return false;
         }
@@ -109,8 +111,8 @@ bool ProjectItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
 
 bool ProjectItemProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
 {
-    Q_UNUSED(source_column)
-    Q_UNUSED(source_parent)
+    Q_UNUSED(source_column);
+    Q_UNUSED(source_parent);
     return true;
 }
 

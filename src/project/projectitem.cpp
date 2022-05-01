@@ -149,7 +149,7 @@ QVariant ProjectItem::data(int column, int role) const
     {
         return _info.fileName();
     }
-    if (role == Qt::FontRole || role == Qt::TextColorRole || role == Qt::ToolTipRole)
+    if (role == Qt::FontRole || role == Qt::ForegroundRole || role == Qt::ToolTipRole)
     {
         if (_type == LogicDir)
         {
@@ -189,7 +189,7 @@ QVariant ProjectItem::data(int column, int role) const
         }
 
         // text color
-        if (role == Qt::TextColorRole)
+        if (role == Qt::ForegroundRole)
         {
             if (_info.isValidated())
             {
@@ -273,7 +273,8 @@ void ProjectItem::updateModif()
                 }
             }
 
-            QSet<QString> oldFiles = _childrensMap.keys().toSet();
+            const QList<QString> &keysList = _childrensMap.keys();
+            QSet<QString> oldFiles = QSet<QString>(keysList.constBegin(), keysList.constEnd());
             oldFiles.subtract(files);
             for (const QString &removedFile : oldFiles)
             {

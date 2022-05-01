@@ -36,11 +36,11 @@ public:
 public slots:
     void selectFile(const QString &fileName);
 
-    void setHiddenFilter(const QRegExp &regExp);
+    void setHiddenFilter(const QRegularExpression &regExp);
     void setHiddenFilter(const QString &pattern);
     void enableHiddenFilter(bool enable = true);
 
-    void setShowFilter(const QRegExp &regExp);
+    void setShowFilter(const QRegularExpression &regExp);
     void setShowFilter(const QString &pattern);
 
     void remove();

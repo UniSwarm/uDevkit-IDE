@@ -380,7 +380,7 @@ void CodeEditor::initialiseWidget()
     if (layout() == nullptr)
     {
         QHBoxLayout *layout = new QHBoxLayout();
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         if (hasPreview())
         {
             QSplitter *splitter = new QSplitter();

@@ -33,7 +33,7 @@ HexEditor::HexEditor(Project *project, QWidget *parent)
     : Editor(project, parent)
 {
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     _hexEditor = new QHexView();
     _modified = false;
