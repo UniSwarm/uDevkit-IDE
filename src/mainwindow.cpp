@@ -33,7 +33,7 @@
 #include "settings/pages/settingswindow.h"
 #include "ui/iconneddockstyle.h"
 
-const int MainWindow::MaxOldProject = 12;
+const int MainWindow::MaxOldProject = 16;
 
 MainWindow::MainWindow(Project *project, QWidget *parent)
     : QMainWindow(parent)
@@ -508,9 +508,18 @@ void MainWindow::updateOldProjects()
     for (int i = 0; i < _oldProjects.size() && i < MaxOldProject; i++)
     {
         QString path = _oldProjects[i];
+        if (!QDir(path).exists())
+        {
+            continue;
+        }
         _oldProjectsActions[i]->setVisible(true);
         _oldProjectsActions[i]->setData(path);
-        _oldProjectsActions[i]->setText(QString("&%1. %2").arg(i + 1).arg(path));
+        char shortCut = static_cast<char>('1' + i);
+        if (i >= 9)
+        {
+            shortCut = static_cast<char>('A' + i - 9);
+        }
+        _oldProjectsActions[i]->setText(QString("&%1. %2").arg(shortCut).arg(path));
         _oldProjectsActions[i]->setStatusTip(tr("Open recent project '") + path + "'");
     }
 }
