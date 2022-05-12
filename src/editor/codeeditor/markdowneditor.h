@@ -37,7 +37,6 @@ protected slots:
 
 protected:
     QFutureWatcher<QByteArray> watcher;
-    QByteArray renderProcess(const QByteArray &textIn);
 };
 
 #endif  // MARKDOWNEDITOR_H

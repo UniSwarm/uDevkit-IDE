@@ -278,7 +278,7 @@ void ProjectItem::updateModif()
             oldFiles.subtract(files);
             for (const QString &removedFile : oldFiles)
             {
-                QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.find(removedFile);
+                QHash<QString, ProjectItem *>::const_iterator i = _childrensMap.constFind(removedFile);
                 if (i != _childrensMap.cend())
                 {
                     removeChild(*i);

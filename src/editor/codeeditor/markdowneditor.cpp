@@ -46,18 +46,18 @@ void MarkdownEditor::updatePreview()
     launchRender();
 }
 
-QByteArray MarkdownEditor::renderProcess(const QByteArray &textIn)
+QByteArray renderProcess(const QByteArray &textIn)
 {
     maddy::QMaddy markdownParser;
     markdownParser.setCss("https://sindresorhus.com/github-markdown-css/github-markdown.css");
-    const QByteArray &dataOut = markdownParser.toHtml(textIn);
+    QByteArray dataOut = markdownParser.toHtml(textIn);
     return dataOut;
 }
 
 void MarkdownEditor::launchRender()
 {
     QByteArray textIn = _editorWidget->textDocument()->text().toLocal8Bit();
-    QFuture<QByteArray> future = QtConcurrent::run([&]() {return this->renderProcess(textIn);});
+    QFuture<QByteArray> future = QtConcurrent::run(renderProcess, textIn);
     watcher.setFuture(future);
 }
 
