@@ -394,7 +394,7 @@ bool MainWindow::openFiles(const QStringList &paths)
 
 void MainWindow::git()
 {
-    _logWidget->start("git", QStringList() << "diff" << _project->rootDir().relativeFilePath(_editorTabWidget->currentFilePath()));
+    _logWidget->start("git", QStringList() << "diff" << "--color" << _project->rootDir().relativeFilePath(_editorTabWidget->currentFilePath()));
 }
 
 void MainWindow::makeall()
