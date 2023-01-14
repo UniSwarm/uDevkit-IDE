@@ -40,9 +40,9 @@ LogWidget::LogWidget(Project *project, QWidget *parent)
     _process = new QProcess(this);
 
 #ifdef WIN32
-    QFont font("Consolas");
+    QFont font("Consolas", 10);
 #else
-    QFont font("monospace");
+    QFont font("monospace", 10);
 #endif
     font.setStyleHint(QFont::Monospace);
     setFont(font);
@@ -117,22 +117,25 @@ void LogWidget::parseOutput(QByteArray data, bool error)
     stream.setCodec("UTF-8");
 #endif
     QRegularExpression colorReg("(\u001b)\\[([0-9]+)m");
-    QRegularExpression colorRstReg("(\u001b\\(B\u001b\\[m|\u001b\\[0;10m)");
+    QRegularExpression colorRstReg("(\u001b\\(B\u001b\\[m|\u001b\\[0;10m|\u001b\\[m)");
     QRegularExpression linkReg(R"(([\-\._a-zA-Z/\\0-9]+\.[a-zA-Z]+)(:[0-9]+)(:[0-9]+)*)");
 
     while (!stream.atEnd())
     {
         QString stringRead = stream.readLine();
         QString errorFormat = error ? " class=\"color31\"" : "";
-        stringRead = "<br/><span" + errorFormat + ">" + stringRead.toHtmlEscaped() + "</span>";
-        stringRead.replace(" ", "&nbsp;");
-        stringRead.replace(colorReg, R"(</span><span class="color\2">)");
-        stringRead.replace(colorRstReg, "</span><span>");  // reset color
-        stringRead.replace("<span></span>", "");
+        QString stringHtml = "<br/><span" + errorFormat + ">" + stringRead.toHtmlEscaped() + "</span>";
+        stringHtml.replace(" ", "&nbsp;");
+        stringHtml.replace(colorReg, R"(</span><span class="color\2">)");
+        stringHtml.replace(colorRstReg, "</span><span>");  // reset color
+        stringHtml.replace("<span></span>", "");
 
-        stringRead.replace(linkReg, R"(<a href="\1\2\3">\1\2\3</a>)");
+        stringHtml.replace(linkReg, R"(<a href="\1\2\3">\1\2\3</a>)");
 
-        html.append(stringRead);
+        if (stringHtml != "<br/>")
+        {
+            html.append(stringHtml);
+        }
     }
 
     append(html);
