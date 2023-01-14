@@ -24,6 +24,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QRegularExpression>
+#include <QScrollBar>
 #include <QStandardPaths>
 #include <QTextStream>
 
@@ -66,7 +67,7 @@ void LogWidget::start(const QString &program, const QStringList &arguments)
     _process->terminate();
     clear();
     QString command = "> " + program + " " + arguments.join(' ');
-    insertHtml("<i style=\"color: green\">" + command.toHtmlEscaped() + "</i>");
+    append("<i style=\"color: green\">" + command.toHtmlEscaped() + "</i>");
 
     QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
 #if defined(Q_OS_WIN)
@@ -86,7 +87,7 @@ void LogWidget::start(const QString &program, const QStringList &arguments)
     QString path = QStandardPaths::findExecutable(program, env.value("PATH").split(listSep));
     if (path.isEmpty())
     {
-        insertHtml("<br/><i style=\"color: red\">" + tr("Cannot find command '%1'").arg(program).toHtmlEscaped() + "</i>");
+        append("<br/><i style=\"color: red\">" + tr("Cannot find command '%1'").arg(program).toHtmlEscaped() + "</i>");
         return;
     }
 
@@ -133,9 +134,8 @@ void LogWidget::parseOutput(QByteArray data, bool error)
 
         html.append(stringRead);
     }
-    moveCursor(QTextCursor::End);
-    insertHtml(html);
-    moveCursor(QTextCursor::End);
+
+    append(html);
 }
 
 void LogWidget::readProcess()
@@ -154,19 +154,27 @@ void LogWidget::errorProcess()
 void LogWidget::finishProcess(int errorCode, QProcess::ExitStatus exitStatus)
 {
     readProcess();
-    moveCursor(QTextCursor::End);
     if (exitStatus == QProcess::NormalExit && errorCode == 0)
     {
-        insertHtml(QString("<br/><i style=\"color: green\">&gt; %1 finished with code %2</i>").arg(_process->program()).arg(errorCode));
+        append(QString("<br/><i style=\"color: green\">&gt; %1 finished with code %2</i>").arg(_process->program()).arg(errorCode));
     }
     else
     {
-        insertHtml(QString("<br/><i style=\"color: red\">&gt; %1 crashed with code %2</i>").arg(_process->program()).arg(errorCode));
+        append(QString("<br/><i style=\"color: red\">&gt; %1 crashed with code %2</i>").arg(_process->program()).arg(errorCode));
     }
-    moveCursor(QTextCursor::End);
 }
 
 void LogWidget::anchorClick(const QUrl &link)
 {
     emit openFileRequested(link.toString(QUrl::None));
+}
+
+void LogWidget::append(const QString &string)
+{
+    bool scroll = (verticalScrollBar()->value() >= verticalScrollBar()->maximum() - 4);
+    insertHtml(string);
+    if (scroll)
+    {
+        ensureCursorVisible();
+    }
 }

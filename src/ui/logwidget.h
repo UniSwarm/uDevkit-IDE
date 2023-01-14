@@ -49,6 +49,7 @@ protected slots:
     void errorProcess();
     void finishProcess(int errorCode, QProcess::ExitStatus exitStatus);
     void anchorClick(const QUrl &link);
+    void append(const QString &string);
 };
 
 #endif  // LOGWIDGET_H
