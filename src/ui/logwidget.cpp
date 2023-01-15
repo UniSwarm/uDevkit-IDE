@@ -181,3 +181,13 @@ void LogWidget::append(const QString &string)
         ensureCursorVisible();
     }
 }
+
+void LogWidget::resizeEvent(QResizeEvent *event)
+{
+    bool scroll = (verticalScrollBar()->value() >= verticalScrollBar()->maximum() - 4);
+    QTextBrowser::resizeEvent(event);
+    if (scroll)
+    {
+        ensureCursorVisible();
+    }
+}

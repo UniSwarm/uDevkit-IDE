@@ -50,6 +50,10 @@ protected slots:
     void finishProcess(int errorCode, QProcess::ExitStatus exitStatus);
     void anchorClick(const QUrl &link);
     void append(const QString &string);
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 };
 
 #endif  // LOGWIDGET_H
