@@ -67,13 +67,17 @@ int main(int argc, char *argv[])
         QTextStream ts(&f);
         app.setStyleSheet(ts.readAll());
         w.setStyleSheet("\
+            QComboBox {padding-right: 4px;} \
             QComboBox::item:checked {height: 24px;} \
             QMenu::icon {margin: 1px;} \
             QMenu::icon:checked {margin: 0; background: #505F69; border: 1px inset #505F69; position: absolute; top: 1px; right: 1px; bottom: 1px; left: 1px;} \
             QMenu::item {padding: 4px 24px 4px 8px;} \
-            QToolBar {border-bottom: none;} \
+            QToolBar {border-bottom: none; border-radius: 4px;} \
             QSplitter::handle:horizontal {width: 2px;} \
             QSplitter::handle:vertical {height: 2px;} \
+            QGroupBox {padding: 6px 0px 0px 0px; margin-top: 12px;} \
+            QGroupBox::title {padding-top: 2px;} \
+            QDockWidget::title {padding: 2px;} \
         ");
         QPalette pal = QApplication::palette();
         pal.setColor(QPalette::Highlight, Qt::blue);
