@@ -46,6 +46,7 @@
 #include "edbee/views/textselection.h"
 #include "edbee/views/texttheme.h"
 
+#include "codeutils.h"
 #include "settings/settingsmanager.h"
 
 bool CodeEditor::initialized = false;
@@ -571,15 +572,21 @@ void CodeEditor::replace(const QVariant &replacePattern, Editor::SearchFlags fla
         if (!flags.testFlag(RegExpMode))
         {
             replaceText = replaceString;
-            _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
         }
         else
         {
             QRegularExpression regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
-            replaceText = range.getSelectedText();
-            replaceText.replace(regExp, replaceString);
-            _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
+            if (replaceString.contains("\\U", Qt::CaseInsensitive) || replaceString.contains("\\L", Qt::CaseInsensitive))
+            {
+                replaceText = CodeUtils::extRegExpReplace(range.getSelectedText(), regExp, replaceString);
+            }
+            else
+            {
+                replaceText = range.getSelectedText();
+                replaceText.replace(regExp, replaceString);
+            }
         }
+        _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
         textSelection->range(0).setLength(0);
         textSelection->range(0).moveCaret(_editorWidget->textDocument(), replaceText.length());
 
@@ -610,22 +617,30 @@ void CodeEditor::replaceAll(const QVariant &replacePattern, SearchFlags flags)
     _editorWidget->textDocument()->beginChanges(controller);
     edbee::TextRangeSet range(_editorWidget->textDocument());
 
+    QRegularExpression regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
     for (int i = 0; i < rangeSet->rangeCount(); i++)
     {
         range.clear();
         range.addRange(rangeSet->range(i));
 
+        QString replaceText;
         if (!flags.testFlag(RegExpMode))
         {
-            _editorWidget->textDocument()->replaceRangeSet(range, replaceString);
+            replaceText = replaceString;
         }
         else
         {
-            QRegularExpression regExp(_searchTerm.toString(), flags.testFlag(CaseSensitive) ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
-            QString replaceText = range.getSelectedText();
-            replaceText.replace(regExp, replaceString);
-            _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
+            if (replaceString.contains("\\U", Qt::CaseInsensitive) || replaceString.contains("\\L", Qt::CaseInsensitive))
+            {
+                replaceText = CodeUtils::extRegExpReplace(range.getSelectedText(), regExp, replaceString);
+            }
+            else
+            {
+                replaceText = range.getSelectedText();
+                replaceText.replace(regExp, replaceString);
+            }
         }
+        _editorWidget->textDocument()->replaceRangeSet(range, replaceText);
     }
     _editorWidget->textDocument()->endChanges(0xFF01);
 

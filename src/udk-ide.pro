@@ -32,6 +32,7 @@ SOURCES += \
     $$PWD/editor/codeeditor/codeeditor.cpp \
     $$PWD/editor/codeeditor/codeeditormargindelegate.cpp \
     $$PWD/editor/codeeditor/codeeditorscrollbar.cpp \
+    $$PWD/editor/codeeditor/codeutils.cpp \
     $$PWD/editor/codeeditor/htmleditor.cpp \
     $$PWD/editor/codeeditor/markdowneditor.cpp \
     $$PWD/editor/editor.cpp \
@@ -81,6 +82,7 @@ HEADERS += \
     $$PWD/editor/codeeditor/codeeditor.h \
     $$PWD/editor/codeeditor/codeeditormargindelegate.h \
     $$PWD/editor/codeeditor/codeeditorscrollbar.h \
+    $$PWD/editor/codeeditor/codeutils.h \
     $$PWD/editor/codeeditor/htmleditor.h \
     $$PWD/editor/codeeditor/markdowneditor.h \
     $$PWD/editor/editor.h \
