@@ -33,18 +33,28 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("udk-ide");
 
     // translate app
-    QTranslator qtTranslator;
     QString lang = SettingsManager::language();
-    qtTranslator.load("qt_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    QApplication::installTranslator(&qtTranslator);
+
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+    const QString path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+#else
+    const QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#endif
+    QTranslator qtTranslator;
+    if (qtTranslator.load("qt_" + lang, path))
+    {
+        QApplication::installTranslator(&qtTranslator);
+    }
     QTranslator udkideTranslator;
-    udkideTranslator.load("udk-ide_" + lang, ":/translations");
-    QApplication::installTranslator(&udkideTranslator);
+    if (udkideTranslator.load("udk-ide_" + lang, ":/translations"))
+    {
+        QApplication::installTranslator(&udkideTranslator);
+    }
 
     Project *project = nullptr;
-    if (argc > 1)
+    if (QApplication::arguments().count() > 1)
     {
-        project = new Project(argv[1]);
+        project = new Project(QApplication::arguments()[1]);
     }
 
     MainWindow w(project);
