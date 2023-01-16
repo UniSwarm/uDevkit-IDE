@@ -273,8 +273,12 @@ void ProjectItem::updateModif()
                 }
             }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+            QSet<QString> oldFiles = _childrensMap.keys().toSet();
+#else
             const QList<QString> &keysList = _childrensMap.keys();
             QSet<QString> oldFiles = QSet<QString>(keysList.constBegin(), keysList.constEnd());
+#endif
             oldFiles.subtract(files);
             for (const QString &removedFile : oldFiles)
             {
