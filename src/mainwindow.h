@@ -55,8 +55,11 @@ protected:
     void createMenus();
 
     void writeSettings();
+    void writeOldProjectsSettings();
     void readSettings();
-    void updateOldProjects();
+    void readOldProjectsSettings();
+    void prependOldProject(const QString &path);
+    void updateOldProjectsActions();
 
 public slots:
     bool openDir(const QString &paths = QString());

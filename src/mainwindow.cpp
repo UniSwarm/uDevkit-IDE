@@ -49,7 +49,6 @@ MainWindow::MainWindow(Project *project, QWidget *parent)
     {
         path = _project->rootPath();
     }
-    updateTitle();
 
     _editorTabWidget = new EditorTabWidget(_project);
 
@@ -66,12 +65,13 @@ MainWindow::MainWindow(Project *project, QWidget *parent)
     setGeometry(100, 100, 800, 600);
 
     readSettings();
+    readOldProjectsSettings();
+
     if (!path.isEmpty())
     {
-        _oldProjects.removeOne(path);
-        _oldProjects.prepend(path);
+        prependOldProject(path);
+        updateTitle();
     }
-    updateOldProjects();
 }
 
 MainWindow::~MainWindow()
@@ -352,9 +352,7 @@ bool MainWindow::openDir(const QString &path)
     }
     _project->setRootPath(mpath);
 
-    _oldProjects.removeOne(mpath);
-    _oldProjects.prepend(mpath);
-    updateOldProjects();
+    prependOldProject(mpath);
 
     updateTitle();
 
@@ -503,7 +501,7 @@ bool MainWindow::event(QEvent *event)
     return QMainWindow::event(event);
 }
 
-void MainWindow::updateOldProjects()
+void MainWindow::updateOldProjectsActions()
 {
     for (int i = 0; i < _oldProjects.size() && i < MaxOldProject; i++)
     {
@@ -542,6 +540,11 @@ void MainWindow::writeSettings()
     settings.setValue("geometry", saveGeometry());
     settings.setValue("windowState", saveState());
     settings.endGroup();
+}
+
+void MainWindow::writeOldProjectsSettings()
+{
+    QSettings settings(QApplication::organizationName(), QApplication::applicationName());
 
     // old projects write
     settings.beginWriteArray("projects");
@@ -563,6 +566,11 @@ void MainWindow::readSettings()
     restoreGeometry(settings.value("geometry").toByteArray());
     restoreState(settings.value("windowState").toByteArray());
     settings.endGroup();
+}
+
+void MainWindow::readOldProjectsSettings()
+{
+    QSettings settings(QApplication::organizationName(), QApplication::applicationName());
 
     // old projects read
     int size = settings.beginReadArray("projects");
@@ -577,7 +585,16 @@ void MainWindow::readSettings()
     }
     settings.endArray();
 
-    updateOldProjects();
+    updateOldProjectsActions();
+}
+
+void MainWindow::prependOldProject(const QString &path)
+{
+    readOldProjectsSettings();
+    _oldProjects.removeOne(path);
+    _oldProjects.prepend(path);
+    writeOldProjectsSettings();
+    updateOldProjectsActions();
 }
 
 void MainWindow::about()
