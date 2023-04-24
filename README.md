@@ -6,8 +6,6 @@
 
 A simple IDE for [uDevkit](https://github.com/UniSwarm/uDevkit-SDK) written in Qt5. This IDE want to be very lightweight and fast to load without a huge project management system.
 
-Still in development.
-
 ![Screenshot](screenshot_rtide.png)
 
 ## Features
@@ -22,7 +20,9 @@ Still in development.
 * HTML live preview
 
 ## dependencies
-### Qt > 5.2
+### Qt > 5.9
+
+Qt 5.15 recommended, Qt6 compatible
 
 Qt module used :
 
@@ -31,22 +31,19 @@ Qt module used :
 - widgets
 - webenginewidgets (Qt > 5.6) or webkitwidgets (Qt < 5.6) or a lite support for web
 
-## Build
-
-Do not forget to init and update submodule before build :
-
 ```
-git submodule init
-git submodule update
+sudo apt install git make g++ qtbase5-dev qttools5-dev-tools
 ```
 
-And to build :
+## Build on linux
 
 ```
+git clone git@github.com:UniSwarm/uDevkit-IDE.git --recursive
+cd uDevkit-IDE
 mkdir build
 cd build
 qmake ../src
-make -j
+make -j`nproc`
 ```
 
 Binaries will be placed in `bin/` directory.
