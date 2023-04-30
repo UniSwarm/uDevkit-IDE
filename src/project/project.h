@@ -21,6 +21,7 @@
 
 #include <QDir>
 #include <QObject>
+#include <QSet>
 
 class ProjectVersionControl;
 class ProjectItemModel;
