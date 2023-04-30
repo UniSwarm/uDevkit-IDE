@@ -153,8 +153,8 @@ void AbstractVersionControl::requestFileModifications(const QString &filePath)
 
 FileVersionChange AbstractVersionControl::fileModifications(const QString &filePath)
 {
-    QMap<QString, FileVersionChange>::iterator localFind = _changeForFile.find(filePath);
-    if (localFind != _changeForFile.end())
+    QMap<QString, FileVersionChange>::const_iterator localFind = _changeForFile.constFind(filePath);
+    if (localFind != _changeForFile.cend())
     {
         return *localFind;
     }

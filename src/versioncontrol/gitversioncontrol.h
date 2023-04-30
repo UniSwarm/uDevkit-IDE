@@ -31,7 +31,7 @@ class GitVersionControl : public AbstractVersionControl
 {
     Q_OBJECT
 public:
-    GitVersionControl();
+    explicit GitVersionControl(QObject *parent = nullptr);
     ~GitVersionControl() override;
 
     QString versionControlName() const override;

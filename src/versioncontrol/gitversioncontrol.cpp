@@ -26,7 +26,8 @@
 
 #include "settings/settingsmanager.h"
 
-GitVersionControl::GitVersionControl()
+GitVersionControl::GitVersionControl(QObject *parent)
+    :AbstractVersionControl(parent)
 {
     _indexWatcher = nullptr;
     _statusState = StatusNone;
@@ -35,6 +36,7 @@ GitVersionControl::GitVersionControl()
     _processGitState = new QProcess(this);
     connect(_processGitState,
             static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            this,
             [=](int, QProcess::ExitStatus)
             {
                 processEnd();
@@ -43,6 +45,7 @@ GitVersionControl::GitVersionControl()
     _processGitDiff = new QProcess(this);
     connect(_processGitDiff,
             static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            this,
             [=](int, QProcess::ExitStatus)
             {
                 processDiffEnd();
@@ -56,6 +59,7 @@ GitVersionControl::GitVersionControl()
 GitVersionControl::~GitVersionControl()
 {
     _processGitState->deleteLater();
+    _processGitDiff->deleteLater();
 }
 
 QString GitVersionControl::versionControlName() const
@@ -74,7 +78,9 @@ void GitVersionControl::validFile(const QSet<QString> &filesPath)
     {
         return;
     }
+
     QStringList args;
+    args.reserve(filesPath.size() + 2);
     args << "add";
 
     QDir dir(_basePath);
@@ -87,6 +93,7 @@ void GitVersionControl::validFile(const QSet<QString> &filesPath)
     newProcess->setWorkingDirectory(_basePath);
     connect(newProcess,
             static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            this,
             [=](int, QProcess::ExitStatus)
             {
                 delete sender();
@@ -100,7 +107,9 @@ void GitVersionControl::inValidFile(const QSet<QString> &filesPath)
     {
         return;
     }
+
     QStringList args;
+    args.reserve(filesPath.size() + 3);
     args << "reset"
          << "HEAD";
 
@@ -114,6 +123,7 @@ void GitVersionControl::inValidFile(const QSet<QString> &filesPath)
     newProcess->setWorkingDirectory(_basePath);
     connect(newProcess,
             static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            this,
             [=](int, QProcess::ExitStatus)
             {
                 delete sender();
@@ -127,7 +137,9 @@ void GitVersionControl::checkoutFile(const QSet<QString> &filesPath)
     {
         return;
     }
+
     QStringList args;
+    args.reserve(filesPath.size() + 2);
     args << "checkout";
 
     QDir dir(_basePath);
@@ -140,6 +152,7 @@ void GitVersionControl::checkoutFile(const QSet<QString> &filesPath)
     newProcess->setWorkingDirectory(_basePath);
     connect(newProcess,
             static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            this,
             [=](int, QProcess::ExitStatus)
             {
                 delete sender();
@@ -157,7 +170,7 @@ void GitVersionControl::requestFileModifications(const QString &filePath)
     _diffRequestQueue.enqueue(filePath);
     if (_processGitDiff->state() == QProcess::NotRunning)
     {
-        reqFileModifHead(_diffRequestQueue.head());
+        reqFileModifHead(_diffRequestQueue.constFirst());
     }
 }
 
@@ -317,7 +330,7 @@ void GitVersionControl::processDiffEnd()
                         change = new VersionChange();
                     }
 
-                    QRegularExpressionMatch contextMatch = regContext.match(line);
+                    const QRegularExpressionMatch &contextMatch = regContext.match(line);
                     int lineOld = contextMatch.captured(1).toInt();
                     int lineNew = contextMatch.captured(4).toInt();
                     change->setLineOld(lineOld);
@@ -357,7 +370,7 @@ void GitVersionControl::processDiffEnd()
 
                 if (line.startsWith("@@"))  // new modif
                 {
-                    QRegularExpressionMatch contextMatch = regContext.match(line);
+                    const QRegularExpressionMatch &contextMatch = regContext.match(line);
                     int lineNew = contextMatch.captured(4).toInt();
                     QList<VersionChange *> changesForRange = _fileChanges.changesForRange(lineNew, lineNew);
                     if (!changesForRange.isEmpty())
@@ -373,7 +386,7 @@ void GitVersionControl::processDiffEnd()
             _diffState = DiffNone;
             if (!_diffRequestQueue.isEmpty())
             {
-                reqFileModifHead(_diffRequestQueue.head());
+                reqFileModifHead(_diffRequestQueue.constFirst());
             }
             break;
     }
