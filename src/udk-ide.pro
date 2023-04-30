@@ -76,6 +76,7 @@ SOURCES += \
     $$PWD/versioncontrol/abstractversioncontrol.cpp \
     $$PWD/versioncontrol/fileversionchange.cpp \
     $$PWD/versioncontrol/gitversioncontrol.cpp \
+    $$PWD/versioncontrol/projectversioncontrol.cpp \
     $$PWD/versioncontrol/versionchange.cpp
 
 HEADERS += \
@@ -126,6 +127,7 @@ HEADERS += \
     $$PWD/versioncontrol/abstractversioncontrol.h \
     $$PWD/versioncontrol/fileversionchange.h \
     $$PWD/versioncontrol/gitversioncontrol.h \
+    $$PWD/versioncontrol/projectversioncontrol.h \
     $$PWD/versioncontrol/versionchange.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
