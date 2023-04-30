@@ -73,10 +73,10 @@ SOURCES += \
     $$PWD/ui/iconneddockstyle.cpp \
     $$PWD/ui/logwidget.cpp \
     $$PWD/ui/searchreplacewidget.cpp \
-    $$PWD/version/abstractversioncontrol.cpp \
-    $$PWD/version/fileversionchange.cpp \
-    $$PWD/version/gitversioncontrol.cpp \
-    $$PWD/version/versionchange.cpp
+    $$PWD/versioncontrol/abstractversioncontrol.cpp \
+    $$PWD/versioncontrol/fileversionchange.cpp \
+    $$PWD/versioncontrol/gitversioncontrol.cpp \
+    $$PWD/versioncontrol/versionchange.cpp
 
 HEADERS += \
     $$PWD/editor/codeeditor/codeeditor.h \
@@ -123,10 +123,10 @@ HEADERS += \
     $$PWD/ui/iconneddockstyle.h \
     $$PWD/ui/logwidget.h \
     $$PWD/ui/searchreplacewidget.h \
-    $$PWD/version/abstractversioncontrol.h \
-    $$PWD/version/fileversionchange.h \
-    $$PWD/version/gitversioncontrol.h \
-    $$PWD/version/versionchange.h
+    $$PWD/versioncontrol/abstractversioncontrol.h \
+    $$PWD/versioncontrol/fileversionchange.h \
+    $$PWD/versioncontrol/gitversioncontrol.h \
+    $$PWD/versioncontrol/versionchange.h
 
 RESOURCES += $$PWD/../contrib/QDarkStyleSheet/qdarkstyle/style.qrc
 

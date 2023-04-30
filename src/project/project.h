@@ -23,7 +23,7 @@
 #include <QObject>
 
 #include "make/makeparser.h"
-#include "version/abstractversioncontrol.h"
+#include "versioncontrol/abstractversioncontrol.h"
 
 #include "projectitemmodel.h"
 

@@ -22,7 +22,7 @@
 #include <QScrollBar>
 
 #include "edbee/views/textrenderer.h"
-#include "version/fileversionchange.h"
+#include "versioncontrol/fileversionchange.h"
 
 class CodeEditorScrollBar : public QScrollBar
 {

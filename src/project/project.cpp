@@ -19,7 +19,7 @@
 #include "project.h"
 
 #include "make/makeparser.h"
-#include "version/gitversioncontrol.h"
+#include "versioncontrol/gitversioncontrol.h"
 
 #include <QDebug>
 

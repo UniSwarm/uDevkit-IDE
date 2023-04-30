@@ -22,7 +22,7 @@
 #include <QObject>
 
 #include "fileprojectinfo.h"
-#include "version/abstractversioncontrol.h"
+#include "versioncontrol/abstractversioncontrol.h"
 
 class Editor;
 

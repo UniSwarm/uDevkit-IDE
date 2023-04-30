@@ -21,7 +21,7 @@
 
 #include "edbee/views/components/textmargincomponent.h"
 
-#include "version/fileversionchange.h"
+#include "versioncontrol/fileversionchange.h"
 
 class CodeEditorMarginDelegate : public edbee::TextMarginComponentDelegate
 {
