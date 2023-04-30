@@ -22,10 +22,9 @@
 #include <QDir>
 #include <QObject>
 
-#include "make/makeparser.h"
-#include "versioncontrol/abstractversioncontrol.h"
-
-#include "projectitemmodel.h"
+class ProjectVersionControl;
+class ProjectItemModel;
+class MakeParser;
 
 class Project : public QObject
 {
@@ -38,7 +37,7 @@ public:
     QString rootPath() const;
     void setRootPath(const QString &path);
 
-    AbstractVersionControl *versionControl() const;
+    ProjectVersionControl *versionControl() const;
 
     ProjectItemModel *projectItemModel() const;
 
@@ -52,15 +51,16 @@ public:
 signals:
     void rootPathChanged();
 
-public slots:
-
 protected slots:
     void newSource(const QSet<QString> &sources);
     void oldSource(const QSet<QString> &sources);
 
 protected:
     QDir _rootDir;
-    AbstractVersionControl *_versionControl;
+
+    // version management
+    ProjectVersionControl *_versionControlProject;
+
     QSet<QString> _openedFiles;
     MakeParser *_make;
 

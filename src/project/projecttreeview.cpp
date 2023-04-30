@@ -33,7 +33,9 @@
 #include "fileprojectinfo.h"
 #include "mainwindow.h"
 
+#include "project/projectitemmodel.h"
 #include "projecttreeviewitemdelegate.h"
+#include "versioncontrol/projectversioncontrol.h"
 
 #include <settings/settingsmanager.h>
 

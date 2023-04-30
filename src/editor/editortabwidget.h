@@ -27,8 +27,8 @@
 #include <project/projecticonprovider.h>
 
 #include "editor.h"
-#include "project/project.h"
 #include "editortabswitchwidget.h"
+#include "project/project.h"
 
 class EditorTabWidget : public QTabWidget
 {

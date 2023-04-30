@@ -23,6 +23,7 @@
 #include <QString>
 
 class Project;
+class AbstractVersionControl;
 
 class FileProjectInfo : public QFileInfo
 {

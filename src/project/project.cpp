@@ -19,16 +19,17 @@
 #include "project.h"
 
 #include "make/makeparser.h"
-#include "versioncontrol/gitversioncontrol.h"
+#include "project/projectitemmodel.h"
+#include "versioncontrol/projectversioncontrol.h"
 
 #include <QDebug>
 
 Project::Project(const QString &path)
 {
     _projectItemModel = new ProjectItemModel(this);
-    _versionControl = new GitVersionControl();
-    connect(_versionControl, &GitVersionControl::newModifiedFiles, _projectItemModel, &ProjectItemModel::filesUpdated);
-    connect(_versionControl, &GitVersionControl::newValidatedFiles, _projectItemModel, &ProjectItemModel::filesUpdated);
+    _versionControlProject = new ProjectVersionControl();
+    connect(_versionControlProject, &ProjectVersionControl::newModifiedFiles, _projectItemModel, &ProjectItemModel::filesUpdated);
+    connect(_versionControlProject, &ProjectVersionControl::newValidatedFiles, _projectItemModel, &ProjectItemModel::filesUpdated);
 
     _make = new MakeParser();
     connect(_make, &MakeParser::sourceFilesAdded, this, &Project::newSource);
@@ -44,7 +45,7 @@ Project::~Project()
 {
     delete _make;
     delete _projectItemModel;
-    delete _versionControl;
+    delete _versionControlProject;
 }
 
 const QDir &Project::rootDir() const
@@ -62,15 +63,15 @@ void Project::setRootPath(const QString &path)
     _rootDir.setPath(QDir::cleanPath(path));
 
     _make->setPath(rootPath());
-    _versionControl->setPath(rootPath());
+    _versionControlProject->setPath(rootPath());
     _projectItemModel->clear();
     _projectItemModel->addRealDirItem(rootPath());
     emit rootPathChanged();
 }
 
-AbstractVersionControl *Project::versionControl() const
+ProjectVersionControl *Project::versionControl() const
 {
-    return _versionControl;
+    return _versionControlProject;
 }
 
 ProjectItemModel *Project::projectItemModel() const

@@ -54,7 +54,7 @@ public:
     void modifFile(const QSet<QString> &filesPath);
 
     virtual void requestFileModifications(const QString &filePath);
-    FileVersionChange fileModifications(const QString &filePath);
+    virtual FileVersionChange fileModifications(const QString &filePath);
 
 protected:
     virtual void analysePath();

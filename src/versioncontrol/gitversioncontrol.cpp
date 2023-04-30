@@ -27,7 +27,7 @@
 #include "settings/settingsmanager.h"
 
 GitVersionControl::GitVersionControl(QObject *parent)
-    :AbstractVersionControl(parent)
+    : AbstractVersionControl(parent)
 {
     _indexWatcher = nullptr;
     _statusState = StatusNone;

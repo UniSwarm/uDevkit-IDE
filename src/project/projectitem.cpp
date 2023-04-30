@@ -20,6 +20,7 @@
 
 #include "project.h"
 #include "projectitemmodel.h"
+#include "versioncontrol/projectversioncontrol.h"
 
 #include <QDebug>
 #include <QDirIterator>
@@ -37,20 +38,28 @@ ProjectItem::ProjectItem(Project *project, const QString &path, Type type, Proje
     _watcher = nullptr;
     if (type == RealDir)
     {
-        _watcher = new QFileSystemWatcher();
-        _watcher->addPath(QDir::cleanPath(path) + "/");
-        connect(_watcher, &QFileSystemWatcher::directoryChanged, this, &ProjectItem::updateModif);
-        connect(_watcher, &QFileSystemWatcher::fileChanged, this, &ProjectItem::updateModif);
+        if (!path.endsWith(".git"))
+        {
+            _watcher = new QFileSystemWatcher();
+            _watcher->addPath(QDir::cleanPath(path) + "/");
+            connect(_watcher, &QFileSystemWatcher::directoryChanged, this, &ProjectItem::updateModif);
+            connect(_watcher, &QFileSystemWatcher::fileChanged, this, &ProjectItem::updateModif);
 
-        QTimer::singleShot(0, this, &ProjectItem::updateModif);
+            QTimer::singleShot(0, this, &ProjectItem::updateModif);
+        }
     }
 
-    if (type == IndividualFile)
+    if (_info.exists())
+    {
+        project->versionControl()->versionControl(path);
+    }
+
+    /*if (type == IndividualFile)
     {
         _watcher = new QFileSystemWatcher();
         _watcher->addPath(QDir::cleanPath(path));
         connect(_watcher, &QFileSystemWatcher::fileChanged, this, &ProjectItem::updateModif);
-    }
+    }*/
 }
 
 ProjectItem::~ProjectItem()

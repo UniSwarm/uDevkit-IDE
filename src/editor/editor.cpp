@@ -20,6 +20,7 @@
 
 #include "editors.h"
 #include "editortabwidget.h"
+#include "versioncontrol/projectversioncontrol.h"
 
 #include <QDebug>
 #include <QFileDialog>
@@ -376,7 +377,7 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
     {
         type = Editor::Hexa;
     }
-    else if (mime.name() == "text/html")
+    else if (mime.name().contains("html"))
     {
         type = Editor::HTML;
     }

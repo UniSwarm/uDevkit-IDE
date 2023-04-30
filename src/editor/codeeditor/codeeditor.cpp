@@ -48,6 +48,7 @@
 
 #include "codeutils.h"
 #include "settings/settingsmanager.h"
+#include "versioncontrol/projectversioncontrol.h"
 
 bool CodeEditor::initialized = false;
 

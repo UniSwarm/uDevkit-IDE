@@ -17,6 +17,7 @@
  **/
 
 #include "editortabwidget.h"
+#include "make/makeparser.h"
 
 #include <QAction>
 #include <QDebug>

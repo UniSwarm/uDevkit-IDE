@@ -19,6 +19,7 @@
 #include "fileprojectinfo.h"
 
 #include "project.h"
+#include "versioncontrol/projectversioncontrol.h"
 
 #include <QCoreApplication>
 #include <QDateTime>
