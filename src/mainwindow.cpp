@@ -45,10 +45,6 @@ MainWindow::MainWindow(Project *project, QWidget *parent)
     {
         _project = new Project();
     }
-    else
-    {
-        path = _project->rootPath();
-    }
 
     _editorTabWidget = new EditorTabWidget(_project);
 
@@ -67,10 +63,15 @@ MainWindow::MainWindow(Project *project, QWidget *parent)
     readSettings();
     readOldProjectsSettings();
 
+    path = _project->rootPath();
     if (!path.isEmpty())
     {
         prependOldProject(path);
         updateTitle();
+        if (_project->rootFilePath() != _project->rootPath())
+        {
+            openFiles(QStringList() << _project->rootFilePath());
+        }
     }
 }
 

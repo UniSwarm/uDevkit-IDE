@@ -58,9 +58,24 @@ QString Project::rootPath() const
     return _rootDir.canonicalPath();
 }
 
+QString Project::rootFilePath() const
+{
+    return _rootFilePath;
+}
+
 void Project::setRootPath(const QString &path)
 {
-    _rootDir.setPath(QDir::cleanPath(path));
+    QFileInfo info(path);
+    if (info.isFile())
+    {
+        _rootDir = info.absoluteDir();
+        _rootFilePath = info.absoluteFilePath();
+    }
+    else
+    {
+        _rootDir.setPath(QDir::cleanPath(path));
+        _rootFilePath = _rootDir.canonicalPath();
+    }
 
     _make->setPath(rootPath());
     _versionControlProject->setPath(rootPath());

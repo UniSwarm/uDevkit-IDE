@@ -19,8 +19,9 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include <QDir>
 #include <QObject>
+
+#include <QDir>
 #include <QSet>
 
 class ProjectVersionControl;
@@ -36,6 +37,7 @@ public:
 
     const QDir &rootDir() const;
     QString rootPath() const;
+    QString rootFilePath() const;
     void setRootPath(const QString &path);
 
     ProjectVersionControl *versionControl() const;
@@ -58,6 +60,7 @@ protected slots:
 
 protected:
     QDir _rootDir;
+    QString _rootFilePath;
 
     // version management
     ProjectVersionControl *_versionControlProject;
