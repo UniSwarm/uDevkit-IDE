@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QDebug>
+#include <QDesktopServices>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QItemSelectionModel>
@@ -239,6 +240,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
     menu.addAction(_fileRenameAction);
     QAction *openDirAction = nullptr;
     QAction *openTermDirAction = nullptr;
+    QAction *openFileBrowserDirAction = nullptr;
     if (_project->projectItemModel()->isDir(indexFile))
     {
         _removeAction->setText(tr("Remove directory"));
@@ -246,6 +248,7 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 
         openDirAction = menu.addAction(tr("Open directory as project"));
         openTermDirAction = menu.addAction(tr("Open in terminal"));
+        openFileBrowserDirAction = menu.addAction(tr("Open in file browser"));
     }
     else
     {
@@ -333,6 +336,11 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
 #elif defined(Q_OS_WIN)
         QProcess::startDetached("mintty.exe", QStringList() << "--dir" << path);
 #endif
+    }
+    else if (trigered == openFileBrowserDirAction)
+    {
+        QString path = _project->projectItemModel()->filePath(indexFile);
+        QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     }
     else if (trigered == versionValidAction)
     {
