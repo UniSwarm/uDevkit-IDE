@@ -29,8 +29,8 @@ HexFile::HexFile(const QString &fileName)
 
 bool HexFile::read()
 {
-    int lineCount = 1;
-    int offsetAddr = 0;
+    int lineCount = 0;
+    uint offsetAddr = 0;
     int dataCount;
     int addr;
     int type;
@@ -49,8 +49,15 @@ bool HexFile::read()
     _prog.fill(static_cast<char>(0xFF), 0x100);
     while (!stream.atEnd())
     {
+        lineCount++;
         int index = 0;
         QString line = stream.readLine();
+        // :BBAAAATTHHHHHH.....HHHHCC
+
+        if (line.size() == 0 || line.startsWith(';'))  // comment or empty line
+        {
+            continue;
+        }
 
         if (line.size() < 11)
         {
@@ -83,7 +90,7 @@ bool HexFile::read()
         }
         index += 2;
 
-        if (type == 0)
+        if (type == 0)  // data
         {
             if (offsetAddr + addr + dataCount > _prog.size())
             {
@@ -104,9 +111,9 @@ bool HexFile::read()
                 }
             }
         }
-        else if (type == 4)
+        else if (type == 4)  // offset
         {
-            offsetAddr = line.mid(index, 4).toInt(&ok, 16) * 0x10000;
+            offsetAddr = line.mid(index, 4).toUInt(&ok, 16) * 0x10000;
             if (!ok)
             {
                 return false;
@@ -114,7 +121,7 @@ bool HexFile::read()
             index += 4;
             // qDebug() << "offset" << QString::number(offsetAddr, 16);
         }
-        else if (type == 1)
+        else if (type == 1)  // end of file
         {
             break;
         }
