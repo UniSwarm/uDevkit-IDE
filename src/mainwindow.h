@@ -68,7 +68,7 @@ public slots:
 protected slots:
     void git();
     void makeall();
-    void makeprog();
+    void makeflash();
     void makeclean();
     void makesim();
 

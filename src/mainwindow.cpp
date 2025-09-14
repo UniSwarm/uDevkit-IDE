@@ -287,7 +287,7 @@ void MainWindow::createMenus()
     action = projectMenu->addAction(tr("&Program"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-software-installer.png"));
     action->setShortcut(QKeySequence("Ctrl+T"));
-    connect(action, &QAction::triggered, this, &MainWindow::makeprog);
+    connect(action, &QAction::triggered, this, &MainWindow::makeflash);
 
     action = projectMenu->addAction(tr("Compile &sim"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-test-tube.png"));
@@ -405,11 +405,11 @@ void MainWindow::makeall()
                                     << "-k");
 }
 
-void MainWindow::makeprog()
+void MainWindow::makeflash()
 {
     _editorTabWidget->saveAllEditors();
     _logWidget->start("make",
-                      QStringList() << "prog"
+                      QStringList() << "flash"
                                     << "--no-print-directory"
                                     << "-j" << QString::number(QThread::idealThreadCount() + 1));
 }
