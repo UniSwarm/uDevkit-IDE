@@ -105,7 +105,7 @@ void MainWindow::createDocks()
     _logDock->setObjectName("logDock");
     QWidget *logContent = new QWidget(_logDock);
     QLayout *logLayout = new QVBoxLayout();
-    logLayout->setContentsMargins(4, 4, 4, 4);
+    logLayout->setContentsMargins(2, 4, 2, 4);
     _logWidget = new LogWidget(_project);
     _logWidget->document()->setDefaultStyleSheet("p{margin: 0;}");
     logLayout->addWidget(_logWidget);
@@ -183,7 +183,7 @@ void MainWindow::createMenus()
     QAction *exitAction = new QAction(tr("E&xit"), this);
     exitAction->setIcon(QIcon(":/icons/img/dark/icons8-quit.png"));
     exitAction->setStatusTip(tr("Exits uDevkit-IDE"));
-    exitAction->setShortcut(QKeySequence::Quit);
+    // exitAction->setShortcut(QKeySequence::Quit);
     fileMenu->addAction(exitAction);
     connect(exitAction, &QAction::triggered, this, &MainWindow::close);
 
@@ -273,6 +273,11 @@ void MainWindow::createMenus()
 
     // ============= Project =============
     QMenu *projectMenu = menuBar()->addMenu(tr("&Project"));
+
+    action = projectMenu->addAction(tr("&Infos"));
+    action->setIcon(QIcon(":/icons/img/dark/icons8-system-information.png"));
+    action->setShortcut(QKeySequence("F8"));
+    connect(action, &QAction::triggered, this, &MainWindow::makeinfo);
 
     action = projectMenu->addAction(tr("Clea&n"));
     action->setIcon(QIcon(":/icons/img/dark/icons8-broom.png"));
@@ -393,7 +398,9 @@ bool MainWindow::openFiles(const QStringList &paths)
 
 void MainWindow::git()
 {
-    _logWidget->start("git", QStringList() << "diff" << "--color" << _project->rootDir().relativeFilePath(_editorTabWidget->currentFilePath()));
+    _logWidget->start("git",
+                      QStringList() << "diff"
+                                    << "--color" << _project->rootDir().relativeFilePath(_editorTabWidget->currentFilePath()));
 }
 
 void MainWindow::makeall()
@@ -412,6 +419,13 @@ void MainWindow::makeflash()
                       QStringList() << "flash"
                                     << "--no-print-directory"
                                     << "-j" << QString::number(QThread::idealThreadCount() + 1));
+}
+
+void MainWindow::makeinfo()
+{
+    _editorTabWidget->saveAllEditors();
+    _logWidget->start("make",
+                      QStringList() << "info");
 }
 
 void MainWindow::makesim()
@@ -602,7 +616,7 @@ void MainWindow::about()
 {
     QMessageBox::about(this,
                        "uDevkit-IDE v0",
-                       QString("Copyright (C) 2017-2021 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
+                       QString("Copyright (C) 2017-2026 UniSwarm (<a href=\"https://uniswarm.eu\">uniswarm.eu</a>)<br>\
 <br>\
 This sofware is part of uDevkit distribution. To check for new version, please visit <a href=\"https://github.com/UniSwarm/uDevkit-IDE\">github.com/UniSwarm/uDevkit-IDE</a><br>\
 <br>\

@@ -69,6 +69,7 @@ protected slots:
     void git();
     void makeall();
     void makeflash();
+    void makeinfo();
     void makeclean();
     void makesim();
 
