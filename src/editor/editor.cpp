@@ -369,7 +369,7 @@ Editor::Type Editor::typeFromPath(const QString &filePath)
     // qDebug() << mime;
 
     Type type;
-    if (mime.name() == "text/x-hex" || filePath.endsWith(".hex"))
+    if (mime.name() == "text/x-hex" || mime.name() == "text/x-ihex" || filePath.endsWith(".hex"))
     {
         type = Editor::HexFile;
     }
