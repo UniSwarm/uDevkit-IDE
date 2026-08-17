@@ -310,7 +310,8 @@ void ProjectTreeView::contextMenuEvent(QContextMenuEvent *event)
                     QString define = fileName.replace(".", "_").toUpper();
                     stream << "#ifndef " << define << "\n"
                            << "#define " << define << "\n"
-                           << "\n\n\n"
+                           << "\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\n\n\n"
+                           << "#ifdef __cplusplus\n}\n#endif\n\n"
                            << "#endif  // " << define << "\n";
                 }
                 if (fileName.endsWith(".c"))
