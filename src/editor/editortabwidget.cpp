@@ -640,7 +640,7 @@ bool EditorTabWidget::eventFilter(QObject *o, QEvent *e)
         }
         return QObject::eventFilter(o, e);
     }
-    if (o == tabBar() && e->type() == QEvent::MouseButtonPress)
+    if (o == tabBar() && e->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(e);
         if (mouseEvent->button() == Qt::MiddleButton)
