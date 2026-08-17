@@ -28,7 +28,7 @@
 #    include <QTextBrowser>
 #endif
 
-#include <QtConcurrent/QtConcurrent>
+#include <QtConcurrent/QtConcurrentRun>
 
 #include "edbee/models/textdocument.h"
 #include "edbee/texteditorwidget.h"
@@ -49,7 +49,7 @@ void MarkdownEditor::updatePreview()
 QByteArray renderProcess(const QByteArray &textIn)
 {
     maddy::QMaddy markdownParser;
-    markdownParser.setCss("https://sindresorhus.com/github-markdown-css/github-markdown.css");
+    markdownParser.setCss("https://cdn.jsdelivr.net/gh/hyrious/github-markdown-css@main/dist/dark.css");
     QByteArray dataOut = markdownParser.toHtml(textIn);
     return dataOut;
 }
@@ -65,7 +65,7 @@ void MarkdownEditor::showHtml()
 {
     const QByteArray dataOut = watcher.future().result();
 #ifndef NOWEBKIT
-    _htmlPreview->setContent(dataOut, "text/html", QUrl::fromLocalFile(_filePath));
+    _htmlPreview->setContent(dataOut, "text/html;charset=UTF-8", QUrl::fromLocalFile(_filePath));
     _editorWidget->setFocus();
 #else
     _htmlPreview->setHtml(QString::fromUtf8(dataOut));
